@@ -1,0 +1,495 @@
+/* ==========================================================================
+   viora-design-skills / token contract v1
+
+   HOW TO USE
+   1. Copy this file into the project (styles/tokens.css or app/tokens.css).
+   2. Import it FIRST, before any framework or component CSS.
+   3. Edit ONLY the block marked "EDIT 1" and "EDIT 2".
+      Paste a palette from reference/05-color.md and a type pair from
+      reference/04-typography.md.
+   4. Leave everything below "CRAFT FLOOR" alone. That section is what makes
+      a page feel built instead of assembled: focus rings, selection, caret,
+      scrollbars, numerals, reduced motion, autofill, print.
+
+   Light and dark are defined as *-light / *-dark pairs so the theme switch
+   blocks below never need editing. Change a colour in one place only.
+   ========================================================================== */
+
+/* ==========================================================================
+   EDIT 1 - PALETTE   (values below are the "graphite" palette)
+   ========================================================================== */
+
+:root {
+  /* ground */
+  --canvas-light:          #ffffff;   --canvas-dark:          #0b0b0d;
+  --surface-light:         #f6f6f7;   --surface-dark:         #16171a;
+  --surface-2-light:       #ededf0;   --surface-2-dark:       #1d1e22;
+
+  /* lines */
+  --hairline-light:        #e4e4e7;   --hairline-dark:        #26272b;
+  --hairline-strong-light: #d2d2d7;   --hairline-strong-dark: #33343a;
+
+  /* text */
+  --ink-light:             #16171a;   --ink-dark:             #f4f4f5;
+  --ink-muted-light:       #5b5e66;   --ink-muted-dark:       #9c9fa6;
+  --ink-subtle-light:      #83868f;   --ink-subtle-dark:      #71747b;
+
+  /* action */
+  --accent-light:          #1d4ed8;   --accent-dark:          #5b7cfa;
+  --accent-ink-light:      #ffffff;   --accent-ink-dark:      #0b0b0d;
+
+  /* control boundary. On an input this line IS the affordance, so it must clear
+     3:1 on its own. --hairline is for structure, this is for controls.
+     Both are measured by scripts/contrast.mjs. Do not soften this one by eye. */
+  --control-border-light:  #8a8c95;   --control-border-dark:  #66686f;
+
+  /* semantic */
+  --success-light:         #1a7f4b;   --success-dark:         #4ade80;
+  --warning-light:         #9a6206;   --warning-dark:         #fbbf24;
+  --danger-light:          #c0261f;   --danger-dark:          #ff6b6b;
+
+  /* shadow hue: the h and s of the ink colour. never pure black. */
+  --shadow-hsl-light: 232 12% 10%;
+  --shadow-hsl-dark:  232 30% 2%;
+
+  /* shadow strength multiplier: dark themes need more */
+  --shadow-boost-light: 1;
+  --shadow-boost-dark: 1.9;
+}
+
+/* ==========================================================================
+   EDIT 2 - TYPE
+   Load the families in the document head or via the framework font loader,
+   then name them here. Keep the fallback stack in the same metric class.
+   ========================================================================== */
+
+:root {
+  /* The default pair covers Latin AND Cyrillic. If the copy is Cyrillic and you
+     swap in a Latin-only face (Geist, Schibsted Grotesk, Satoshi, Instrument
+     Sans, Space Grotesk, Poppins...), the browser silently falls back to a
+     system font and your design is gone. check.mjs fails the build for that.
+     Latin-only faces are legal only when the copy is Latin-only. */
+  --font-display: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-text:    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", "Cascadia Mono", monospace;
+
+  /* pick ONE radius family, delete the rest */
+  /* soft   */ --r-sm: 6px;  --r-md: 10px; --r-lg: 14px; --r-xl: 18px;
+  /* sharp  */ /* --r-sm: 2px;  --r-md: 4px;  --r-lg: 6px;  --r-xl: 8px;   */
+  /* round  */ /* --r-sm: 12px; --r-md: 18px; --r-lg: 24px; --r-xl: 32px; */
+  --r-full: 9999px;
+}
+
+/* ==========================================================================
+   RESOLVED TOKENS - do not edit below this line
+   ========================================================================== */
+
+:root {
+  color-scheme: light dark;
+
+  --canvas:          var(--canvas-light);
+  --surface:         var(--surface-light);
+  --surface-2:       var(--surface-2-light);
+  --hairline:        var(--hairline-light);
+  --hairline-strong: var(--hairline-strong-light);
+  --ink:             var(--ink-light);
+  --ink-muted:       var(--ink-muted-light);
+  --ink-subtle:      var(--ink-subtle-light);
+  --accent:          var(--accent-light);
+  --accent-ink:      var(--accent-ink-light);
+  --control-border:  var(--control-border-light);
+  --success:         var(--success-light);
+  --warning:         var(--warning-light);
+  --danger:          var(--danger-light);
+  --shadow-hsl:      var(--shadow-hsl-light);
+  --shadow-boost:    var(--shadow-boost-light);
+
+  /* derived - never hand-write these */
+  --accent-hover:  color-mix(in oklab, var(--accent) 88%, var(--ink));
+  --accent-active: color-mix(in oklab, var(--accent) 78%, var(--ink));
+  --accent-soft:   color-mix(in oklab, var(--accent) 12%, var(--canvas));
+  --accent-line:   color-mix(in oklab, var(--accent) 35%, var(--canvas));
+  /* second and third accent steps are DARKER AND LIGHTER, never a new hue.
+     A duo or drenched strategy uses these, so the palette stays at one colour. */
+  --accent-2:      color-mix(in oklab, var(--accent) 55%, var(--ink));
+  --accent-3:      color-mix(in oklab, var(--accent) 28%, var(--canvas));
+  --glass-border:  color-mix(in oklab, var(--ink) 12%, transparent);
+  --focus:         color-mix(in oklab, var(--accent) 75%, var(--ink));
+  --danger-soft:   color-mix(in oklab, var(--danger) 12%, var(--canvas));
+  --success-soft:  color-mix(in oklab, var(--success) 12%, var(--canvas));
+  --warning-soft:  color-mix(in oklab, var(--warning) 14%, var(--canvas));
+  --scrim:         color-mix(in srgb, var(--canvas) 0%, hsl(var(--shadow-hsl) / 0.45));
+
+  /* ---- space: 4px base. these values only. ---- */
+  --space-1:  0.25rem;  /*   4 */
+  --space-2:  0.5rem;   /*   8 */
+  --space-3:  0.75rem;  /*  12 */
+  --space-4:  1rem;     /*  16 */
+  --space-5:  1.25rem;  /*  20 */
+  --space-6:  1.5rem;   /*  24 */
+  --space-7:  2rem;     /*  32 */
+  --space-8:  2.5rem;   /*  40 */
+  --space-9:  3rem;     /*  48 */
+  --space-10: 4rem;     /*  64 */
+  --space-11: 5rem;     /*  80 */
+  --space-12: 6rem;     /*  96 */
+  --space-13: 7.5rem;   /* 120 */
+  --space-14: 9rem;     /* 144 */
+  --space-15: 11rem;    /* 176 */
+  --space-16: 14rem;    /* 224 */
+
+  /* ---- layout ---- */
+  --measure:   68ch;               /* reading width. never exceed 75ch */
+  --gutter:    clamp(1rem, 4vw, 2.5rem);
+  --container: 1200px;
+  --container-wide: 1440px;
+  --nav-h:     64px;
+
+  /* ---- type: size + line-height + tracking, always used together ---- */
+  --text-display-1: clamp(2.5rem, 1.55rem + 3.8vw, 5rem);
+  --lh-display-1: 0.98;   --ls-display-1: -0.035em;
+
+  --text-display-2: clamp(2rem, 1.45rem + 2.2vw, 3.5rem);
+  --lh-display-2: 1.02;   --ls-display-2: -0.03em;
+
+  --text-h1: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+  --lh-h1: 1.1;           --ls-h1: -0.022em;
+
+  --text-h2: clamp(1.375rem, 1.25rem + 0.6vw, 1.625rem);
+  --lh-h2: 1.2;           --ls-h2: -0.016em;
+
+  --text-h3: 1.25rem;     --lh-h3: 1.3;   --ls-h3: -0.01em;
+  --text-h4: 1.0625rem;   --lh-h4: 1.35;  --ls-h4: -0.005em;
+  --text-lg: 1.125rem;    --lh-lg: 1.6;   --ls-lg: -0.005em;
+  --text-base: 1rem;      --lh-base: 1.55; --ls-base: 0em;
+  --text-sm: 0.875rem;    --lh-sm: 1.5;   --ls-sm: 0em;
+  --text-xs: 0.75rem;     --lh-xs: 1.4;   --ls-xs: 0.008em;
+
+  --weight-body: 400;
+  --weight-medium: 500;
+  --weight-strong: 600;
+  --weight-display: 700;
+
+  /* ---- depth: every level has offset AND blur. no zero-offset halos. ---- */
+  --shadow-1:
+    0 1px 2px hsl(var(--shadow-hsl) / calc(0.07 * var(--shadow-boost))),
+    0 1px 1px hsl(var(--shadow-hsl) / calc(0.04 * var(--shadow-boost)));
+  --shadow-2:
+    0 2px 4px -1px hsl(var(--shadow-hsl) / calc(0.09 * var(--shadow-boost))),
+    0 4px 12px -2px hsl(var(--shadow-hsl) / calc(0.07 * var(--shadow-boost)));
+  --shadow-3:
+    0 8px 24px -6px hsl(var(--shadow-hsl) / calc(0.15 * var(--shadow-boost))),
+    0 2px 6px -2px hsl(var(--shadow-hsl) / calc(0.08 * var(--shadow-boost)));
+  --shadow-4:
+    0 24px 48px -12px hsl(var(--shadow-hsl) / calc(0.22 * var(--shadow-boost))),
+    0 8px 16px -8px hsl(var(--shadow-hsl) / calc(0.12 * var(--shadow-boost)));
+  --shadow-inset-top: inset 0 1px 0 hsl(0 0% 100% / 0.05);
+
+  /* ---- motion: never invent a curve or a duration ---- */
+  --ease-out:     cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out:  cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer:  cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-linear:  linear;
+
+  --dur-instant: 100ms;   /* colour, opacity, press feedback */
+  --dur-fast:    150ms;   /* tooltip, small popover */
+  --dur-base:    200ms;   /* dropdown, menu */
+  --dur-slow:    300ms;   /* modal. hard cap for in-app motion */
+  --dur-drawer:  360ms;   /* sheets, panels with real travel */
+  --stagger:     45ms;
+
+  /* ---- z scale: five levels, nothing else ---- */
+  --z-1: 10;   /* sticky headers, raised rows */
+  --z-2: 20;   /* dropdowns, popovers */
+  --z-3: 30;   /* drawers, sheets */
+  --z-4: 40;   /* modals */
+  --z-5: 50;   /* toasts, tooltips over modals */
+}
+
+/* dark theme: follows the OS unless the document opts out */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --canvas: var(--canvas-dark);
+    --surface: var(--surface-dark);
+    --surface-2: var(--surface-2-dark);
+    --hairline: var(--hairline-dark);
+    --hairline-strong: var(--hairline-strong-dark);
+    --ink: var(--ink-dark);
+    --ink-muted: var(--ink-muted-dark);
+    --ink-subtle: var(--ink-subtle-dark);
+    --accent: var(--accent-dark);
+    --accent-ink: var(--accent-ink-dark);
+    --control-border: var(--control-border-dark);
+    --success: var(--success-dark);
+    --warning: var(--warning-dark);
+    --danger: var(--danger-dark);
+    --shadow-hsl: var(--shadow-hsl-dark);
+    --shadow-boost: var(--shadow-boost-dark);
+  }
+}
+
+/* dark theme: explicit override, e.g. a theme toggle setting data-theme */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --canvas: var(--canvas-dark);
+  --surface: var(--surface-dark);
+  --surface-2: var(--surface-2-dark);
+  --hairline: var(--hairline-dark);
+  --hairline-strong: var(--hairline-strong-dark);
+  --ink: var(--ink-dark);
+  --ink-muted: var(--ink-muted-dark);
+  --ink-subtle: var(--ink-subtle-dark);
+  --accent: var(--accent-dark);
+  --accent-ink: var(--accent-ink-dark);
+  --control-border: var(--control-border-dark);
+  --success: var(--success-dark);
+  --warning: var(--warning-dark);
+  --danger: var(--danger-dark);
+  --shadow-hsl: var(--shadow-hsl-dark);
+  --shadow-boost: var(--shadow-boost-dark);
+}
+
+/* ==========================================================================
+   CRAFT FLOOR - the surfaces nobody draws. do not delete.
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+@supports (interpolate-size: allow-keywords) {
+  :root { interpolate-size: allow-keywords; }   /* height: auto becomes animatable */
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scrollbar-gutter: stable;                     /* no shift when a scrollbar appears */
+  scrollbar-color: var(--hairline-strong) transparent;
+  scrollbar-width: thin;
+  scroll-padding-top: calc(var(--nav-h) + var(--space-4));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:focus-within { scroll-behavior: smooth; }
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--text-base);
+  line-height: var(--lh-base);
+  font-weight: var(--weight-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-synthesis-weight: none;                  /* no fake bold when a weight is missing */
+  -webkit-tap-highlight-color: transparent;
+  min-height: 100dvh;                           /* never 100vh */
+}
+
+/* headings: display family, matched tracking, no orphan words */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-strong);
+  margin: 0;
+  text-wrap: balance;
+}
+h1 { font-size: var(--text-h1); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); }
+h2 { font-size: var(--text-h2); line-height: var(--lh-h2); letter-spacing: var(--ls-h2); }
+h3 { font-size: var(--text-h3); line-height: var(--lh-h3); letter-spacing: var(--ls-h3); }
+h4 { font-size: var(--text-h4); line-height: var(--lh-h4); letter-spacing: var(--ls-h4); }
+
+p, li { text-wrap: pretty; }
+p { margin: 0; max-inline-size: var(--measure); }
+
+/* display utilities */
+.display-1 {
+  font-family: var(--font-display);
+  font-size: var(--text-display-1);
+  line-height: var(--lh-display-1);
+  letter-spacing: var(--ls-display-1);
+  font-weight: var(--weight-display);
+  text-wrap: balance;
+}
+.display-2 {
+  font-family: var(--font-display);
+  font-size: var(--text-display-2);
+  line-height: var(--lh-display-2);
+  letter-spacing: var(--ls-display-2);
+  font-weight: var(--weight-display);
+  text-wrap: balance;
+}
+
+/* selection: default blue destroys any palette */
+::selection {
+  background: color-mix(in oklab, var(--accent) 22%, var(--canvas));
+  color: var(--ink);
+}
+
+/* caret */
+input, textarea, [contenteditable] { caret-color: var(--accent); }
+
+/* focus: visible, offset, never removed */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+:where(a, button, input, select, textarea, summary):focus:not(:focus-visible) { outline: none; }
+
+/* links in prose: underline that clears the descenders */
+a {
+  color: inherit;
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in oklab, currentColor 40%, transparent);
+  transition: text-decoration-color var(--dur-instant) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  a:hover { text-decoration-color: currentColor; }
+}
+
+/* media: block by default, never overflow */
+:where(img, svg, video, canvas, picture) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+img { background: var(--surface); }              /* no white flash while loading */
+
+/* forms inherit type, and grow when told to */
+:where(input, button, textarea, select) {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+textarea { field-sizing: content; }
+:where(input, textarea)::placeholder { color: var(--ink-muted); opacity: 1; }
+
+/* 16px minimum on mobile inputs or iOS zooms the page */
+@media (max-width: 640px) {
+  :where(input, select, textarea) { font-size: max(16px, 1rem); }
+}
+
+/* autofill: chrome paints yellow unless stopped */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--ink);
+  /* viora-allow: neon-glow this is the only way to repaint chrome autofill, not a decorative glow */
+  -webkit-box-shadow: 0 0 0 100px var(--surface) inset;
+  caret-color: var(--accent);
+}
+
+/* scrollbar: a default light scrollbar on a dark page is the loudest tell there is */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--hairline-strong);
+  border-radius: var(--r-full);
+  border: 2px solid var(--canvas);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--ink-subtle); }
+
+/* numerals that must not jitter or wander */
+.tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+.mono { font-family: var(--font-mono); font-variant-ligatures: none; }
+
+/* hairline rule */
+hr { border: 0; border-top: 1px solid var(--hairline); margin: var(--space-8) 0; }
+
+/* layout helpers */
+.container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+.prose { max-inline-size: var(--measure); }
+.stack > * + * { margin-block-start: var(--space-4); }
+.section { padding-block: clamp(var(--space-10), 8vw, var(--space-14)); }
+
+/* fixed bottom bars must clear the home indicator */
+.safe-bottom { padding-bottom: max(var(--space-4), env(safe-area-inset-bottom)); }
+.safe-top { padding-top: max(var(--space-4), env(safe-area-inset-top)); }
+
+/* screen-reader-only, for accessible names that must not be visible */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+/* skip link, first focusable element on the page */
+.skip-link {
+  position: absolute; left: var(--space-4); top: var(--space-4);
+  z-index: var(--z-5); background: var(--surface); color: var(--ink);
+  padding: var(--space-2) var(--space-4); border-radius: var(--r-md);
+  border: 1px solid var(--control-border);
+  /* offscreen by transform, never by layout: nothing reflows when it appears */
+  translate: 0 calc(-100% - var(--space-4));
+  transition: translate var(--dur-fast) var(--ease-out);
+}
+.skip-link:focus { translate: 0 0; }
+
+/* reduced motion: ships in the same file, not a later commit */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* reduced transparency: any glass surface needs a solid fallback */
+@media (prefers-reduced-transparency: reduce) {
+  .glass, [data-glass] {
+    backdrop-filter: none;
+    background: var(--surface);
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root { --hairline: var(--hairline-strong); --ink-muted: var(--ink); }
+}
+
+/* print: one rule stops a dark page printing as a black rectangle */
+@media print {
+  /* viora-allow: pure-black-text print wants maximum ink density on paper, screen rules do not apply */
+  :root { --canvas: #fff; --surface: #fff; --ink: #000; --ink-muted: #333; --hairline: #ccc; }
+  /* viora-allow: pure-black-text same reason */
+  body { background: #fff; color: #000; }
+  nav, footer, .no-print, [data-no-print] { display: none !important; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #555; }
+  h1, h2, h3 { break-after: avoid; }
+  p, li, table { break-inside: avoid; }
+}
+
+/* ==========================================================================
+   TAILWIND v4 - uncomment if the project uses Tailwind, keep the same names
+   ==========================================================================
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-hairline: var(--hairline);
+  --color-hairline-strong: var(--hairline-strong);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-text);
+  --font-mono: var(--font-mono);
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+  --shadow-1: var(--shadow-1);
+  --shadow-2: var(--shadow-2);
+  --shadow-3: var(--shadow-3);
+  --shadow-4: var(--shadow-4);
+  --ease-out: var(--ease-out);
+  --ease-drawer: var(--ease-drawer);
+}
+*/
