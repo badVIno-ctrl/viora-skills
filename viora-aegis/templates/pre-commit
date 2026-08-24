@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Viora Aegis pre-commit gate.
+# Install:  python3 <pack>/scripts/viora.py init --hook
+# Bypass (emergencies only, and fix it in the next commit):  git commit --no-verify
+set -uo pipefail
+
+SKILL_DIR="${VIORA_SKILL_DIR:-.viora/skills/viora-aegis}"
+VIORA="$SKILL_DIR/scripts/viora.py"
+
+if ! command -v python3 >/dev/null 2>&1 || [ ! -f "$VIORA" ]; then
+  exit 0    # never block a commit because tooling is missing
+fi
+
+printf '\033[1mViora Aegis\033[0m checking staged changes...\n'
+
+# 1. Secrets in the staged diff — always blocking.
+python3 "$VIORA" scan --path . --staged --only SECRET --fail-on low --quiet
+SECRETS=$?
+if [ "$SECRETS" = "1" ]; then
+  printf '\n\033[31mBLOCKED: a possible secret is staged.\033[0m\n'
+  printf 'Remove it, then ROTATE the credential — it may already be exposed.\n'
+  printf 'False positive? Add:  // viora-ignore: SECRET-XXX reason\n\n'
+  python3 "$VIORA" scan --path . --staged --only SECRET --fail-on low
+  exit 1
+fi
+
+# 2. High/Critical vulnerability patterns in the staged diff.
+python3 "$VIORA" scan --path . --staged --fail-on high --quiet
+CODE=$?
+if [ "$CODE" = "1" ]; then
+  printf '\n\033[31mBLOCKED: high-severity findings in this change.\033[0m\n\n'
+  python3 "$VIORA" scan --path . --staged --fail-on high
+  printf '\nFix them, or justify with:  // viora-ignore: RULE-ID reason\n'
+  printf 'Emergency bypass: git commit --no-verify\n\n'
+  exit 1
+fi
+
+printf '\033[32mViora Aegis: clean.\033[0m\n'
+exit 0

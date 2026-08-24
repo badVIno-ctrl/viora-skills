@@ -1,0 +1,46 @@
+---
+description: Viora Aegis — defensive security skill. Apply when writing or reviewing code that touches untrusted input, auth, sessions, payments, uploads, personal data, dependencies, CI/CD, containers, or LLM/agent features; and whenever asked to check, audit, harden or secure anything.
+globs: ["**/*.{js,jsx,ts,tsx,py,rb,php,go,java,kt,cs,rs,sql,sh,yml,yaml,tf}", "**/Dockerfile*", ".github/workflows/**"]
+alwaysApply: false
+---
+
+# Viora Aegis — security rules
+
+Full skill: `.viora/skills/viora-aegis/SKILL.md`. Read it before any audit, review or hardening work.
+
+## Always on (the Ten Laws)
+
+1. All external input is hostile — including LLM output. Validate at the boundary with an allowlist schema.
+2. Never build a command from a string. Parameterised queries, argv arrays, no `eval`.
+3. Authentication is not authorization. Check ownership of the object, server-side, every time.
+4. Fail closed. An exception or missing config in a security decision means deny.
+5. No secret in the repo, ever — and no fallback default that lets the app boot without one.
+6. Encode at the sink, in the sink's context. Never bypass framework escaping.
+7. Crypto is a library call: TLS 1.2+, AES-GCM, Argon2id/bcrypt(≥12), CSPRNG. Never disable verification.
+8. Least privilege everywhere — DB users, cloud roles, CI tokens, CORS origins, agent tools.
+9. Bound everything: rate limits, body size, timeouts, pagination, token and tool-call budgets.
+10. Log security events with correlation IDs; never log secrets; never return stack traces.
+
+## Before reporting anything
+
+Answer three questions in writing, or say UNDETERMINED:
+1. Is the input genuinely attacker-controlled? Trace it back to a real entry point.
+2. Is the sink reachable — is there already an ORM, schema, allowlist, escape or middleware in between?
+3. What is the blast radius — who triggers it, what do they get, does it cross a trust boundary?
+
+Severity = impact × reachability, never the pattern name. A regex hit is a lead, not a finding.
+
+## Commands
+
+```bash
+python3 .viora/skills/viora-aegis/scripts/viora.py scan --path . --diff origin/main   # review a change
+python3 .viora/skills/viora-aegis/scripts/viora.py scan --path .                      # full audit
+python3 .viora/skills/viora-aegis/scripts/viora.py deps --path .                      # supply chain
+python3 .viora/skills/viora-aegis/scripts/viora.py headers https://your-site          # live headers
+```
+
+## Never
+
+- Weaken a control (disable TLS verification, widen CORS, remove a check) to make a build or test pass.
+- Change auth, session, CORS, crypto or payment behaviour without asking first.
+- Report a finding you have not traced, or claim a clean result for something you did not check.

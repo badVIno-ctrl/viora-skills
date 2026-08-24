@@ -1,0 +1,200 @@
+{
+  "$schema": "viora-pack/1",
+  "name": "viora-aegis",
+  "displayName": "Viora Aegis",
+  "version": "1.0.0",
+  "brand": "Viora",
+  "license": "MIT",
+  "description": "Universal defensive security skill for coding agents: threat modelling, secure code review, vulnerability triage with false-positive control, hardening, secret and dependency scanning, CI gating, and LLM/agent security.",
+  "entrypoint": "SKILL.md",
+  "cli": "scripts/viora.py",
+  "runtime": {
+    "python": ">=3.8",
+    "dependencies": [],
+    "network": "optional",
+    "degradedMode": "grep-only using rules/*.json when shell execution is unavailable"
+  },
+  "compatibility": [
+    {
+      "agent": "claude-code",
+      "install": ".claude/skills/viora-aegis/",
+      "mode": "native-skill"
+    },
+    {
+      "agent": "claude-desktop",
+      "install": "skill upload (zip)",
+      "mode": "native-skill"
+    },
+    {
+      "agent": "codex",
+      "install": ".viora/skills/viora-aegis/ + AGENTS.md",
+      "mode": "pointer"
+    },
+    {
+      "agent": "antigravity",
+      "install": ".antigravity/rules/viora-aegis.md + AGENTS.md",
+      "mode": "pointer"
+    },
+    {
+      "agent": "cursor",
+      "install": ".cursor/rules/viora-aegis.mdc",
+      "mode": "rule"
+    },
+    {
+      "agent": "windsurf",
+      "install": ".windsurf/rules/viora-aegis.md",
+      "mode": "rule"
+    },
+    {
+      "agent": "gemini-cli",
+      "install": "GEMINI.md",
+      "mode": "pointer"
+    },
+    {
+      "agent": "github-copilot",
+      "install": ".github/copilot-instructions.md",
+      "mode": "pointer"
+    },
+    {
+      "agent": "opencode",
+      "install": ".opencode/skills/viora-aegis/",
+      "mode": "native-skill"
+    },
+    {
+      "agent": "cline",
+      "install": ".clinerules/viora-aegis.md",
+      "mode": "rule"
+    },
+    {
+      "agent": "roo",
+      "install": ".roo/rules/viora-aegis.md",
+      "mode": "rule"
+    },
+    {
+      "agent": "kilo",
+      "install": ".kilocode/rules/viora-aegis.md",
+      "mode": "rule"
+    },
+    {
+      "agent": "continue",
+      "install": ".continue/rules/viora-aegis.md",
+      "mode": "rule"
+    },
+    {
+      "agent": "aider",
+      "install": "CONVENTIONS.md",
+      "mode": "pointer"
+    },
+    {
+      "agent": "zed",
+      "install": ".rules",
+      "mode": "pointer"
+    },
+    {
+      "agent": "generic",
+      "install": "AGENTS.md",
+      "mode": "pointer"
+    }
+  ],
+  "modes": [
+    "GUARD",
+    "REVIEW",
+    "AUDIT",
+    "HARDEN",
+    "FIX",
+    "TRIAGE",
+    "DESIGN",
+    "AGENT-SEC"
+  ],
+  "commands": [
+    {
+      "name": "doctor",
+      "summary": "Detect stack, entry points, risk surfaces and available tooling"
+    },
+    {
+      "name": "scan",
+      "summary": "Scan code for vulnerability patterns and secrets; text/json/sarif/markdown"
+    },
+    {
+      "name": "deps",
+      "summary": "Dependency and supply-chain hygiene, optional OSV lookup"
+    },
+    {
+      "name": "headers",
+      "summary": "Check live security headers, cookies and CORS"
+    },
+    {
+      "name": "baseline",
+      "summary": "Freeze current findings so only new issues fail the gate"
+    },
+    {
+      "name": "report",
+      "summary": "Merge result files into one SECURITY_REPORT.md"
+    },
+    {
+      "name": "init",
+      "summary": "Write config, pre-commit hook and CI workflow"
+    }
+  ],
+  "rules": {
+    "patterns": {
+      "file": "rules/patterns.json",
+      "count": 51,
+      "prefixes": [
+        "AI",
+        "AUTH",
+        "CONTAINER",
+        "CRYPTO",
+        "DEFAULT",
+        "DESER",
+        "DOS",
+        "INJ",
+        "LOG",
+        "PATH",
+        "SSRF",
+        "SUPPLY",
+        "XSS"
+      ]
+    },
+    "secrets": {
+      "file": "rules/secrets.json",
+      "count": 15,
+      "entropyDetector": "SECRET-900"
+    },
+    "total": 66
+  },
+  "references": [
+    "references/00-index.md",
+    "references/01-threat-model.md",
+    "references/02-owasp-top10-2025.md",
+    "references/03-language-playbooks.md",
+    "references/04-ai-agent-security.md",
+    "references/05-secure-patterns.md",
+    "references/06-supply-chain.md",
+    "references/07-triage-and-severity.md",
+    "references/08-toolchain.md",
+    "references/09-checklists.md"
+  ],
+  "standards": [
+    "OWASP Top 10:2025",
+    "OWASP ASVS 5.0",
+    "OWASP LLM Top 10 (2025)",
+    "OWASP Agentic Security Initiative",
+    "CWE",
+    "STRIDE",
+    "NIST SSDF"
+  ],
+  "scope": "defensive-only",
+  "exitCodes": {
+    "0": "clean",
+    "1": "findings at or above the gate",
+    "2": "execution error"
+  },
+  "templates": [
+    "templates/SECURITY_REPORT.md",
+    "templates/THREAT_MODEL.md",
+    "templates/pre-commit",
+    "templates/ci-github-actions.yml",
+    "templates/ci-gitlab-ci.yml"
+  ]
+}

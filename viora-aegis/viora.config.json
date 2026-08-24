@@ -1,0 +1,22 @@
+{
+  "$schema": "viora-config/1",
+
+  "failOn": "high",
+
+  "minSeverity": "low",
+
+  "exclude": [
+    "vendor/**",
+    "third_party/**",
+    "**/*.min.js",
+    "**/fixtures/**"
+  ],
+
+  "disabledRules": [],
+
+  "severityOverrides": {},
+
+  "secretsEntropy": true,
+
+  "downgradeTests": true
+}

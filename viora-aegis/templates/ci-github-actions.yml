@@ -1,0 +1,85 @@
+name: Viora Aegis security
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"     # weekly, catches newly published CVEs
+  workflow_dispatch:
+
+permissions:
+  contents: read            # least privilege by default
+
+concurrency:
+  group: viora-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    name: Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write   # only for uploading SARIF
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0       # full history: diff mode and secret history need it
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Environment
+        run: python3 .viora/skills/viora-aegis/scripts/viora.py doctor --path .
+
+      - name: Scan code
+        run: |
+          python3 .viora/skills/viora-aegis/scripts/viora.py scan \
+            --path . --format sarif --out viora.sarif --fail-on high
+
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: viora.sarif
+          category: viora-aegis
+
+      - name: Dependencies
+        if: always()
+        run: python3 .viora/skills/viora-aegis/scripts/viora.py deps --path . --online
+
+      - name: Markdown summary
+        if: always()
+        run: |
+          python3 .viora/skills/viora-aegis/scripts/viora.py scan \
+            --path . --format markdown --out .viora/findings.md --fail-on none || true
+          cat .viora/findings.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: viora-findings
+          path: |
+            viora.sarif
+            .viora/findings.md
+          retention-days: 30
+
+  diff:
+    name: Changed files only
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Scan the diff
+        run: |
+          git fetch origin "${{ github.base_ref }}" --depth=1 || true
+          python3 .viora/skills/viora-aegis/scripts/viora.py scan \
+            --path . --diff "origin/${{ github.base_ref }}" --fail-on medium

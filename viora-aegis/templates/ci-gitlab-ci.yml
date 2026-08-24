@@ -1,0 +1,58 @@
+# Viora Aegis — GitLab CI security gate
+# Copy into .gitlab-ci.yml, or keep as a separate file and add:
+#   include: { local: '.viora/skills/viora-aegis/templates/ci-gitlab-ci.yml' }
+#
+# Assumes the pack lives at .viora/skills/viora-aegis (override with VIORA_SKILL_DIR).
+
+variables:
+  VIORA_SKILL_DIR: ".viora/skills/viora-aegis"
+
+viora-aegis:scan:
+  stage: test
+  image: python:3.12-slim
+  needs: []
+  script:
+    - python3 "$VIORA_SKILL_DIR/scripts/viora.py" doctor --path .
+    - python3 "$VIORA_SKILL_DIR/scripts/viora.py" scan --path . --format json --out viora.json --fail-on none
+    - python3 "$VIORA_SKILL_DIR/scripts/viora.py" scan --path . --format markdown --out viora-findings.md --fail-on none
+    # the gate: exit 1 on anything at or above 'high'
+    - python3 "$VIORA_SKILL_DIR/scripts/viora.py" scan --path . --fail-on high
+  artifacts:
+    when: always
+    expire_in: 30 days
+    paths:
+      - viora.json
+      - viora-findings.md
+
+viora-aegis:secrets:
+  stage: test
+  image: python:3.12-slim
+  needs: []
+  script:
+    # zero tolerance for credentials, on every branch
+    - python3 "$VIORA_SKILL_DIR/scripts/viora.py" scan --path . --only SECRET --fail-on low
+
+viora-aegis:deps:
+  stage: test
+  image: python:3.12-slim
+  needs: []
+  allow_failure: true
+  script:
+    - python3 "$VIORA_SKILL_DIR/scripts/viora.py" deps --path . --online --json viora-deps.json
+  artifacts:
+    when: always
+    expire_in: 30 days
+    paths:
+      - viora-deps.json
+
+# Merge-request-only variant: scan just what changed.
+# viora-aegis:mr:
+#   stage: test
+#   image: python:3.12-slim
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+#   variables:
+#     GIT_DEPTH: 0
+#   script:
+#     - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+#     - python3 "$VIORA_SKILL_DIR/scripts/viora.py" scan --path . --diff "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" --fail-on high
