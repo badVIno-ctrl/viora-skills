@@ -509,11 +509,3 @@ viora-skills/
 
 <br/>
 
-## Лицензия
-
-MIT.
-
-<div align="center">
-<sub><b>Viora</b> — один стандарт для всех кодовых агентов.</sub>
-</div>
-
