@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+# VioraCode pre-commit hook.
+#
+# Why this exists: everything else in this protocol depends on the agent choosing to
+# follow it. This hook does not. It runs whether the agent cooperates or not, which makes
+# it the only part of VioraCode that a weak model cannot skip by forgetting.
+#
+# It blocks a commit when:
+#   1. a VioraCode run is open and `viora.py check` says it is not ready
+#      (unfinished steps, stale evidence, out-of-plan files, open Critical findings)
+#   2. staged files contain merge-conflict markers
+#   3. staged files contain focused tests (.only / fdescribe / fit) that would silently
+#      disable the rest of the suite in CI
+#
+# It warns, but does not block, on debug residue (print/console.log/breakpoint/dd()).
+#
+# Escape hatch, deliberately noisy so it shows up in shell history:
+#   VIORA_SKIP=1 git commit -m "..."
+#
+# Install: bash hooks/install-hooks.sh   (or copy this file to .git/hooks/pre-commit)
+
+set -uo pipefail
+
+GIT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || echo .)"
+cd "$GIT_ROOT" || exit 0
+
+VIORA_DIR="${VIORA_DIR:-.viora}"
+SCRIPT=""
+for candidate in scripts/viora.py .viora/viora.py "$HOME/.viora/scripts/viora.py"; do
+  [ -f "$candidate" ] && SCRIPT="$candidate" && break
+done
+
+say()  { printf '%s\n' "$*" >&2; }
+rule() { say "------------------------------------------------------------------"; }
+
+if [ -n "${VIORA_SKIP:-}" ]; then
+  say "viora: VIORA_SKIP set - hook bypassed. The commit is on you."
+  exit 0
+fi
+
+STAGED="$(git diff --cached --name-only --diff-filter=ACMR 2>/dev/null)"
+[ -z "$STAGED" ] && exit 0
+
+FAIL=0
+
+# ---------------------------------------------------------------- 1. run state
+if [ -f "$VIORA_DIR/state.json" ] && [ -n "$SCRIPT" ] && command -v python3 >/dev/null 2>&1; then
+  CHECK_OUT="$(python3 "$SCRIPT" check 2>&1)"
+  CHECK_CODE=$?
+  if [ "$CHECK_CODE" -ne 0 ]; then
+    rule
+    say "viora: this commit is blocked because the open run is not ready."
+    say ""
+    printf '%s\n' "$CHECK_OUT" >&2
+    say ""
+    say "Three honest ways forward:"
+    say "  - finish the steps:      python3 $SCRIPT next"
+    say "  - rerun the gates:       python3 $SCRIPT gate"
+    say "  - commit anyway, loudly: VIORA_SKIP=1 git commit ..."
+    FAIL=1
+  fi
+elif [ -n "$SCRIPT" ]; then
+  say "viora: no open run ($VIORA_DIR/state.json missing) - skipping protocol checks."
+fi
+
+# ------------------------------------------------------- 2. conflict markers
+CONFLICTS=""
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  if git show ":$f" 2>/dev/null | grep -qE '^(<{7}|={7}|>{7})( |$)'; then
+    CONFLICTS="$CONFLICTS $f"
+  fi
+done <<<"$STAGED"
+if [ -n "$CONFLICTS" ]; then
+  rule
+  say "viora: merge-conflict markers are staged in:"
+  for f in $CONFLICTS; do say "  $f"; done
+  say "This is never intentional. Resolve them and stage again."
+  FAIL=1
+fi
+
+# ---------------------------------------------------------- 3. focused tests
+FOCUSED=""
+while IFS= read -r f; do
+  case "$f" in
+    *test*|*spec*|*Test*|*Spec*) ;;
+    *) continue ;;
+  esac
+  [ -f "$f" ] || continue
+  if git show ":$f" 2>/dev/null | grep -qE '(describe|it|test|context)\.only|^\s*(fdescribe|fit)\(|\.only\(' ; then
+    FOCUSED="$FOCUSED $f"
+  fi
+done <<<"$STAGED"
+if [ -n "$FOCUSED" ]; then
+  rule
+  say "viora: focused test(s) staged - CI would silently skip the rest of the suite:"
+  for f in $FOCUSED; do say "  $f"; done
+  say "Remove .only / fdescribe / fit, or bypass with VIORA_SKIP=1 if this is deliberate."
+  FAIL=1
+fi
+
+# ------------------------------------------------------------ 4. debug residue
+RESIDUE=""
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  case "$f" in
+    *test*|*spec*|*.md|*.json|*.lock|*.yml|*.yaml) continue ;;
+  esac
+  hits="$(git show ":$f" 2>/dev/null | grep -cE 'console\.(log|debug)\(|^\s*print\(|breakpoint\(\)|debugger;|binding\.pry|dd\(|var_dump\(' 2>/dev/null || true)"
+  # grep -c exits 1 when it finds nothing, so a naive `|| echo 0` appends a
+  # SECOND line and the numeric test below receives "0\n0". Keep digits only.
+  hits="$(printf '%s' "${hits:-0}" | tr -dc '0-9')"
+  [ "${hits:-0}" -gt 0 ] && RESIDUE="$RESIDUE $f:$hits"
+done <<<"$STAGED"
+if [ -n "$RESIDUE" ]; then
+  rule
+  say "viora: possible debug residue (not blocking - some of these are legitimate output):"
+  for f in $RESIDUE; do say "  $f hit(s)"; done
+fi
+
+# ------------------------------------------------------------- 5. change size
+ADDED="$(git diff --cached --numstat 2>/dev/null | awk '{a+=$1; d+=$2} END {print a+d}')"
+ADDED="${ADDED:-0}"
+FILES="$(printf '%s\n' "$STAGED" | grep -c . || true)"
+FILES="$(printf '%s' "${FILES:-0}" | tr -dc '0-9')"
+if [ "$ADDED" -gt 1000 ]; then
+  rule
+  say "viora: $ADDED changed lines across $FILES file(s)."
+  say "Over 1000 lines must be split - nobody reviews this, they approve it."
+  say "Split strategies: references/06-change-sizing.md"
+  FAIL=1
+elif [ "$ADDED" -gt 300 ]; then
+  rule
+  say "viora: $ADDED changed lines across $FILES file(s) - over the 300-line ceiling."
+  say "Not blocking, but say in the commit message why this is one atomic change."
+fi
+
+if [ "$FAIL" -ne 0 ]; then
+  rule
+  say "COMMIT BLOCKED by viora pre-commit."
+  say "This hook is not smarter than you. It is only more consistent."
+  exit 1
+fi
+
+exit 0

@@ -167,11 +167,32 @@ echo "## Evidence table"
 echo
 echo "| Gate | Command | Result |"
 echo "|---|---|---|"
+
+# Append every row to the evidence log so a later report cannot claim a gate that
+# was never run. viora.py report only prints PASS for rows found in this file.
+# When viora.py invoked us it sets VIORA_NO_EVIDENCE=1 and records the rows itself,
+# stamped with a fingerprint of the working tree, so we must not write duplicates.
+EVIDENCE_LOG=""
+VIORA_DIR="${VIORA_DIR:-.viora}"
+if [ -z "${VIORA_NO_EVIDENCE:-}" ] && mkdir -p "$VIORA_DIR" 2>/dev/null; then
+  EVIDENCE_LOG="$VIORA_DIR/evidence.jsonl"
+fi
+STAMP="$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo unknown)"
+
 for row in "${RESULTS[@]}"; do
   IFS='|' read -r g c r <<<"$row"
   echo "| $g | \`$c\` | $r |"
+  if [ -n "$EVIDENCE_LOG" ]; then
+    esc_c="$(printf '%s' "$c" | sed 's/\\/\\\\/g; s/"/\\"/g')"
+    printf '{"gate":"%s","command":"%s","result":"%s","at":"%s"}\n' \
+      "$g" "$esc_c" "$r" "$STAMP" >>"$EVIDENCE_LOG" 2>/dev/null || true
+  fi
 done
 echo
+if [ -n "$EVIDENCE_LOG" ]; then
+  echo "Evidence appended to $EVIDENCE_LOG"
+  echo
+fi
 if [ "$FAILED" -eq 1 ]; then
   echo "VERDICT: FAIL - fix the failing gate before claiming completion."
   exit 1

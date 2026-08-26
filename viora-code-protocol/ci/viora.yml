@@ -1,0 +1,169 @@
+# VioraCode CI - the part of the protocol that does not depend on the agent's memory.
+#
+# Copy to .github/workflows/viora.yml
+#
+# Design rules:
+#   - installs nothing. No network beyond checkout. It runs the repo's own gates.
+#   - never fails on style opinions. It fails on the three things that are always wrong:
+#     a failing gate, an unreviewable diff, and a report that claims what it did not run.
+#   - every failure message says what to do next, because the reader is often an agent.
+#
+# Requires the protocol's scripts/ directory in the repo (or vendored under .viora/).
+
+name: viora
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  gates:
+    name: gates (the repo's own commands)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # differential review needs history
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Locate the protocol scripts
+        id: locate
+        run: |
+          for d in scripts .viora/scripts tools/viora; do
+            if [ -f "$d/verify.sh" ]; then
+              echo "dir=$d" >>"$GITHUB_OUTPUT"
+              exit 0
+            fi
+          done
+          echo "::warning::VioraCode scripts not found - skipping gate detection"
+          echo "dir=" >>"$GITHUB_OUTPUT"
+
+      - name: List detected gates
+        if: steps.locate.outputs.dir != ''
+        run: bash ${{ steps.locate.outputs.dir }}/verify.sh . --list
+
+      - name: Run detected gates
+        if: steps.locate.outputs.dir != ''
+        run: bash ${{ steps.locate.outputs.dir }}/verify.sh .
+
+      - name: Upload evidence
+        if: always() && steps.locate.outputs.dir != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: viora-evidence
+          path: .viora/evidence.jsonl
+          if-no-files-found: ignore
+
+  size:
+    name: change size (is this reviewable)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Measure the diff
+        run: |
+          BASE="${{ github.event.pull_request.base.sha }}"
+          [ -n "$BASE" ] || BASE="$(git rev-parse HEAD~1)"
+          CHANGED=$(git diff --numstat "$BASE"...HEAD | awk '{a+=$1; d+=$2} END {print a+d+0}')
+          FILES=$(git diff --name-only "$BASE"...HEAD | grep -c . || true)
+          echo "changed lines: $CHANGED across $FILES file(s)"
+          echo "### viora: $CHANGED changed lines, $FILES files" >>"$GITHUB_STEP_SUMMARY"
+
+          # Generated files and lockfiles do not count against reviewability.
+          REAL=$(git diff --numstat "$BASE"...HEAD \
+            -- . ':(exclude)**/*.lock' ':(exclude)**/package-lock.json' \
+               ':(exclude)**/pnpm-lock.yaml' ':(exclude)**/yarn.lock' \
+               ':(exclude)**/Cargo.lock' ':(exclude)**/poetry.lock' \
+               ':(exclude)**/*.snap' ':(exclude)**/*.generated.*' \
+            | awk '{a+=$1; d+=$2} END {print a+d+0}')
+          echo "hand-written lines: $REAL"
+          echo "hand-written (excluding lockfiles and snapshots): $REAL" >>"$GITHUB_STEP_SUMMARY"
+
+          if [ "$REAL" -gt 1000 ]; then
+            echo "::error::$REAL hand-written changed lines. Over 1000 nobody reviews a PR, they approve it. Split it: see references/06-change-sizing.md (Stack / File group / Horizontal / Vertical slice)."
+            exit 1
+          fi
+          if [ "$REAL" -gt 300 ]; then
+            echo "::warning::$REAL hand-written changed lines, over the 300-line ceiling. If this is one atomic change, say why in the PR body."
+          fi
+
+      - name: Conflict markers and focused tests
+        run: |
+          BASE="${{ github.event.pull_request.base.sha }}"
+          [ -n "$BASE" ] || BASE="$(git rev-parse HEAD~1)"
+          FAIL=0
+          if git diff "$BASE"...HEAD -U0 | grep -E '^\+(<{7}|={7}|>{7})( |$)' >/dev/null; then
+            echo "::error::merge-conflict markers were added in this PR"
+            FAIL=1
+          fi
+          if git diff "$BASE"...HEAD -U0 -- '*test*' '*spec*' \
+             | grep -E '^\+.*((describe|it|test|context)\.only|fdescribe\(|\bfit\()' >/dev/null; then
+            echo "::error::a focused test (.only / fdescribe / fit) was added - the rest of the suite would be skipped"
+            FAIL=1
+          fi
+          exit $FAIL
+
+  hygiene:
+    name: structural hygiene (advisory)
+    runs-on: ubuntu-latest
+    continue-on-error: true # these are findings, not verdicts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Hotspots
+        run: |
+          [ -f scripts/scan_repo.py ] || exit 0
+          python3 scripts/scan_repo.py . --top 12 | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Duplicate blocks
+        run: |
+          [ -f scripts/find_duplicates.py ] || exit 0
+          python3 scripts/find_duplicates.py . --min-lines 8 --top 10 | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: UI guard
+        run: |
+          [ -f scripts/ui_guard.py ] || exit 0
+          python3 scripts/ui_guard.py . | tee -a "$GITHUB_STEP_SUMMARY"
+
+  honesty:
+    name: report honesty (agent-authored PRs)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: The PR body must carry a real report
+        env:
+          BODY: ${{ github.event.pull_request.body }}
+          LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+        run: |
+          # Only enforced on PRs labelled agent / ai / viora. Humans are not asked to
+          # paste a machine report; agents are, because their claims are the risk.
+          case ",$LABELS," in
+            *,agent,*|*,ai,*|*,viora,*) ;;
+            *) echo "not an agent-authored PR (labels: $LABELS) - skipping"; exit 0 ;;
+          esac
+
+          fail=0
+          printf '%s' "$BODY" | grep -qE 'VERDICT:\s*(DELIVERED|NO_CHANGE|BLOCKED)' \
+            || { echo "::error::PR body has no 'VERDICT: DELIVERED|NO_CHANGE|BLOCKED' line. Paste the output of 'viora.py report' unedited."; fail=1; }
+          printf '%s' "$BODY" | grep -qiE 'NOT DONE|UNPROVEN' \
+            || { echo "::error::PR body has no 'NOT DONE / UNPROVEN' section. Every change has an untested edge; an empty list is not credible."; fail=1; }
+          printf '%s' "$BODY" | grep -qiE '\| *Gate *\||EVIDENCE' \
+            || { echo "::error::PR body has no evidence table. Run 'viora.py gate' and paste the table."; fail=1; }
+
+          if printf '%s' "$BODY" | grep -qiE 'should work|probably works|I think this works'; then
+            echo "::error::PR body hedges ('should work'). Either you ran a command and can paste it, or the claim comes out."
+            fail=1
+          fi
+          exit $fail

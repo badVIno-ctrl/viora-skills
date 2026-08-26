@@ -1,257 +1,323 @@
 ---
 name: viora-code-protocol
-description: Viora Code Protocol by Viora Studio - the engineering standard for any coding agent (Codex, Antigravity, Cursor, Claude Code, Copilot and others). Use for every code task - writing a feature, fixing a bug, refactoring, reviewing a diff, building or changing UI, or optimizing performance - in any language or framework. Prevents the typical failures of generated code: duplicated logic and second copies of components that overwrite each other, overlapping interfaces and z-index wars, dead or orphaned code, unbounded files and functions, leaks and heavy render loops, and "done" claims with no proof. Provides task-mode routing, an anti-duplication reuse ladder, hard size limits, UI integrity and performance budgets, evidence-based verification gates, a self-review pass, and a fixed report format, plus read-only scanner scripts (scan_repo, find_duplicates, ui_guard, verify).
+description: Universal engineering protocol for AI coding agents (Codex, Claude Code, Cursor, Windsurf, Antigravity, Gemini CLI, Copilot, Cline). Ship the smallest, clearest, single-owner change that is proven to work by fresh command output. Use for every code task - fix, feature, refactor, UI, performance, debugging, review. Runs on a three-tier ladder (T0 MICRO / T1 LITE / T2 FULL) so a fast cheap model runs the same gates as a frontier model, with more scaffolding and fewer judgment calls.
 ---
 
-# Viora Code Protocol
+# VioraCode Protocol
 
-*Viora Studio engineering standard. Companion to Viora Design Skills.*
+**The law.** Ship the smallest, clearest, single-owner change that is *proven* to work by fresh command output.
 
-**The law:** ship the smallest, clearest, single-owner change that is *proven* to work by fresh command output.
+**Authority order.** 1. Repository rules (`AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING`, lint/format config, CI). 2. This protocol. 3. Your own habits. When 1 and 2 disagree, 1 wins and you say so in one line.
 
-This protocol is agent-neutral and language-neutral. It overrides your habits, not the repository's own rules. If a repository instruction file (any `AGENTS.md`, `CONTRIBUTING.md`, `.md` convention doc, lint config) conflicts with this protocol, the repository wins - and you say so in the report.
-
----
-
-## 0. Pick your lane (10 seconds)
-
-| Situation | Lane |
-|---|---|
-| Smaller / faster model, tight context, or a simple task | **LITE** - execute the 12-step checklist in section 3 literally, in order. Read reference files only when a step says to. |
-| Stronger reasoning model, or risky / multi-file / architectural work | **FULL** - run the phases in section 4 and read the reference file each phase names. |
-
-Both lanes pass **the same gates** (section 6). LITE is a shorter path, never permission to skip proof.
-
-Write the lane and mode in your first message: `Lane: LITE | Mode: FIX`.
+**Two failures cause every bad diff:** guessing instead of reading, and claiming instead of proving. Every rule below kills one of them.
 
 ---
 
-## 1. The six defects this protocol exists to prevent
+## 0. Set your tier - first action, one line
 
-| Defect | How it shows up | The rule that stops it |
+A tier is *how much scaffolding you need*, not how smart you are. **The gates are identical at every tier.** Only the amount of judgment changes.
+
+| Tier | Fits | How it runs |
 |---|---|---|
-| **Duplication** | A second `Modal`, a second `formatDate`, a second config loader; two files doing one job | Phase 2 Recon: search before you write; one concept = one owner |
-| **Overlap / collision** | Two interfaces mounted at once, panels stacking, styles cancelling each other, z-index war | Phase 5 UI integrity: one mount root, one layer manager, replace instead of stack |
-| **Orphans & dead code** | New file nobody imports; old code left behind "just in case"; unused flags | Phase 4: every new unit is wired on creation; superseded code is deleted in the same change |
-| **Bloat** | 900-line files, 120-line functions, 5 levels of nesting, abstractions with one caller | Section 5 hard limits + "no abstraction before the second consumer" |
-| **Heaviness** | Re-render on every keystroke, listeners never removed, N+1 queries, work in loops | Phase 6 budgets + teardown pairs |
-| **Fake completion** | "Done, it should work now" with no command output; tests never run | Phase 7 iron law: no claim without fresh evidence |
+| **T0 MICRO** | fast/cheap/small models (Gemini Flash class, 8-30B local models), and any model deep into a long session | one action per reply, one file per change, fill-in templates, scripts make the decisions |
+| **T1 LITE** | mid-tier models, new but fast models | the 10-step spine, short judgment calls, no sub-agents |
+| **T2 FULL** | frontier models with room to think | phases, sub-agent review, cross-model doubt |
 
-If your change adds any of these, it is not done - regardless of whether the feature appears to work.
+**Choose in this order. First match wins.**
+
+1. A `.viora/tier` file exists in the repo → use the word inside it.
+2. The user named a tier → use it.
+3. Neither → use **T1**.
+
+T1 is the safe default because it is *cheap to be over-scaffolded* and *expensive to be under-scaffolded*.
+
+**Demote one tier the moment any of these is true.** These are observable facts, not self-assessment:
+
+- a gate failed twice in a row on this task
+- you touched a file that was not in your PLAN
+- you wrote a sentence claiming a result you had not run
+- you cannot say which step number you are on
+- this is your 15th reply on one task
+
+Demoting is a **win**: T0 finishes tasks, and T2 held badly loses them. Say `DEMOTE -> T0 (reason)` and continue from the current step.
+
+**Every reply opens with this line:**
+
+```
+VIORA T1 | MODE FIX | STEP 4/10
+```
+
+That single line is the cheapest defence against losing the thread mid-task.
+
+→ Tier rails, the 60-second calibration probe, and the T0 hard stops: `references/07-model-tiers.md`
 
 ---
 
-## 2. Route the task
+## 1. The spine - ten steps, one owner each
 
-Classify in one line, then run only what the mode requires.
+Every task runs these ten steps in order. The tier decides how expensive each one is, never whether it happens.
 
-| Mode | Trigger | Required phases | Required gates |
+| # | Step | Output that proves it happened | T0 | T1 | T2 |
+|---|---|---|---|---|---|
+| 1 | **CONTRACT** | goal, done-test, protected, non-goals | fill template | 5 lines | + GRILL rounds |
+| 2 | **OWNER** | `Owner: path:line` for the behaviour, or `Owner: NONE` | run script, paste | script + 3 greps | full ownership map |
+| 3 | **LADDER** | the rung you chose and why rung-below fails | pick from list | 1 line | 1 line + rejected rungs |
+| 4 | **PLAN** | exact file list, line budget, frozen interfaces | 1 file only | ≤3 files | full plan |
+| 5 | **RED** | a check that fails *now* for the right reason | 1 assert | 1-2 tests | seams confirmed first |
+| 6 | **GREEN** | smallest edit inside the owner | 1 file, ≤80 lines | ≤3 files | ≤300 lines |
+| 7 | **CLEAN** | same behaviour, fewer concepts | run limits check | simplify pass | simplify + dead-code sweep |
+| 8 | **PROVE** | fresh gate output, pasted verbatim | `verify.sh` | `verify.sh` | `verify.sh` + runtime check |
+| 9 | **DOUBT** | findings from a hostile re-read | 5 fixed questions | 8-lens cold pass | clean-context reviewer / second opinion |
+| 10 | **REPORT** | the fixed report contract | template | template | template |
+
+**RED before GREEN.** A change you never watched fail is a change you cannot prove works. If the stack has no test runner, RED is a command whose output changes: a failing `curl`, a script that prints the wrong number, a log line that is missing. → `references/05-tests-and-evidence.md`
+
+**One owner.** Before you create a file, function, component, constant or route, you have already found who owns that behaviour. Two owners of one concept is the most expensive defect an agent produces. → `references/01-recon-and-reuse.md`
+
+---
+
+## 2. Modes - which steps are mandatory
+
+Name the mode in your header line. It sets the floor, and you may always do more.
+
+| Mode | Trigger | Mandatory steps | Extra reference |
 |---|---|---|---|
-| **TRIVIAL** | typo, string, comment, version bump, single obvious line | 1, 4, 7 | lint + the one relevant check |
-| **FIX** | something is broken / wrong behavior | 1, 2, 4, 5*, 7, 8 | reproduce first, then full gates |
-| **FEATURE** | new behavior | 1, 2, 3, 4, 5*, 6, 7, 8, 9 | full gates + new test |
-| **REFACTOR** | same behavior, better structure | 1, 2, 3, 4, 7, 8, 9 | full gates, **behavior must not change** |
-| **UI** | any visible surface, component, layout, style | 1, 2, 3, 4, **5**, 6, 7, 8, 9 | full gates + rendered-state check |
-| **PERF** | slow, heavy, laggy, memory | 1, 2, **6**, 4, 7, 8, 9 | measure before + after |
-| **REVIEW** | judge someone else's diff | 2, 8, 9 | no gates to run; report findings by severity |
-
-`5*` = only if the change touches UI. When unsure between two modes, pick the stricter one.
-
----
-
-## 3. LITE: the 12-step checklist
-
-Copy this list into your working notes and tick every box. Never tick a box you did not actually do.
-
-```
-[ ]  1. RESTATE: goal in one sentence + acceptance check ("done when X does Y") + what must NOT change.
-[ ]  2. UNKNOWNS: if a required fact is missing (target file, API shape, expected behavior), ask ONE
-         batched question and stop. Never guess a public interface.
-[ ]  3. SEARCH BEFORE WRITING: search the repo for the thing you are about to create -
-         3 name variants + 2 behavior keywords. Write down `Owner: path:line` for each concept you touch.
-         Command: python3 scripts/find_duplicates.py .   (or: grep -rn "<name>" --include=*.* .)
-[ ]  4. LADDER: choose the lowest rung that solves it:
-         no change -> delete/config -> reuse local code -> platform/stdlib -> installed dependency
-         -> new dependency (needs a reason) -> minimal new code. State the rung.
-[ ]  5. PLAN FILES: list every file you will touch and why, in one line each. If a new file is needed,
-         say which existing file would otherwise have grown past its limit.
-[ ]  6. LIMITS: file <= 400 lines, function <= 50 lines, nesting <= 3, params <= 4, no duplicated block
-         > 8 lines, no magic values (name them), no nested ternaries.
-[ ]  7. IMPLEMENT ONE OWNER: change the existing owner instead of adding a parallel one.
-         Delete the code your change replaces. Wire every new unit immediately (import/route/register).
-         No drive-by edits outside the plan.
-[ ]  8. UI (skip if no UI): mount once; do not stack a second panel over an existing one - replace or
-         reuse it; z-index only from the shared token/scale; no `!important`; every listener, timer,
-         subscription and observer gets its paired teardown.
-[ ]  9. TEST THE CHANGE: for a bug, first write the check that fails for the reported reason;
-         for a feature, cover the main path + one boundary. No tests of the framework itself.
-[ ] 10. RUN THE GATES and read the output: format/lint, types, tests, build (whatever the repo defines).
-         Command: bash scripts/verify.sh .
-[ ] 11. SELF-REVIEW THE DIFF line by line: unused code? leftovers? debug prints? duplicated logic?
-         anything outside the plan? Anything you cannot justify - delete it.
-[ ] 12. REPORT with the template in section 7. Label anything you did not verify as `UNPROVEN`.
-```
-
-Stop conditions inside LITE: two failed fix attempts -> switch to FULL phase 8 debugging. Any gate red -> fix or report `BLOCKED`. Never continue past a red gate.
+| **TRIVIAL** | typo, string, comment, version bump; ≤5 lines, no logic | 1, 6, 8, 10 | - |
+| **FIX** | something behaves wrong | all ten; RED reproduces the bug | `10-debugging.md` |
+| **FEATURE** | new behaviour | all ten | `02-design-and-limits.md` |
+| **REFACTOR** | same behaviour, better shape | all ten; RED = existing suite green before *and* after | `02`, `12` |
+| **UI** | anything a user sees | all ten + UI guard | `03-ui-integrity.md` |
+| **PERF** | speed, memory, size | all ten; RED = a measurement, before/after in one table | `04-performance-and-resources.md` |
+| **REVIEW** | judge a diff you or another agent wrote | 1, 2, 9, 10 | `13-differential-review.md` |
+| **DEBUG** | you are lost, not yet fixing | 1, 2, 5 then re-enter FIX | `10-debugging.md` |
 
 ---
 
-## 4. FULL: the phases
+## 3. The six defects this protocol prevents
 
-### Phase 1 - Contract
-Write 5 lines before touching code: **Outcome** (observable), **Acceptance** (command or interaction that proves it), **Protected behavior** (what must keep working), **Non-goals**, **Assumptions** (mark each as verified or guessed). Guessed assumptions about public interfaces must be resolved by reading code, not by inventing.
+Named so you can point at them in review.
 
-### Phase 2 - Recon and anti-duplication
-Map the territory before adding to it. Establish, in writing, the current owner of every concept you will touch: `Concept -> path:line`. Then apply the Solution Ladder and justify your rung.
-Read: `references/01-recon-and-reuse.md`. Tools: `scripts/scan_repo.py`, `scripts/find_duplicates.py`.
-**Hard rule:** two implementations of one behavior is a defect, even if both work.
-
-### Phase 3 - Design and limits
-Produce a file plan (path -> single responsibility -> why it exists) and freeze the interfaces first: for each unit, what it **consumes** and what it **produces**. Files that change together live together. No new layer, wrapper, event bus, or abstraction until a second real consumer exists.
-Read: `references/02-design-and-limits.md`.
-
-### Phase 4 - Implement surgically
-One owner per concept. Smallest diff that fully solves the contract. Delete what you supersede. Wire what you create. Keep names boring and explicit. No commented-out code, no `TODO` without an owner note, no placeholder or fake implementation presented as real. If a needed change falls outside the plan, record it as a follow-up instead of silently doing it.
-Read: `references/02-design-and-limits.md` (checklist at the end).
-
-### Phase 5 - UI integrity (any visible surface)
-One mount root; one owner per surface; new panels replace or extend existing ones instead of covering them; a single layer/z-index scale; no `!important`; class names namespaced to their component; teardown paired with every setup; verify the *rendered* result, not the source.
-Read: `references/03-ui-integrity.md`. Tool: `scripts/ui_guard.py`.
-
-### Phase 6 - Performance and resources
-Respect the budgets, prevent the known-heavy patterns (work in render, unthrottled events, N+1, unbounded caches, giant lists without virtualization, layout thrash), and pair every allocation with its release. For PERF mode: measure before, measure after, report both numbers.
-Read: `references/04-performance-and-resources.md`.
-
-### Phase 7 - Evidence and verification
-**Iron law: no completion claim without fresh command output from the current code.** Identify the gates -> run them -> read the full output -> only then claim. A gate you did not run is `UNPROVEN`, never "probably fine".
-Read: `references/05-tests-and-evidence.md`. Tool: `scripts/verify.sh`.
-
-### Phase 8 - Self-review (cold pass)
-Re-read the complete diff as if a stranger wrote it. Justify every added line. Hunt: duplication, dead code, orphans, magic values, leaks, silent behavior changes, missing error paths, secrets in code, over-abstraction. Apply the six lenses (correctness, simplicity, integration, resources, failure modes, maintainability). Fix what you find before reporting.
-Read: `references/06-review-and-report.md`.
-
-### Phase 9 - Report
-Use the fixed contract in section 7. Honest verdict, evidence table, deviations, follow-ups. No praise, no filler, no invented certainty.
+1. **Duplication** - a second implementation of behaviour that already exists.
+2. **Collision** - two owners of one concept fighting: styles, routes, state, ids, z-index.
+3. **Orphans** - code nothing reaches: dead branches, unused exports, commented blocks, files nobody imports.
+4. **Bloat** - 1000 lines where 100 suffice; abstraction that has one caller; a wrapper that only forwards.
+5. **Heaviness** - work in the wrong place: N+1 queries, unbounded loops, re-renders, sync work on a hot path.
+6. **Fake completion** - "done", "fixed", "should work" with no fresh command output behind it.
 
 ---
 
-## 5. Hard limits (numbers, not opinions)
+## 4. Hard limits - checkable, not aesthetic
 
-| Limit | Value | On exceeding |
-|---|---|---|
-| File length | 400 lines | split by responsibility, or state why splitting is worse |
-| Function / method | 50 lines | extract a named helper next to it |
-| Nesting depth | 3 | early returns, guard clauses |
-| Parameters | 4 | pass one options object / struct |
-| Duplicated block | 8 lines | consolidate into one owner |
-| Public interface change | 0 unrequested | ask first |
-| New dependency | needs justification | prefer stdlib / installed / local |
-| Magic literals | 0 | one named constant, one owner |
-| Nested ternaries / clever one-liners | 0 | clarity beats brevity |
-| Files touched beyond the plan | 0 | re-plan or record a follow-up |
+Break one only by naming it in the report with the reason.
 
-Limits are guardrails against sprawl, not license to fragment: never split one coherent function into three files just to satisfy a number, and say so if the tradeoff bites.
-
----
-
-## 6. Gates
-
-Run the repository's own commands - never invent command names. Discover them via `scripts/scan_repo.py`, the package manifest, `Makefile`, or CI config.
-
-| Gate | Passes when |
+| Limit | Value |
 |---|---|
-| Format / lint | clean on touched files, no new warnings, no suppressions added to hide problems |
-| Types | no new type errors (a language with types) |
-| Tests | the new check fails before the fix and passes after; the existing suite stays green |
-| Build | succeeds |
-| Runtime check | the actual behavior was exercised (request, script run, or rendered UI) |
-| Scanners | `find_duplicates.py` and (for UI) `ui_guard.py` show no new findings caused by your change |
+| file length | ≤400 lines (≥1000 is a decomposition task, not a diff) |
+| function length | ≤50 lines |
+| nesting depth | ≤3 |
+| parameters | ≤4 (more → one options object) |
+| duplicated block | ≤8 lines before it becomes one owner |
+| changed lines per diff | T0 ≤80 · T1 ≤300 · T2 ≤300, then split |
+| files beyond PLAN | 0 |
+| unrequested public interface changes | 0 |
+| magic literals | 0 (name it or make it a constant) |
+| nested ternaries | 0 |
+| new dependencies | 0 without an explicit ask |
 
-One command for most of it: `bash scripts/verify.sh .`
-If the environment cannot run a gate, say `UNPROVEN: <gate> - <reason>`. Never fabricate output. Never delete or weaken a test to make a gate green.
+**Change sizing.** ~100 changed lines reviews well. ~300 is acceptable for one logical change. ~1000 means split it: stack it, split by file group, build the shared layer first, or slice it vertically. Refactor and feature in one diff is two diffs. → `references/02-design-and-limits.md`
 
 ---
 
-## 7. Report contract
+## 5. Gates and the iron law of evidence
+
+```
+NO COMPLETION CLAIM WITHOUT FRESH COMMAND OUTPUT IN THIS REPLY.
+```
+
+If you did not run it in this reply, you have not proven it. "Should pass", "looks right", "I'm confident" are all the same sentence: unproven.
+
+**The gate function, every time, before any positive statement:**
+
+1. **Name** the command that would prove this claim.
+2. **Run** it, whole, fresh.
+3. **Read** the exit code and the failure count.
+4. **Compare** output to claim.
+5. **Then** speak - with the output attached.
+
+One command runs the repo's own gates and prints a pasteable evidence table:
+
+```bash
+bash scripts/verify.sh .                       # format, lint, types, test, build
+bash scripts/verify.sh . --only lint,test      # narrow while iterating
+bash scripts/verify.sh . --list                # show what it would run
+```
+
+A gate that did not run is written `SKIP` and appears under **UNPROVEN** in the report. Silence is not a pass.
+
+| Claim | Only this proves it |
+|---|---|
+| tests pass | test command output, 0 failures, this reply |
+| types clean | typechecker exit 0 |
+| build works | build command exit 0 (a clean linter proves nothing about compilation) |
+| bug fixed | the original failing symptom now passes |
+| regression test works | it failed before the fix and passes after |
+| refactor safe | the same suite green before and after |
+| sub-agent finished | the diff, read by you |
+
+→ `references/05-tests-and-evidence.md`
+
+---
+
+## 6. When you are stuck - count, then change kind
+
+Attempts are counted, and the count changes what you are allowed to do next.
+
+| Attempt | Required move |
+|---|---|
+| 1st failure | read the whole error, top to bottom. The fix is usually quoted in it. |
+| 2nd failure | stop editing. Write the root cause in one sentence: "X happens because Y." Cannot? You are missing information - go read, or ask. |
+| 3rd failure | stop. The shape is wrong, not the line. Report `BLOCKED` with: what you tried (3 items), what you learned, the two options you see, and the one question that unblocks you. |
+
+**Never** try fix #4 on the same theory. Three failures that each reveal a new problem elsewhere is an architecture signal - escalate it as one.
+
+**Anti-loop rules.** The same command twice with the same output is a signal, not a retry. A file opened three times means you are searching without a query - go back to step 2. Two identical replies mean you are stalling - report state and ask.
+
+**STOP-AND-ASK is a success, not a failure.** One batched question that saves a wrong 300-line diff is the highest-value thing you can produce. Format:
+
+```
+BLOCKED ON: <one sentence>
+I can proceed if you answer:
+Q1 <question> - my recommendation: <answer>
+Q2 <question> - my recommendation: <answer>
+Otherwise I will assume Q1=<default>, Q2=<default> and continue.
+```
+
+→ `references/09-clarify-and-grill.md`
+
+---
+
+## 7. Banned excuses
+
+When one of these sentences forms in your output, the sentence is the bug.
+
+| You are about to say | What is actually true |
+|---|---|
+| "I'll add tests later" | later never arrives. RED comes before GREEN or the change is unproven. |
+| "Should work now" | run it. Confidence is not evidence. |
+| "Tests pass" (not run in this reply) | that is a memory, not a result. |
+| "Simpler to write a new one" | cheaper for you to type, more expensive for everyone to own. Find the owner. |
+| "I'll clean it up later" | the diff is the only cleanup window that exists. |
+| "It's just a small addition to this file" | small diffs still push files past a healthy size and bolt branches onto unrelated flows. |
+| "The linter passed" | a linter is not a compiler and not a test. |
+| "It works on my machine" | name the machine it must work on and run it there. |
+| "This test is flaky, ignore it" | flakiness hides real bugs. Explain the mechanism or fix it. |
+| "I know what the bug is" | you are right ~70% of the time; the other 30% costs hours. Reproduce first. |
+| "Just this once" | the exception is the failure mode. |
+| "AI-generated code is probably fine" | it needs more scrutiny, not less: confident and plausible even when wrong. |
+
+→ Full table with rebuttals for every source skill: `references/14-rationalizations.md`
+
+---
+
+## 8. Report contract - the only accepted ending
 
 ```
 VERDICT: DELIVERED | NO_CHANGE | BLOCKED
-Mode/Lane: FEATURE / FULL
+MODE: <mode> | TIER: <T0|T1|T2>
+
 WHAT CHANGED
-- path:line - one line per file, why it changed
+- path:line - one line, what and why
+
 HOW IT WAS SOLVED
-- ladder rung + the owner you extended (or the reason new code was unavoidable)
+- ladder rung + the owner you extended
+
 EVIDENCE
 | Gate | Command | Result |
 |---|---|---|
-| lint | <cmd> | PASS |
-| test | <cmd> | PASS (3 added, 41 total) |
+| test | `<cmd>` | PASS 34/34 |
+
 DELETED / REPLACED
-- what you removed so nothing duplicates it
+- what is gone, and what took over
+
 NOT DONE / UNPROVEN
-- explicit list, no hiding
+- every SKIP gate, every assumption, every deferred item
+
 FOLLOW-UPS
-- optional, small, concrete
+- smallest next step, or "none"
 ```
 
-`NO_CHANGE` is a valid, respected outcome when the desired behavior already exists. `BLOCKED` beats a guess.
+`NOT DONE / UNPROVEN` is never empty on a real task. An empty one means you did not look. → `references/06-review-and-report.md`
 
 ---
 
-## 8. Stuck rules
-
-| Signal | Action |
-|---|---|
-| 2 failed fix attempts | stop patching; find the root cause (read the error, trace the data, form one hypothesis, test it) |
-| 3 failed fix attempts | the design is suspect; state the architectural doubt and ask before continuing |
-| The fix needs a `try/catch` around a mystery | you do not understand the failure yet; keep investigating |
-| A test fails and you want to change the test | change it only if the test is provably wrong; otherwise the code is wrong |
-| Required information is missing | ask one batched question; do not invent an interface |
-| The request itself would create duplication | say so, propose the reuse path, then act |
-
-Read `references/07-model-tiers.md` for the escalation ladder and the smaller-model safety rails.
-
----
-
-## 9. Banned excuses
-
-| Excuse | Reality |
-|---|---|
-| "It's cleaner to write a fresh component" | it creates a second owner; extend the existing one |
-| "I'll keep the old code just in case" | dead code is a bug with a delay; delete it |
-| "The tests probably pass" | run them or write `UNPROVEN` |
-| "I'll add the abstraction now, we'll need it later" | second consumer first, abstraction after |
-| "Higher z-index fixes it" | you started a war; use the layer scale |
-| "Small file, limits don't matter" | limits are cheap now, expensive later |
-| "The user only asked for the feature" | they asked for working software |
-| "I fixed it" (after editing without running anything) | unverified equals unfinished |
-
----
-
-## 10. Scripts (read-only, stdlib only, no network)
+## 9. Scripts - deterministic answers instead of guesses
 
 ```bash
-python3 scripts/scan_repo.py .            # stack, repo commands, entrypoints, oversized files
-python3 scripts/find_duplicates.py .      # clones, duplicate symbols, repeated literals
-python3 scripts/ui_guard.py . --strict    # mount roots, overlays, z-index, leaks, CSS collisions
-bash    scripts/verify.sh .               # runs the repo's own gates, prints an evidence table
-bash    scripts/verify.sh . --only lint,test
+python3 scripts/viora.py doctor                                     # is this repo usable? what can be proven here?
+python3 scripts/viora.py start --mode FIX --tier T1 --task "..."   # open the run
+python3 scripts/viora.py next                                      # print the exact next step
+python3 scripts/viora.py done 2 --note "Owner: src/auth.ts:140"     # advance with proof
+python3 scripts/viora.py plan --files src/a.ts --lines 60           # record the plan the machine holds you to
+python3 scripts/viora.py checkpoint --label "before GREEN"          # one-command undo point
+python3 scripts/viora.py scope                                      # real diff vs the plan and the budget
+python3 scripts/viora.py gate                                      # run gates, record fingerprinted evidence
+python3 scripts/viora.py report                                     # emit the report from recorded facts
+python3 scripts/viora.py check                                      # audit: what did I skip, what went stale?
+
+python3 scripts/scan_repo.py .              # stack, real commands, rules files, big files
+python3 scripts/find_duplicates.py . --top 15   # clones, duplicate symbols, repeated literals
+python3 scripts/ui_guard.py . --strict      # mount roots, z-index wars, listener leaks, class collisions
+bash    scripts/verify.sh .                 # the repo's own gates + evidence table
 ```
 
-No Python or shell available? Use the fallbacks: `grep -rn "<name>" .` before creating anything, `grep -rn "z-index\|!important\|addEventListener" src/`, and run the repo's gate commands by hand. The protocol stands without the scripts; the scripts only make it fast.
+`viora.py` is the conductor: it holds the step, counts failed attempts, keeps the findings ledger, and refuses to print a PASS that has no recorded command output. **At T0, run it every turn and do exactly what it prints.**
+
+### Three things the machine enforces, so you do not have to remember them
+
+**1. Evidence is bound to the code it proved.** Every gate row is stamped with a fingerprint of the working tree. Edit anything afterwards and that row becomes `STALE`. `check` fails, and `report` prints the row as STALE and counts it into UNPROVEN. So the rule "rerun the gates after your last edit" is no longer a rule you can forget - it is arithmetic. There is exactly one honest response to a stale row: run `gate` again. Two refinements keep this from becoming a nuisance: only the newest row per gate counts (rerunning supersedes, it does not pile up), and rows named `red`, `repro`, `baseline` or `before` are shown as `pre-fix` rather than STALE - they describe the tree *before* the fix, which is the whole point of them. A run holding *only* pre-fix rows is refused outright: a reproduction is not a proof of repair.
+
+**2. Scope is measured from git, not from memory.** `plan` records the files and the line budget; `scope` compares them to the real diff. `done 6` and `done 7` refuse while scope has problems. Widening the plan is allowed and honest - `plan --files <the real list> --force` - and it leaves a record. Silently touching a fourth file does not.
+
+**3. Undo is one command.** `checkpoint` before you edit, `rollback --yes` when a hypothesis dies. This is what makes "stop after two failed attempts" survivable instead of expensive: you hand back a clean tree with two recorded dead ends, not a tree full of half-reverted guesses.
+
+No scripts available? Use the grep fallbacks in `references/01-recon-and-reuse.md`. Reconnaissance is never skipped, only done more slowly.
 
 ---
 
-## 11. Reference index (read on demand)
+## 10. Reference index - read on demand, not upfront
 
-| File | Read it when |
+| Read this | When |
 |---|---|
-| `references/01-recon-and-reuse.md` | before creating any file, component, helper, constant or dependency |
-| `references/02-design-and-limits.md` | planning files/interfaces, or a limit is being exceeded |
-| `references/03-ui-integrity.md` | any UI work, overlapping panels, styling conflicts, portals |
-| `references/04-performance-and-resources.md` | slowness, heaviness, memory, large lists, animations |
-| `references/05-tests-and-evidence.md` | deciding what to test, or proving completion |
-| `references/06-review-and-report.md` | self-review, reviewing a diff, writing the final report |
-| `references/07-model-tiers.md` | choosing LITE/FULL, escalation, being stuck |
-| `references/08-stack-notes.md` | stack-specific traps (web/TS, Python, backend, mobile) |
-| `templates/contract.md`, `templates/report.md` | copy-paste working notes and final report |
+| `07-model-tiers.md` | always, once - tier rails, T0 turn loop, calibration probe |
+| `01-recon-and-reuse.md` | step 2-3: finding the owner, the solution ladder, grep fallbacks |
+| `02-design-and-limits.md` | step 4, 7: file plans, frozen interfaces, simplification, splitting |
+| `03-ui-integrity.md` | any visible change |
+| `04-performance-and-resources.md` | PERF mode, or any hot path |
+| `05-tests-and-evidence.md` | step 5, 8: seams, RED-GREEN, what to test, evidence rules |
+| `06-review-and-report.md` | step 9-10: five-axis review, severity labels, report contract |
+| `08-stack-notes.md` | stack-specific traps (TS, React, Python, Go, Rust, SQL) |
+| `09-clarify-and-grill.md` | the contract is ambiguous - frontier rounds, batched questions |
+| `10-debugging.md` | FIX/DEBUG mode - reproduce, localise, reduce, root cause, guard |
+| `11-doubt-and-second-opinion.md` | step 9 - hostile self-review, clean context, cross-model check |
+| `12-review-loop-and-ledger.md` | autonomous "review and fix until clean" runs, findings ledger |
+| `13-differential-review.md` | REVIEW mode - risk-first diff review, blast radius, git history |
+| `14-rationalizations.md` | you are about to explain why a step does not apply |
+
+**Templates:** `templates/contract.md` · `templates/report.md` · `templates/ledger.md` · `templates/review-request.md` · `templates/handoff.md`
+
+### Worked runs - imitate these before you improvise
+
+If you are a fast or small model, **read one of these first**. A transcript of a correct run teaches more than a rule does, because you can copy its shape directly.
+
+| Read this | It shows |
+|---|---|
+| `examples/01-t0-fix-full-run.md` | a complete T0 FIX, ten turns, including gates going STALE after a one-word edit and being rerun |
+| `examples/02-blocked-and-honest.md` | a vague request answered with one batched round of questions, then two dead hypotheses, a rollback, and a BLOCKED report with 0 files changed |
+| `examples/03-review-differential.md` | REVIEW mode: `git merge-base`, blast radius, `git log -S` on a suspicious constant, and the finding that lives in a file the diff never touches |
+| `examples/04-debug-with-demotion.md` | DEBUG mode: reproducing a flake as a number, a self-demotion T1 -> T0 after scope creep, and probabilistic proof reported as probabilistic |
+
+**Measuring instead of hoping:** `evals/` contains six fixtures, a rubric and a scorer. It answers one question about the model you are running - *does this protocol actually change its behaviour?* - and turns the answer into a number you can use to pick a tier. Start at `evals/README.md`.
+
+**Proving the protocol itself:** `tests/` holds 85 assertions that drive the real conductor, the real hook and the real grader inside throwaway repos - `bash tests/run-all.sh`, no network, no dependencies. Every refusal promised on this page is asserted there. Writing those tests found eight defects before release, all of them the kind that would have made a report mislead; `tests/README.md` lists them.
+
+**Outside the chat:** `hooks/pre-commit` blocks a commit whose run is not ready (unfinished steps, stale evidence, out-of-plan files, open Critical findings), and `ci/viora.yml` enforces gates, change size and report honesty on pull requests. These are the only parts of the protocol that work when the agent forgets it exists. → `INSTALL.md`
