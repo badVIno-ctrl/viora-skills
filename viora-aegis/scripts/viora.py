@@ -5,6 +5,8 @@ Viora Aegis - portable defensive security engine.
 
 Zero dependencies. Python 3.8+. Runs anywhere a coding agent runs.
 
+  viora.py plan      [MODE]        <- start here: prints the procedure to follow
+  viora.py checklist [MODE]        condensed tick list for the same mode
   viora.py doctor    [--path .]
   viora.py scan      [--path .] [--diff REF] [--only ID|CAT] [--severity low]
                      [--fail-on high] [--format text|json|sarif|markdown]
@@ -14,6 +16,14 @@ Zero dependencies. Python 3.8+. Runs anywhere a coding agent runs.
   viora.py baseline  [--path .] [--out .viora/baseline.json]
   viora.py report    [--in .viora] [--out SECURITY_REPORT.md] [--title "..."]
   viora.py init      [--path .] [--ci github|gitlab|none] [--hook]
+  viora.py defaults  [--path .]    insecure-defaults rules only
+  viora.py skill-audit TARGET [--vendor-domain HOST] [--fail-on SEV]
+                     audit ANOTHER skill or agent pack before installing it
+  viora.py ci-audit  [--path .] [--fail-on SEV]
+                     audit CI pipelines where untrusted input reaches an agent
+
+Every mode also has a written playbook under playbooks/ and a reference under
+references/. If you are unsure which mode you need, run: viora.py plan
 
 Exit codes: 0 = clean / under threshold, 1 = gate breached, 2 = execution error.
 """
@@ -32,7 +42,7 @@ import subprocess
 import sys
 import time
 
-__version__ = "1.0.0"
+__version__ = "2.0.0"
 BRAND = "Viora Aegis"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -120,7 +130,7 @@ def load_config(root):
 
 def load_rules():
     rules, meta = [], {}
-    for fname in ("patterns.json", "secrets.json"):
+    for fname in ("patterns.json", "secrets.json", "defaults.json"):
         data = load_json(os.path.join(PACK, "rules", fname))
         if not data:
             continue
@@ -599,6 +609,55 @@ def cmd_doctor(args):
         print(c("  Git", "1;97"))
         print("    branch %s | working tree %s" % (branch, "dirty" if dirty else "clean"))
         print("")
+    print(c("  Pack integrity", "1;97"))
+    rules_dir = os.path.join(PACK, "rules")
+    packs, rule_count, bad = 0, 0, []
+    listing = sorted(os.listdir(rules_dir)) if os.path.isdir(rules_dir) else []
+    for fn in listing:
+        if not fn.endswith(".json"):
+            continue
+        packs += 1
+        try:
+            with open(os.path.join(rules_dir, fn), encoding="utf-8") as fh:
+                data = json.load(fh)
+        except Exception as exc:
+            bad.append("rules/%s does not parse: %s" % (fn, exc))
+            continue
+        for r in data.get("rules") or []:
+            rule_count += 1
+            for key in ("pattern", "exclude_line", "require_line"):
+                if r.get(key):
+                    try:
+                        re.compile(r[key])
+                    except re.error as exc:
+                        bad.append("rules/%s %s.%s: %s" % (fn, r.get("id", "?"), key, exc))
+    import importlib
+    if HERE not in sys.path:
+        sys.path.insert(0, HERE)
+    engine_names = ("viora_plan", "viora_skillaudit", "viora_ciaudit")
+    engines = []
+    for name in engine_names:
+        if not os.path.exists(os.path.join(HERE, name + ".py")):
+            engines.append("%s.py is missing" % name)
+            continue
+        try:
+            importlib.import_module(name)
+        except Exception as exc:
+            engines.append("%s does not load: %s" % (name, exc))
+    want_dirs = ("playbooks", "references", "templates", "rules", "adapters")
+    missing_dirs = [d for d in want_dirs if not os.path.isdir(os.path.join(PACK, d))]
+    print("    rule packs %d  |  rules %d  |  engines %d/%d loadable"
+          % (packs, rule_count, len(engine_names) - len(engines), len(engine_names)))
+    if missing_dirs:
+        print(c("    MISSING directories: %s" % ", ".join(missing_dirs), "1;91"))
+    for item in bad + engines:
+        print(c("    BROKEN  " + item, "1;91"))
+    if bad or engines or missing_dirs:
+        print(c("    This pack is damaged. Reinstall it. Do NOT read a quiet scan", "1;91"))
+        print(c("    as a clean result - rules that cannot compile cannot match.", "1;91"))
+    else:
+        print(c("    every rule pattern compiles and every engine loads", "92"))
+    print("")
     print(c("  Optional security tooling", "1;97"))
     found, missing = [], []
     for t in OPTIONAL_TOOLS:
@@ -1184,6 +1243,49 @@ def cmd_init(args):
 
 
 # --------------------------------------------------------------------------
+# Extended engines.
+#
+# These live in sibling modules so that each stays small enough to read, and are
+# imported lazily so that a partial or damaged install still runs doctor and
+# scan instead of dying at startup. Everything stays dependency-free.
+# --------------------------------------------------------------------------
+def _load_engine(name):
+    import importlib
+    if HERE not in sys.path:
+        sys.path.insert(0, HERE)
+    try:
+        return importlib.import_module(name)
+    except Exception as exc:
+        eprint("error: the %s engine is unavailable (%s)" % (name, exc))
+        eprint("       this pack looks incomplete. Reinstall it, or work in degraded")
+        eprint("       mode by grepping the rule packs under rules/ by hand.")
+        return None
+
+
+def cmd_skill_audit(args):
+    """SKILL-AUDIT: static safety audit of a skill/plugin/MCP server. Never executes it."""
+    eng = _load_engine("viora_skillaudit")
+    return eng.run(args) if eng else 2
+
+
+def cmd_ci_audit(args):
+    """CI-AUDIT: workflow audit, including pipelines where an AI agent holds credentials."""
+    eng = _load_engine("viora_ciaudit")
+    return eng.run(args) if eng else 2
+
+
+def cmd_plan(args):
+    """PLAN: print the exact numbered procedure for a mode. The small-model safety net."""
+    eng = _load_engine("viora_plan")
+    return eng.run(args) if eng else 2
+
+
+def cmd_defaults(args):
+    """DEFAULTS: the ordinary scan, narrowed to the insecure-defaults corpus."""
+    return cmd_scan(args)
+
+
+# --------------------------------------------------------------------------
 def main(argv=None):
     p = argparse.ArgumentParser(prog="viora", description="%s v%s — defensive security engine" % (BRAND, __version__))
     p.add_argument("--version", action="version", version="%s %s" % (BRAND, __version__))
@@ -1237,6 +1339,57 @@ def main(argv=None):
     i.add_argument("--ci", choices=["github", "gitlab", "none"], default="github")
     i.add_argument("--hook", action="store_true")
     i.set_defaults(func=cmd_init)
+
+    sa = sub.add_parser("skill-audit",
+                        help="audit a skill / plugin / MCP server BEFORE installing it (static only)")
+    sa.add_argument("target", help="path to the skill directory, or one file")
+    sa.add_argument("--vendor-domain", action="append", default=[],
+                    help="domain you accept as the vendor's own; downgrades egress to it (repeatable)")
+    sa.add_argument("--format", choices=["text", "json", "markdown"], default="text")
+    sa.add_argument("--out", help="write the chosen format to this file")
+    sa.add_argument("--fail-on", choices=SEVERITIES + ["none"], default="none",
+                    help="exit 1 at or above this severity")
+    sa.set_defaults(func=cmd_skill_audit)
+
+    ca = sub.add_parser("ci-audit",
+                        help="audit CI/CD workflows, including AI agents running in CI")
+    ca.add_argument("--path", default=".")
+    ca.add_argument("--format", choices=["text", "json", "markdown"], default="text")
+    ca.add_argument("--out")
+    ca.add_argument("--fail-on", choices=SEVERITIES + ["none"], default="none")
+    ca.set_defaults(func=cmd_ci_audit)
+
+    df = sub.add_parser("defaults",
+                        help="focused insecure-defaults and fail-open audit")
+    df.add_argument("--path", default=".")
+    df.add_argument("--diff")
+    df.add_argument("--staged", action="store_true")
+    df.add_argument("--severity", choices=SEVERITIES)
+    df.add_argument("--fail-on", choices=SEVERITIES + ["none"])
+    df.add_argument("--format", choices=["text", "json", "sarif", "markdown"], default="text")
+    df.add_argument("--out")
+    df.add_argument("--json")
+    df.add_argument("--baseline", nargs="?", const="", default=None)
+    df.add_argument("--no-baseline", action="store_true")
+    df.add_argument("--quiet", action="store_true")
+    df.set_defaults(func=cmd_defaults, only="DEFAULT")
+
+    pl = sub.add_parser("plan",
+                        help="print the exact numbered procedure for a mode (START HERE)")
+    pl.add_argument("mode", nargs="?",
+                    help="review | audit | skill-audit | ci-audit | triage | fix | defaults | "
+                         "supply-chain | variants | context | harden | design | agent-sec | "
+                         "crypto | tests   (omit for the mode router)")
+    pl.add_argument("--list", action="store_true", help="list every available mode")
+    pl.add_argument("--checklist", action="store_true", help="compact to-do list form")
+    pl.add_argument("--out")
+    pl.set_defaults(func=cmd_plan)
+
+    cl = sub.add_parser("checklist", help="compact to-do list for a mode")
+    cl.add_argument("mode", nargs="?")
+    cl.add_argument("--list", action="store_true")
+    cl.add_argument("--out")
+    cl.set_defaults(func=cmd_plan, checklist=True)
 
     args = p.parse_args(argv)
     if not getattr(args, "func", None):

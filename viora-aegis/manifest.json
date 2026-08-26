@@ -2,167 +2,141 @@
   "$schema": "viora-pack/1",
   "name": "viora-aegis",
   "displayName": "Viora Aegis",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "brand": "Viora",
   "license": "MIT",
-  "description": "Universal defensive security skill for coding agents: threat modelling, secure code review, vulnerability triage with false-positive control, hardening, secret and dependency scanning, CI gating, and LLM/agent security.",
+  "description": "Universal defensive security skill for coding agents: threat modelling, secure code review, vulnerability triage with false-positive control, insecure-defaults auditing, supply-chain and agentic-CI review, pre-install auditing of other skills, hardening, secret scanning and CI gating. Ships a deterministic planner so small and fast models can execute the same procedures.",
   "entrypoint": "SKILL.md",
+  "quickstart": "QUICKSTART.md",
+  "fallbackPointer": "AGENTS.md",
   "cli": "scripts/viora.py",
   "runtime": {
     "python": ">=3.8",
     "dependencies": [],
     "network": "optional",
-    "degradedMode": "grep-only using rules/*.json when shell execution is unavailable"
+    "engines": [
+      "scripts/viora.py",
+      "scripts/viora_plan.py",
+      "scripts/viora_skillaudit.py",
+      "scripts/viora_ciaudit.py"
+    ],
+    "degradedMode": "grep-only using rules/*.json when shell execution is unavailable; missing engines are reported, never silently skipped"
+  },
+  "smallModelSupport": {
+    "summary": "Do not reason about method. Ask the tool for the procedure, then follow it literally.",
+    "router": "python3 scripts/viora.py plan",
+    "procedure": "python3 scripts/viora.py plan <mode>",
+    "checklist": "python3 scripts/viora.py checklist <mode>",
+    "onePager": "QUICKSTART.md",
+    "routerPlaybook": "playbooks/00-router.md",
+    "guarantees": [
+      "numbered steps in fixed order",
+      "an ELSE branch for every step that can fail",
+      "hard stops stated before the work, not after",
+      "a fixed output template",
+      "a self-check block to tick before answering"
+    ]
   },
   "compatibility": [
-    {
-      "agent": "claude-code",
-      "install": ".claude/skills/viora-aegis/",
-      "mode": "native-skill"
-    },
-    {
-      "agent": "claude-desktop",
-      "install": "skill upload (zip)",
-      "mode": "native-skill"
-    },
-    {
-      "agent": "codex",
-      "install": ".viora/skills/viora-aegis/ + AGENTS.md",
-      "mode": "pointer"
-    },
-    {
-      "agent": "antigravity",
-      "install": ".antigravity/rules/viora-aegis.md + AGENTS.md",
-      "mode": "pointer"
-    },
-    {
-      "agent": "cursor",
-      "install": ".cursor/rules/viora-aegis.mdc",
-      "mode": "rule"
-    },
-    {
-      "agent": "windsurf",
-      "install": ".windsurf/rules/viora-aegis.md",
-      "mode": "rule"
-    },
-    {
-      "agent": "gemini-cli",
-      "install": "GEMINI.md",
-      "mode": "pointer"
-    },
-    {
-      "agent": "github-copilot",
-      "install": ".github/copilot-instructions.md",
-      "mode": "pointer"
-    },
-    {
-      "agent": "opencode",
-      "install": ".opencode/skills/viora-aegis/",
-      "mode": "native-skill"
-    },
-    {
-      "agent": "cline",
-      "install": ".clinerules/viora-aegis.md",
-      "mode": "rule"
-    },
-    {
-      "agent": "roo",
-      "install": ".roo/rules/viora-aegis.md",
-      "mode": "rule"
-    },
-    {
-      "agent": "kilo",
-      "install": ".kilocode/rules/viora-aegis.md",
-      "mode": "rule"
-    },
-    {
-      "agent": "continue",
-      "install": ".continue/rules/viora-aegis.md",
-      "mode": "rule"
-    },
-    {
-      "agent": "aider",
-      "install": "CONVENTIONS.md",
-      "mode": "pointer"
-    },
-    {
-      "agent": "zed",
-      "install": ".rules",
-      "mode": "pointer"
-    },
-    {
-      "agent": "generic",
-      "install": "AGENTS.md",
-      "mode": "pointer"
-    }
+    { "agent": "claude-code", "install": ".claude/skills/viora-aegis/", "mode": "native-skill" },
+    { "agent": "claude-desktop", "install": "skill upload (zip)", "mode": "native-skill" },
+    { "agent": "codex", "install": ".viora/skills/viora-aegis/ + AGENTS.md", "mode": "pointer" },
+    { "agent": "antigravity", "install": ".antigravity/rules/viora-aegis.md + AGENTS.md", "mode": "pointer" },
+    { "agent": "cursor", "install": ".cursor/rules/viora-aegis.mdc", "mode": "rule" },
+    { "agent": "windsurf", "install": ".windsurf/rules/viora-aegis.md", "mode": "rule" },
+    { "agent": "gemini-cli", "install": "GEMINI.md", "mode": "pointer" },
+    { "agent": "github-copilot", "install": ".github/copilot-instructions.md", "mode": "pointer" },
+    { "agent": "opencode", "install": ".opencode/skills/viora-aegis/", "mode": "native-skill" },
+    { "agent": "cline", "install": ".clinerules/viora-aegis.md", "mode": "rule" },
+    { "agent": "roo", "install": ".roo/rules/viora-aegis.md", "mode": "rule" },
+    { "agent": "kilo", "install": ".kilocode/rules/viora-aegis.md", "mode": "rule" },
+    { "agent": "continue", "install": ".continue/rules/viora-aegis.md", "mode": "rule" },
+    { "agent": "aider", "install": "CONVENTIONS.md", "mode": "pointer" },
+    { "agent": "zed", "install": ".rules", "mode": "pointer" },
+    { "agent": "generic", "install": "AGENTS.md", "mode": "pointer" }
   ],
   "modes": [
-    "GUARD",
-    "REVIEW",
-    "AUDIT",
-    "HARDEN",
-    "FIX",
-    "TRIAGE",
-    "DESIGN",
-    "AGENT-SEC"
+    { "name": "GUARD", "plan": null, "playbook": null, "summary": "Ambient default: never introduce a vulnerability while doing unrelated work" },
+    { "name": "REVIEW", "plan": "review", "playbook": "playbooks/01-review-diff.md", "summary": "Review a diff, branch or pull request" },
+    { "name": "AUDIT", "plan": "audit", "playbook": "playbooks/02-audit-repo.md", "summary": "Systematic audit of a whole repository" },
+    { "name": "FIX", "plan": "fix", "playbook": "playbooks/03-fix-findings.md", "summary": "Patch confirmed findings and prove the fix" },
+    { "name": "TRIAGE", "plan": "triage", "playbook": "playbooks/04-triage-verify.md", "summary": "Turn leads into defensible findings; kill false positives" },
+    { "name": "SKILL-AUDIT", "plan": "skill-audit", "playbook": "playbooks/05-skill-audit.md", "summary": "Statically audit another skill, plugin or MCP server before installing it" },
+    { "name": "SUPPLY-CHAIN", "plan": "supply-chain", "playbook": "playbooks/06-supply-chain.md", "summary": "Dependencies, lockfiles, install scripts, advisories, abandoned upstreams" },
+    { "name": "CI-AUDIT", "plan": "ci-audit", "playbook": "playbooks/07-agent-ci-audit.md", "summary": "Pipelines where untrusted input can reach a credentialed agent" },
+    { "name": "DEFAULTS", "plan": "defaults", "playbook": "playbooks/08-insecure-defaults.md", "summary": "Fail-open and insecure default configuration" },
+    { "name": "VARIANTS", "plan": "variants", "playbook": "playbooks/09-variant-analysis.md", "summary": "Find every sibling of a confirmed bug and fix the class" },
+    { "name": "CONTEXT", "plan": "context", "playbook": "playbooks/10-context-building.md", "summary": "Understand the system before hunting; produces no verdicts" },
+    { "name": "CRYPTO", "plan": "crypto", "playbook": "playbooks/11-crypto-review.md", "summary": "Constant-time comparison, zeroization, crypto misuse" },
+    { "name": "TESTS", "plan": "tests", "playbook": "playbooks/12-test-hardening.md", "summary": "Turn each finding into a regression test and a detection rule" },
+    { "name": "HARDEN", "plan": "harden", "playbook": "playbooks/13-harden.md", "summary": "Install the gates: hooks, CI, baseline, headers, dependency policy" },
+    { "name": "DESIGN", "plan": "design", "playbook": "playbooks/14-design-threat-model.md", "summary": "Threat model a feature before it is built" },
+    { "name": "AGENT-SEC", "plan": "agent-sec", "playbook": "references/04-ai-agent-security.md", "summary": "LLM, RAG, MCP, tool-permission and agent-autonomy review" }
   ],
   "commands": [
-    {
-      "name": "doctor",
-      "summary": "Detect stack, entry points, risk surfaces and available tooling"
-    },
-    {
-      "name": "scan",
-      "summary": "Scan code for vulnerability patterns and secrets; text/json/sarif/markdown"
-    },
-    {
-      "name": "deps",
-      "summary": "Dependency and supply-chain hygiene, optional OSV lookup"
-    },
-    {
-      "name": "headers",
-      "summary": "Check live security headers, cookies and CORS"
-    },
-    {
-      "name": "baseline",
-      "summary": "Freeze current findings so only new issues fail the gate"
-    },
-    {
-      "name": "report",
-      "summary": "Merge result files into one SECURITY_REPORT.md"
-    },
-    {
-      "name": "init",
-      "summary": "Write config, pre-commit hook and CI workflow"
-    }
+    { "name": "plan", "summary": "Print the deterministic procedure for a mode; with no mode, print the routing questions", "engine": "scripts/viora_plan.py" },
+    { "name": "checklist", "summary": "Print the tick-box short form of a mode's procedure", "engine": "scripts/viora_plan.py" },
+    { "name": "doctor", "summary": "Detect stack, entry points, risk surfaces and available tooling" },
+    { "name": "scan", "summary": "Scan code for vulnerability patterns and secrets; text/json/sarif/markdown" },
+    { "name": "defaults", "summary": "Audit insecure and fail-open defaults only (DEFAULT rules)" },
+    { "name": "skill-audit", "summary": "Static pre-install audit of a skill, plugin or MCP server", "engine": "scripts/viora_skillaudit.py" },
+    { "name": "ci-audit", "summary": "Audit CI pipelines for untrusted input reaching credentialed agents", "engine": "scripts/viora_ciaudit.py" },
+    { "name": "deps", "summary": "Dependency and supply-chain hygiene, optional OSV lookup" },
+    { "name": "headers", "summary": "Check live security headers, cookies and CORS" },
+    { "name": "baseline", "summary": "Freeze current findings so only new issues fail the gate" },
+    { "name": "report", "summary": "Merge result files into one SECURITY_REPORT.md" },
+    { "name": "init", "summary": "Write config, pre-commit hook and CI workflow" }
   ],
   "rules": {
     "patterns": {
       "file": "rules/patterns.json",
       "count": 51,
-      "prefixes": [
-        "AI",
-        "AUTH",
-        "CONTAINER",
-        "CRYPTO",
-        "DEFAULT",
-        "DESER",
-        "DOS",
-        "INJ",
-        "LOG",
-        "PATH",
-        "SSRF",
-        "SUPPLY",
-        "XSS"
-      ]
+      "prefixes": ["AI", "AUTH", "CONTAINER", "CRYPTO", "DEFAULT", "DESER", "DOS", "INJ", "LOG", "PATH", "SSRF", "SUPPLY", "XSS"]
     },
     "secrets": {
       "file": "rules/secrets.json",
       "count": 15,
       "entropyDetector": "SECRET-900"
     },
-    "total": 66
+    "defaults": {
+      "file": "rules/defaults.json",
+      "count": 16,
+      "prefixes": ["DEFAULT"],
+      "usedBy": ["scan", "defaults"]
+    },
+    "skillAudit": {
+      "file": "rules/skill-audit.json",
+      "count": 42,
+      "prefixes": ["SA"],
+      "categories": ["NET", "EXEC", "CRED", "DYN", "FS", "OBF", "PI", "PERM", "SUP"],
+      "usedBy": ["skill-audit"]
+    },
+    "ciWorkflows": {
+      "file": "rules/ci-workflows.json",
+      "count": 19,
+      "prefixes": ["CI"],
+      "categories": ["TRIG", "EXPR", "AGENT", "CHK", "SECR", "PIN"],
+      "usedBy": ["ci-audit"]
+    },
+    "total": 143
   },
+  "playbooks": [
+    "playbooks/00-router.md",
+    "playbooks/01-review-diff.md",
+    "playbooks/02-audit-repo.md",
+    "playbooks/03-fix-findings.md",
+    "playbooks/04-triage-verify.md",
+    "playbooks/05-skill-audit.md",
+    "playbooks/06-supply-chain.md",
+    "playbooks/07-agent-ci-audit.md",
+    "playbooks/08-insecure-defaults.md",
+    "playbooks/09-variant-analysis.md",
+    "playbooks/10-context-building.md",
+    "playbooks/11-crypto-review.md",
+    "playbooks/12-test-hardening.md",
+    "playbooks/13-harden.md",
+    "playbooks/14-design-threat-model.md"
+  ],
   "references": [
     "references/00-index.md",
     "references/01-threat-model.md",
@@ -173,7 +147,31 @@
     "references/06-supply-chain.md",
     "references/07-triage-and-severity.md",
     "references/08-toolchain.md",
-    "references/09-checklists.md"
+    "references/09-checklists.md",
+    "references/10-skill-audit.md",
+    "references/11-static-analysis.md",
+    "references/12-triage-brocards.md",
+    "references/13-crypto-side-channels.md"
+  ],
+  "templates": [
+    "templates/SECURITY_REPORT.md",
+    "templates/SKILL_AUDIT_REPORT.md",
+    "templates/THREAT_MODEL.md",
+    "templates/VARIANT_REPORT.md",
+    "templates/pre-commit",
+    "templates/ci-github-actions.yml",
+    "templates/ci-gitlab-ci.yml"
+  ],
+  "adapters": [
+    "adapters/INTEGRATION.md",
+    "adapters/antigravity.md",
+    "adapters/claude-code.md",
+    "adapters/codex.md",
+    "adapters/copilot.md",
+    "adapters/cursor.mdc",
+    "adapters/gemini.md",
+    "adapters/opencode.md",
+    "adapters/windsurf.md"
   ],
   "standards": [
     "OWASP Top 10:2025",
@@ -184,17 +182,38 @@
     "STRIDE",
     "NIST SSDF"
   ],
+  "attribution": [
+    {
+      "source": "trailofbits/skills",
+      "url": "https://github.com/trailofbits/skills",
+      "license": "CC-BY-SA-4.0",
+      "use": "methodology-only",
+      "note": "No text reproduced. Methodology restated in our own words so this pack stays MIT: false-positive gates, triage maxims, insecure-defaults workflow, variant analysis, supply-chain auditing, agentic-CI auditing, constant-time and zeroization review, property-based testing."
+    },
+    {
+      "source": "dkleptsov/skill-security-review",
+      "url": "https://github.com/dkleptsov/skill-security-review",
+      "license": "Apache-2.0",
+      "use": "inspiration",
+      "note": "Origin of the SKILL-AUDIT mode: static-only pre-install review, behaviour categories, four-step verdict scale."
+    },
+    {
+      "source": "semgrep/skills",
+      "url": "https://github.com/semgrep/skills",
+      "use": "methodology-only",
+      "note": "Test-first rule authoring with ruleid/ok fixtures, taint mode with declared sanitizers, diff-aware CI scanning."
+    },
+    {
+      "source": "anthropics/claude-code-security-review",
+      "url": "https://github.com/anthropics/claude-code-security-review",
+      "use": "methodology-only",
+      "note": "Confidence discipline and exploitability-over-scariness severity rule."
+    }
+  ],
   "scope": "defensive-only",
   "exitCodes": {
-    "0": "clean",
-    "1": "findings at or above the gate",
-    "2": "execution error"
-  },
-  "templates": [
-    "templates/SECURITY_REPORT.md",
-    "templates/THREAT_MODEL.md",
-    "templates/pre-commit",
-    "templates/ci-github-actions.yml",
-    "templates/ci-gitlab-ci.yml"
-  ]
+    "0": "clean, or all findings below the gate",
+    "1": "findings at or above --fail-on",
+    "2": "execution error or a required engine is unavailable"
+  }
 }

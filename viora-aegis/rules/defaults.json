@@ -1,0 +1,211 @@
+{
+  "schema": "viora-rules/1",
+  "version": "2.0.0",
+  "pack": "viora-aegis-defaults",
+  "purpose": "Find where the system is INSECURE WHEN NOBODY CONFIGURES IT, and where a failing security check lets the request through anyway. These are the bugs that ship silently, because nothing is broken on the developer's machine.",
+  "reading_rule": "READ THE DEFAULT VALUE, NOT THE FLAG NAME. `verify_ssl` is an intention; `verify_ssl=False` is the behaviour. A config option existing is never a finding - its value is.",
+  "verify_before_reporting": [
+    "V1 Is this actually the default in a real deployment, or is it overridden on every shipped path? If a shipped config sets a safe value everywhere, this is DEFENCE-IN-DEPTH at most - and you must name where the override lives.",
+    "V2 Is this path reachable in production, or is it dev-only and excluded from the build? Name the build flag, environment check or bundler exclusion that proves it.",
+    "V3 What does an attacker get if it stays at this value? If you cannot write that sentence, you have a code smell, not a finding."
+  ],
+  "corpora": [
+    "fallback-secrets",
+    "default-credentials",
+    "fail-open-security",
+    "weak-crypto-defaults",
+    "permissive-access",
+    "debug-features"
+  ],
+  "reject_these_excuses": [
+    "'It is only the default, real deployments override it.' - then prove it: name the file that overrides it on EVERY shipped path. Undocumented overrides are how staging config reaches production.",
+    "'That branch is only for local development.' - then name the build-time exclusion. An `if DEBUG` that reads an env var is not an exclusion; it is a switch an attacker may be able to flip.",
+    "'The framework would never run with that setting in production.' - name the version and the mechanism that prevents it, or treat it as reachable.",
+    "'It fails open on purpose, for availability.' - that is a deliberate decision that must be written down and bounded. Undocumented fail-open is Law 4 broken.",
+    "'MD5 here is not security-relevant.' - possibly true. Read what the digest is used for FIRST. A cache key is fine; a token, signature or password is not."
+  ],
+  "rules": [
+    {
+      "id": "DEFAULT-101",
+      "title": "Secret read from the environment with a hardcoded fallback",
+      "category": "DEFAULT",
+      "severity": "critical",
+      "confidence": "high",
+      "cwe": "CWE-1188",
+      "owasp": "A05:2021 Security Misconfiguration",
+      "pattern": "(?i)(?:getenv|environ(?:\\.get)?|process\\.env)[\\s\\[('\"]{1,4}[A-Za-z_]*(?:SECRET|TOKEN|KEY|PASSWORD|PASSWD|PWD|SALT|CREDENTIAL|PRIVATE)[A-Za-z_]*['\")\\]\\s]{1,4}(?:,\\s*|\\|\\||\\s*or\\s+|\\?\\?\\s*|\\|\\s*default\\s*\\()['\"][^'\"\\n]{4,}['\"]",
+      "note": "The fallback IS the production secret the first time someone forgets to set the variable, and it is in your git history forever. This is the single highest-value pattern in this pack.",
+      "fix": "Remove the fallback. Fail to start: read the variable, and if it is missing raise at boot. A process that will not start is a visible outage; a process running on a known default is a silent breach."
+    },
+    {
+      "id": "DEFAULT-102",
+      "title": "Framework secret key set to a placeholder or example value",
+      "category": "DEFAULT",
+      "severity": "critical",
+      "confidence": "high",
+      "cwe": "CWE-798",
+      "pattern": "(?i)(?:secret_key|secret|jwt_secret|session_secret|app_key|encryption_key|signing_key|cookie_secret)\\s*[:=]\\s*['\"](?:changeme|change-me|change_me|secret|mysecret|topsecret|password|pass|test|testing|dev|devkey|development|example|placeholder|todo|xxx+|123456|s3cr3t|keyboard.?cat|insecure|not.?so.?secret|please.?change|your.?secret.?here|supersecret)[^'\"\\n]*['\"]",
+      "note": "A placeholder signing key means every session cookie and JWT in the deployment is forgeable by anyone who has read the repo or guessed the framework's tutorial value.",
+      "fix": "Generate a high-entropy key per environment, load it from a secret manager, and assert its length and entropy at startup."
+    },
+    {
+      "id": "DEFAULT-103",
+      "title": "Default or well-known credentials in configuration",
+      "category": "DEFAULT",
+      "severity": "high",
+      "confidence": "medium",
+      "cwe": "CWE-1392",
+      "pattern": "(?i)(?:user(?:name)?|login|admin_user)\\s*[:=]\\s*['\"](?:admin|administrator|root|sa|guest|test|demo|postgres|mysql|oracle)['\"][\\s\\S]{0,120}?(?:pass(?:word|wd)?|pwd)\\s*[:=]\\s*['\"](?:admin|administrator|root|password|passwd|pass|123456|12345678|changeme|guest|test|demo|postgres|mysql|oracle|secret|letmein|toor|)['\"]",
+      "note": "Default credential pairs are the first thing any scanner tries. Check whether this file ships, or is only used by the local compose stack.",
+      "fix": "Require credentials to be supplied per environment, and make first-boot force a change. Never ship a working default account."
+    },
+    {
+      "id": "DEFAULT-104",
+      "title": "TLS certificate verification disabled",
+      "category": "DEFAULT",
+      "severity": "high",
+      "confidence": "high",
+      "cwe": "CWE-295",
+      "owasp": "A02:2021 Cryptographic Failures",
+      "pattern": "(?i)(?:verify\\s*=\\s*False|verify_ssl\\s*[:=]\\s*(?:False|false|0)|rejectUnauthorized\\s*:\\s*false|NODE_TLS_REJECT_UNAUTHORIZED\\s*[:=]\\s*['\"]?0|InsecureSkipVerify\\s*:\\s*true|CURLOPT_SSL_VERIFYPEER\\s*,\\s*(?:false|0)|ServerCertificateValidationCallback\\s*[+]?=|--no-check-certificate|--insecure\\b|ssl\\._create_unverified_context|check_hostname\\s*=\\s*False|trustAllCerts|ALLOW_ALL_HOSTNAME_VERIFIER)",
+      "note": "Turns every TLS connection on this path into an unauthenticated one. The encryption still happens, which is what makes it feel safe - but any network position can now impersonate the peer.",
+      "fix": "Verify by default. If a private CA is the real problem, install the CA bundle and keep verification on. Never disable verification globally to fix one endpoint."
+    },
+    {
+      "id": "DEFAULT-105",
+      "title": "Authentication or authorisation check fails open",
+      "category": "DEFAULT",
+      "severity": "high",
+      "confidence": "low",
+      "cwe": "CWE-636",
+      "owasp": "A01:2021 Broken Access Control",
+      "pattern": "(?i)(?:except[^\\n:]{0,60}:\\s*(?:#[^\\n]*)?\\n\\s*(?:return\\s+True|return\\s+1|pass\\b|continue\\b)|catch\\s*\\([^)]*\\)\\s*\\{\\s*(?://[^\\n]*)?\\s*(?:return\\s+true|next\\(\\)|resolve\\(\\s*true)|on_error\\s*[:=]\\s*['\"]?(?:allow|permit|continue|ignore)|fail(?:_|-)?open\\s*[:=]\\s*(?:true|True|1)|default\\s*[:=]\\s*(?:ALLOW|PERMIT|ALLOWED))",
+      "note": "Law 4. This is the highest-value shape in the whole pack and no regex finds it reliably - use this hit as a prompt to read every security decision and ask: what happens if it THROWS, TIMES OUT, or returns NULL?",
+      "fix": "Deny on every abnormal path. The catch block returns false, the timeout denies, and the null result denies. If availability genuinely requires fail-open, document it, bound it, and alarm on it."
+    },
+    {
+      "id": "DEFAULT-106",
+      "title": "Debug or development mode enabled by default",
+      "category": "DEFAULT",
+      "severity": "medium",
+      "confidence": "medium",
+      "cwe": "CWE-489",
+      "owasp": "A05:2021 Security Misconfiguration",
+      "pattern": "(?i)(?:DEBUG\\s*[:=]\\s*(?:True|true|1|['\"](?:true|1|on|yes)['\"])|debug_mode\\s*[:=]\\s*(?:True|true|1)|APP_DEBUG\\s*=\\s*(?:true|1)|FLASK_DEBUG\\s*=\\s*(?:1|true)|app\\.run\\([^)]*debug\\s*=\\s*True|NODE_ENV\\s*[:=]\\s*['\"]?development|display_errors\\s*=\\s*(?:On|1)|DJANGO_DEBUG\\s*=\\s*(?:True|1))",
+      "exclude_line": "(?i)(?:DEBUG\\s*[:=]\\s*(?:False|false|0)|test|spec|fixture|example|\\.env\\.example)",
+      "note": "Debug mode typically means stack traces with source, an interactive console, verbose errors and disabled caching. In some frameworks the debugger is remote code execution by design.",
+      "fix": "Default to off. Read the flag from the environment with a SAFE default, and assert at startup that it is off when the deployment is not local."
+    },
+    {
+      "id": "DEFAULT-107",
+      "title": "CORS configured to allow any origin",
+      "category": "DEFAULT",
+      "severity": "medium",
+      "confidence": "medium",
+      "cwe": "CWE-942",
+      "pattern": "(?i)(?:Access-Control-Allow-Origin['\"]?\\s*[:,]\\s*['\"]\\*|origin\\s*:\\s*(?:['\"]\\*['\"]|true\\b)|cors\\s*\\(\\s*\\)|allow_origins\\s*=\\s*\\[\\s*['\"]\\*|AllowedOrigins\\s*[:=]\\s*\\[?\\s*['\"]\\*|allowedOrigins\\s*[:=]\\s*\\[?\\s*['\"]\\*|CORS_ORIGIN_ALLOW_ALL\\s*=\\s*True|allow_any_origin)",
+      "note": "Severity depends entirely on what else is true. A wildcard origin WITH credentials allowed is the serious case; browsers refuse that combination, so check whether the code reflects the Origin header back instead - that is the same bug wearing a disguise.",
+      "fix": "Allowlist the exact origins. If you must be dynamic, match against a fixed list; never echo the request's Origin header."
+    },
+    {
+      "id": "DEFAULT-108",
+      "title": "Cookie missing Secure, HttpOnly or SameSite",
+      "category": "DEFAULT",
+      "severity": "medium",
+      "confidence": "low",
+      "cwe": "CWE-1004",
+      "pattern": "(?i)(?:(?:secure|httponly|http_only)\\s*[:=]\\s*(?:False|false|0)|samesite\\s*[:=]\\s*['\"]?(?:none|None)['\"]?|SESSION_COOKIE_SECURE\\s*=\\s*False|cookie_secure\\s*[:=]\\s*(?:false|False|0))",
+      "note": "Read which cookie this is. A session or auth cookie without HttpOnly is stealable by any XSS; without Secure it leaks over plain HTTP; SameSite=None without Secure is rejected by modern browsers, so this may already be dead code.",
+      "fix": "For session and auth cookies: Secure, HttpOnly, and SameSite=Lax or Strict. Use None only for a genuine cross-site flow, and then Secure is mandatory."
+    },
+    {
+      "id": "DEFAULT-109",
+      "title": "Service bound to all interfaces or an admin port left open",
+      "category": "DEFAULT",
+      "severity": "medium",
+      "confidence": "low",
+      "cwe": "CWE-1327",
+      "pattern": "(?:(?:host|bind|address|listen|hostname)\\s*[:=]\\s*['\"](?:0\\.0\\.0\\.0|::|\\[::\\]|\\*)['\"]|--bind[= ]0\\.0\\.0\\.0|--host[= ]0\\.0\\.0\\.0|ports?\\s*:\\s*-?\\s*['\"]?0\\.0\\.0\\.0:)",
+      "note": "Inside a container this is usually correct and expected. On a host, or with host networking, it exposes the service to every reachable network. Check the deployment shape before you judge it.",
+      "fix": "Bind to localhost unless the service is meant to be reachable, and put the network boundary in the platform rather than in the application."
+    },
+    {
+      "id": "DEFAULT-110",
+      "title": "Overly permissive file, bucket or object permissions",
+      "category": "DEFAULT",
+      "severity": "medium",
+      "confidence": "medium",
+      "cwe": "CWE-732",
+      "pattern": "(?i)(?:chmod\\s+(?:-[A-Za-z]+\\s+)*(?:0?7(?:7[0-7]|[0-7]7)|a\\+rwx|o\\+w)|os\\.chmod\\([^,]+,\\s*0o?7(?:7[0-7]|[0-7]7)|umask\\(\\s*0\\s*\\)|acl\\s*[:=]\\s*['\"](?:public-read-write|public-read)['\"]|PublicAccessBlockConfiguration[^\\n]{0,80}false|AllUsers|allAuthenticatedUsers|\"Principal\"\\s*:\\s*\"\\*\")",
+      "note": "World-writable is worse than world-readable: it means an attacker can replace content that something else trusts. Check who else reads the path or the bucket.",
+      "fix": "Least privilege (Law 8). 0600 for secrets, 0644 for read-only data, and a named principal instead of a wildcard."
+    },
+    {
+      "id": "DEFAULT-111",
+      "title": "Weak or default cryptographic parameters",
+      "category": "DEFAULT",
+      "severity": "medium",
+      "confidence": "medium",
+      "cwe": "CWE-326",
+      "owasp": "A02:2021 Cryptographic Failures",
+      "pattern": "(?i)(?:key_?size\\s*[:=]\\s*(?:512|768|1024)\\b|rsa[._-]?(?:generate|key)[^\\n]{0,40}\\b(?:512|768|1024)\\b|iterations?\\s*[:=]\\s*(?:[1-9]\\d{0,3}|1[0-9]{4})\\b[^\\n]{0,40}(?:pbkdf2|kdf)|pbkdf2[^\\n]{0,60}?\\b(?:[1-9]\\d{0,3}|1[0-9]{4})\\b|rounds\\s*[:=]\\s*(?:[1-9]|10)\\b[^\\n]{0,30}bcrypt|bcrypt[^\\n]{0,30}rounds\\s*[:=]\\s*(?:[1-9]|10)\\b|ssl_version\\s*[:=]\\s*[^\\n]*(?:SSLv2|SSLv3|TLSv1(?:\\.0|\\.1)?)\\b|minimum_?tls[^\\n]{0,20}1\\.0|MD5|SHA1)\\b",
+      "note": "Classify the purpose before judging: a low iteration count for password storage is serious; MD5 for a cache key is not a finding at all. Read what the value protects.",
+      "fix": "Use the current recommended parameters and put them in one place, so raising them later is a single change: Argon2id or bcrypt with a modern cost for passwords, RSA 3072+ or an elliptic curve for keys, and TLS 1.2 as the floor."
+    },
+    {
+      "id": "DEFAULT-112",
+      "title": "No limit on request size, page size, upload or iteration",
+      "category": "DEFAULT",
+      "severity": "low",
+      "confidence": "low",
+      "cwe": "CWE-770",
+      "pattern": "(?i)(?:max_?(?:size|length|len|bytes|rows|results|items|upload|body|request|tokens|retries|depth)\\s*[:=]\\s*(?:None|null|nil|-1|0)\\b|limit\\s*[:=]\\s*(?:None|null|nil|-1|0)\\b|client_max_body_size\\s+0|unlimited\\s*[:=]\\s*(?:true|True|1)|timeout\\s*[:=]\\s*(?:None|null|nil|0|-1)\\b)",
+      "note": "Law 9. On its own this is availability and cost; combined with an expensive operation per item, or an agent loop, it becomes the actual bill. Note that a zero timeout usually means 'wait forever', not 'do not wait'.",
+      "fix": "Set an explicit bound on every list, body, upload, retry, loop and spend, and return a clear error when it is exceeded."
+    },
+    {
+      "id": "DEFAULT-113",
+      "title": "Signature, token or integrity verification disabled by default",
+      "category": "DEFAULT",
+      "severity": "high",
+      "confidence": "medium",
+      "cwe": "CWE-347",
+      "pattern": "(?i)(?:verify(?:_signature|_token|_jwt|_aud|_exp|_iss)?\\s*[:=]\\s*(?:False|false|0)|options\\s*=\\s*\\{[^}]*['\"]verify_[a-z]+['\"]\\s*:\\s*False|algorithms?\\s*[:=]\\s*\\[?\\s*['\"](?:none|None|HS256'\\s*,\\s*'RS256)['\"]|decode\\([^)]*verify\\s*=\\s*False|jwt\\.decode\\([^)]*(?:options|verify)[^)]*False|skip(?:_|-)?(?:verify|validation|signature)\\s*[:=]\\s*(?:true|True|1)|gpgcheck\\s*=\\s*0|--no-verify\\b|--skip-verification)",
+      "note": "If the verifier accepts the algorithm from the token, or accepts `none`, the signature is decoration. Check whether an attacker chooses the algorithm.",
+      "fix": "Pin the expected algorithm in the verifier, verify exp/aud/iss, and never accept `none`. Package integrity checks stay on."
+    },
+    {
+      "id": "DEFAULT-114",
+      "title": "Security middleware, header or protection disabled",
+      "category": "DEFAULT",
+      "severity": "medium",
+      "confidence": "medium",
+      "cwe": "CWE-693",
+      "pattern": "(?i)(?:csrf(?:_protection|Protection)?\\s*[:=]\\s*(?:False|false|0|None)|(?:csrf|xsrf)\\s*:\\s*false|@csrf_exempt|csrf\\.exempt|WTF_CSRF_ENABLED\\s*=\\s*False|contentSecurityPolicy\\s*:\\s*false|helmet\\s*\\(\\s*\\{\\s*[^}]*false|X-Frame-Options[^\\n]{0,20}ALLOWALL|autoescape\\s*[:=]\\s*(?:False|false|0)|SECURE_SSL_REDIRECT\\s*=\\s*False|escape\\s*[:=]\\s*(?:False|false)|safe_?mode\\s*[:=]\\s*(?:False|false|0))",
+      "note": "Autoescape disabled is the highest-impact member of this group: it silently turns every template variable into an XSS sink (Law 6).",
+      "fix": "Keep the framework's protections on globally and make exemptions per-route, narrow, and commented with the reason."
+    },
+    {
+      "id": "DEFAULT-115",
+      "title": "Insecure transport used by default",
+      "category": "DEFAULT",
+      "severity": "medium",
+      "confidence": "low",
+      "cwe": "CWE-319",
+      "pattern": "(?i)(?:['\"]http://(?!localhost|127\\.0\\.0\\.1|\\[?::1|0\\.0\\.0\\.0|example\\.(?:com|org|net)|schemas?\\.|www\\.w3\\.org|xmlns)[A-Za-z0-9.\\-]+|ftp://|telnet://|(?:use_?(?:tls|ssl|https)|secure_?transport|require_?tls)\\s*[:=]\\s*(?:False|false|0)|smtp[^\\n]{0,30}starttls\\s*[:=]\\s*(?:False|false|0)|sslmode\\s*=\\s*disable)",
+      "note": "A schema or namespace URL over http is not a transport finding. What matters is a real endpoint that carries credentials or data.",
+      "fix": "Use TLS for every non-loopback destination, and require it rather than negotiating down."
+    },
+    {
+      "id": "DEFAULT-116",
+      "title": "Development or test bypass reachable in a shipped path",
+      "category": "DEFAULT",
+      "severity": "high",
+      "confidence": "low",
+      "cwe": "CWE-489",
+      "pattern": "(?i)(?:(?:if|when|unless)[^\\n]{0,40}(?:test_?mode|dev_?mode|is_?dev|local_?only|bypass_?auth|skip_?auth|no_?auth|mock_?auth|fake_?login|impersonate|god_?mode|backdoor|master_?(?:key|password)|super_?user_?token)|(?:bypass|skip|disable)_?(?:auth|authz|login|permission|security|check)s?\\s*[:=]\\s*(?:True|true|1)|X-(?:Debug|Test|Admin|Bypass)-[A-Za-z-]+|ALLOW_INSECURE|UNSAFE_[A-Z_]+\\s*[:=]\\s*(?:True|true|1))",
+      "note": "The classic breach shape: a bypass added for local testing, guarded by a flag or header that turns out to be attacker-reachable. Answer V2 in writing - name the build-time exclusion, or treat it as production code.",
+      "fix": "Remove it, or exclude it at BUILD time rather than at runtime, so the code physically is not in the shipped artifact. A runtime flag is a switch someone can flip."
+    }
+  ]
+}
