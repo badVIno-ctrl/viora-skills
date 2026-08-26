@@ -148,3 +148,18 @@ The copy language is the language of the request, and it decides three things be
 **The numbers.** Russian groups thousands with a thin space and puts the currency after the amount: 184 200 ₽. English groups with a comma and puts the symbol first: $184,200. Both need `font-variant-numeric: tabular-nums` in any column that is read vertically.
 
 Declare the language on the document. `check.mjs` fails a missing `lang` and fails a document that declares English while the copy is Cyrillic.
+
+## Pairings on demand, including Cyrillic
+
+```
+node scripts/pick.mjs "<mood> <surface>" --domain cyrillic -n 3
+node scripts/pick.mjs "<mood> <surface>" --domain type -n 3
+```
+
+`--domain cyrillic` reads `data/cyrillic-pairs.csv`: 26 pairings that actually ship Cyrillic,
+each with its register, what it is wrong for, and the Google Fonts URL. `--domain type` is
+the Latin-first pool of 74 pairings. A wrong pick does not ship silently: `check.mjs` fails
+the build with `cyrillic-latin-face`.
+
+Font loading, the weight budget and the layout shift a late font causes:
+`reference/15-perf-craft.md`.

@@ -1,0 +1,6 @@
+{
+	"name": "viora-design-skills",
+	"version": "4.1.0",
+	"description": "Interface design with two lanes, an offline catalog and linters that measure instead of describing.",
+	"contextFileName": "LITE.md"
+}

@@ -1,0 +1,456 @@
+<!--
+  Виора block library / marketing
+  hero, trust row, feature grid, numbers, pricing, faq, quote, closing band
+
+  Paste the section you need into a page that links assets/tokens.css.
+  Class prefix is m- so this file never collides with shell.html or app.html.
+  Every value is a token. Change the palette, the section follows.
+
+  Checked by: node scripts/check.mjs assets/blocks/html/marketing.html assets/tokens.css
+              node scripts/wig.mjs   assets/blocks/html/marketing.html
+-->
+
+<style>
+  .m-wrap {
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* ---------- hero: two columns on desktop, stacked and honest on mobile -- */
+  .m-hero {
+    display: grid;
+    gap: var(--space-8);
+    padding-block: var(--space-12) var(--space-10);
+    align-items: center;
+  }
+  .m-hero h1 {
+    font-family: var(--font-display);
+    font-size: var(--text-display-2);
+    font-weight: var(--weight-display);
+    line-height: var(--lh-display-2);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    margin: 0 0 var(--space-4);
+    color: var(--ink);
+  }
+  .m-lede {
+    max-width: var(--measure);
+    font-size: var(--text-lg);
+    color: var(--ink-muted);
+    margin: 0 0 var(--space-6);
+  }
+  .m-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+  }
+  .m-proof {
+    margin: var(--space-5) 0 0;
+    font-size: var(--text-sm);
+    color: var(--ink-subtle);
+    font-variant-numeric: tabular-nums;
+  }
+  .m-shot {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-3);
+    background: var(--surface);
+  }
+
+  /* ---------- buttons ---------------------------------------------------- */
+  .m-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    padding-inline: var(--space-5);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    font: inherit;
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out);
+  }
+  .m-btn-solid { background: var(--accent); color: var(--accent-ink); }
+  .m-btn-line { background: transparent; color: var(--ink); border-color: var(--control-border); }
+  @media (hover: hover) {
+    .m-btn-solid:hover { background: var(--accent-hover); }
+    .m-btn-line:hover { background: var(--surface); }
+  }
+  .m-btn-solid:active { background: var(--accent-active); }
+  .m-btn:focus-visible,
+  .m-faq summary:focus-visible,
+  .m-price a:focus-visible {
+    outline: var(--focus);
+    outline-offset: 2px;
+  }
+
+  /* ---------- trust row: names, not fake logos --------------------------- */
+  .m-trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-6);
+    align-items: baseline;
+    padding-block: var(--space-6);
+    border-block: 1px solid var(--hairline);
+    color: var(--ink-subtle);
+    font-size: var(--text-sm);
+  }
+
+  /* ---------- features: one wide card, two narrow. never three identical -- */
+  .m-features {
+    display: grid;
+    gap: var(--space-5);
+    padding-block: var(--space-11);
+  }
+  .m-card {
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    background: var(--canvas);
+  }
+  .m-card-lead {
+    background: var(--surface);
+    box-shadow: var(--shadow-1);
+  }
+  .m-card h3 {
+    font-size: var(--text-h3);
+    font-weight: var(--weight-strong);
+    letter-spacing: -0.01em;
+    margin: 0 0 var(--space-3);
+    color: var(--ink);
+  }
+  .m-card p {
+    margin: 0;
+    max-width: var(--measure);
+    color: var(--ink-muted);
+  }
+  .m-card dl {
+    display: grid;
+    gap: var(--space-2);
+    margin: var(--space-5) 0 0;
+    font-size: var(--text-sm);
+  }
+  .m-card dt { color: var(--ink); font-weight: var(--weight-medium); }
+  .m-card dd { margin: 0 0 var(--space-2); color: var(--ink-muted); }
+
+  /* ---------- numbers: attributed, tabular, not decorative --------------- */
+  .m-numbers {
+    display: grid;
+    gap: var(--space-6);
+    padding-block: var(--space-10);
+    border-top: 1px solid var(--hairline);
+  }
+  .m-number {
+    font-family: var(--font-display);
+    font-size: var(--text-h1);
+    font-weight: var(--weight-display);
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    display: block;
+  }
+  .m-number-note { color: var(--ink-muted); font-size: var(--text-sm); }
+  .m-source { color: var(--ink-subtle); font-size: var(--text-xs); margin: 0; }
+
+  /* ---------- pricing --------------------------------------------------- */
+  .m-pricing { padding-block: var(--space-11); display: grid; gap: var(--space-5); }
+  .m-price {
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    display: grid;
+    align-content: start;
+    gap: var(--space-4);
+  }
+  .m-price-pick {
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+  }
+  .m-price h3 { margin: 0; font-size: var(--text-h4); color: var(--ink); }
+  .m-amount {
+    font-family: var(--font-display);
+    font-size: var(--text-h1);
+    font-weight: var(--weight-display);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .m-per { font-size: var(--text-sm); color: var(--ink-muted); }
+  .m-price ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); font-size: var(--text-sm); color: var(--ink-muted); }
+  .m-price li { display: flex; gap: var(--space-2); align-items: flex-start; }
+  .m-price svg { flex: none; margin-top: 3px; color: var(--accent); }
+
+  /* ---------- faq ------------------------------------------------------- */
+  .m-faq { padding-block: var(--space-10); border-top: 1px solid var(--hairline); }
+  .m-faq h2, .m-pricing h2, .m-features h2, .m-quote h2 {
+    font-size: var(--text-h2);
+    font-weight: var(--weight-strong);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    margin: 0 0 var(--space-6);
+    color: var(--ink);
+  }
+  .m-faq details { border-bottom: 1px solid var(--hairline); }
+  .m-faq summary {
+    cursor: pointer;
+    padding: var(--space-4) 0;
+    font-weight: var(--weight-medium);
+    color: var(--ink);
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+  .m-faq summary::-webkit-details-marker { display: none; }
+  .m-faq summary::after { content: "+"; color: var(--ink-subtle); }
+  .m-faq details[open] summary::after { content: "\2212"; } /* minus sign, escaped: a literal dash here would read as punctuation */
+  .m-faq p { margin: 0 0 var(--space-4); max-width: var(--measure); color: var(--ink-muted); }
+
+  /* ---------- quote ----------------------------------------------------- */
+  .m-quote { padding-block: var(--space-10); }
+  .m-quote blockquote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: var(--lh-h2);
+    letter-spacing: -0.01em;
+    max-width: 34ch;
+    color: var(--ink);
+  }
+  .m-quote figcaption { margin-top: var(--space-4); font-size: var(--text-sm); color: var(--ink-muted); }
+
+  /* ---------- closing band --------------------------------------------- */
+  .m-close {
+    padding-block: var(--space-11);
+    border-top: 1px solid var(--hairline);
+    display: grid;
+    gap: var(--space-4);
+    justify-items: start;
+  }
+  .m-close h2 { max-width: 28ch; }
+  .m-close p { margin: 0; color: var(--ink-subtle); font-size: var(--text-sm); }
+
+  @media (min-width: 60rem) {
+    .m-hero { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: var(--space-10); }
+    .m-features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .m-card-lead { grid-column: 1 / -1; }
+    .m-numbers { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .m-pricing { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
+    .m-pricing h2 { grid-column: 1 / -1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .m-btn { transition-duration: 1ms; }
+  }
+</style>
+
+<main class="m-wrap" id="main">
+  <section class="m-hero">
+    <div>
+      <h1>Release notes that ship with the release</h1>
+      <p class="m-lede">
+        Halyard reads your merged pull requests, drafts the note in your own
+        wording, and holds it until you approve. No template, no digest email,
+        no second tool for the changelog.
+      </p>
+      <div class="m-actions">
+        <a class="m-btn m-btn-solid" href="/start">Draft your next release</a>
+        <a class="m-btn m-btn-line" href="/example">Read a real note</a>
+      </div>
+      <p class="m-proof">Median draft time 3&nbsp;min. Works with GitHub, GitLab and Linear.</p>
+    </div>
+
+    <img
+      class="m-shot"
+      src="/img/halyard-draft-1280.png"
+      alt="Halyard draft view: merged pull requests on the left, the note being written on the right"
+      width="1280"
+      height="860"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
+  </section>
+
+  <section class="m-trust" aria-label="Teams using Halyard">
+    <span>Rigging releases at</span>
+    <span>Kvartal</span>
+    <span>Northsail</span>
+    <span>Dockyard Software</span>
+    <span>Lumen Freight</span>
+    <span>Pier 9 Labs</span>
+  </section>
+
+  <section class="m-features" aria-labelledby="features-title">
+    <h2 id="features-title">Three jobs, one pass</h2>
+
+    <article class="m-card m-card-lead">
+      <h3>It reads the diff, not the commit titles</h3>
+      <p>
+        Halyard groups merged work by what a customer would notice, then writes
+        one line per group. Internal refactors stay out of the note unless they
+        changed a limit, a default or an error message.
+      </p>
+      <dl>
+        <dt>Grouping</dt>
+        <dd>By surface, then by severity. Breaking changes always lead.</dd>
+        <dt>Voice</dt>
+        <dd>Learned from your last twelve published notes, not from a template.</dd>
+      </dl>
+    </article>
+
+    <article class="m-card">
+      <h3>Approval is a person, not a checkbox</h3>
+      <p>
+        Every draft goes to the engineer who merged the work and the person who
+        answers support tickets. Two approvals publish it. One rejection sends
+        it back with the reason attached.
+      </p>
+    </article>
+
+    <article class="m-card">
+      <h3>The changelog is a page you own</h3>
+      <p>
+        Published notes render into your own domain with your own tokens.
+        Export as Markdown, RSS or a plain JSON feed at any time.
+      </p>
+    </article>
+  </section>
+
+  <section class="m-numbers" aria-label="Measured on our own workspaces">
+    <div>
+      <span class="m-number">3&nbsp;min</span>
+      <span class="m-number-note">median time from merge to a draft ready for review</span>
+    </div>
+    <div>
+      <span class="m-number">92%</span>
+      <span class="m-number-note">of drafts published with light edits or none</span>
+    </div>
+    <div>
+      <span class="m-number">340</span>
+      <span class="m-number-note">workspaces publishing at least once a week</span>
+    </div>
+    <p class="m-source">
+      Our own telemetry, 12&nbsp;months to July&nbsp;2026, all paying workspaces.
+      Method and raw counts: <a href="/method">how we measure</a>.
+    </p>
+  </section>
+
+  <section class="m-pricing" aria-labelledby="pricing-title">
+    <h2 id="pricing-title">Priced per person who approves</h2>
+
+    <article class="m-price">
+      <h3>Solo</h3>
+      <div><span class="m-amount">$0</span> <span class="m-per">one approver, public repos</span></div>
+      <ul>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m5 13 4 4L19 7" /></svg>
+          Unlimited drafts
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m5 13 4 4L19 7" /></svg>
+          Markdown and RSS export
+        </li>
+      </ul>
+      <a class="m-btn m-btn-line" href="/start">Start solo</a>
+    </article>
+
+    <article class="m-price m-price-pick">
+      <h3>Team</h3>
+      <div><span class="m-amount">$19</span> <span class="m-per">per approver, monthly</span></div>
+      <ul>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m5 13 4 4L19 7" /></svg>
+          Private repositories and two-person approval
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m5 13 4 4L19 7" /></svg>
+          Your domain, your tokens on the changelog
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m5 13 4 4L19 7" /></svg>
+          Linear and Jira references resolved in the note
+        </li>
+      </ul>
+      <a class="m-btn m-btn-solid" href="/start?plan=team">Start with your team</a>
+    </article>
+
+    <article class="m-price">
+      <h3>Company</h3>
+      <div><span class="m-amount">$49</span> <span class="m-per">per approver, monthly</span></div>
+      <ul>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m5 13 4 4L19 7" /></svg>
+          SSO, audit log, data residency
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m5 13 4 4L19 7" /></svg>
+          Review windows and scheduled publishing
+        </li>
+      </ul>
+      <a class="m-btn m-btn-line" href="/talk">Talk to us first</a>
+    </article>
+  </section>
+
+  <section class="m-faq" aria-labelledby="faq-title">
+    <h2 id="faq-title">Questions people actually ask</h2>
+
+    <details>
+      <summary>Does it publish without me?</summary>
+      <p>
+        Never. A draft sits until two people approve it, and you can require a
+        specific person for any repository. Scheduled publishing still needs the
+        approvals first.
+      </p>
+    </details>
+
+    <details>
+      <summary>What happens to a note when a release is rolled back?</summary>
+      <p>
+        The note is marked as rolled back on your changelog with the time and
+        the reason you give. Nothing is silently deleted, because your customers
+        already read it.
+      </p>
+    </details>
+
+    <details>
+      <summary>Can I keep writing notes by hand?</summary>
+      <p>
+        Yes, and Halyard learns from those. Hand-written notes are the training
+        set for your voice, so the more you write, the closer drafts land.
+      </p>
+    </details>
+
+    <details>
+      <summary>Where does our code go?</summary>
+      <p>
+        Diffs are read in memory to produce the draft and are not stored. What
+        we keep is the note, the approvals and the references. Details in
+        <a href="/security">security</a>.
+      </p>
+    </details>
+  </section>
+
+  <figure class="m-quote">
+    <blockquote>
+      We stopped writing the changelog on Fridays. It writes itself on Tuesday
+      and I argue with it for ten minutes.
+    </blockquote>
+    <figcaption>Marta Sundqvist, release manager at Kvartal</figcaption>
+  </figure>
+
+  <section class="m-close">
+    <h2>Your next release can carry its own note</h2>
+    <a class="m-btn m-btn-solid" href="/start">Connect a repository</a>
+    <p>No card. Disconnect in one click and the drafts leave with you.</p>
+  </section>
+</main>

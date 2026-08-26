@@ -8,9 +8,11 @@
  *   node verify.mjs src app --url http://localhost:5173
  *
  * Runs, in this order:
- *   1. check.mjs        the mechanical craft linter
- *   2. contrast.mjs     WCAG measurement on every token file it can find
- *   3. shot.mjs         desktop + mobile, then --squint, then --icon
+ *   1. check.mjs        craft linter: slop, tokens, rhythm, type, motion
+ *   2. wig.mjs          interface linter: interaction, forms, state, locale
+ *   3. contrast.mjs     WCAG measurement on every token file it can find
+ *   3b. palettes.mjs    every palette in a library, substituted and measured
+ *   4. shot.mjs         desktop + mobile, then --squint, then --icon
  *
  * Prints one verdict. Exit 1 means the mechanical floor is not passed.
  * Fix everything reported in ONE batch, run this once more, then stop.
@@ -69,6 +71,9 @@ function findTokenFiles(root, found = [], depth = 0) {
 			if (statSync(p).size > 400_000) continue
 			const raw = readFileSync(p, "utf8")
 			const defines = (raw.match(/^\s*--[a-z0-9-]+\s*:/gm) || []).length
+			/* a palette library is not a contract: it carries one :root per
+			   alternative, and palettes.mjs measures those one block at a time. */
+			if (/=== PALETTE: /.test(raw)) continue
 			if (defines >= 8 && /--(?:canvas|surface|ink|accent|bg|foreground)\b/.test(raw)) found.push(p)
 		} catch {
 			/* unreadable file, not a token file */
@@ -91,7 +96,13 @@ results.push([
 	run("check.mjs", "check.mjs", strict ? [...targets, "--strict"] : targets),
 ])
 
-/* 2. contrast ----------------------------------------------------------- */
+/* 2. interface rules ---------------------------------------------------- */
+results.push([
+	"wig",
+	run("wig.mjs", "wig.mjs", strict ? [...targets, "--strict"] : targets),
+])
+
+/* 3. contrast ----------------------------------------------------------- */
 const tokenFiles = []
 for (const t of targets) {
 	const p = resolve(t)
@@ -112,7 +123,51 @@ if (tokenFiles.length === 0) {
 	results.push(["contrast", worst])
 }
 
-/* 3. screenshots -------------------------------------------------------- */
+/* 3b. palette library --------------------------------------------------- */
+function findPaletteLibraries(root, found = [], depth = 0) {
+	if (depth > 6 || found.length >= 3) return found
+	let entries = []
+	try {
+		entries = readdirSync(root, { withFileTypes: true })
+	} catch {
+		return found
+	}
+	for (const e of entries) {
+		const p = join(root, e.name)
+		if (e.isDirectory()) {
+			if (SKIP.has(e.name) || e.name.startsWith(".")) continue
+			findPaletteLibraries(p, found, depth + 1)
+			continue
+		}
+		if (extname(e.name) !== ".css") continue
+		try {
+			if (statSync(p).size > 400_000) continue
+			if (/=== PALETTE: /.test(readFileSync(p, "utf8"))) found.push(p)
+		} catch {
+			/* unreadable file, not a library */
+		}
+	}
+	return found
+}
+
+const libraries = []
+for (const t of targets) {
+	const p = resolve(t)
+	if (!existsSync(p)) continue
+	if (statSync(p).isDirectory()) findPaletteLibraries(p, libraries)
+}
+if (libraries.length > 0) {
+	let worst = 0
+	for (const lib of [...new Set(libraries)]) {
+		const sibling = join(dirname(lib), "tokens.css")
+		const pair = existsSync(sibling) ? sibling : tokenFiles[0]
+		if (!pair) continue
+		worst = Math.max(worst, run(`palettes.mjs ${lib}`, "palettes.mjs", [lib, pair]))
+	}
+	results.push(["palettes", worst])
+}
+
+/* 4. screenshots -------------------------------------------------------- */
 if (url && !skipShots) {
 	const u = String(url)
 	const shots = [

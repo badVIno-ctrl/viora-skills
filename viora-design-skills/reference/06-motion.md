@@ -248,3 +248,16 @@ Often worth more than any animation.
 ## Output of this gate
 
 One or two authored moments, tokens used for every curve and duration, reduced motion in place, no banned pattern present. Continue.
+
+## Recipes from the catalog
+
+```
+node scripts/pick.mjs "<interaction>" --domain motion --tier subtle
+```
+
+Each row carries the trigger, duration, easing, a snippet, framework notes and the failure
+mode. Tiers are `subtle`, `moderate` and `bold`, and they map onto the MOTION dial from the
+direction contract. The gate in this file still decides whether the moment exists at all.
+
+Interaction latency, main-thread cost and why a 60fps animation can still feel slow:
+`reference/15-perf-craft.md`.

@@ -1,223 +1,190 @@
 # Виора Design Skills
 
-One design skill for coding agents. Replaces six.
+**v4.1.0** A design skill for coding agents. It makes the agent produce interfaces that look designed
+rather than generated: a committed visual direction, a measured palette, real states, and a
+mechanical floor that is checked by scripts instead of claimed in a summary.
 
-Built for Claude Code, Codex, Antigravity, Cursor, Gemini CLI, Windsurf, Cline, OpenCode and anything else that reads a `SKILL.md`. Designed so that a mid-tier 2025 model produces work that looks decided rather than generated.
+Works with Claude Code, Codex, Cursor, Gemini CLI, Copilot, Windsurf, Cline and anything else that
+reads a Markdown instruction file. No dependencies, no network, no API keys. Node 18 or newer for the
+scripts, and the skill still works without a terminal.
 
----
+## What it changes
 
-# Русская версия
+An agent left alone produces the same page every time: a gradient hero, an eyebrow label above the
+heading, three feature cards with thin icons, a band of invented statistics, grey body text, a footer
+with nine columns. It looks like software and it looks like nothing.
 
-## Что это
-
-Один скилл вместо шести. Внутри - маршрутизатор на восемь шагов (G0-G7), тринадцать справочных файлов, которые загружаются **по одному, только когда нужны**, и четыре скрипта проверки без зависимостей. Модель никогда не держит в контексте больше двух справочников одновременно.
-
-## Установка
-
-Положите папку `viora-design-skills` в каталог скиллов вашего инструмента:
-
-| Инструмент | Куда положить |
-|---|---|
-| Claude Code (проект) | `.claude/skills/viora-design-skills/` |
-| Claude Code (глобально) | `~/.claude/skills/viora-design-skills/` |
-| Codex | `.codex/skills/viora-design-skills/` |
-| Antigravity / Gemini CLI | `.gemini/skills/viora-design-skills/` |
-| Cursor | `.cursor/skills/viora-design-skills/` |
-| OpenCode | `.opencode/skills/viora-design-skills/` |
-| GitHub Copilot | `.github/skills/viora-design-skills/` |
-
-Важно: копируйте **всю папку целиком**, вместе с `reference/`, `assets/` и `scripts/`. Один `SKILL.md` без них работать не будет.
-
-Если ваш инструмент не поддерживает скиллы, добавьте одну строку в `AGENTS.md`, `CLAUDE.md` или `.cursor/rules`:
-
-```md
-Любая работа с интерфейсом: сначала прочитай .claude/skills/viora-design-skills/SKILL.md и следуй ему.
-```
-
-## Как пользоваться
-
-Ничего специального делать не нужно. Скилл подхватывается сам, когда вы просите что-то нарисовать, сверстать, отредизайнить или починить. Просто пишите задачу:
-
-```
-Сделай лендинг для сервиса аналитики. Аудитория - технические руководители.
-```
-
-```
-Переделай дашборд. Сейчас выглядит как шаблон.
-```
-
-```
-Пройдись по /app/settings и доведи до нормального качества.
-```
-
-Что даёт лучший результат:
-
-1. **Скажите, для кого это.** "для технических руководителей" меняет результат сильнее, чем "сделай красиво".
-2. **Закрепите то, что нельзя менять.** Бренд, цвет, шрифт, референс. Закреплённое всегда побеждает дефолты скилла.
-3. **Дайте настоящий текст и настоящие картинки,** если они есть. Тонкий контент - главный признак сгенерированного интерфейса, его не спасает никакая вёрстка.
-4. **Не просите "добавить анимаций".** Скилл сам решит, где движение уместно. Просьба "побольше анимации" ухудшает результат.
-
-## Что появится в проекте
-
-- `tokens.css` - токены: цвет, типографика, отступы, радиусы, тени, кривые анимации, плюс то, что почти никто не настраивает: цвет выделения текста, каретка, скроллбар, фокус-ринг, табличные цифры, `prefers-reduced-motion`, печать.
-- `DESIGN.md` - контракт дизайна проекта. Это память: следующая сессия не придумывает стиль заново, а читает его. Именно за счёт этого файла экономится контекст на слабых моделях.
-
-В самом скилле есть два файла, которые нужно копировать, а не читать:
-
-- `assets/starter.html` - однофайловая заготовка, которая уже проходит все проверки: токены на светлую и тёмную темы, skip-link, sticky-навигация, hero, hairline-таблица с табулярными цифрами, форма с настоящими label, одно подписное движение и полный блок `prefers-reduced-motion`. Начинать с неё быстрее, чем с пустого файла.
-- `assets/snippets.md` - десять базовых компонентов (кнопка, поле, карточка, таблица, модалка, пустое состояние, скелетон, тост, иконки, утилиты) со всеми состояниями и фокус-рингом на месте.
-
-## Проверка качества
-
-В скилле есть линтер без зависимостей. Модель запускает его сама на шаге проверки, но вы можете и вручную:
-
-```bash
-node .claude/skills/viora-design-skills/scripts/verify.mjs . --url http://localhost:3000
-node .claude/skills/viora-design-skills/scripts/verify.mjs . --strict --no-shots
-node .claude/skills/viora-design-skills/scripts/check.mjs .
-node .claude/skills/viora-design-skills/scripts/check.mjs . --summary
-node .claude/skills/viora-design-skills/scripts/check.mjs --list-rules
-node .claude/skills/viora-design-skills/scripts/contrast.mjs tokens.css
-node .claude/skills/viora-design-skills/scripts/selftest.mjs
-```
-
-Правил 66. Среди них пятнадцать новых, которые ловят именно «машинный» интерфейс: фиолетово-голубой AI-градиент, дефолтная тень из доки фреймворка, mesh-блобы в герое, всё по центру, три одинаковые карточки в ряд, кликабельный `div`, `svg` без имени, `img` без размеров, `overflow-x: hidden` как заплатка, отступы вне ритма, произвольные px-классы, дисплейный кегль без трекинга, Title Case в заголовках, стекломания и полное отсутствие токенов в проекте. Он ловит то, что проверяется механически: длинное тире, `transition: all`, `100vh`, снятый фокус, `Lorem`, `Acme`, `John Doe`, градиентный текст, надзаголовки-кикеры, отсутствие `prefers-reduced-motion`, `<img>` без `alt`, запрет зума, положительный `tabindex`, шрифты-дефолты, латинский шрифт под кириллицей, больше трёх цветовых тонов, два семейства радиусов, анимация лейаута, иконка-кнопка без имени, placeholder вместо label, два `h1`, пропущенный уровень заголовка.
-
-Формат вывода не зашит в скилл, он выбирается на G0 из трёх вариантов по одному признаку: где будет жить код. `FILE` один самодостаточный HTML, `PARTS` компоненты в существующий проект, `APP` проект с роутами и данными. Если признаков нет, берётся файл, который просто открывается.
-
-Язык интерфейса всегда равен языку запроса, и это проверяется машинно, а не просится в инструкции. Документ без `lang` и документ, который объявляет английский при кириллическом тексте, падают с ошибкой. К ним примыкает старое правило про кириллицу под латинским начертанием: вместе они закрывают самый частый способ убить русский макет.
-
-Одной командой всё сразу: `verify.mjs` запускает линтер, сам находит файл токенов и меряет контраст, снимает скриншоты десктопа, мобильного, размытый силуэт и иконку, а затем печатает один вердикт. Флаг `--strict` роняет проверку и на предупреждениях: именно так стоит гонять его перед сдачей. Отдельное правило глушится в коде: `/* viora-allow: rule-id причина */`, но только с причиной, иначе это не решение, а прятание. А `selftest.mjs` проверяет сам инструмент: собирает заведомо плохой файл, убеждается, что каждое ключевое правило срабатывает, и что собственные ассеты скилла проходят чисто.
-
-Скрипт `contrast.mjs` делает то, что поиском по тексту не проверить: раскрывает `var()`, `color-mix()`, `oklch()` и `hsl()` в светлой и тёмной темах и измеряет все пары контраста по WCAG. Не «вроде читаемо», а цифра.
-
-`0 errors` и `0 failures` - механический минимум пройден. Дальше скилл делает один прогон скриншотов (десктоп, мобайл, размытый силуэт и иконка), прогон по десяти эвристикам и проход на вычитание, и правит всё найденное одной пачкой.
-
-Если какое-то правило в вашем случае неприменимо, это не подавляется молча. Целый файл-фикстуру или документ, который специально учит на плохом примере, освобождает маркер `viora-allow-file` в первых строках, но для продуктового кода он не годится:
-
-```css
-/* viora-allow: neon-glow неоновая обводка здесь часть заданного стиля */
-```
-
-Скриншоты:
-
-```bash
-node .claude/skills/viora-design-skills/scripts/shot.mjs http://localhost:3000
-node .claude/skills/viora-design-skills/scripts/shot.mjs http://localhost:3000 --squint   # размытый чёрно-белый силуэт
-node .claude/skills/viora-design-skills/scripts/shot.mjs http://localhost:3000 --icon     # 0.2x, читается ли вообще
-```
-
-## Почему это работает на слабых моделях
-
-- **Всегда в контексте только `SKILL.md`.** Остальное - по одному файлу на шаг.
-- **Мен�� вместо изобретения.** 14 визуальных миров, 13 готовых палитр с точными hex, 10 шрифтовых пар с отметкой про кириллицу, 12 семейств секций. Выбрать из списка слабая модель умеет намного лучше, чем придумать с нуля.
-- **Скрипт вместо самопроверки.** Модель не умеет честно ревьюить свой код. Линтер умеет.
-- **`DESIGN.md` как память.** Один раз решили - дальше только читаем.
-- **Жёсткое правило остановки.** Один прогон правок, одно подтверждение, стоп. Без бесконечной полировки.
-
----
-
-# English
+This skill replaces that default with a process. Route the job, read only what the job needs, commit
+to a direction, build on a token contract, then verify with scripts that print file and line numbers.
+The verification is the part that matters: a rule the agent can measure is a rule the agent cannot
+talk its way around.
 
 ## Install
 
-Drop the whole `viora-design-skills` folder into your tool's skills directory:
+```bash
+# 1. into a project, for every agent format at once
+node /path/to/viora-design-skills/scripts/install.mjs --into /path/to/project
 
-| Tool | Path |
-|---|---|
-| Claude Code (project) | `.claude/skills/viora-design-skills/` |
-| Claude Code (global) | `~/.claude/skills/viora-design-skills/` |
-| Codex | `.codex/skills/viora-design-skills/` |
-| Antigravity / Gemini CLI | `.gemini/skills/viora-design-skills/` |
-| Cursor | `.cursor/skills/viora-design-skills/` |
-| OpenCode | `.opencode/skills/viora-design-skills/` |
-| GitHub Copilot | `.github/skills/viora-design-skills/` |
-
-Copy the **entire folder**, including `reference/`, `assets/` and `scripts/`. `SKILL.md` alone will not work.
-
-For tools without skill support, add one line to `AGENTS.md`, `CLAUDE.md` or `.cursor/rules`:
-
-```md
-For any UI work, read .claude/skills/viora-design-skills/SKILL.md first and follow it.
+# see what it would touch first
+node /path/to/viora-design-skills/scripts/install.mjs --into /path/to/project --dry-run
 ```
 
-## Architecture
+That copies the skill to `.claude/skills/viora-design-skills` and writes a short pointer block into
+`AGENTS.md`, `GEMINI.md`, `.cursor/rules/viora-design.mdc` and `.github/copilot-instructions.md`. The
+pointer is wrapped in markers, so running it again replaces the block and leaves your own text alone.
 
-```
-SKILL.md            always loaded. Router, ten laws, eight gates. Nothing else.
-reference/01..13    one concern per file, loaded one at a time, on demand
-assets/tokens.css   drop-in token contract and craft floor
-assets/starter.html  a page that already passes every check, ready to edit
-assets/snippets.md   ten components with every state written out
-assets/DESIGN.md    project memory template
-scripts/verify.mjs  one command for G6: linter + contrast + shots, single verdict
-scripts/check.mjs   mechanical linter, 66 rules, zero dependencies
-scripts/shot.mjs    screenshots: desktop, mobile, --squint, --icon
-scripts/contrast.mjs  WCAG resolver: var(), color-mix(), oklch(), both themes
-scripts/selftest.mjs  proves every rule fires and the shipped assets stay clean
-```
+Other ways in:
 
-The eight gates, `G0` to `G7`: **route, read, direct, frame, build, detail, verify, report.** Each gate names exactly one file to load and one thing to produce, and prints a one-line marker. A model that drifts is visibly off-script.
+- **Claude Code plugin.** The folder ships `.claude-plugin/plugin.json`, so it can be added as a
+  plugin directly.
+- **Gemini CLI extension.** `gemini-extension.json` points at `LITE.md`, which is the lane a Flash
+  model should be on anyway.
+- **By hand.** Put the folder anywhere and add one line to your agent instructions: read
+  `viora-design-skills/SKILL.md` before any design work.
 
-G0 also picks the **stack**, so the output format is a decision with criteria instead of a habit: `FILE` for one self-contained page, `PARTS` for components inside an existing repo, `APP` only when routes and real data are asked for. The interface language follows the language of the request, and two rules enforce it: `html-lang-missing` and `lang-copy-mismatch`.
+## The two lanes
 
-## Context budget
-
-| Loaded | When |
-|---|---|
-| `SKILL.md` (198 lines) | always |
-| one reference file | per gate, then released |
-| never | the whole `reference/` folder |
-| skipped entirely | `01-direction.md`, once `DESIGN.md` exists |
-
-Maximum two reference files in context at once. That ceiling is what makes it usable on weaker models.
-
-## What it produces
-
-- A committed visual direction, named, chosen from 14 worlds instead of invented.
-- One token file: 13 ready palettes with exact hex for light and dark, a control-border role that actually clears 3:1, a type scale with matched tracking, a 4px space rhythm, one radius family, a four-step tinted shadow scale, tokenised easings and durations.
-- The browser surfaces almost nobody sets: selection, caret, scrollbar, focus ring, underline offset, tabular numerals, autofill, reduced motion, reduced transparency, print.
-- Complete states: hover, focus-visible, active, disabled, loading, empty, error, offline, first run.
-- Accessibility by construction, measured rather than claimed: 4.5:1 body contrast and 3:1 control borders checked by `contrast.mjs`, 44px targets, full keyboard operation, visible focus, 200% zoom, 320px width.
-- One or two authored motion moments, never motion everywhere.
-- `DESIGN.md`, so the next session inherits the decision instead of re-deriving it.
-
-## Checker
+Strong models get the full process. Light models get a shorter one with fixed values. The lane is
+decided by a script, never by asking the model how capable it feels.
 
 ```bash
-node scripts/verify.mjs . --url http://localhost:3000   # linter + contrast + shots, one verdict
-node scripts/verify.mjs . --strict --no-shots           # fail on warnings too
-node scripts/check.mjs .                 # scan the project
-node scripts/check.mjs . --summary       # counts only
-node scripts/check.mjs . --json          # machine readable
-node scripts/check.mjs --list-rules      # every rule and its message
-node scripts/check.mjs . --ignore-rule banned-font,raw-hex
-node scripts/contrast.mjs tokens.css     # every contrast pair, both themes
-node scripts/contrast.mjs tokens.css --pair ink:accent
-node scripts/selftest.mjs                # prove the toolchain itself works
+node scripts/lane.mjs --model claude-sonnet-4.5    # FULL
+node scripts/lane.mjs --model gemini-2.5-flash     # LITE
+node scripts/lane.mjs --probe                      # unknown model: three questions with real answers
+node scripts/lane.mjs --list-models                # the table it actually uses
 ```
 
-Exit code 1 means errors remain. Suppress a rule where it genuinely does not apply, with a reason. A whole fixture, or a doc that teaches an anti-pattern on purpose, can carry `viora-allow-file` in its first lines. Never product code:
+FULL is `SKILL.md`: seven gates, fourteen visual worlds, the catalog, the subtraction pass. LITE is
+`LITE.md`: eight steps, eight numbered recipes with exact hex values, one motion pattern. LITE removes
+decisions, not standards. The token contract, the contrast requirement, visible focus and real copy
+are identical on both lanes.
 
-```css
-/* viora-allow: neon-glow the brief pins a neon aesthetic */
-```
+Why a script decides: self-assessment is the first ability to fail. Every model answers yes when asked
+if it can hold eight constraints at once. The router uses the model name, then name heuristics, then a
+three-question probe whose answers live in these files. Unresolved means LITE, because a strong model
+on the short lane still ships good work, while a weak model on the long lane ships three skipped
+gates and a confident summary. Details in `reference/17-model-tiers.md`.
 
-## What it merges
+## The gates
 
-Six skills went in. Each contributed the thing it did best:
-
-| Source | What it contributed | Now lives in |
+| Gate | What happens | Marker |
 |---|---|---|
-| Direction and craft-floor skill | direction commitment, the craft floor, the refusal list, bounded verification | `SKILL.md`, `01-direction.md`, `02-tokens.md`, `10-review.md` |
-| Taste skill | counted layout ceilings, the spent-hex list, section families, Core Web Vitals targets | `03-layout.md`, `05-color.md`, `08-states-a11y.md` |
-| Impeccable | the gate structure itself, the distil and delight passes, the subtraction rule | `SKILL.md`, `10-review.md` |
-| UI/UX pro max | ten-heuristic scoring, severity levels, persona walkthroughs, touch and icon minimums | `10-review.md`, `07-components.md`, `08-states-a11y.md` |
-| Animation and library skills | the animation decision framework, easing and duration doctrine, library routing | `06-motion.md`, `07-components.md` |
-| awesome-design-md | the `DESIGN.md` schema and its frontmatter convention | `12-design-md.md`, `assets/DESIGN.template.md` |
+| G0 | route the job: new, change, redesign, review or fix, and the mode | `G0 route:` |
+| G1 | read only the files this job needs | `G1 read:` |
+| G2 | commit to a direction, name the world, fill the contract | `G2 direction:` |
+| G3 | tokens and the section plan, no component code yet | `G3 frame:` |
+| G4 | build, paste blocks where the pattern is standard | `G4 build:` |
+| G5 | one signature detail that no template would produce | `G5 detail:` |
+| G6 | verify with the scripts, fix, then delete something | `G6 verify:` |
+| G7 | report what was built and what was cut | `G7 done` |
 
-What was dropped: duplicate advice, prose that read well but changed no decision, unverifiable claims, and anything requiring a Python runtime, a CSV data bundle, or a network fetch at build time. What was added on top of all six: two verification scripts, a working starter page, a component library with real states, and a mechanical mapping from each of the ten design laws to the gate that enforces it.
+## Scripts
 
-## License
+Everything here is plain Node with no dependencies. All of it runs offline.
 
-MIT.
+| Command | What it does |
+|---|---|
+| `node scripts/verify.mjs <paths>` | the whole pipeline, one verdict |
+| `node scripts/check.mjs <paths>` | 66 rules: slop copy, banned patterns, motion, colour, craft |
+| `node scripts/wig.mjs <paths>` | 36 interface rules with file and line output |
+| `node scripts/contrast.mjs <token file>` | measures 30 required pairs, light and dark |
+| `node scripts/palettes.mjs` | measures all 13 palettes in the library |
+| `node scripts/shot.mjs <url>` | screenshots at several widths, squint and scale tests |
+| `node scripts/pick.mjs "<query>" --system` | offline catalog: palette, type, style, pattern, motion |
+| `node scripts/explain.mjs <rule-id>` | why a rule exists, with a before and an after |
+| `node scripts/lane.mjs --probe` | decides FULL or LITE |
+| `node scripts/ru.mjs <paths>` | Russian typography, with `--fix` for the mechanical half |
+| `node scripts/score.mjs <paths>` | scores the four measurable axes of the rubric |
+| `node scripts/docsync.mjs` | checks the skill against itself before shipping it |
+| `node scripts/install.mjs --into <dir>` | installs into a project |
+| `node scripts/selftest.mjs` | proves the scripts still work |
+
+Both linters take `--summary`, `--json`, `--strict`, `--ignore-rule a,b`, `--list-rules`,
+`--explain <id>` and `--github` for GitHub Actions annotations.
+
+## The offline catalog
+
+`data/` holds 13 tables and 22 stack guides, roughly 190 palettes, 74 Latin type pairs, 26 Cyrillic
+type pairs, 79 styles, 34 landing patterns, 119 interface rules, 105 icon entries and 192 product
+routings. `scripts/pick.mjs` searches them with BM25 in about 20 milliseconds, with Russian stemming,
+so the agent picks from measured rows instead of choosing colours by mood.
+
+```bash
+node scripts/pick.mjs "logistics dashboard for operations managers" --system
+node scripts/pick.mjs "клиника" --cyrillic         # only Cyrillic-safe font pairs
+node scripts/pick.mjs "fintech" --domain palette --css   # ready token block
+```
+
+`--css` prints a fillable `EDIT 1` block for `assets/tokens.css`, checks that the accent is actually
+an accent rather than a surface colour, and tells you which command measures the result.
+
+## Palettes and blocks
+
+- `assets/tokens.css` is the token contract. Two edits are allowed: palette and type. The craft floor
+  is not editable.
+- `assets/palettes.css` holds 13 palettes as paste-in blocks. Every one passes all 30 contrast pairs
+  in both modes, and `scripts/palettes.mjs` proves it on demand.
+- `assets/blocks/` holds the patterns nobody should retype: header, mobile drawer, footer, hero,
+  feature grid, pricing, FAQ, quote, sidebar, toolbar, data table, settings form, destructive dialog,
+  toast. Plus the same behaviour in React. Tokens only, no raw hex, and they lint clean.
+
+A pasted block is a floor, not a design. The direction still has to show up in it.
+
+## Evals
+
+`evals/briefs.md` holds twelve briefs that test the skill itself, from a logistics landing page to a
+Russian dental clinic to an admin table with bulk actions. `evals/rubric.md` scores eight axes out of
+forty, four of them mechanical.
+
+```bash
+node scripts/score.mjs .        # the four measurable axes
+```
+
+The pass bar: 30 or more out of 40, no axis below 3, and the craft floor at 5. Errors are not taste.
+
+## Continuous integration
+
+`.github/workflows/design-gate.yml` runs the same scripts on every push and turns findings into
+annotations on the diff. Linters block, palette and typography warnings do not, because a warning is
+a decision and a decision needs a person.
+
+## Russian and other scripts
+
+Cyrillic is treated as a first-class case, not an afterthought. There are 26 measured Cyrillic type
+pairs, a rule that fails a Latin-only display face over Russian copy, and `scripts/ru.mjs` for the
+rest: guillemets, the long dash, non-breaking spaces before units and currency, mixed alphabets
+inside one word, Title Case in Russian headings.
+
+One deliberate conflict: `check.mjs` treats the long dash as the loudest machine tell in English copy
+and bans it. In Russian the same character is grammar, so Cyrillic lines are exempt and `ru.mjs`
+requires it. Both rules say so in their own messages.
+
+## What it refuses to do
+
+- No gradient meshes, glowing borders or purple-to-blue washes.
+- No invented statistics, no placeholder names, no adjectives standing in for facts.
+- No removed focus rings, no blocked paste, no icon-only buttons without names.
+- No em dash in English copy.
+- No claim that a check passed when no script was run.
+
+## Layout of the folder
+
+```
+SKILL.md              the FULL lane: gates, worlds, routing, file map
+LITE.md               the LITE lane: eight steps, eight recipes with exact values
+reference/            19 files, opened one at a time, never all at once
+assets/               token contract, starter file, palettes, paste-in blocks, snippets
+data/                 13 catalog tables plus 22 stack guides
+scripts/              linters, measurements, router, catalog search, installer
+evals/                twelve briefs and the scoring rubric
+```
+
+## Attribution and license
+
+MIT, see `LICENSE`. The catalog data and several ideas come from other open projects, and
+`ATTRIBUTION.md` records exactly what came from where, including which parts are not MIT and must not
+be presented as such. If you redistribute this folder, keep that file with it.
+
+What is original here: the gate process, the direction contract, the token contract, the lane router,
+both linters and their rule catalogues, the palette library and its measurement pass, the block
+library, the Cyrillic pairs, the Russian typography linter, the eval suite and the scoring rubric.

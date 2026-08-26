@@ -1,0 +1,413 @@
+/* ==========================================================================
+   Виора Design Skills / palette library
+
+   Thirteen palettes, each one a drop-in replacement for the block marked
+   "EDIT 1 - PALETTE" in assets/tokens.css. Copy the block between the two
+   markers, paste it over EDIT 1, then run:
+
+       node scripts/contrast.mjs <your tokens file>
+
+   Every palette here has been measured with that script. If you change a
+   value, measure again: a palette is a claim about contrast, and a claim
+   nobody measured is decoration.
+
+   Palettes marked "one mode" are deliberately single-mode. Their light and
+   dark columns are identical, so the surface looks the same either way
+   instead of pretending to have a second personality.
+
+   viora-allow-file: a palette library contains every hue on purpose, so the
+   hue-count and raw-hex rules do not apply to this file.
+   ========================================================================== */
+
+/* === PALETTE: graphite === neutral, precise, safe anywhere. The default. */
+:root {
+  /* ground */
+  --canvas-light:          #ffffff;   --canvas-dark:          #0b0b0d;
+  --surface-light:         #f6f6f7;   --surface-dark:         #16171a;
+  --surface-2-light:       #ededf0;   --surface-2-dark:       #1d1e22;
+
+  /* lines */
+  --hairline-light:        #e4e4e7;   --hairline-dark:        #26272b;
+  --hairline-strong-light: #d2d2d7;   --hairline-strong-dark: #33343a;
+
+  /* text */
+  --ink-light:             #16171a;   --ink-dark:             #f4f4f5;
+  --ink-muted-light:       #5b5e66;   --ink-muted-dark:       #9c9fa6;
+  --ink-subtle-light:      #83868f;   --ink-subtle-dark:      #71747b;
+
+  /* action */
+  --accent-light:          #1d4ed8;   --accent-dark:          #5b7cfa;
+  --accent-ink-light:      #ffffff;   --accent-ink-dark:      #0b0b0d;
+
+  /* control boundary */
+  --control-border-light:  #8a8c95;   --control-border-dark:  #66686f;
+
+  /* semantic */
+  --success-light:         #1a7f4b;   --success-dark:         #4ade80;
+  --warning-light:         #9a6206;   --warning-dark:         #fbbf24;
+  --danger-light:          #c0261f;   --danger-dark:          #ff6b6b;
+
+  --shadow-hsl-light: 232 12% 10%;
+  --shadow-hsl-dark:  232 30% 2%;
+  --shadow-boost-light: 1;
+  --shadow-boost-dark: 1.9;
+}
+/* === END graphite === */
+
+/* === PALETTE: nightshift === one mode, dark. Software craft, night product. */
+:root {
+  --canvas-light:          #08090a;   --canvas-dark:          #08090a;
+  --surface-light:         #101113;   --surface-dark:         #101113;
+  --surface-2-light:       #16181b;   --surface-2-dark:       #16181b;
+
+  --hairline-light:        #22252a;   --hairline-dark:        #22252a;
+  --hairline-strong-light: #2e3238;   --hairline-strong-dark: #2e3238;
+
+  --ink-light:             #f7f8f8;   --ink-dark:             #f7f8f8;
+  --ink-muted-light:       #8a8f98;   --ink-muted-dark:       #8a8f98;
+  --ink-subtle-light:      #6b7079;   --ink-subtle-dark:      #6b7079;
+
+  /* #6e7bf2 carries text, #4f5bd5 carries fills with white ink on top */
+  --accent-light:          #6e7bf2;   --accent-dark:          #6e7bf2;
+  --accent-ink-light:      #08090a;   --accent-ink-dark:      #08090a;
+
+  --control-border-light:  #6a6f78;   --control-border-dark:  #6a6f78;
+
+  --success-light:         #4ade80;   --success-dark:         #4ade80;
+  --warning-light:         #fbbf24;   --warning-dark:         #fbbf24;
+  --danger-light:          #ff6b6b;   --danger-dark:          #ff6b6b;
+
+  --shadow-hsl-light: 232 14% 4%;
+  --shadow-hsl-dark:  232 14% 4%;
+  --shadow-boost-light: 1.9;
+  --shadow-boost-dark: 1.9;
+}
+/* === END nightshift === */
+
+/* === PALETTE: forest === grown, calm, premium without beige. */
+:root {
+  --canvas-light:          #fbfbf9;   --canvas-dark:          #0c1310;
+  --surface-light:         #f2f3ef;   --surface-dark:         #14201a;
+  --surface-2-light:       #e9ebe4;   --surface-2-dark:       #1b2a22;
+
+  --hairline-light:        #dde0d8;   --hairline-dark:        #24312a;
+  --hairline-strong-light: #c7cbbf;   --hairline-strong-dark: #314137;
+
+  --ink-light:             #14201a;   --ink-dark:             #edf2ed;
+  --ink-muted-light:       #55635a;   --ink-muted-dark:       #96a69b;
+  --ink-subtle-light:      #7c8a81;   --ink-subtle-dark:      #6e7d74;
+
+  --accent-light:          #1f6f4a;   --accent-dark:          #4fbf87;
+  --accent-ink-light:      #ffffff;   --accent-ink-dark:      #0c1310;
+
+  --control-border-light:  #7d8a80;   --control-border-dark:  #5f6f65;
+
+  --success-light:         #1a7f4b;   --success-dark:         #4ade80;
+  --warning-light:         #9a6206;   --warning-dark:         #fbbf24;
+  --danger-light:          #c0261f;   --danger-dark:          #ff6b6b;
+
+  --shadow-hsl-light: 150 16% 10%;
+  --shadow-hsl-dark:  150 28% 3%;
+  --shadow-boost-light: 1;
+  --shadow-boost-dark: 1.9;
+}
+/* === END forest === */
+
+/* === PALETTE: clinic === trustworthy, careful, clean. Health, legal, gov. */
+:root {
+  --canvas-light:          #fcfdfd;   --canvas-dark:          #0a1416;
+  --surface-light:         #f1f5f6;   --surface-dark:         #122023;
+  --surface-2-light:       #e7edef;   --surface-2-dark:       #18292d;
+
+  --hairline-light:        #dce5e5;   --hairline-dark:        #223438;
+  --hairline-strong-light: #c3d1d2;   --hairline-strong-dark: #2e4348;
+
+  --ink-light:             #10201f;   --ink-dark:             #eaf2f2;
+  --ink-muted-light:       #4f6360;   --ink-muted-dark:       #93a6a7;
+  --ink-subtle-light:      #7a8d8b;   --ink-subtle-dark:      #6c7f80;
+
+  --accent-light:          #0e7c86;   --accent-dark:          #3fc0c9;
+  --accent-ink-light:      #ffffff;   --accent-ink-dark:      #0a1416;
+
+  --control-border-light:  #7b8d8e;   --control-border-dark:  #5d7073;
+
+  --success-light:         #1a7f4b;   --success-dark:         #4ade80;
+  --warning-light:         #9a6206;   --warning-dark:         #fbbf24;
+  --danger-light:          #c0261f;   --danger-dark:          #ff6b6b;
+
+  --shadow-hsl-light: 186 18% 10%;
+  --shadow-hsl-dark:  186 30% 3%;
+  --shadow-boost-light: 1;
+  --shadow-boost-dark: 1.9;
+}
+/* === END clinic === */
+
+/* === PALETTE: oxide === one mode, dark. Industrial, signal orange. */
+:root {
+  --canvas-light:          #0d0d0e;   --canvas-dark:          #0d0d0e;
+  --surface-light:         #17181a;   --surface-dark:         #17181a;
+  --surface-2-light:       #1f2023;   --surface-2-dark:       #1f2023;
+
+  --hairline-light:        #262729;   --hairline-dark:        #262729;
+  --hairline-strong-light: #35363a;   --hairline-strong-dark: #35363a;
+
+  --ink-light:             #f2f2f0;   --ink-dark:             #f2f2f0;
+  --ink-muted-light:       #9a9a98;   --ink-muted-dark:       #9a9a98;
+  --ink-subtle-light:      #75757a;   --ink-subtle-dark:      #75757a;
+
+  /* dark ink on orange. White on #ff5a1f fails, do not try it. */
+  --accent-light:          #ff5a1f;   --accent-dark:          #ff5a1f;
+  --accent-ink-light:      #14100e;   --accent-ink-dark:      #14100e;
+
+  --control-border-light:  #6f7075;   --control-border-dark:  #6f7075;
+
+  --success-light:         #4ade80;   --success-dark:         #4ade80;
+  --warning-light:         #fbbf24;   --warning-dark:         #fbbf24;
+  --danger-light:          #ff6b6b;   --danger-dark:          #ff6b6b;
+
+  --shadow-hsl-light: 20 10% 4%;
+  --shadow-hsl-dark:  20 10% 4%;
+  --shadow-boost-light: 1.9;
+  --shadow-boost-dark: 1.9;
+}
+/* === END oxide === */
+
+/* === PALETTE: blueprint === engineered, measured, technical. */
+:root {
+  --canvas-light:          #f7f9fb;   --canvas-dark:          #0a0f14;
+  --surface-light:         #edf1f6;   --surface-dark:         #111820;
+  --surface-2-light:       #e2e8f0;   --surface-2-dark:       #17202a;
+
+  --hairline-light:        #d5dde7;   --hairline-dark:        #212c38;
+  --hairline-strong-light: #b9c6d4;   --hairline-strong-dark: #2d3a48;
+
+  --ink-light:             #0e1620;   --ink-dark:             #e9eff5;
+  --ink-muted-light:       #4c5a6b;   --ink-muted-dark:       #93a2b2;
+  --ink-subtle-light:      #75838f;   --ink-subtle-dark:      #6b7a8a;
+
+  --accent-light:          #1668b8;   --accent-dark:          #4ba3e8;
+  --accent-ink-light:      #ffffff;   --accent-ink-dark:      #0a0f14;
+
+  --control-border-light:  #7d8a99;   --control-border-dark:  #5d6b7a;
+
+  /* #c2410c light and #f97316 dark are the signal accent. Signal only. */
+  --success-light:         #1a7f4b;   --success-dark:         #4ade80;
+  --warning-light:         #9a6206;   --warning-dark:         #fbbf24;
+  --danger-light:          #c0261f;   --danger-dark:          #ff6b6b;
+
+  --shadow-hsl-light: 210 20% 10%;
+  --shadow-hsl-dark:  210 32% 3%;
+  --shadow-boost-light: 1;
+  --shadow-boost-dark: 1.9;
+}
+/* === END blueprint === */
+
+/* === PALETTE: terminal === one mode, dark. Insider, exact, keyboard-first. */
+:root {
+  --canvas-light:          #0a0b0a;   --canvas-dark:          #0a0b0a;
+  --surface-light:         #121412;   --surface-dark:         #121412;
+  --surface-2-light:       #181b18;   --surface-2-dark:       #181b18;
+
+  --hairline-light:        #232823;   --hairline-dark:        #232823;
+  --hairline-strong-light: #31382f;   --hairline-strong-dark: #31382f;
+
+  --ink-light:             #e8ede6;   --ink-dark:             #e8ede6;
+  --ink-muted-light:       #8b958a;   --ink-muted-dark:       #8b958a;
+  --ink-subtle-light:      #6b746a;   --ink-subtle-dark:      #6b746a;
+
+  --accent-light:          #7dda6a;   --accent-dark:          #7dda6a;
+  --accent-ink-light:      #0a0b0a;   --accent-ink-dark:      #0a0b0a;
+
+  --control-border-light:  #6c766b;   --control-border-dark:  #6c766b;
+
+  --success-light:         #7dda6a;   --success-dark:         #7dda6a;
+  --warning-light:         #e3b341;   --warning-dark:         #e3b341;
+  --danger-light:          #ff6b6b;   --danger-dark:          #ff6b6b;
+
+  --shadow-hsl-light: 110 12% 3%;
+  --shadow-hsl-dark:  110 12% 3%;
+  --shadow-boost-light: 1.9;
+  --shadow-boost-dark: 1.9;
+}
+/* === END terminal === */
+
+/* === PALETTE: editorial === one mode, light. Authored, literate, printed. */
+:root {
+  --canvas-light:          #f4f2ed;   --canvas-dark:          #f4f2ed;
+  --surface-light:         #eae7e0;   --surface-dark:         #eae7e0;
+  --surface-2-light:       #e0dcd3;   --surface-2-dark:       #e0dcd3;
+
+  --hairline-light:        #dad6ce;   --hairline-dark:        #dad6ce;
+  --hairline-strong-light: #beb8ac;   --hairline-strong-dark: #beb8ac;
+
+  --ink-light:             #141412;   --ink-dark:             #141412;
+  --ink-muted-light:       #5a574f;   --ink-muted-dark:       #5a574f;
+  --ink-subtle-light:      #837f74;   --ink-subtle-dark:      #837f74;
+
+  --accent-light:          #8c2318;   --accent-dark:          #8c2318;
+  --accent-ink-light:      #f4f2ed;   --accent-ink-dark:      #f4f2ed;
+
+  --control-border-light:  #7f7a6f;   --control-border-dark:  #7f7a6f;
+
+  --success-light:         #1a7f4b;   --success-dark:         #1a7f4b;
+  --warning-light:         #9a6206;   --warning-dark:         #9a6206;
+  --danger-light:          #c0261f;   --danger-dark:          #c0261f;
+
+  --shadow-hsl-light: 40 12% 12%;
+  --shadow-hsl-dark:  40 12% 12%;
+  --shadow-boost-light: 1;
+  --shadow-boost-dark: 1;
+}
+/* === END editorial === */
+
+/* === PALETTE: bauhaus === one mode, light. Primary, structural, loud. */
+:root {
+  --canvas-light:          #f5f3ee;   --canvas-dark:          #f5f3ee;
+  --surface-light:         #ffffff;   --surface-dark:         #ffffff;
+  --surface-2-light:       #ebe8e1;   --surface-2-dark:       #ebe8e1;
+
+  /* rules are ink here, not grey */
+  --hairline-light:        #1a1a18;   --hairline-dark:        #1a1a18;
+  --hairline-strong-light: #111110;   --hairline-strong-dark: #111110;
+
+  --ink-light:             #111110;   --ink-dark:             #111110;
+  --ink-muted-light:       #4a4a46;   --ink-muted-dark:       #4a4a46;
+  --ink-subtle-light:      #6f6f6a;   --ink-subtle-dark:      #6f6f6a;
+
+  /* red primary. #1b4fd8 and #f2b713 are the second and third, by structure. */
+  --accent-light:          #d42a20;   --accent-dark:          #d42a20;
+  --accent-ink-light:      #f5f3ee;   --accent-ink-dark:      #f5f3ee;
+
+  --control-border-light:  #7a7a74;   --control-border-dark:  #7a7a74;
+
+  --success-light:         #1a7f4b;   --success-dark:         #1a7f4b;
+  --warning-light:         #9a6206;   --warning-dark:         #9a6206;
+  --danger-light:          #c0261f;   --danger-dark:          #c0261f;
+
+  --shadow-hsl-light: 45 8% 10%;
+  --shadow-hsl-dark:  45 8% 10%;
+  --shadow-boost-light: 1;
+  --shadow-boost-dark: 1;
+}
+/* === END bauhaus === */
+
+/* === PALETTE: mono-pop === monochrome plus one bright. Swap the accent. */
+:root {
+  --canvas-light:          #ffffff;   --canvas-dark:          #0a0a0a;
+  --surface-light:         #f5f5f5;   --surface-dark:         #141414;
+  --surface-2-light:       #ebebeb;   --surface-2-dark:       #1c1c1c;
+
+  --hairline-light:        #e5e5e5;   --hairline-dark:        #262626;
+  --hairline-strong-light: #cfcfcf;   --hairline-strong-dark: #363636;
+
+  --ink-light:             #0a0a0a;   --ink-dark:             #f5f5f5;
+  --ink-muted-light:       #575757;   --ink-muted-dark:       #a1a1a1;
+  --ink-subtle-light:      #7a7a7a;   --ink-subtle-dark:      #787878;
+
+  /* the one bright. Alternative pair: #e0245e light, #ff4d79 dark. */
+  --accent-light:          #0f9d58;   --accent-dark:          #3ddc84;
+  --accent-ink-light:      #0a0a0a;   --accent-ink-dark:      #0a0a0a;
+
+  --control-border-light:  #8a8a8a;   --control-border-dark:  #6a6a6a;
+
+  --success-light:         #1a7f4b;   --success-dark:         #4ade80;
+  --warning-light:         #9a6206;   --warning-dark:         #fbbf24;
+  --danger-light:          #c0261f;   --danger-dark:          #ff6b6b;
+
+  --shadow-hsl-light: 0 0% 8%;
+  --shadow-hsl-dark:  0 0% 2%;
+  --shadow-boost-light: 1;
+  --shadow-boost-dark: 1.9;
+}
+/* === END mono-pop === */
+
+/* === PALETTE: solar === warm, energetic, friendly. Amber never carries text. */
+:root {
+  --canvas-light:          #fffdf8;   --canvas-dark:          #14110b;
+  --surface-light:         #fff6e6;   --surface-dark:         #1e1911;
+  --surface-2-light:       #fbebd2;   --surface-2-dark:       #282118;
+
+  --hairline-light:        #f0e3cc;   --hairline-dark:        #332b20;
+  --hairline-strong-light: #dcc9a9;   --hairline-strong-dark: #453b2c;
+
+  --ink-light:             #1e1a12;   --ink-dark:             #f7f2e8;
+  --ink-muted-light:       #5e5341;   --ink-muted-dark:       #a79b87;
+  --ink-subtle-light:      #877a64;   --ink-subtle-dark:      #7e7461;
+
+  /* #b45309 is the text-safe amber, #ffb63d is a fill only */
+  --accent-light:          #b45309;   --accent-dark:          #ffb63d;
+  --accent-ink-light:      #fffdf8;   --accent-ink-dark:      #14110b;
+
+  --control-border-light:  #8e816b;   --control-border-dark:  #7a6f5e;
+
+  --success-light:         #1a7f4b;   --success-dark:         #4ade80;
+  --warning-light:         #9a6206;   --warning-dark:         #fbbf24;
+  --danger-light:          #c0261f;   --danger-dark:          #ff6b6b;
+
+  --shadow-hsl-light: 34 22% 12%;
+  --shadow-hsl-dark:  34 28% 4%;
+  --shadow-boost-light: 1;
+  --shadow-boost-dark: 1.9;
+}
+/* === END solar === */
+
+/* === PALETTE: slate-glass === one mode, dark. Layered translucency.
+   The glass itself lives in the surface rules of tokens.css, not here:
+   set --surface to rgba(255,255,255,0.06) over this canvas after pasting. */
+:root {
+  --canvas-light:          #0e1116;   --canvas-dark:          #0e1116;
+  --surface-light:         #171b22;   --surface-dark:         #171b22;
+  --surface-2-light:       #1e232c;   --surface-2-dark:       #1e232c;
+
+  --hairline-light:        #262c36;   --hairline-dark:        #262c36;
+  --hairline-strong-light: #333a46;   --hairline-strong-dark: #333a46;
+
+  --ink-light:             #f2f5f9;   --ink-dark:             #f2f5f9;
+  --ink-muted-light:       #9aa5b4;   --ink-muted-dark:       #9aa5b4;
+  --ink-subtle-light:      #737f8f;   --ink-subtle-dark:      #737f8f;
+
+  --accent-light:          #5b9df9;   --accent-dark:          #5b9df9;
+  --accent-ink-light:      #08111c;   --accent-ink-dark:      #08111c;
+
+  --control-border-light:  #6d7787;   --control-border-dark:  #6d7787;
+
+  --success-light:         #4ade80;   --success-dark:         #4ade80;
+  --warning-light:         #fbbf24;   --warning-dark:         #fbbf24;
+  --danger-light:          #ff6b6b;   --danger-dark:          #ff6b6b;
+
+  --shadow-hsl-light: 215 28% 4%;
+  --shadow-hsl-dark:  215 28% 4%;
+  --shadow-boost-light: 1.9;
+  --shadow-boost-dark: 1.9;
+}
+/* === END slate-glass === */
+
+/* === PALETTE: gallery === one mode, light. The work is the colour. */
+:root {
+  --canvas-light:          #fdfdfc;   --canvas-dark:          #fdfdfc;
+  --surface-light:         #f7f7f6;   --surface-dark:         #f7f7f6;
+  --surface-2-light:       #efefed;   --surface-2-dark:       #efefed;
+
+  --hairline-light:        #e8e8e6;   --hairline-dark:        #e8e8e6;
+  --hairline-strong-light: #cfcfcc;   --hairline-strong-dark: #cfcfcc;
+
+  --ink-light:             #141414;   --ink-dark:             #141414;
+  --ink-muted-light:       #606060;   --ink-muted-dark:       #606060;
+  --ink-subtle-light:      #8a8a88;   --ink-subtle-dark:      #8a8a88;
+
+  /* the accent is ink. Colour comes from the images. */
+  --accent-light:          #141414;   --accent-dark:          #141414;
+  --accent-ink-light:      #fdfdfc;   --accent-ink-dark:      #fdfdfc;
+
+  --control-border-light:  #85857f;   --control-border-dark:  #85857f;
+
+  --success-light:         #1a7f4b;   --success-dark:         #1a7f4b;
+  --warning-light:         #9a6206;   --warning-dark:         #9a6206;
+  --danger-light:          #c0261f;   --danger-dark:          #c0261f;
+
+  --shadow-hsl-light: 0 0% 8%;
+  --shadow-hsl-dark:  0 0% 8%;
+  --shadow-boost-light: 1;
+  --shadow-boost-dark: 1;
+}
+/* === END gallery === */

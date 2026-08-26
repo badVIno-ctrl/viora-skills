@@ -8,6 +8,7 @@
  *   node check.mjs src app              scan specific paths
  *   node check.mjs . --summary          counts only
  *   node check.mjs . --json             machine readable
+ *   node check.mjs . --github           GitHub Actions annotations, one per finding
  *   node check.mjs . --strict           warnings fail too, use before handing work over
  *   node check.mjs . --ignore-rule banned-font,raw-hex
  *   node check.mjs --list-rules
@@ -134,8 +135,11 @@ const RULES = [
 		id: "em-dash",
 		level: "error",
 		ext: TEXT,
-		msg: "em or en dash used as punctuation. The single loudest machine tell. Use a comma, colon or period. En dash only between numbers.",
+		msg: "em or en dash used as punctuation. The single loudest machine tell. Use a comma, colon or period. En dash only between numbers. Russian copy is exempt and is checked by scripts/ru.mjs, where the long dash is grammar.",
 		scan(line) {
+			/* Russian owns the long dash: there it is punctuation, not a machine
+			   tell. Cyrillic lines belong to scripts/ru.mjs, which asks for it. */
+			if (/[\u0410-\u044F\u0401\u0451]/.test(line)) return []
 			const hits = []
 			for (let i = 0; i < line.length; i++) {
 				const c = line[i]
@@ -860,6 +864,17 @@ function walk(dir, out) {
 
 /* ------------------------------------------------------------------- main */
 
+if (flags.has("--explain")) {
+	const { spawnSync } = await import("node:child_process")
+	const id = process.argv.slice(2).find((a) => !a.startsWith("-"))
+	const run = spawnSync(
+		process.execPath,
+		[new URL("./explain.mjs", import.meta.url).pathname, ...(id ? [id] : ["--all"])],
+		{ stdio: "inherit" },
+	)
+	process.exit(run.status ?? 0)
+}
+
 if (flags.has("--list-rules")) {
 	for (const r of [...RULES, ...REPO_RULES]) {
 		console.log(`${r.level.padEnd(5)}  ${r.id.padEnd(22)}  ${r.msg}`)
@@ -1059,6 +1074,19 @@ const warns = findings.filter((f) => f.level === "warn")
 const cwd = process.cwd()
 const rel = (p) => (p === "(project)" ? p : relative(cwd, p) || basename(p))
 
+if (flags.has("--github")) {
+	/* one annotation per finding, so a warning lands on the diff instead of in a
+	   log nobody opens. Project-level findings carry no file or line. */
+	for (const f of findings) {
+		const kind = f.level === "error" ? "error" : "warning"
+		const where =
+			f.file === "(project)" ? "" : `file=${rel(f.file)},line=${Math.max(1, f.line || 1)},col=${Math.max(1, f.col || 1)},`
+		console.log(`::${kind} ${where}title=viora ${f.id}::${String(f.msg).replace(/\s+/g, " ")}`)
+	}
+	console.log(`viora check: ${errors.length} errors, ${warns.length} warnings in ${files.length} files`)
+	process.exit(errors.length > 0 || (flags.has("--strict") && warns.length > 0) ? 1 : 0)
+}
+
 if (flags.has("--json")) {
 	console.log(
 		JSON.stringify(
@@ -1104,6 +1132,7 @@ if (errors.length === 0 && warns.length === 0) {
 } else {
 	console.log("fix every error. decide on every warning, or suppress it with")
 	console.log("a reason: /* viora-allow: rule-id why this is correct here */")
+	console.log("why a rule exists, with a before and an after: node scripts/explain.mjs <rule-id>")
 }
 console.log(bar)
 

@@ -299,3 +299,15 @@ The `editorial` and `solar` palettes above are the sanctioned way to be warm: th
 ## Output of this gate
 
 One complete palette in `tokens.css`, both themes if the project has both, contrast pairs verified. Continue G4.
+
+## More palettes than the thirteen above
+
+```
+node scripts/pick.mjs "<product type>" --domain palette -n 3
+```
+
+Full token sets for 192 product types: background, foreground, card, muted, border, ring,
+destructive, and a note on what the combination is for. Everything in this file still holds:
+neutrals plus at most two chromatic families, and every required pair measured by
+`contrast.mjs` before it ships. `reference/16-catalog.md` explains how to use a row without
+landing on the same page as everyone else who queried the same words.

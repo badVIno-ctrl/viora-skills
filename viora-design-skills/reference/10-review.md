@@ -217,3 +217,45 @@ Do not:
 - keep polishing to appear thorough.
 
 Print `G6 verify: 0 errors, N warnings (all decided), contrast 0 failures` and go to G7.
+
+## The pipeline, as it stands now
+
+One command runs the whole thing and prints one verdict:
+
+```
+node scripts/verify.mjs <paths> --url <url|file>
+```
+
+In order, it runs:
+
+1. `check.mjs` craft and slop, 66 rules, errors and warnings.
+2. `wig.mjs` interface rules, output as `file:line`. Rule list: `reference/14-interface-rules.md`.
+3. `contrast.mjs` WCAG measurement over every token file it can find.
+4. `palettes.mjs` every palette block in `assets/palettes.css`, light and dark.
+5. `shot.mjs` desktop and mobile, then `--squint`, then `--icon`.
+
+After it passes, one pass on `reference/15-perf-craft.md` if the surface ships to real users,
+then the subtraction pass, then the report. `node scripts/selftest.mjs` proves the toolchain
+itself still works, and is the first thing to run after editing any script.
+
+Without a terminal, the checklist above is the substitute. Say which one you used, and never
+report a script result you did not actually see.
+
+## The rest of the toolchain
+
+Not part of `verify.mjs`, because each one answers a different question.
+
+| Command | The question it answers |
+|---|---|
+| `node scripts/explain.mjs <rule-id>` | why does this rule exist, and what does the fix look like |
+| `node scripts/score.mjs <paths>` | how does this work score on the four measurable axes of `evals/rubric.md` |
+| `node scripts/ru.mjs <paths>` | is the Russian typography right: guillemets, dashes, non-breaking spaces |
+| `node scripts/lane.mjs --probe` | which lane should this model be on |
+| `node scripts/docsync.mjs` | does the skill still agree with itself, after editing the skill |
+
+Two flags matter in review work. `--strict` makes warnings fail, which is the right setting before
+handing work to another person. `--github` turns findings into annotations on the diff, which is how
+`.github/workflows/design-gate.yml` puts a defect on the line that caused it.
+
+A warning is not a bug, it is a decision waiting for a person. Either fix it or say out loud why it
+stays. Silence on a warning reads as a skipped check.

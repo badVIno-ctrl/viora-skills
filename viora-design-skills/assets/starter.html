@@ -19,6 +19,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- viora-allow: raw-hex a theme-color meta cannot reference a CSS variable -->
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<!-- viora-allow: raw-hex a theme-color meta cannot reference a CSS variable -->
+<meta name="theme-color" content="#0b0b0d" media="(prefers-color-scheme: dark)" />
 <title>Halyard, rigging for release notes</title>
 <meta name="description" content="Halyard turns merged pull requests into release notes your customers actually read." />
 <style>
@@ -339,7 +343,7 @@ p { margin: 0; max-inline-size: var(--measure); text-wrap: pretty; }
     <form class="signup" action="#" method="post">
       <div class="field">
         <label for="work-email">Work email</label>
-        <input id="work-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required />
+        <input id="work-email" name="email" type="email" autocomplete="email" spellcheck="false" placeholder="you@company.com" required />
       </div>
       <button class="btn btn-primary" type="submit">Get the first draft</button>
     </form>

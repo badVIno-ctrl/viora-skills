@@ -120,3 +120,19 @@ Seven blocks, 150 words maximum, named exactly as `SKILL.md` names them: `THESIS
 One marker line, the contract written to both places, nothing else. Then close this file and go to G3.
 
 `G2 direction: Software Craft / nightshift / expression 4 density 4 motion 2 ornament 2`
+
+## Raw material for this gate
+
+The direction is yours to commit to. The catalog only supplies parts:
+
+```
+node scripts/pick.mjs "<product type> <audience> <feeling>" --system
+```
+
+It answers with a palette, two type pairings, two styles including what each one is wrong
+for, a landing pattern with its section order, and a motion tier. Add `--cyrillic` when the
+copy is Russian. If the script cannot run, `reference/16-catalog.md` carries the offline
+digest and the routing table.
+
+The worlds above outrank anything the catalog returns. A row is a starting point, never a
+direction: it has no thesis, no signature and no opinion about this product.

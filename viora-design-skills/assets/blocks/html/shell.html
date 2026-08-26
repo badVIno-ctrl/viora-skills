@@ -1,0 +1,306 @@
+<!--
+  Виора block library / shell
+  skip link, header, primary nav, mobile drawer, footer
+
+  How to use: paste the piece you need into a page that already links
+  assets/tokens.css. The <style> block below only styles these classes, so it
+  can be pasted once and left alone. Nothing here invents a colour: every
+  value is a token, so the block takes on whatever palette the page uses.
+
+  Checked by: node scripts/check.mjs assets/blocks/html/shell.html
+              node scripts/wig.mjs   assets/blocks/html/shell.html
+-->
+
+<style>
+  .v-skip {
+    position: absolute;
+    left: var(--space-3);
+    top: var(--space-3);
+    z-index: 20;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: var(--shadow-2);
+    transform: translateY(calc(-1 * (100% + var(--space-4))));
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+  .v-skip:focus-visible {
+    transform: translateY(0);
+    outline: var(--focus);
+    outline-offset: 2px;
+  }
+
+  .v-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    height: var(--nav-h);
+    padding-inline: var(--gutter);
+    border-bottom: 1px solid var(--hairline);
+    background: color-mix(in oklab, var(--canvas) 88%, transparent);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .v-brand {
+    font-weight: 560;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    text-decoration: none;
+    margin-inline-end: auto;
+  }
+
+  .v-nav {
+    display: none;
+    gap: var(--space-1);
+  }
+  .v-nav a {
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    color: var(--ink-muted);
+    text-decoration: none;
+    font-size: 0.9375rem;
+  }
+  .v-nav a[aria-current="page"] {
+    color: var(--ink);
+  }
+  @media (hover: hover) {
+    .v-nav a:hover {
+      color: var(--ink);
+      background: var(--surface);
+    }
+  }
+  .v-nav a:focus-visible,
+  .v-btn:focus-visible,
+  .v-brand:focus-visible,
+  .v-drawer a:focus-visible {
+    outline: var(--focus);
+    outline-offset: 2px;
+  }
+
+  .v-head-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .v-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 40px;
+    padding-inline: var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    font: inherit;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+  .v-btn-solid {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .v-btn-quiet {
+    background: transparent;
+    color: var(--ink-muted);
+    min-width: 40px;
+    padding-inline: var(--space-2);
+  }
+  .v-btn-line {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--control-border);
+  }
+  @media (hover: hover) {
+    .v-btn-solid:hover { background: var(--accent-hover); }
+    .v-btn-quiet:hover { background: var(--surface); color: var(--ink); }
+    .v-btn-line:hover { background: var(--surface); }
+  }
+  .v-btn-solid:active { background: var(--accent-active); }
+
+  .v-burger { display: inline-flex; }
+
+  .v-drawer {
+    position: fixed;
+    inset: var(--nav-h) 0 0 0;
+    z-index: 9;
+    display: grid;
+    align-content: start;
+    gap: var(--space-1);
+    padding: var(--space-4) var(--gutter);
+    padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom));
+    background: var(--canvas);
+    border-top: 1px solid var(--hairline);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .v-drawer[hidden] { display: none; }
+  .v-drawer a {
+    padding: var(--space-3) var(--space-2);
+    border-bottom: 1px solid var(--hairline);
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 1.125rem;
+  }
+  .v-drawer .v-btn { margin-top: var(--space-4); }
+
+  .v-foot {
+    display: grid;
+    gap: var(--space-6);
+    padding: var(--space-8) var(--gutter) var(--space-6);
+    border-top: 1px solid var(--hairline);
+    color: var(--ink-muted);
+    font-size: 0.9375rem;
+  }
+  .v-foot-cols {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .v-foot h2 {
+    font-size: 0.8125rem;
+    font-weight: 560;
+    color: var(--ink);
+    margin: 0 0 var(--space-3);
+  }
+  .v-foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+  .v-foot a { color: inherit; text-decoration: none; }
+  @media (hover: hover) {
+    .v-foot a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  }
+  .v-foot-base {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: baseline;
+    justify-content: space-between;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--hairline);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (min-width: 48rem) {
+    .v-nav { display: flex; }
+    .v-burger { display: none; }
+    .v-foot-cols { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v-skip, .v-btn { transition-duration: 1ms; }
+  }
+</style>
+
+<a class="v-skip" href="#main">Skip to content</a>
+
+<header class="v-head">
+  <a class="v-brand" href="/">Halyard</a>
+
+  <nav class="v-nav" aria-label="Primary">
+    <a href="/rigging" aria-current="page">Rigging</a>
+    <a href="/releases">Releases</a>
+    <a href="/pricing">Pricing</a>
+    <a href="/docs">Docs</a>
+  </nav>
+
+  <div class="v-head-actions">
+    <button class="v-btn v-btn-quiet" type="button" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-3.4-3.4" />
+      </svg>
+    </button>
+    <a class="v-btn v-btn-line" href="/sign-in">Sign in</a>
+    <a class="v-btn v-btn-solid" href="/start">Start a release</a>
+    <button class="v-btn v-btn-quiet v-burger" type="button" aria-expanded="false" aria-controls="v-drawer" aria-label="Open menu" data-drawer-toggle>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16" />
+      </svg>
+    </button>
+  </div>
+</header>
+
+<div class="v-drawer" id="v-drawer" hidden>
+  <a href="/rigging">Rigging</a>
+  <a href="/releases">Releases</a>
+  <a href="/pricing">Pricing</a>
+  <a href="/docs">Docs</a>
+  <a class="v-btn v-btn-solid" href="/start">Start a release</a>
+</div>
+
+<script>
+  // Drawer: one toggle, Escape closes, focus returns to the button that opened it.
+  // No library, no scroll listener, no animation that outlives a tap.
+  (() => {
+    const toggle = document.querySelector("[data-drawer-toggle]")
+    const drawer = document.getElementById("v-drawer")
+    if (!toggle || !drawer) return
+
+    const setOpen = (open) => {
+      drawer.hidden = !open
+      toggle.setAttribute("aria-expanded", String(open))
+      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu")
+      document.documentElement.style.overflow = open ? "hidden" : ""
+      if (open) drawer.querySelector("a")?.focus()
+      else toggle.focus()
+    }
+
+    toggle.addEventListener("click", () => setOpen(drawer.hidden))
+    drawer.addEventListener("click", (event) => {
+      if (event.target instanceof HTMLAnchorElement) setOpen(false)
+    })
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !drawer.hidden) setOpen(false)
+    })
+  })()
+</script>
+
+<footer class="v-foot">
+  <div class="v-foot-cols">
+    <div>
+      <h2>Product</h2>
+      <ul>
+        <li><a href="/rigging">Rigging</a></li>
+        <li><a href="/releases">Releases</a></li>
+        <li><a href="/changelog">Changelog</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Docs</h2>
+      <ul>
+        <li><a href="/docs/start">Getting started</a></li>
+        <li><a href="/docs/api">API</a></li>
+        <li><a href="/docs/cli">CLI</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Company</h2>
+      <ul>
+        <li><a href="/about">About</a></li>
+        <li><a href="/work-with-us">Work with us</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Legal</h2>
+      <ul>
+        <li><a href="/terms">Terms</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/status">Status</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="v-foot-base">
+    <span>Halyard, built in Kaliningrad since 2019</span>
+    <span><time datetime="2026-08-26">26 August 2026</time>, v4.1.0</span>
+  </div>
+</footer>

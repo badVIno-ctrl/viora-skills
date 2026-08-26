@@ -150,3 +150,10 @@ Saturation ceiling for large fields is roughly 80% of the gamut maximum; above t
 ## Output of this gate
 
 `tokens.css` present, imported first, palette and type filled, radius family chosen and recorded. Then load `03-layout.md` and finish G3.
+
+## Where the token file goes in each stack
+
+`reference/18-stacks.md` has the entry point per stack: the Tailwind config mapping, the Next
+`app/globals.css` import, Nuxt and Astro layouts, the shadcn theme layer, and the typed
+constants file that replaces CSS in React Native, SwiftUI and Compose. It also lists the six
+things that never change whatever the stack is.
