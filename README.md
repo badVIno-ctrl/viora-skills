@@ -3,31 +3,32 @@
 <h1>Viora Skills</h1>
 
 <p>
-  <b>Три скилла, которые превращают кодового ИИ-агента в команду:</b><br/>
-  дизайнер · инженер · безопасник<br/>
-  <sub>плюс оркестратор, который проводит проект через всех троих по фазам</sub>
+<b>Три скилла, которые превращают кодового ИИ-агента в команду:</b><br/>
+дизайнер · инженер · безопасник<br/>
+<sub>плюс оркестратор, который проводит проект через всех троих по фазам,<br/>
+и пятый пакет, который ведёт телеграм-канал голосом автора</sub>
 </p>
 
 <p>
-  <img src="https://img.shields.io/badge/skills-4-6E56CF?style=for-the-badge&labelColor=0D1117" alt="4 скилла" />
-  <img src="https://img.shields.io/badge/dependencies-0-1F883D?style=for-the-badge&labelColor=0D1117" alt="Ноль зависимостей" />
-  <img src="https://img.shields.io/badge/offline-ready-0969DA?style=for-the-badge&labelColor=0D1117" alt="Работает офлайн" />
-  <img src="https://img.shields.io/badge/license-MIT-8250DF?style=for-the-badge&labelColor=0D1117" alt="MIT" />
+<img src="https://img.shields.io/badge/skills-5-6E56CF?style=for-the-badge&labelColor=0D1117" alt="5 скиллов" />
+<img src="https://img.shields.io/badge/dependencies-0-1F883D?style=for-the-badge&labelColor=0D1117" alt="Ноль зависимостей" />
+<img src="https://img.shields.io/badge/offline-ready-0969DA?style=for-the-badge&labelColor=0D1117" alt="Работает офлайн" />
+<img src="https://img.shields.io/badge/license-MIT-8250DF?style=for-the-badge&labelColor=0D1117" alt="MIT" />
 </p>
 
 <p>
-  <sub>
-    Claude Code · Codex · Antigravity · Cursor · Windsurf · Gemini CLI · Copilot<br/>
-    opencode · Cline · Roo · Kilo · Continue · Aider · Zed · любой агент с <code>AGENTS.md</code>
-  </sub>
+<sub>
+Claude Code · Codex · Antigravity · Cursor · Windsurf · Gemini CLI · Copilot<br/>
+opencode · Cline · Roo · Kilo · Continue · Aider · Zed · любой агент с <code>AGENTS.md</code>
+</sub>
 </p>
 
 <p>
-  <a href="#skills"><b>Скиллы</b></a> ·
-  <a href="#tech"><b>Технически</b></a> ·
-  <a href="#install"><b>Установка</b></a> ·
-  <a href="#pipeline"><b>Как работают вместе</b></a> ·
-  <a href="#limits"><b>Границы</b></a>
+<a href="#skills"><b>Скиллы</b></a> ·
+<a href="#tech"><b>Технически</b></a> ·
+<a href="#install"><b>Установка</b></a> ·
+<a href="#pipeline"><b>Как работают вместе</b></a> ·
+<a href="#limits"><b>Границы</b></a>
 </p>
 
 </div>
@@ -43,18 +44,23 @@
 агент его находит. Четвёртый пакет — **viora-build** — не добавляет ни одного своего правила: он
 только ведёт проект по фазам и на каждой передаёт работу нужному из трёх.
 
+Пятый пакет, **channel-skill**, стоит особняком: он не про код, а про текст. Тот же принцип, только
+провал другой: модель пишет пост, который звучит не как автор. Скилл сначала берёт интервью,
+потом пишет, а вёрстку и голос проверяет линтером.
+
 <br/>
 
 <a name="skills"></a>
 
 ## Часть 1 — Скиллы
 
-| | Скилл | Отвечает за | Главный вопрос |
+|  | Скилл | Отвечает за | Главный вопрос |
 |:--:|---|---|---|
-| ◆ | [**viora-design-skills**](#design) | Как это **выглядит** | «Это красиво или просто аккуратно?» |
-| ◆ | [**viora-code-protocol**](#protocol) | Как это **сделано** | «Это доказано или ты так думаешь?» |
-| ◆ | [**viora-aegis**](#aegis) | Как это **ломают** | «Это уязвимость или просто совпадение регулярки?» |
-| ▸ | [**viora-build**](#build) | В каком **порядке** | «Какая сейчас фаза и чем она закрывается?» |
+| ◆ | [**viora-design-skills**](https://github.com/badVIno-ctrl/viora-skills/tree/main/viora-design-skills) | Как это **выглядит** | «Это красиво или просто аккуратно?» |
+| ◆ | [**viora-code-protocol**](https://github.com/badVIno-ctrl/viora-skills/tree/main/viora-code-protocol) | Как это **сделано** | «Это доказано или ты так думаешь?» |
+| ◆ | [**viora-aegis**](https://github.com/badVIno-ctrl/viora-skills/tree/main/viora-aegis) | Как это **ломают** | «Это уязвимость или просто совпадение регулярки?» |
+| ▸ | [**viora-build**](https://github.com/badVIno-ctrl/viora-skills/tree/main/viora-build) | В каком **порядке** | «Какая сейчас фаза и чем она закрывается?» |
+| ● | [**channel-skill**](https://github.com/badVIno-ctrl/viora-skills/tree/main/channel-skill) | Как это **звучит** | «Это твой голос или голос модели?» |
 
 <br/>
 
@@ -64,8 +70,8 @@
 
 <img src="https://img.shields.io/badge/design-6E56CF?style=flat-square&labelColor=0D1117" alt="design" />
 <img src="https://img.shields.io/badge/v3.0.0-0D1117?style=flat-square" alt="v3.0.0" />
-<img src="https://img.shields.io/badge/8_ворот_G0→G7-0D1117?style=flat-square" alt="8 ворот" />
-<img src="https://img.shields.io/badge/66_правил_линтера-0D1117?style=flat-square" alt="66 правил" />
+<img src="https://img.shields.io/badge/8_%D0%B2%D0%BE%D1%80%D0%BE%D1%82_G0%E2%86%92G7-0D1117?style=flat-square" alt="8 ворот" />
+<img src="https://img.shields.io/badge/66_%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D0%BB_%D0%BB%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B0-0D1117?style=flat-square" alt="66 правил" />
 
 > **Арт-директор и senior design engineer в одном скилле.** Задача — не «приемлемо», а чтобы
 > пользователь вслух сказал: «красиво». Один скилл вместо шести.
@@ -77,17 +83,17 @@
 **Что он делает вместо вас**
 
 - Заставляет **выбрать направление** до первой строки кода — неопределившийся дизайн выглядит
-  сгенерированным, каким бы чистым он ни был.
+сгенерированным, каким бы чистым он ни был.
 - Держит **контракт токенов**: один акцент, одно семейство радиусов, одна пара шрифтов, один ритм
-  отступов. Внутри компонентов — ни одного сырого hex, ни одного магического px.
+отступов. Внутри компонентов — ни одного сырого hex, ни одного магического px.
 - **Вычитает** всё, что не заслужило место, и добивает детали, которые никто не называет, но все
-  чувствуют: цвет выделения, каретка, фокус-ринг, скроллбар, табличные цифры, оптическое
-  выравнивание.
+чувствуют: цвет выделения, каретка, фокус-ринг, скроллбар, табличные цифры, оптическое
+выравнивание.
 - Ловит «машинный» интерфейс механически: фиолетово-голубой AI-градиент, mesh-блобы в герое, три
-  одинаковые карточки в ряд, всё по центру, кликабельный `div`, дефолтная тень из доки фреймворка,
-  `transition: all`, `100vh`, `Lorem ipsum`.
+одинаковые карточки в ряд, всё по центру, кликабельный `div`, дефолтная тень из доки фреймворка,
+`transition: all`, `100vh`, `Lorem ipsum`.
 - Оставляет в проекте **`DESIGN.md`** — контракт дизайна. Следующая сессия не выдумывает стиль
-  заново, а читает его.
+заново, а читает его.
 
 <br/>
 
@@ -96,9 +102,9 @@
 ### ◆ viora-code-protocol
 
 <img src="https://img.shields.io/badge/engineering-1F883D?style=flat-square&labelColor=0D1117" alt="engineering" />
-<img src="https://img.shields.io/badge/LITE_|_FULL-0D1117?style=flat-square" alt="две полосы" />
-<img src="https://img.shields.io/badge/7_режимов-0D1117?style=flat-square" alt="7 режимов" />
-<img src="https://img.shields.io/badge/жёсткие_лимиты-0D1117?style=flat-square" alt="лимиты" />
+<img src="https://img.shields.io/badge/LITE_%7C_FULL-0D1117?style=flat-square" alt="две полосы" />
+<img src="https://img.shields.io/badge/7_%D1%80%D0%B5%D0%B6%D0%B8%D0%BC%D0%BE%D0%B2-0D1117?style=flat-square" alt="7 режимов" />
+<img src="https://img.shields.io/badge/%D0%B6%D1%91%D1%81%D1%82%D0%BA%D0%B8%D0%B5_%D0%BB%D0%B8%D0%BC%D0%B8%D1%82%D1%8B-0D1117?style=flat-square" alt="лимиты" />
 
 > **Инженерный стандарт для любой задачи с кодом.** Закон: отгружай самое маленькое, самое ясное
 > изменение с одним владельцем — и **докажи** свежим выводом команд, что оно работает.
@@ -129,8 +135,8 @@
 
 <img src="https://img.shields.io/badge/security-D1242F?style=flat-square&labelColor=0D1117" alt="security" />
 <img src="https://img.shields.io/badge/v1.0.0-0D1117?style=flat-square" alt="v1.0.0" />
-<img src="https://img.shields.io/badge/8_режимов-0D1117?style=flat-square" alt="8 режимов" />
-<img src="https://img.shields.io/badge/66_правил-0D1117?style=flat-square" alt="66 правил" />
+<img src="https://img.shields.io/badge/8_%D1%80%D0%B5%D0%B6%D0%B8%D0%BC%D0%BE%D0%B2-0D1117?style=flat-square" alt="8 режимов" />
+<img src="https://img.shields.io/badge/66_%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D0%BB-0D1117?style=flat-square" alt="66 правил" />
 <img src="https://img.shields.io/badge/defensive_only-0D1117?style=flat-square" alt="только защита" />
 
 > **Защитный security-инженер, а не обёртка над сканером.** Совпадение регулярки — это *зацепка*,
@@ -145,17 +151,17 @@
 **Что он делает вместо вас**
 
 - Строит модель угроз по STRIDE и пишет abuse case рядом с каждым use case — эта фраза становится
-  первым тестом.
+первым тестом.
 - Держит **десять законов**: недоверенный ввод по умолчанию (включая вывод LLM), никаких команд из
-  строк, authN ≠ authZ, отказ по умолчанию при сбое, ноль секретов в репозитории, кодирование на
-  месте вывода, крипта — вызов библиотеки, минимум привилегий, всё ограничено лимитами, логи без
-  утечек.
+строк, authN ≠ authZ, отказ по умолчанию при сбое, ноль секретов в репозитории, кодирование на
+месте вывода, крипта — вызов библиотеки, минимум привилегий, всё ограничено лимитами, логи без
+утечек.
 - Чинит **класс проблемы**, а не строку, и к каждой находке даёт патч под этот стек — не ссылку на
-  статью о best practices.
+статью о best practices.
 - Закрывает то, чего нет в обычных чек-листах: prompt injection, небезопасный вызов инструментов,
-  обработка вывода модели, отравление памяти и RAG, бюджеты на вызовы.
+обработка вывода модели, отравление памяти и RAG, бюджеты на вызовы.
 - Ставит гейт в CI и pre-commit, а на старом проекте с сотнями находок замораживает долг через
-  `baseline` — валятся только новые проблемы.
+`baseline` — валятся только новые проблемы.
 
 <br/>
 
@@ -165,8 +171,8 @@
 
 <img src="https://img.shields.io/badge/pipeline-BF8700?style=flat-square&labelColor=0D1117" alt="pipeline" />
 <img src="https://img.shields.io/badge/v1.0.0-0D1117?style=flat-square" alt="v1.0.0" />
-<img src="https://img.shields.io/badge/8_фаз_P0→P7-0D1117?style=flat-square" alt="8 фаз" />
-<img src="https://img.shields.io/badge/0_своих_правил-0D1117?style=flat-square" alt="ноль своих правил" />
+<img src="https://img.shields.io/badge/8_%D1%84%D0%B0%D0%B7_P0%E2%86%92P7-0D1117?style=flat-square" alt="8 фаз" />
+<img src="https://img.shields.io/badge/0_%D1%81%D0%B2%D0%BE%D0%B8%D1%85_%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D0%BB-0D1117?style=flat-square" alt="ноль своих правил" />
 
 > **Оркестратор, а не четвёртый свод правил.** Он ничего не знает про дизайн, код и безопасность —
 > он знает **порядок**: какая сейчас фаза, кому она делегирована и чем закрывается.
@@ -178,16 +184,52 @@
 **Что он делает вместо вас**
 
 - Ведёт сборку по восьми фазам и **не пускает дальше без артефакта**: нет `tokens.css` — вёрстка не
-  начинается; нет плана файлов — поверхности не строятся; нет свежего вывода команд — фаза не
-  закрыта.
+начинается; нет плана файлов — поверхности не строятся; нет свежего вывода команд — фаза не
+закрыта.
 - Строит **по одной поверхности за итерацию** с полными воротами на каждой, вместо «сделал шесть
-  секций, проверил один раз в конце».
+секций, проверил один раз в конце».
 - Включает Aegis в режиме `GUARD` с фазы `P2`, а не после сдачи: аудит в `P5` — это проверка, а не
-  первая мысль о безопасности.
+первая мысль о безопасности.
 - Держит состояние в файлах (`.viora/BUILD.md`, `DESIGN.md`, отчёты), поэтому сборка переживает
-  перезапуск сессии и работает на слабых моделях.
+перезапуск сессии и работает на слабых моделях.
 - Никогда не пересказывает правила дочерних пакетов своими словами: обновили пакет — поведение
-  изменилось сразу, расхождению взяться неоткуда.
+изменилось сразу, расхождению взяться неоткуда.
+
+<br/>
+
+<a name="channel"></a>
+
+### ● channel-skill
+
+<img src="https://img.shields.io/badge/content-229ED9?style=flat-square&labelColor=0D1117" alt="content" />
+<img src="https://img.shields.io/badge/v6.1.0-0D1117?style=flat-square" alt="v6.1.0" />
+<img src="https://img.shields.io/badge/python_3.8%2B-0D1117?style=flat-square" alt="python 3.8+" />
+<img src="https://img.shields.io/badge/%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B2%D1%8C%D1%8E_%D0%BF%D0%B5%D1%80%D0%B2%D1%8B%D0%BC-0D1117?style=flat-square" alt="интервью первым" />
+
+> **Скилл для агента, который пишет посты в твой телеграм-канал твоим голосом.** Сначала задаёт
+> вопросы про тебя и канал, потом пишет. Не наоборот. Публикует всё равно человек.
+
+Включается на любой работе с текстом канала: пост, анонс, гайд, релиз, подборка, статья на
+telegra.ph, сценарий шортса, мем, оценка готового поста. И на просьбах вроде «звучит не как я»,
+«пахнет нейронкой», «почему пост никто не пересылает».
+
+**Что он делает вместо вас**
+
+- Начинает не с текста, а с **интервью на 5-7 минут**: кто ты, про что канал, для кого, какой тон,
+какие рубрики, что стоит в подвале. Ответы уходят в профиль, и голос берётся оттуда, а не из
+головы модели. Интервью проходится тремя способами: в терминале, вопросами агента в чате или
+правкой готового шаблона.
+- Держит **правило ноль**: длинного тире нет нигде, ни в постах, ни в статьях, ни в ответах агента.
+Это самый заметный след модели, поэтому у него отдельный линтер и проверка всего репозитория.
+- Закрывает всю цепочку одной командой `ship`: автоправка вёрстки, линтер поста, оценка на цифрах
+именно твоего канала и разрез длинного текста на пост плюс статью.
+- Ловит механически то, за что канал теряет охват: голая ссылка вместо ярлыка, чужой или
+переставленный футер, потерянный хэштег, два хэштега, стена текста, выход из коридора длины
+рубрики, подпись к медиа больше 1024 знаков.
+- Помнит канал: прошлые приветствия, темы, шутки и решения лежат в `memory/`, поэтому повтор
+приветствия ловится до публикации.
+- Даёт **мост с Телеграмом**, но необязательный: задача летит себе в Избранное, оттуда же
+возвращается черновик. Ключи только твои, в репозитории лежат шаблоны `example`.
 
 <br/>
 
@@ -213,6 +255,10 @@ flowchart LR
     GU -.-> P4
 ```
 
+`channel-skill` в этот пайплайн не входит и не должен: у него другой выход. Он подхватывает работу
+после сдачи, когда про релиз надо рассказать людям, и берёт факты из отчётов сборки, а не из
+воздуха.
+
 <br/>
 
 <a name="tech"></a>
@@ -221,7 +267,7 @@ flowchart LR
 
 ### Общая архитектура
 
-Все три пакета собраны по одной схеме и намеренно скучны в эксплуатации.
+Все пакеты собраны по одной схеме и намеренно скучны в эксплуатации.
 
 | Свойство | Реализация |
 |---|---|
@@ -392,13 +438,13 @@ FOLLOW-UPS       — мелкие и конкретные
 ```bash
 python3 scripts/viora.py doctor  --path .                       # стек, экосистемы, доступные инструменты, git
 python3 scripts/viora.py scan    --path . --format markdown \
-        --out .viora/findings.md --json .viora/findings.json     # полный аудит
-python3 scripts/viora.py scan    --path . --diff origin/main     # только то, что внёс дифф
-python3 scripts/viora.py deps    --path .                        # supply chain, пины, скрипты, тайпсквоттинг
-python3 scripts/viora.py headers --url https://example.com       # живые заголовки, куки, CORS
-python3 scripts/viora.py baseline --path .                       # заморозить текущий долг
-python3 scripts/viora.py report  --path .                        # свести всё в SECURITY_REPORT.md
-python3 scripts/viora.py init    --path .                        # конфиг + pre-commit + CI workflow
+  --out .viora/findings.md --json .viora/findings.json          # полный аудит
+python3 scripts/viora.py scan    --path . --diff origin/main    # только то, что внёс дифф
+python3 scripts/viora.py deps    --path .                       # supply chain, пины, скрипты, тайпсквоттинг
+python3 scripts/viora.py headers --url https://example.com      # живые заголовки, куки, CORS
+python3 scripts/viora.py baseline --path .                      # заморозить текущий долг
+python3 scripts/viora.py report  --path .                       # свести всё в SECURITY_REPORT.md
+python3 scripts/viora.py init    --path .                       # конфиг + pre-commit + CI workflow
 ```
 
 Форматы вывода: `text`, `json`, `sarif`, `markdown`. Коды возврата: `0` — чисто, `1` — находки на
@@ -481,6 +527,85 @@ VIORA_SKILLS_DIR=~/.claude/skills bash scripts/pipeline_check.sh /путь/к/п
 
 </details>
 
+<details>
+<summary><b>● channel-skill - интервью, четыре тира контекста, линтеры поста и статьи</b></summary>
+
+<br/>
+
+**Интервью первым шагом.** До первой строки текста скилл собирает профиль автора: имя канала, тон,
+аудитория, рубрики и их коридоры длины, футер, окно публикации, цифры канала для оценки. Три
+режима на выбор:
+
+| Способ | Команда | Когда удобно |
+|---|---|---|
+| В терминале, вопрос за вопросом | `python3 tools/onboard.py` | ставишь себе сам |
+| Агент спрашивает в чате | `python3 tools/onboard.py --questions`, затем `--stdin` | Claude Code, Codex, Cursor |
+| Готовый шаблон и правка руками | файл из `channel-skill/profile/profiles` | надо очень быстро |
+
+Проверка, что профиль собран: `python3 tools/profile.py --check`. Все поля описаны в
+`docs/PROFILE.md`.
+
+**Четыре тира контекста.** Папка большая, целиком её не читает никто:
+
+| Тир | Кому | Файлы |
+|---|---|---|
+| 0 | быстрые и слабые модели, маленькое окно | `QUICKCARD.txt` |
+| 1 | обычная работа над постом | `SKILL.md` |
+| 2 | сложная задача | `SKILL.md` плюс РОВНО один файл из `reference/` по `ROUTER.md` |
+| 3 | среда без файловой системы | `PROMPT-CORE.txt` или `PROMPT-FULL.txt` |
+
+**Одна команда на всю проверку.** `ship` это автоправка, линтер, оценка и решение про разрез за
+один ход. Код возврата `1` значит НЕ ГОТОВО, и в блоке ИТОГ стоят следующие команды по порядку:
+
+```bash
+python3 tools/channel.py ship draft.txt --rubric гайд          # автоправка + линтер + оценка + разрез
+python3 tools/channel.py ship draft.txt --rubric гайд --article article.md
+python3 tools/channel.py hook "тема" --rubric релиз            # шесть первых строк по архетипам
+python3 tools/lint_post.py draft.txt --strict --json           # только линтер, машиночитаемо
+python3 tools/lint_post.py draft.txt --fix --rubric гайд       # только автоправка
+python3 tools/lint_article.py article.md --strict              # статья: подпись, слитные абзацы, хвосты
+python3 tools/lint_chat.py --text "ответ агента"               # следит за ответами агента в чате
+python3 tools/split_post.py draft.txt --check                  # надо ли резать на две части
+python3 tools/score_post.py draft.txt --rubric гайд            # балл 0-100 и три правки по важности
+bash tools/check_all.sh                                        # самотесты, эталоны, состав поставки
+```
+
+Линтер возвращает код ошибки, человеческое описание и готовую подсказку `hint`, поэтому слабая
+модель правит по указанию пальцем, а не восстанавливает правила по памяти. Оценка опирается на
+цифры профиля: подписчики, коридор охвата, реакции, замеры из `memory/metrics.md`.
+
+**Память канала.** `memory/` держит прошлые приветствия, журнал постов, решения и лог шуток. Повтор
+приветствия ловится до публикации, а не в комментариях.
+
+**Подскиллы.** `channel-research/` ищет факты и источники, `channel-video/` разбирает чужой ролик по
+субтитрам. Оба работают без платных ключей; `yt-dlp` и `telethon` необязательны.
+
+**Мост с Телеграмом** необязателен и по умолчанию выключен. Включённый работает так: задача летит в
+Избранное с обращением, агент забирает её, приносит черновик туда же, и только после слова автора
+`tg.py publish` отправляет пост в канал.
+
+```bash
+cp secrets/telegram.env.example secrets/telegram.env   # свой api_id и api_hash с my.telegram.org
+python3 channel-skill/tools/tg.py setup
+python3 channel-skill/tools/tg.py doctor
+```
+
+**Установка в свой проект.** Скрипт раскладывает копию в папки обнаружения и не трогает чужие
+скиллы:
+
+```bash
+cd channel-skill
+python3 tools/install.py --target /путь/до/проекта --dry-run
+python3 tools/install.py --target /путь/до/проекта
+python3 tools/package.py                               # собрать архив для раздачи
+```
+
+**Документация:** `docs/QUICKSTART.md`, `channel-skill/ONBOARDING.md`, `docs/PROFILE.md`,
+`docs/TELEGRAM.md`, `docs/ARCHITECTURE.md`, `docs/CUSTOMIZE.md`, `docs/FAQ.md`, `docs/SECURITY.md`,
+плюс `README.en.md` для англоязычных.
+
+</details>
+
 <br/>
 
 <a name="install"></a>
@@ -497,6 +622,7 @@ git clone https://github.com/badVIno-ctrl/viora-skills.git
 
 # Claude Code (проект)
 cp -r viora-skills/viora-*        .claude/skills/
+cp -r viora-skills/channel-skill  .claude/skills/
 
 # Claude Code (глобально)
 cp -r viora-skills/viora-*        ~/.claude/skills/
@@ -515,12 +641,15 @@ cp -r viora-skills/viora-*        ~/.claude/skills/
 | Aider · Zed | `CONVENTIONS.md` · `.rules` |
 | Любой другой | корневой `AGENTS.md` |
 
-### Вариант 2 — установщик (для `viora-aegis`)
+### Вариант 2 — установщик (для `viora-aegis` и `channel-skill`)
 
 ```bash
 bash viora-aegis/install.sh --target /путь/к/проекту
 # Windows
 powershell -ExecutionPolicy Bypass -File viora-aegis\install.ps1 -Target C:\path\to\project
+
+# channel-skill
+python3 channel-skill/channel-skill/tools/install.py --target /путь/к/проекту
 ```
 
 ### Вариант 3 — только файл инструкций
@@ -533,6 +662,7 @@ powershell -ExecutionPolicy Bypass -File viora-aegis\install.ps1 -Target C:\path
 Перед любым изменением кода: прочитай и выполняй ./viora-code-protocol/SKILL.md.
 Безопасность, ревью и аудит: ./viora-aegis/SKILL.md.
 Проект целиком, с нуля до релиза: ./viora-build/SKILL.md — он вызовет остальные три по фазам.
+Посты и текст канала: ./channel-skill/channel-skill/SKILL.md, интервью обязательно первым.
 ```
 
 ### Проверка, что скилл реально подключён
@@ -544,6 +674,10 @@ powershell -ExecutionPolicy Bypass -File viora-aegis\install.ps1 -Target C:\path
 Правильное поведение **до** написания кода: объявлена полоса и режим, найден существующий
 форматтер с путём `src/lib/format.ts:14`, названа ступень лестницы, перечислены файлы. Если агент
 начинает с создания `src/utils/dateHelper2.ts` — скилл не загружен.
+
+Для `channel-skill` проверка другая: попросите пост про любую тему. Правильное поведение до текста:
+агент проверяет профиль и задаёт вопросы интервью одним сообщением, а готовый черновик приносит
+только после прогона `ship`. Если пост приходит сразу и с длинным тире, скилл не загружен.
 
 <br/>
 
@@ -573,16 +707,36 @@ viora-skills/
 │   ├── scripts/                 scan_repo.py · find_duplicates.py · ui_guard.py · verify.sh
 │   └── INSTALL.md · README-RU.md
 │
-└── viora-aegis/
-    ├── SKILL.md                 контракт, роутер режимов, десять законов, цикл аудита
-    ├── references/              10 файлов: модель угроз, OWASP Top 10:2025, плейбуки языков,
-    │                            безопасность ИИ-агентов, безопасные паттерны, supply chain,
-    │                            триаж и severity, инструментарий, чек-листы
-    ├── rules/                   patterns.json (51) · secrets.json (15)
-    ├── adapters/                8 адаптеров под конкретных агентов
-    ├── templates/               SECURITY_REPORT.md · THREAT_MODEL.md · pre-commit · CI
-    ├── scripts/viora.py         сканер и CLI
-    └── install.sh · install.ps1 · manifest.json · viora.config.json
+├── viora-aegis/
+│   ├── SKILL.md                 контракт, роутер режимов, десять законов, цикл аудита
+│   ├── references/              10 файлов: модель угроз, OWASP Top 10:2025, плейбуки языков,
+│   │                            безопасность ИИ-агентов, безопасные паттерны, supply chain,
+│   │                            триаж и severity, инструментарий, чек-листы
+│   ├── rules/                   patterns.json (51) · secrets.json (15)
+│   ├── adapters/                8 адаптеров под конкретных агентов
+│   ├── templates/               SECURITY_REPORT.md · THREAT_MODEL.md · pre-commit · CI
+│   ├── scripts/viora.py         сканер и CLI
+│   └── install.sh · install.ps1 · manifest.json · viora.config.json
+│
+└── channel-skill/
+    ├── channel-skill/           сам скилл
+    │   ├── SKILL.md             правила, пайплайн от сырья до готового поста
+    │   ├── QUICKCARD.txt        одна карточка для слабых моделей
+    │   ├── ROUTER.md            что читать под какую задачу
+    │   ├── ONBOARDING.md        сценарий интервью
+    │   ├── PROMPT-CORE.txt      ядро для среды без файлов
+    │   ├── profile/             профиль автора, схема и шаблоны
+    │   ├── reference/           справочники: голос, форматы, крючок, разрез, telegra.ph, рост
+    │   ├── memory/              приветствия, журнал постов, решения, метрики
+    │   ├── evals/               эталоны поведения и фикстуры
+    │   ├── channel-research/    подскилл: поиск фактов
+    │   ├── channel-video/       подскилл: разбор видео по субтитрам
+    │   └── tools/               onboard.py · channel.py · lint_post.py · lint_article.py ·
+    │                            score_post.py · split_post.py · tg.py · install.py
+    ├── docs/                    документация для людей и страница index.html
+    ├── secrets/                 шаблоны env, живые ключи в gitignore
+    ├── hooks/                   проверка среды при старте сессии
+    └── start-watch.sh           смена в Телеграме одной командой
 ```
 
 <br/>
@@ -594,16 +748,22 @@ viora-skills/
 Честно о том, чего эти скиллы не делают.
 
 - **Aegis не заменяет пентест.** Сканер регулярочный, без анализа потока данных: он даёт зацепки,
-  выводы делает агент. Атакующей функциональности нет — только защита своего кода.
+выводы делает агент. Атакующей функциональности нет — только защита своего кода.
 - **`deps` без `--online`** не ходит в базы уязвимостей: проверяет структуру, пины, скрипты и
-  тайпсквоттинг. Динамика не тестируется, кроме `headers`.
+тайпсквоттинг. Динамика не тестируется, кроме `headers`.
 - **Протокол не спасёт от плохой постановки задачи.** Если непонятно, что считать «готово», агент
-  задаст один вопрос и остановится — это заложенное поведение, а не сбой.
+задаст один вопрос и остановится — это заложенное поведение, а не сбой.
 - **Дизайн-скилл не сделает контент.** Тонкий текст и заглушки вместо картинок — главный признак
-  сгенерированного интерфейса, вёрстка его не лечит.
+сгенерированного интерфейса, вёрстка его не лечит.
 - **Оркестратор не ускоряет мелкие задачи.** На одной правке восемь фаз — чистые накладные расходы;
-  именно поэтому он сам отправляет к нужному дочернему пакету.
+именно поэтому он сам отправляет к нужному дочернему пакету.
 - **Просьба «побольше анимации» ухудшает результат.** Скилл сам решает, где движение уместно.
+- **channel-skill не публикует сам.** Режим по умолчанию отдаёт черновик человеку, в канал уходит
+только по прямой команде автора.
+- **channel-skill без интервью бесполезен.** Пустой профиль значит чужой голос: скилл спросит и
+остановится, а не начнёт угадывать.
+- **Линтер ловит форму, а не скуку.** Ноль ошибок значит «можно отдавать», а не «написано хорошо»:
+угол, факт и личная деталь остаются на авторе.
 
 <br/>
 
