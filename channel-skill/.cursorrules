@@ -1,0 +1,20 @@
+Скилл постов лежит в channel-skill/. Имя автора, имя канала, тон, ссылки и рубрики
+берутся из профиля автора в channel-skill/profile, а не из этого файла.
+
+Правило ноль: длинных тире (em dash, en dash, horizontal bar, figure dash, minus sign)
+нет ни в постах, ни в статьях, ни в ответах в чате. Только обычный дефис -,
+точка или запятая.
+
+Шаг ноль: если профиля автора нет, сначала интервью, а не текст:
+python3 channel-skill/tools/onboard.py
+Проверить профиль: python3 channel-skill/tools/profile.py --check
+Свой список рубрик: python3 channel-skill/tools/profile.py --show
+
+Слабая модель или маленькое окно: читай channel-skill/QUICKCARD.txt.
+Обычная работа: channel-skill/SKILL.md.
+Маршрут по задачам: channel-skill/ROUTER.md.
+
+Перед выдачей поста: python3 channel-skill/tools/lint_post.py draft.txt --strict
+Пост длиннее 1800 знаков: python3 channel-skill/tools/split_post.py draft.txt --check
+
+Публикует автор. Скилл отдаёт текст и ждёт слова.

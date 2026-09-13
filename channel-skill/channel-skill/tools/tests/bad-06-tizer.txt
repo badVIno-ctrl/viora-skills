@@ -1,0 +1,23 @@
+Здарова, заложники дедлайнов.
+
+Собрал 30 бесплатных сервисов к началу учебы. Три самых жирных здесь.
+
+**1. NotebookLM.** Сервис от Google: скармливаем учебник и получаем выжимку с тестами. [ТЫК](https://notebooklm.google.com/)
+
+**2. Academic Research Skills.** Набор скиллов для Claude Code: собирает диплом в docx. [РЕПА](https://github.com/Imbad0202/academic-research-skills)
+
+**3. WolframAlpha.** Решает матан с пошаговыми выкладками. [ТЫК](https://www.wolframalpha.com/)
+
+Остальные 27 сервисов для слайдов и формул: [СТАТЬЯ](https://telegra.ph/30-besplatnyh-servisov-dlya-ucheby-kursovyh-i-diplomov-2026-09-05)
+
+ВАЖНО! Готовые тексты проверяем на выдуманные ссылки: модели любят сочинять авторов.
+
+Из минусов: в NotebookLM лимит на 50 источников в одном блокноте.
+
+Я гонял NotebookLM на старых лекциях: со второго захода вышли тезисы для зачета.
+
+Перешли тому, кто до сих пор пишет рефераты вручную по ночам.
+
+#сервисы
+
+[ЧАТ](https://t.me/demo_chat) | [GITHUB](https://github.com/demo) | [YOUTUBE](https://www.youtube.com/@demo) | [ТГК](https://t.me/demo_channel)

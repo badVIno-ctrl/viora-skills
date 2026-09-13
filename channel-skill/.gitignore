@@ -1,0 +1,31 @@
+# Кэш питона и всё, что генерится локально.
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
+# Сборки и временные выводы скриптов.
+dist/
+out/
+channel-skill/evals/runs/
+
+# Системный мусор.
+.DS_Store
+Thumbs.db
+
+# Личные ключи и строки сессии. Никогда не в репозиторий.
+*.env
+*.session
+secrets/*
+!secrets/README.txt
+!secrets/*.env.example
+
+# Личный профиль автора: собирается интервью на месте.
+channel-skill/profile/profile.json
+channel-skill/profile/.render.json
+
+# Локальные копии скилла после python3 tools/install.py
+.claude/skills/
+.agents/skills/
+.cursor/skills/
+.channel-install.json

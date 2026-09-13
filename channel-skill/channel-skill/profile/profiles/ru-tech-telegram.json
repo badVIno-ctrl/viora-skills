@@ -1,0 +1,108 @@
+{
+  "_help": "Шаблон: русский тех-канал в Телеграме. Применить: python3 tools/onboard.py --from-json profile/profiles/ru-tech-telegram.json, потом поправь поля под себя.",
+  "schema": 1,
+  "brand": {
+    "name": "ТЕХ КАНАЛ",
+    "short": "ТЕХ",
+    "author": "твой_ник",
+    "language": "ru",
+    "tone": "нашёл, проверил, принёс",
+    "topics": [
+      "AI",
+      "инструменты",
+      "код"
+    ],
+    "audience": "разработчики и студенты, читают вечером с телефона",
+    "about": "пишу про инструменты, которые сам гоняю в работе",
+    "taboo": [
+      "обход лицензий",
+      "взлом платных сервисов"
+    ],
+    "formats": [
+      "посты",
+      "статьи"
+    ]
+  },
+  "channel": {
+    "platform": "telegram",
+    "handle": "@your_channel",
+    "url": "https://t.me/your_channel",
+    "window": "18:00-21:00",
+    "tz": "Europe/Moscow"
+  },
+  "links": [
+    {
+      "label": "ЧАТ",
+      "url": "https://t.me/your_chat"
+    },
+    {
+      "label": "GITHUB",
+      "url": "https://github.com/your-name"
+    },
+    {
+      "label": "ТГК",
+      "url": "https://t.me/your_channel"
+    }
+  ],
+  "sources": [
+    {
+      "name": "habr",
+      "url": "https://habr.com/ru/all/",
+      "kind": "web"
+    },
+    {
+      "name": "github trending",
+      "url": "https://github.com/trending",
+      "kind": "github"
+    }
+  ],
+  "footer": {
+    "enabled": true,
+    "template": "",
+    "legacy_labels": []
+  },
+  "article": {
+    "enabled": true,
+    "platform": "telegra.ph",
+    "signature": "Тех Канал"
+  },
+  "second_brand": {
+    "enabled": false,
+    "name": "",
+    "tag": "второй",
+    "min": 250,
+    "max": 500,
+    "footer": false
+  },
+  "rubrics": {
+    "реклама": null
+  },
+  "voice": {
+    "greeting_max_words": 5,
+    "extra_banned": [
+      "уникальный контент",
+      "не имеет аналогов"
+    ],
+    "extra_lexicon": []
+  },
+  "metrics": {
+    "subscribers": 0,
+    "reach": [
+      0,
+      0
+    ],
+    "reactions": [
+      0,
+      0
+    ]
+  },
+  "telegram": {
+    "prefixes": [
+      "/post",
+      "/канал",
+      "/vs"
+    ],
+    "mode": "draft",
+    "inbox": "me"
+  }
+}

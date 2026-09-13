@@ -1,0 +1,40 @@
+{
+  "name": "channel-skill",
+  "version": "6.1.0",
+  "description": "Посты и статьи для Telegram-канала голосом его автора: бренд и рубрики из профиля, интервью на старте, разрез на пост плюс telegra.ph, ресерч, видео, линтер и оценка поста.",
+  "author": {
+    "name": "CHANNEL SKILL",
+    "url": "https://github.com/OWNER/channel-skill"
+  },
+  "homepage": "https://github.com/OWNER/channel-skill",
+  "repository": "https://github.com/OWNER/channel-skill",
+  "license": "MIT",
+  "keywords": [
+    "telegram",
+    "content",
+    "copywriting",
+    "onboarding",
+    "seo",
+    "research"
+  ],
+  "skills": "./channel-skill/",
+  "interface": {
+    "displayName": "CHANNEL SKILL",
+    "shortDescription": "Посты и статьи для телеграм-канала голосом его автора.",
+    "longDescription": "Пишет посты, статьи и сценарии для телеграм-канала. Имя автора, голос, рубрики, ссылки и цифры берёт из профиля, а если профиля нет, сначала проводит короткое интервью. Сам режет длинные посты на телеграм плюс telegra.ph, ищет факты в интернете, смотрит видео, гоняет линтер и ставит посту оценку на цифрах канала. Отдельно следит за ИИ-признаками и за длинным тире.",
+    "developerName": "CHANNEL SKILL",
+    "category": "writing",
+    "capabilities": [
+      "интервью про автора и канал на старте",
+      "маршрутизация задачи по рубрикам канала",
+      "линтер поста с автоправкой",
+      "оценка поста на цифрах канала",
+      "разрез на телеграм и telegra.ph",
+      "ресерч без ключей",
+      "разбор видео по субтитрам"
+    ],
+    "websiteURL": "https://github.com/OWNER/channel-skill",
+    "defaultPrompt": "Задай мне вопросы про мой канал, собери профиль и сделай первый пост, потом проверь его через ship",
+    "brandColor": "#0f172a"
+  }
+}

@@ -1,0 +1,271 @@
+{
+  "comment": "Эталоны поведения скилла. Запуск: python3 tools/run_evals.py. Каждый случай снят с живого вывода инструмента, цифры не выдуманы. Длинные тире в текстах случаев пишем только экранированно через \\u2014, чтобы сам файл оставался чистым по правилу ноль.",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "route-abuz",
+      "why": "рубрика абуз даёт SLAY, коридор 700-1400 и ровно один файл на чтение",
+      "args": ["tools/channel.py", "route", "нужен пост про абузы сервисов"],
+      "exit": 0,
+      "contains": [
+        "Рубрика: #абуз",
+        "Каркас: SLAY, запасной PAS",
+        "Коридор: 700-1400 знаков, пунктов от 4 до 7",
+        "reference/formats.md"
+      ],
+      "forbidden": ["reference/shorts.md", "reference/github.md"]
+    },
+    {
+      "id": "route-relise",
+      "why": "слово github в задаче уводит на github.md и каркас BAB",
+      "args": ["tools/channel.py", "route", "вышел новый релиз моего репозитория на github"],
+      "exit": 0,
+      "contains": [
+        "Рубрика: #релиз",
+        "Каркас: BAB, запасной STAR",
+        "Коридор: 400-700 знаков, пунктов от 1 до 3",
+        "reference/github.md"
+      ]
+    },
+    {
+      "id": "route-shorts",
+      "why": "шортс даёт один пункт и короткий коридор",
+      "args": ["tools/channel.py", "route", "короткий шортс про одну фишку"],
+      "exit": 0,
+      "contains": [
+        "Рубрика: #шортс",
+        "Каркас: AIDA, запасной BAB",
+        "Коридор: 250-500 знаков, пунктов от 1 до 1",
+        "reference/shorts.md"
+      ]
+    },
+    {
+      "id": "route-gayd",
+      "why": "гайд даёт PAS и коридор без жёсткого числа пунктов",
+      "args": ["tools/channel.py", "route", "подробный гайд как настроить окружение по шагам"],
+      "exit": 0,
+      "contains": [
+        "Рубрика: #гайд",
+        "Каркас: PAS, запасной AIDA",
+        "Коридор: 900-1800 знаков",
+        "reference/formats.md"
+      ]
+    },
+    {
+      "id": "lint-good-strict",
+      "why": "чистый пост проходит строгий режим без единой жалобы",
+      "args": ["tools/lint_post.py", "tools/tests/good-01-servisy.txt", "--strict"],
+      "exit": 0,
+      "contains": ["Чисто. Пост можно отдавать автору."]
+    },
+    {
+      "id": "lint-slop",
+      "why": "слоп-пост ловится по всем десяти кодам и не даёт ложных срабатываний",
+      "args": ["tools/lint_post.py", "tools/tests/bad-01-slop.txt", "--rubric", "сервисы", "--json"],
+      "exit": 1,
+      "json": true,
+      "codes": [
+        "E-ARROW",
+        "E-BARE-URL",
+        "E-FOOTER-PLAIN",
+        "E-BANNED-WORD",
+        "E-SLOP-CONSTRUCT",
+        "E-TY-FORM",
+        "E-FIRST-SCREEN",
+        "E-HASHTAG-MISSING",
+        "E-FORWARD-CTA",
+        "E-PERSONAL"
+      ],
+      "no_codes": ["E-GREETING-LONG", "E-CIRCLED"]
+    },
+    {
+      "id": "lint-tire",
+      "why": "правило ноль: длинное тире видно сразу, а разрез тут не нужен",
+      "args": ["tools/lint_post.py", "tools/tests/bad-04-tire.txt", "--rubric", "сервисы", "--json"],
+      "exit": 1,
+      "json": true,
+      "codes": ["E-EMDASH"],
+      "no_codes": ["E-DASH", "W-DASH-ONE", "E-SPLIT-NEEDED", "E-POST-RETELL"]
+    },
+    {
+      "id": "lint-humanity",
+      "why": "сухой ИИ-текст без живых признаков даёт низкую живость",
+      "args": ["tools/lint_post.py", "tools/tests/humanity-dry.txt", "--rubric", "сервисы", "--json"],
+      "exit": 1,
+      "json": true,
+      "codes": ["E-SLOP-CONSTRUCT", "W-HUMANITY-LOW"]
+    },
+    {
+      "id": "lint-tg-limit",
+      "why": "пост на 4444 знака не влезает в сообщение Telegram и требует статью",
+      "args": ["tools/lint_post.py", "evals/fixtures/tg-limit.txt", "--rubric", "гайд", "--json"],
+      "exit": 1,
+      "json": true,
+      "codes": ["E-TG-LIMIT", "E-SPLIT-NEEDED"]
+    },
+    {
+      "id": "lint-media-clean",
+      "why": "фикстура под медиа чиста по тексту: решение про статью зависит только от медиа",
+      "args": ["tools/lint_post.py", "evals/fixtures/media-caption.txt", "--rubric", "сервисы", "--json"],
+      "exit": 0,
+      "json": true,
+      "numbers": [
+        {"field": "errorCount", "equals": 0},
+        {"field": "warnCount", "equals": 0},
+        {"field": "clean", "equals": true}
+      ]
+    },
+    {
+      "id": "score-good",
+      "why": "чистый пост по цифрам канала берёт верхний коридор оценки",
+      "args": ["tools/score_post.py", "tools/tests/good-01-servisy.txt", "--rubric", "сервисы", "--json"],
+      "exit": 0,
+      "json": true,
+      "numbers": [
+        {"field": "total", "min": 90, "max": 100},
+        {"field": "verdict", "equals": "можно отдавать автору"}
+      ]
+    },
+    {
+      "id": "score-razrez",
+      "why": "пост со ссылкой на статью тоже считается готовым",
+      "args": ["tools/score_post.py", "tools/tests/good-03-razrez.txt", "--rubric", "сервисы", "--json"],
+      "exit": 0,
+      "json": true,
+      "numbers": [{"field": "total", "min": 90, "max": 100}]
+    },
+    {
+      "id": "score-slop",
+      "why": "слоп-пост падает низко и получает вердикт переписать",
+      "args": ["tools/score_post.py", "tools/tests/bad-01-slop.txt", "--rubric", "сервисы", "--json"],
+      "json": true,
+      "numbers": [
+        {"field": "total", "min": 0, "max": 45},
+        {"field": "verdict", "contains": "переписать"}
+      ]
+    },
+    {
+      "id": "score-humanity",
+      "why": "сухой текст без живых деталей не дотягивает до середины",
+      "args": ["tools/score_post.py", "tools/tests/humanity-dry.txt", "--rubric", "сервисы", "--json"],
+      "json": true,
+      "numbers": [{"field": "total", "min": 20, "max": 55}]
+    },
+    {
+      "id": "split-one-post",
+      "why": "тело ниже 1400 и пунктов до семи: статья не нужна",
+      "args": ["tools/split_post.py", "tools/tests/good-03-razrez.txt", "--check"],
+      "exit": 0,
+      "contains": ["один пост, статья не нужна"],
+      "forbidden": ["нужна статья"]
+    },
+    {
+      "id": "split-many-items",
+      "why": "пятнадцать пунктов всегда уезжают в статью",
+      "args": ["tools/split_post.py", "tools/tests/bad-05-bez-statyi.txt", "--check"],
+      "exit": 0,
+      "contains": [
+        "нужна статья на telegra.ph",
+        "пунктов 15, больше 8",
+        "PASTE_TELEGRAPH_URL"
+      ]
+    },
+    {
+      "id": "split-media-off",
+      "why": "без медиа тело 986 знаков живёт одним постом",
+      "args": ["tools/split_post.py", "evals/fixtures/media-caption.txt", "--check"],
+      "exit": 0,
+      "contains": ["один пост, статья не нужна"]
+    },
+    {
+      "id": "split-media-on",
+      "why": "та же фикстура с медиа требует статью: подпись режется на 1024",
+      "args": ["tools/split_post.py", "evals/fixtures/media-caption.txt", "--check", "--media"],
+      "exit": 0,
+      "contains": [
+        "нужна статья на telegra.ph",
+        "подпись обрежется на 1024"
+      ]
+    },
+    {
+      "id": "split-tg-limit",
+      "why": "тело больше 2200 знаков без вариантов уезжает в статью",
+      "args": ["tools/split_post.py", "evals/fixtures/tg-limit.txt", "--check"],
+      "exit": 0,
+      "contains": ["нужна статья на telegra.ph", "больше 2200"]
+    },
+    {
+      "id": "hook-abuz",
+      "why": "генератор крючков даёт шесть архетипов и бюджет первого экрана",
+      "args": ["tools/channel.py", "hook", "пак абузов на неделю", "--rubric", "абуз"],
+      "exit": 0,
+      "contains": [
+        "[дефицит]",
+        "[запрет]",
+        "[цифра]",
+        "[провал]",
+        "[спор]",
+        "[пробел]",
+        "бюджет первого экрана 100"
+      ]
+    },
+    {
+      "id": "memory-greeting-used",
+      "why": "приветствие из памяти второй раз не проходит",
+      "args": ["tools/memory.py", "check-greeting", "Хай, чуваки"],
+      "exit": 1,
+      "contains": ["ЗАНЯТО"]
+    },
+    {
+      "id": "memory-greeting-free",
+      "why": "новое приветствие разрешено и просит записать себя после выхода поста",
+      "args": ["tools/memory.py", "check-greeting", "Салют, инженеры"],
+      "exit": 0,
+      "contains": ["СВОБОДНО", "add-greeting"]
+    },
+    {
+      "id": "chat-emdash",
+      "why": "правило ноль действует и в ответах в чате, не только в постах",
+      "args": ["tools/lint_chat.py", "--text", "вот такая строка \u2014 с тире"],
+      "exit": 1,
+      "contains": ["E-EMDASH"]
+    },
+    {
+      "id": "chat-clean",
+      "why": "ровная речь без тире и без слопа проходит молча",
+      "args": ["tools/lint_chat.py", "--text", "Собрал скилл, прогнал тесты, всё зелёное."],
+      "exit": 0
+    },
+    {
+      "id": "article-good",
+      "why": "эталонная статья на телеграф проходит строгий линтер молча: подпись Demo Studio, метки по строкам, заголовок в коридоре",
+      "args": ["tools/lint_article.py", "tools/tests/article-good-01.md", "--strict"],
+      "exit": 0,
+      "contains": ["Статья чистая."]
+    },
+    {
+      "id": "article-bad",
+      "why": "все жалобы автора на статьи ловятся за один прогон: чужая подпись, ликбез, зов в канал, слитые метки и стена текста",
+      "args": ["tools/lint_article.py", "tools/tests/article-bad-01.md", "--json"],
+      "exit": 1,
+      "json": true,
+      "codes": ["E-A-AUTHOR", "E-A-OBVIOUS", "E-A-SUBSCRIBE", "E-A-MERGED-LABELS", "E-A-HEADING", "E-A-DENSE", "E-A-EMDASH"]
+    },
+    {
+      "id": "article-cmd",
+      "why": "статью линтует одна команда точки входа, пути к скриптам вспоминать не надо",
+      "args": ["tools/channel.py", "article", "tools/tests/article-bad-01.md"],
+      "exit": 1,
+      "contains": ["E-A-AUTHOR", "Итог: ошибок"]
+    },
+    {
+      "id": "footer-stale-label",
+      "why": "старый ярлык [DEMO] в футере даёт ровно одну претензию и не тянет за собой пропажу футера и чужой ярлык",
+      "args": ["tools/lint_post.py", "tools/tests/bad-10-futer-staryi.txt", "--rubric", "сервисы", "--json"],
+      "exit": 1,
+      "json": true,
+      "codes": ["E-FOOTER-OLD-LABEL"],
+      "no_codes": ["E-FOOTER-MISSING", "E-FOOTER-PLAIN", "W-LABEL-NONSTD", "W-HASHTAG-PLACE"]
+    }
+  ]
+}

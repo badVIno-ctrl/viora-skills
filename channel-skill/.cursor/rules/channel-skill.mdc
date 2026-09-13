@@ -1,0 +1,98 @@
+---
+description: Посты в Telegram-канал автора голосом автора, ресерч интернета, просмотр видео
+globs: ["**/*.md", "**/*.txt"]
+alwaysApply: true
+---
+
+# CHANNEL SKILL 6.1.0
+
+## Правило ноль
+
+Длинных тире нет нигде. Запрещены em dash U+2014, en dash U+2013,
+horizontal bar U+2015, figure dash U+2012 и minus sign U+2212, причём и в постах,
+и в статьях, и в коммитах, и в обычных ответах в чате. Ставим обычный дефис,
+точку, запятую или двоеточие. Это первое, что автор замечает в тексте от ИИ.
+
+Проверить свою собственную реплику перед отправкой:
+
+```bash
+cd channel-skill
+python3 tools/lint_chat.py --text "твой ответ"
+```
+
+## Шаг ноль: чей это канал
+
+Имя автора, имя канала, тон, аудитория, ссылки, рубрики и цифры лежат
+в профиле автора, а не в этом файле. Нет профиля, значит сначала интервью:
+
+```bash
+cd channel-skill
+python3 tools/onboard.py
+python3 tools/profile.py --check
+```
+
+Демо-данные из `channel-skill/profile/profile.example.json` годятся для тестов
+и никогда не едут в живой пост.
+
+## Что читать
+
+- Маленькое окно или быстрая модель: `channel-skill/QUICKCARD.txt`, больше ничего.
+- Обычная работа: `channel-skill/SKILL.md`, правила и пайплайн.
+- Сложная задача: `channel-skill/ROUTER.md`, дальше ровно один файл из reference.
+- Среда без файлов: вставь `channel-skill/PROMPT-CORE.txt` в первое сообщение.
+
+Не держи все правила в голове. Скрипты держат правила, модель держит вкус.
+
+## Железное
+
+- Футер из профиля последней строкой, над ним один хэштег-рубрика.
+- Приветствие короткое, потолок слов задан в профиле, сразу за ним цифра или срок.
+- Личная деталь обязательна: с какого раза завелось, что отвалилось.
+- Концовка просит переслать, а не поставить реакцию.
+- Ссылки только ярлыком: `[ТЫК](url)`. Голых URL нет.
+- Выдуманных ссылок, цифр, сроков и опыта автора не бывает. Нет в сырье, спрашиваем.
+- Пост без чистого `channel-skill/tools/lint_post.py` в режиме --strict автору не отдаём.
+- Публикует автор. Скилл только отдаёт текст.
+
+## Команды
+
+Все команды из каталога скилла: сначала `cd channel-skill`. Имена рубрик в примерах
+взяты из набора по умолчанию, свои смотри командой profile.py --show.
+
+```bash
+# интервью про автора и канал, если профиля ещё нет
+python3 tools/onboard.py
+
+# план по задаче: рубрика, каркас, коридор и один файл на чтение
+python3 tools/channel.py route "нужен пост про новый инструмент"
+
+# автоправка, линтер, оценка и разрез одним ходом
+python3 tools/channel.py ship draft.txt --rubric гайд
+
+# шесть вариантов первой строки
+python3 tools/channel.py hook "тема поста" --rubric гайд
+
+python3 tools/lint_post.py draft.txt --strict
+python3 tools/score_post.py draft.txt
+python3 tools/split_post.py draft.txt --check
+python3 tools/memory.py check-greeting "первая строка поста"
+python3 tools/research.py "запрос"
+python3 tools/watch.py "https://youtu.be/ID"
+python3 tools/tg.py doctor
+python3 tools/channel.py doctor
+python3 tools/validate_skill.py
+python3 tools/run_evals.py
+python3 tools/package.py --check
+bash tools/check_all.sh
+```
+
+## Установка в свой проект
+
+```bash
+cd channel-skill
+python3 tools/install.py --target /путь/до/проекта --dry-run
+python3 tools/install.py --target /путь/до/проекта
+```
+
+Скилл ложится в `.claude/skills`, `.agents/skills` и `.cursor/skills`. Чужие скиллы
+в этих папках не трогает.

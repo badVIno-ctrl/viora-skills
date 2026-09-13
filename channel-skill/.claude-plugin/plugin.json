@@ -1,0 +1,24 @@
+{
+  "name": "channel-skill",
+  "version": "6.1.0",
+  "description": "Посты и статьи для Telegram-канала голосом его автора: бренд и рубрики из профиля, интервью на старте, разрез на пост плюс telegra.ph, ресерч, видео, линтер и оценка поста.",
+  "author": {
+    "name": "CHANNEL SKILL"
+  },
+  "homepage": "https://github.com/OWNER/channel-skill",
+  "repository": "https://github.com/OWNER/channel-skill",
+  "license": "MIT",
+  "keywords": [
+    "telegram",
+    "content",
+    "copywriting",
+    "onboarding",
+    "seo",
+    "research"
+  ],
+  "skills": [
+    "./channel-skill",
+    "./channel-skill/channel-research",
+    "./channel-skill/channel-video"
+  ]
+}

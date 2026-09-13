@@ -1,0 +1,237 @@
+{
+  "comment": "Тесты самого линтера. Запуск: python3 tools/lint_post.py --selftest. codes это что обязан поймать, forbidden это ложные срабатывания, которых быть не должно.",
+  "cases": [
+    {
+      "file": "good-01-servisy.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": null
+    },
+    {
+      "file": "good-02-relise.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": null
+    },
+    {
+      "file": "../sample-post.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": null
+    },
+    {
+      "file": "bad-01-slop.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": "сервисы",
+      "codes": [
+        "E-ARROW",
+        "E-BARE-URL",
+        "E-FOOTER-PLAIN",
+        "E-BANNED-WORD",
+        "E-SLOP-CONSTRUCT",
+        "E-TY-FORM",
+        "E-FIRST-SCREEN",
+        "E-HASHTAG-MISSING",
+        "E-FORWARD-CTA",
+        "E-PERSONAL"
+      ],
+      "forbidden": [
+        "E-GREETING-LONG",
+        "E-CIRCLED"
+      ]
+    },
+    {
+      "file": "bad-02-pervyi-ekran.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": "сервисы",
+      "codes": [
+        "E-GREETING-LONG",
+        "E-GREETING-USED",
+        "E-FIRST-SCREEN",
+        "E-HASHTAG-MISSING",
+        "E-FORWARD-CTA",
+        "E-PERSONAL",
+        "E-DEADLINE-MISSING",
+        "W-SYMMETRY",
+        "W-POS-STREAK"
+      ],
+      "forbidden": [
+        "E-ARROW",
+        "E-BARE-URL",
+        "E-FOOTER-PLAIN",
+        "E-TY-FORM"
+      ]
+    },
+    {
+      "file": "bad-03-koncovka.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": null,
+      "codes": [
+        "E-CIRCLED",
+        "E-EMOJI-BAN",
+        "E-DEADLINE-NOT-IN-HEAD",
+        "E-FORWARD-CTA",
+        "E-PERSONAL",
+        "W-REACTION-END"
+      ],
+      "forbidden": [
+        "E-TY-FORM",
+        "E-FOOTER-PLAIN",
+        "E-HASHTAG-MISSING"
+      ]
+    },
+    {
+      "file": "good-03-razrez.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": null
+    },
+    {
+      "file": "bad-04-tire.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": "сервисы",
+      "codes": [
+        "E-EMDASH"
+      ],
+      "forbidden": [
+        "E-DASH",
+        "W-DASH-ONE",
+        "E-SPLIT-NEEDED",
+        "E-POST-RETELL"
+      ]
+    },
+    {
+      "file": "bad-05-bez-statyi.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": "сервисы",
+      "codes": [
+        "E-SPLIT-NEEDED",
+        "W-ITEMS-MANY",
+        "W-LEN-LONG",
+        "W-SYMMETRY"
+      ],
+      "forbidden": [
+        "E-POST-RETELL",
+        "E-EMDASH",
+        "E-TG-LIMIT"
+      ]
+    },
+    {
+      "file": "bad-06-tizer.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": "сервисы",
+      "why": "при статье пост пересказывает её пунктами вместо анонса",
+      "codes": [
+        "E-POST-RETELL"
+      ],
+      "forbidden": [
+        "E-EMDASH",
+        "E-FOOTER-MISSING"
+      ]
+    },
+    {
+      "file": "humanity-dry.txt",
+      "rubric": "сервисы",
+      "why": "сухой ИИ-текст: слоп-связка и ни одного живого признака",
+      "expect": "dirty",
+      "codes": [
+        "E-SLOP-CONSTRUCT",
+        "W-HUMANITY-LOW"
+      ]
+    },
+    {
+      "file": "good-04-mem-kogda.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": null,
+      "brand": "second-brand",
+      "why": "мем по шаблону «когда»: с флагом --brand second-brand футер и оффер не нужны"
+    },
+    {
+      "file": "good-05-mem-dialog.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": null,
+      "brand": "second-brand",
+      "why": "мем по шаблону «диалог с ИИ»: без футера и без оффера это норма"
+    },
+    {
+      "file": "good-06-anons.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": null,
+      "why": "анонс при статье: приветствие, название ссылкой, хэштег, футер"
+    },
+    {
+      "file": "bad-07-mem-ssylka.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": null,
+      "brand": "second-brand",
+      "why": "ссылка в меме: её место в закрепе",
+      "codes": [
+        "E-MEME-LINK"
+      ],
+      "forbidden": [
+        "E-FOOTER-MISSING",
+        "E-HASHTAG-MISSING",
+        "E-FIRST-SCREEN",
+        "E-PERSONAL"
+      ]
+    },
+    {
+      "file": "bad-08-mem-futer.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": null,
+      "brand": "second-brand",
+      "why": "футер DEMO в мем-тексте",
+      "codes": [
+        "E-BRAND-FOOTER"
+      ],
+      "forbidden": [
+        "E-MEME-LINK",
+        "E-FOOTER-MISSING",
+        "E-PERSONAL"
+      ]
+    },
+    {
+      "file": "bad-09-reklama-bez-erid.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": null,
+      "why": "рекламный пост без пометки «Реклама» и без erid",
+      "codes": [
+        "E-AD-NO-MARK"
+      ],
+      "forbidden": [
+        "E-BRAND-FOOTER",
+        "E-MEME-LINK",
+        "E-FOOTER-MISSING"
+      ]
+    },
+    {
+      "file": "bad-10-futer-staryi.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": "сервисы",
+      "why": "футер собран со старым ярлыком [DEMO] вместо [ТГК]: одна претензия и никаких каскадов",
+      "codes": [
+        "E-FOOTER-OLD-LABEL"
+      ],
+      "forbidden": [
+        "E-FOOTER-MISSING",
+        "E-FOOTER-PLAIN",
+        "E-FOOTER-NOT-LAST",
+        "W-LABEL-NONSTD",
+        "W-HASHTAG-PLACE"
+      ]
+    }
+  ]
+}

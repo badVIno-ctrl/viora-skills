@@ -1,0 +1,23 @@
+{
+  "name": "channel-skill",
+  "owner": {
+    "name": "CHANNEL SKILL",
+    "url": "https://github.com/OWNER/channel-skill"
+  },
+  "metadata": {
+    "description": "Скиллы CHANNEL SKILL: посты, ресерч и видео для телеграм-канала любого автора",
+    "version": "6.1.0"
+  },
+  "plugins": [
+    {
+      "name": "channel-skill",
+      "source": "./",
+      "description": "Пишет посты и статьи для телеграм-канала голосом его автора. Бренд берёт из профиля, а если профиля нет, сначала проводит интервью.",
+      "version": "6.1.0",
+      "author": {
+        "name": "CHANNEL SKILL"
+      },
+      "license": "MIT"
+    }
+  ]
+}

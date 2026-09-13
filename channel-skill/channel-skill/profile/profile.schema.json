@@ -1,0 +1,331 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Профиль канала для скилла Channel Skill",
+  "type": "object",
+  "required": [
+    "brand",
+    "channel"
+  ],
+  "properties": {
+    "schema": {
+      "type": "integer",
+      "const": 1,
+      "description": "версия формата профиля"
+    },
+    "brand": {
+      "type": "object",
+      "required": [
+        "name",
+        "author",
+        "tone",
+        "audience"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "имя бренда или канала"
+        },
+        "short": {
+          "type": "string",
+          "description": "короткое имя для подписей"
+        },
+        "author": {
+          "type": "string",
+          "description": "кто пишет: ник или имя"
+        },
+        "language": {
+          "type": "string",
+          "description": "язык постов: ru, en, es"
+        },
+        "tone": {
+          "type": "string",
+          "description": "голос в трёх словах"
+        },
+        "topics": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "audience": {
+          "type": "string",
+          "description": "для кого пишем"
+        },
+        "about": {
+          "type": "string",
+          "description": "чем автор занимается"
+        },
+        "taboo": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "о чём не пишем"
+        }
+      }
+    },
+    "channel": {
+      "type": "object",
+      "properties": {
+        "platform": {
+          "type": "string",
+          "enum": [
+            "telegram",
+            "other"
+          ]
+        },
+        "handle": {
+          "type": "string",
+          "pattern": "^@[A-Za-z0-9_]{4,32}$"
+        },
+        "url": {
+          "type": "string"
+        },
+        "window": {
+          "type": "string",
+          "description": "окно публикации, например 16:30-21:00"
+        },
+        "tz": {
+          "type": "string",
+          "description": "часовой пояс IANA"
+        }
+      }
+    },
+    "links": {
+      "type": "array",
+      "description": "ссылки футера по порядку",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "url"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "ярлык капсом, до 12 знаков"
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https?://"
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "description": "источники тем автора: каналы, сайты, YouTube, GitHub",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "url"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https?://"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "telegram",
+              "youtube",
+              "github",
+              "reddit",
+              "x",
+              "web"
+            ]
+          },
+          "role": {
+            "type": "string",
+            "description": "пусто или ориентир"
+          }
+        }
+      }
+    },
+    "footer": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "template": {
+          "type": "string",
+          "description": "своя строка футера знак в знак; пусто значит собрать из links"
+        },
+        "legacy_labels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "старые ярлыки, которые линтер считает ошибкой"
+        }
+      }
+    },
+    "article": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "режем ли длинные посты на пост плюс статью"
+        },
+        "platform": {
+          "type": "string",
+          "description": "telegra.ph, Notion, свой сайт"
+        },
+        "signature": {
+          "type": "string",
+          "description": "подпись автора в статье"
+        }
+      }
+    },
+    "second_brand": {
+      "type": "object",
+      "description": "второй бренд или мемный формат с другими правилами",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "min": {
+          "type": "integer"
+        },
+        "max": {
+          "type": "integer"
+        },
+        "footer": {
+          "type": "boolean"
+        }
+      }
+    },
+    "rubrics": {
+      "type": "object",
+      "description": "правки таблицы рубрик: ключ это тег без решётки, null выключает рубрику",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "integer"
+              },
+              "max": {
+                "type": "integer"
+              },
+              "points": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": "integer"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "forward": {
+                "type": "string",
+                "enum": [
+                  "required",
+                  "wanted",
+                  "none"
+                ]
+              },
+              "frame": {
+                "type": "string"
+              },
+              "frame_alt": {
+                "type": "string"
+              },
+              "file": {
+                "type": "string"
+              },
+              "soft_first_screen": {
+                "type": "boolean"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "voice": {
+      "type": "object",
+      "properties": {
+        "greeting_max_words": {
+          "type": "integer"
+        },
+        "extra_banned": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "extra_lexicon": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "subscribers": {
+          "type": "integer"
+        },
+        "reach": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "reactions": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    },
+    "telegram": {
+      "type": "object",
+      "properties": {
+        "prefixes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "префиксы заявок в Избранном"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "scheduled",
+            "auto"
+          ]
+        },
+        "inbox": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

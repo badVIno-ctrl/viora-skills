@@ -1,0 +1,60 @@
+name: check
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: самопроверка скилла
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.12"]
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONIOENCODING: "utf-8"
+    steps:
+      - name: забрать код
+        uses: actions/checkout@v4
+
+      - name: поставить python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: версия python
+        run: python3 --version
+
+      - name: все проверки сразу
+        working-directory: channel-skill
+        run: bash tools/check_all.sh
+
+      - name: состав поставки
+        working-directory: channel-skill
+        run: python3 tools/package.py --check
+
+  dashes:
+    name: длинное тире вне закона
+    runs-on: ubuntu-latest
+    steps:
+      - name: забрать код
+        uses: actions/checkout@v4
+
+      - name: искать длинные тире в документации
+        run: |
+          bad=$(grep -rIn -e $'\u2014' -e $'\u2013' -e $'\u2015' -e $'\u2012' \
+            --include='*.md' --include='*.txt' --include='*.py' --include='*.sh' \
+            --exclude-dir='.git' . | grep -v 'dash-demo' || true)
+          if [ -n "$bad" ]; then
+            echo "$bad"
+            echo "Нашли длинное тире. Замени на дефис или точку."
+            exit 1
+          fi
+          echo "Тире чисто."

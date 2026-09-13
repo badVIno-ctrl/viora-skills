@@ -1,0 +1,105 @@
+{
+  "_help": "Демо-профиль поставки. Свой профиль собирается интервью: python3 tools/onboard.py. Полное описание полей: docs/PROFILE.md",
+  "schema": 1,
+  "brand": {
+    "name": "DEMO STUDIO",
+    "short": "DEMO",
+    "author": "demo_author",
+    "language": "ru",
+    "tone": "нашёл, проверил, принёс",
+    "topics": [
+      "AI",
+      "Web",
+      "Dev"
+    ],
+    "audience": "студенты и начинающие разработчики, читают вечером с телефона",
+    "about": "демо-профиль, чтобы скилл работал сразу после распаковки",
+    "taboo": [
+      "обход лицензий",
+      "взлом платных сервисов"
+    ]
+  },
+  "channel": {
+    "platform": "telegram",
+    "handle": "@demo_channel",
+    "url": "https://t.me/demo_channel",
+    "window": "16:30-21:00",
+    "tz": "Europe/Moscow"
+  },
+  "links": [
+    {
+      "label": "ЧАТ",
+      "url": "https://t.me/demo_chat"
+    },
+    {
+      "label": "GITHUB",
+      "url": "https://github.com/demo"
+    },
+    {
+      "label": "YOUTUBE",
+      "url": "https://www.youtube.com/@demo"
+    },
+    {
+      "label": "ТГК",
+      "url": "https://t.me/demo_channel"
+    }
+  ],
+  "sources": [
+    {
+      "name": "demo_news",
+      "url": "https://t.me/demo_news",
+      "kind": "telegram"
+    },
+    {
+      "name": "Hacker News",
+      "url": "https://news.ycombinator.com",
+      "kind": "web"
+    }
+  ],
+  "footer": {
+    "enabled": true,
+    "template": "",
+    "legacy_labels": [
+      "[DEMO]("
+    ]
+  },
+  "article": {
+    "enabled": true,
+    "platform": "telegra.ph",
+    "signature": "Demo Studio"
+  },
+  "second_brand": {
+    "enabled": true,
+    "name": "ВТОРОЙ БРЕНД",
+    "tag": "мем",
+    "min": 40,
+    "max": 220,
+    "footer": false
+  },
+  "rubrics": {},
+  "voice": {
+    "greeting_max_words": 5,
+    "extra_banned": [],
+    "extra_lexicon": []
+  },
+  "metrics": {
+    "subscribers": 260,
+    "reach": [
+      165,
+      386
+    ],
+    "reactions": [
+      1,
+      5
+    ]
+  },
+  "telegram": {
+    "prefixes": [
+      "/post",
+      "/канал",
+      "/vs"
+    ],
+    "mode": "draft",
+    "inbox": "me"
+  }
+}

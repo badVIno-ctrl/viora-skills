@@ -1,0 +1,10 @@
+# Что не нужно внутри скилла при установке.
+__pycache__/
+*.pyc
+.DS_Store
+dist/
+out/
+PROMPT-CORE.txt
+PROMPT-FULL.txt
+tools/tests/
+evals/

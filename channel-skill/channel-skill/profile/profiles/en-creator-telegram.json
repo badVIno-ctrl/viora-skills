@@ -1,0 +1,207 @@
+{
+  "_help": "Template: English creator channel on Telegram. Apply with python3 tools/onboard.py --from-json profile/profiles/en-creator-telegram.json and then edit the fields.",
+  "schema": 1,
+  "brand": {
+    "name": "CREATOR LAB",
+    "short": "LAB",
+    "author": "your_handle",
+    "language": "en",
+    "tone": "found it, tested it, shipped it",
+    "topics": [
+      "creator tools",
+      "editing",
+      "audience growth"
+    ],
+    "audience": "solo creators, reading on mobile in the evening",
+    "about": "I test tools on my own channel and report what survived",
+    "taboo": [
+      "pirated software",
+      "made up numbers"
+    ],
+    "formats": [
+      "posts",
+      "articles"
+    ]
+  },
+  "channel": {
+    "platform": "telegram",
+    "handle": "@your_channel",
+    "url": "https://t.me/your_channel",
+    "window": "18:00-21:00",
+    "tz": "Europe/London"
+  },
+  "links": [
+    {
+      "label": "CHAT",
+      "url": "https://t.me/your_chat"
+    },
+    {
+      "label": "GITHUB",
+      "url": "https://github.com/your-name"
+    },
+    {
+      "label": "CHANNEL",
+      "url": "https://t.me/your_channel"
+    }
+  ],
+  "sources": [
+    {
+      "name": "Hacker News",
+      "url": "https://news.ycombinator.com",
+      "kind": "web"
+    },
+    {
+      "name": "Product Hunt",
+      "url": "https://www.producthunt.com",
+      "kind": "web"
+    }
+  ],
+  "footer": {
+    "enabled": true,
+    "template": "",
+    "legacy_labels": []
+  },
+  "article": {
+    "enabled": true,
+    "platform": "telegra.ph",
+    "signature": "Creator Lab"
+  },
+  "second_brand": {
+    "enabled": false,
+    "name": "",
+    "tag": "side",
+    "min": 250,
+    "max": 500,
+    "footer": false
+  },
+  "rubrics": {
+    "абуз": null,
+    "сервисы": null,
+    "гайд": null,
+    "релиз": null,
+    "девлог": null,
+    "личное": null,
+    "опрос": null,
+    "шортс": null,
+    "лидмагнит": null,
+    "второй": null,
+    "мем": null,
+    "реклама": null,
+    "tools": {
+      "min": 500,
+      "max": 900,
+      "points": [
+        3,
+        5
+      ],
+      "forward": "required",
+      "frame": "SLAY",
+      "frame_alt": "BAB",
+      "file": "reference/formats.md"
+    },
+    "guide": {
+      "min": 900,
+      "max": 1800,
+      "points": null,
+      "forward": "wanted",
+      "frame": "PAS",
+      "frame_alt": "AIDA",
+      "file": "reference/formats.md"
+    },
+    "release": {
+      "min": 400,
+      "max": 700,
+      "points": [
+        1,
+        3
+      ],
+      "forward": "none",
+      "frame": "BAB",
+      "frame_alt": "STAR",
+      "file": "reference/github.md"
+    },
+    "devlog": {
+      "min": 500,
+      "max": 900,
+      "points": [
+        1,
+        3
+      ],
+      "forward": "none",
+      "frame": "STAR",
+      "frame_alt": "BAB",
+      "file": "reference/examples.md",
+      "soft_first_screen": true
+    },
+    "personal": {
+      "min": 400,
+      "max": 900,
+      "points": null,
+      "forward": "none",
+      "frame": "STAR",
+      "frame_alt": "PAS",
+      "file": "reference/voice.md",
+      "soft_first_screen": true
+    },
+    "poll": {
+      "min": 200,
+      "max": 450,
+      "points": [
+        2,
+        4
+      ],
+      "forward": "wanted",
+      "frame": "PAS",
+      "frame_alt": "AIDA",
+      "file": "reference/formats.md"
+    },
+    "shorts": {
+      "min": 250,
+      "max": 500,
+      "points": [
+        1,
+        1
+      ],
+      "forward": "wanted",
+      "frame": "AIDA",
+      "frame_alt": "BAB",
+      "file": "reference/shorts.md"
+    },
+    "meme": {
+      "min": 40,
+      "max": 220,
+      "points": null,
+      "forward": "none",
+      "frame": "",
+      "frame_alt": "",
+      "file": "reference/formats.md"
+    }
+  },
+  "voice": {
+    "greeting_max_words": 5,
+    "extra_banned": [
+      "game changer",
+      "unique content"
+    ],
+    "extra_lexicon": []
+  },
+  "metrics": {
+    "subscribers": 0,
+    "reach": [
+      0,
+      0
+    ],
+    "reactions": [
+      0,
+      0
+    ]
+  },
+  "telegram": {
+    "prefixes": [
+      "/post",
+      "/vs"
+    ],
+    "mode": "draft",
+    "inbox": "me"
+  }
+}
