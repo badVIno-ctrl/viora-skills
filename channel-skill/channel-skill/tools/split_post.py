@@ -13,7 +13,7 @@ import os
 import re
 import sys
 
-VERSION = "6.1.0"
+VERSION = "6.2.1"
 
 TG_HARD_LIMIT = 4096          # технический предел сообщения
 TG_CAPTION_LIMIT = 1024       # предел подписи к медиа
@@ -46,7 +46,7 @@ ITEM_RE = re.compile(r"^\s*(?:\*\*)?(\d{1,2})[.)]\s", re.MULTILINE)
 HASHTAG_LINE_RE = re.compile(r"^\s*#[^\s#]+\s*$")
 # Точка предложения часто прячется под жирным: «честные.**» это тоже конец.
 SENT_SPLIT = re.compile(r"(?<=[.!?])(?:\*\*|__|[*_`])*\s+")
-TITLE_MIN, TITLE_MAX = 40, 70   # коридор заголовка статьи: reference/telegraph.md
+TITLE_MIN, TITLE_MAX = 40, 70   # коридор заголовка статьи: reference/publish.md
 HASHTAG_RE = re.compile(r"#([а-яёa-z]+)", re.IGNORECASE)
 MONEY_RE = re.compile(r"\d[\d\s.,]*\s?(?:\$|₽|руб|USD|EUR|%)|\$\s?\d", re.IGNORECASE)
 NUM_RE = re.compile(r"\d")
@@ -58,8 +58,7 @@ TIME_RE = re.compile(r"минут|часа|часов|дней|секунд", re
 def read_source(path):
     if not path or path == "-":
         return sys.stdin.read()
-    with open(path, encoding="utf-8") as handle:
-        return handle.read()
+    return P.read_post(path)
 
 
 def strip_footer(text):
@@ -181,7 +180,7 @@ def title_of(lead, items, rubric):
 
     Приветствие уезжает в анонс, поэтому сюда приходит вторая строка
     первого экрана. Если имя короче коридора, добираем вторым
-    предложением, пока влезает: коридор 40-70 из reference/telegraph.md.
+    предложением, пока влезает: коридор 40-70 из reference/publish.md.
     """
     source = re.sub(r"^#+\s*", "", flat(lead))
     if not source and items:
@@ -417,7 +416,7 @@ def main():
 
     if args.brand == "second-brand":
         print("Бренд ВТОРОЙ БРЕНД: мем не режем, у него одна шутка и подпись 40-220 знаков.")
-        print("Правила мема: reference/second-brand.md")
+        print("Правила мема: reference/distribution.md")
         return 0
 
     text = read_source(args.file)

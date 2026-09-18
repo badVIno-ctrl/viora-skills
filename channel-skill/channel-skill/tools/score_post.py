@@ -32,7 +32,7 @@ import os
 import re
 import sys
 
-VERSION = "6.1.0"
+VERSION = "6.2.1"
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL = os.path.dirname(HERE)
 if HERE not in sys.path:
@@ -570,8 +570,7 @@ def main():
         return selftest()
 
     if args.file:
-        with open(args.file, encoding="utf-8") as handle:
-            text = handle.read()
+        text = P.read_post(args.file)
         name = args.file
     else:
         text = sys.stdin.read()

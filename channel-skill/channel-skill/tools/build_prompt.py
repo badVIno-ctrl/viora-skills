@@ -42,6 +42,8 @@ CORE_ORDER = [
     ("reference/layout.md", "layout"),
     ("reference/formats.md", "lengths"),
     ("reference/antislop.md", "antislop"),
+    ("reference/slop-patterns.md", "patterns"),
+    ("reference/edit-mode.md", "edit"),
     ("reference/split.md", "split"),
     ("SKILL.md", "skeleton"),
     ("SKILL.md", "selfcheck"),
@@ -58,17 +60,15 @@ FULL_ORDER = [
     "reference/formats.md",
     "reference/greetings.md",
     "reference/examples.md",
-    "reference/shorts.md",
-    "reference/seo.md",
-    "reference/crosspost.md",
-    "reference/second-brand.md",
-    "reference/growth.md",
-    "reference/github.md",
+    "reference/publish.md",
+    "reference/distribution.md",
+    "reference/slop-patterns.md",
+    "reference/edit-mode.md",
 ]
 
 CORE_NAME = "PROMPT-CORE.txt"
 FULL_NAME = "PROMPT-FULL.txt"
-MAX_CORE_CHARS = 19000
+MAX_CORE_CHARS = 21500
 
 
 def version():

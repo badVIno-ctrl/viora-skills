@@ -17,7 +17,7 @@ import os
 import re
 import sys
 
-VERSION = "6.1.0"
+VERSION = "6.2.1"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 if HERE not in sys.path:

@@ -28,6 +28,10 @@ echo "== тесты памяти канала =="
 python3 tools/memory.py --selftest || fail=1
 echo
 
+echo "== тесты доктора слопа =="
+python3 tools/slop_doctor.py --selftest || fail=1
+echo
+
 echo "== тесты линтера речи =="
 python3 tools/lint_chat.py --selftest || fail=1
 echo

@@ -30,7 +30,7 @@ import subprocess
 import sys
 import tempfile
 
-VERSION = "6.1.0"
+VERSION = "6.2.1"
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL = os.path.dirname(HERE)
 if HERE not in sys.path:
@@ -48,9 +48,9 @@ SHAPES = {
              "lead": "что дают и кому", "tail": "Как забрать:"},
     "сервисы": {"low": 200, "high": 700, "points": (3, 5), "file": "reference/formats.md",
                 "lead": "что за сервис и зачем", "tail": "По факту:"},
-    "гайд": {"low": 400, "high": 1200, "points": (4, 6), "file": "reference/frameworks.md",
+    "гайд": {"low": 400, "high": 1200, "points": (4, 6), "file": "reference/matrix.md",
              "lead": "какая боль решается", "tail": "Итог:"},
-    "релиз": {"low": 200, "high": 600, "points": (1, 3), "file": "reference/github.md",
+    "релиз": {"low": 200, "high": 600, "points": (1, 3), "file": "reference/publish.md",
               "lead": "что выложил и зачем", "tail": "Где взять:"},
     "девлог": {"low": 250, "high": 700, "points": (1, 3), "file": "reference/examples.md",
                "lead": "что делал и что сломалось", "tail": "Дальше:"},
@@ -58,9 +58,9 @@ SHAPES = {
                "lead": "что случилось", "tail": "Вывод:"},
     "опрос": {"low": 150, "high": 400, "points": (2, 4), "file": "reference/formats.md",
               "lead": "что спрашиваю", "tail": "Варианты:"},
-    "шортс": {"low": 200, "high": 450, "points": (1, 1), "file": "reference/shorts.md",
+    "шортс": {"low": 200, "high": 450, "points": (1, 1), "file": "reference/publish.md",
               "lead": "про что ролик", "tail": "Смотреть:"},
-    "лидмагнит": {"low": 250, "high": 600, "points": (1, 3), "file": "reference/telegraph.md",
+    "лидмагнит": {"low": 250, "high": 600, "points": (1, 3), "file": "reference/publish.md",
                   "lead": "что внутри и зачем", "tail": "Забрать:"},
     "второй": {"low": 200, "high": 450, "points": (1, 2), "file": "reference/voice.md",
                 "lead": "что сломалось", "tail": "Статус:"},

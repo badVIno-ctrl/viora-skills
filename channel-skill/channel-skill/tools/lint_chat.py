@@ -22,7 +22,7 @@ import os
 import re
 import sys
 
-VERSION = "6.1.0"
+VERSION = "6.2.1"
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 EMDASHES = "\u2014\u2013\u2015\u2012\u2212"

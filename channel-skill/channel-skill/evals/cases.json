@@ -13,7 +13,7 @@
         "Коридор: 700-1400 знаков, пунктов от 4 до 7",
         "reference/formats.md"
       ],
-      "forbidden": ["reference/shorts.md", "reference/github.md"]
+      "forbidden": ["reference/publish.md", "reference/publish.md"]
     },
     {
       "id": "route-relise",
@@ -24,7 +24,7 @@
         "Рубрика: #релиз",
         "Каркас: BAB, запасной STAR",
         "Коридор: 400-700 знаков, пунктов от 1 до 3",
-        "reference/github.md"
+        "reference/publish.md"
       ]
     },
     {
@@ -36,7 +36,7 @@
         "Рубрика: #шортс",
         "Каркас: AIDA, запасной BAB",
         "Коридор: 250-500 знаков, пунктов от 1 до 1",
-        "reference/shorts.md"
+        "reference/publish.md"
       ]
     },
     {

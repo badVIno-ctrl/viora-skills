@@ -34,7 +34,7 @@ import subprocess
 import sys
 import tempfile
 
-VERSION = "6.1.0"
+VERSION = "6.2.1"
 DEFAULT_TIMEOUT = 120
 
 

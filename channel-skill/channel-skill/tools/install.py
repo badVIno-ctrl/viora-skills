@@ -31,7 +31,7 @@ import shutil
 import sys
 import tempfile
 
-VERSION = "6.1.0"
+VERSION = "6.2.1"
 
 SKILL_NAME = "channel-skill"
 TARGET_DIRS = (

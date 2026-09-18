@@ -8,7 +8,7 @@
 
 MIT · версия 6.1.0 · python 3.8+ · нуль внешних зависимостей
 
-[Быстрый старт](docs/QUICKSTART.md) · [Интервью](channel-skill/ONBOARDING.md) · [Профиль](docs/PROFILE.md) · [Телеграм](docs/TELEGRAM.md) · [Устройство](docs/ARCHITECTURE.md) · [FAQ](docs/FAQ.md) · [English](README.en.md)
+[Быстрый старт](docs/GUIDE.md) · [Интервью](channel-skill/ONBOARDING.md) · [Профиль](docs/GUIDE.md) · [Телеграм](docs/GUIDE.md) · [Устройство](docs/GUIDE.md) · [FAQ](docs/GUIDE.md) · [English](README.en.md)
 
 </div>
 
@@ -42,7 +42,7 @@ python3 tools/onboard.py
 | Готовый шаблон и правка руками | файл из `channel-skill/profile/profiles` | Надо очень быстро |
 
 Дальше всё берётся из профиля: имя канала, тон, рубрики и их коридоры длины, футер,
-окно публикации и цифры канала для оценки. Описание всех полей: [docs/PROFILE.md](docs/PROFILE.md).
+окно публикации и цифры канала для оценки. Описание всех полей: [docs/GUIDE.md](docs/GUIDE.md).
 
 ## Три минуты до первого поста
 
@@ -58,7 +58,7 @@ python3 tools/channel.py ship draft.txt --rubric гайд   # 4. одна ком
 ```
 
 `ship` это автоправка, линтер, оценка и разрез длинного текста за один ход.
-Подробнее: [docs/QUICKSTART.md](docs/QUICKSTART.md).
+Подробнее: [docs/GUIDE.md](docs/GUIDE.md).
 
 ## Что умеет
 
@@ -117,7 +117,7 @@ python3 channel-skill/tools/tg.py doctor
 
 В репозитории нет ни одного чужого ключа и ни одного токена. Всё, что лежит в `secrets`,
 это шаблоны с расширением example, а живые файлы закрыты в gitignore.
-Шаги с картинками и разбор ошибок: [docs/TELEGRAM.md](docs/TELEGRAM.md).
+Шаги с картинками и разбор ошибок: [docs/GUIDE.md](docs/GUIDE.md).
 
 ## Безопасность в трёх строках
 
@@ -125,7 +125,7 @@ python3 channel-skill/tools/tg.py doctor
 - Ключи и сессия живут только у тебя на машине, в профиле их нет никогда.
 - Выдуманные цифры и ссылки запрещены правилами скилла: нет в сырье, агент спрашивает.
 
-Подробно: [docs/SECURITY.md](docs/SECURITY.md).
+Подробно: [docs/GUIDE.md](docs/GUIDE.md).
 
 ## Какое качество считается приемлемым
 
@@ -168,13 +168,13 @@ python3 версии 3.8 и выше. Всё остальное стандарт
 
 | Файл | О чём |
 | --- | --- |
-| [docs/QUICKSTART.md](docs/QUICKSTART.md) | Первый пост за три минуты |
+| [docs/GUIDE.md](docs/GUIDE.md) | Первый пост за три минуты |
 | [channel-skill/ONBOARDING.md](channel-skill/ONBOARDING.md) | Все вопросы интервью и три режима |
-| [docs/PROFILE.md](docs/PROFILE.md) | Все поля профиля и частые ошибки |
-| [docs/TELEGRAM.md](docs/TELEGRAM.md) | Ключи, вход, смена, режимы публикации |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Как устроен скилл и почему именно так |
-| [docs/CUSTOMIZE.md](docs/CUSTOMIZE.md) | Свои рубрики, свой голос, свои проверки |
-| [docs/FAQ.md](docs/FAQ.md) | Короткие ответы на частые вопросы |
+| [docs/GUIDE.md](docs/GUIDE.md) | Все поля профиля и частые ошибки |
+| [docs/GUIDE.md](docs/GUIDE.md) | Ключи, вход, смена, режимы публикации |
+| [docs/GUIDE.md](docs/GUIDE.md) | Как устроен скилл и почему именно так |
+| [docs/GUIDE.md](docs/GUIDE.md) | Свои рубрики, свой голос, свои проверки |
+| [docs/GUIDE.md](docs/GUIDE.md) | Короткие ответы на частые вопросы |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Как прислать правку |
 
 ## Лицензия

@@ -24,7 +24,7 @@ import os
 import re
 import sys
 
-VERSION = "6.1.0"
+VERSION = "6.2.1"
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL = os.path.dirname(HERE)
 if HERE not in sys.path:
@@ -49,7 +49,7 @@ def footer_row(line):
 
     Без этого сбитый футер читался как пропажа футера: линтер звал
     E-FOOTER-MISSING, а автоправка дописывала второй футер под первым.
-    Разбор правила: reference/handoff.md.
+    Разбор правила: reference/publish.md.
     """
     bare = line.strip()
     if not bare or not FOOTER_ON:
@@ -155,7 +155,7 @@ LABELS_OK = {
 LABELS_BAD = {"по ссылке", "здесь", "тут", "ссылка", "link", "клик", "жми"}
 
 # Два бренда. По умолчанию vs, то есть старое поведение линтера не меняется.
-# Разбор второго бренда: reference/second-brand.md.
+# Разбор второго бренда: reference/distribution.md.
 BRANDS = ("vs", "second-brand")
 
 # Оффер в мем-тексте это ошибка: мем ничего не продаёт.
@@ -166,7 +166,7 @@ OFFER_WORDS = [
 ]
 
 # Признаки рекламного поста: по ним включается проверка маркировки.
-# Требования целиком: reference/monetization.md.
+# Требования целиком: reference/distribution.md.
 AD_SIGNS = ["#реклама", "erid", "рекламодател", "на правах рекламы"]
 
 # План распространения в конце черновика. Проверка только по флагу --growth,
@@ -219,7 +219,7 @@ SUBSCRIBE_CTA = [
     "остальное выкладываю в канале", "старый пост с полезными сервисами",
 ]
 
-# Структурные следы машины, которых не видно по словарю: reference/sepia.md.
+# Структурные следы машины, которых не видно по словарю: reference/beauty.md.
 PARTICIPLE_TAIL = re.compile(
     r",\s*(позволяя|обеспечивая|делая|давая|создавая|открывая|превращая"
     r"|сохраняя|экономя|упрощая|ускоряя)\b"
@@ -634,11 +634,11 @@ HINTS = {
     "W-TY-ADDRESS": "Замени «ты» на «вы» или перепиши без обращения.",
     "W-PARASITE": "Убери слово-паразит, смысл не пострадает.",
     "E-BRAND-FOOTER": "Убери футер основного бренда: у второго бренда его нет. Ссылка живёт в закрепе.",
-    "E-BRAND-OFFER": "Убери оффер: мем ничего не продаёт. Голос в reference/second-brand.md.",
+    "E-BRAND-OFFER": "Убери оффер: мем ничего не продаёт. Голос в reference/distribution.md.",
     "E-MEME-LINK": "Убери ссылку из мема. Её место в закреплённом комментарии.",
     "E-AD-NO-MARK": "Поставь «Реклама» первой строкой, назови рекламодателя и добавь erid от ОРД.",
-    "W-MEME-REPEAT": "Шаблон или шутка уже выходили. Возьми другой шаблон из reference/second-brand.md.",
-    "W-GROWTH-NO-PLAN": "Допиши три строки: Приток, Действие, Замер. Каналы в reference/growth.md.",
+    "W-MEME-REPEAT": "Шаблон или шутка уже выходили. Возьми другой шаблон из reference/distribution.md.",
+    "W-GROWTH-NO-PLAN": "Допиши три строки: Приток, Действие, Замер. Каналы в reference/distribution.md.",
 }
 
 
@@ -1014,7 +1014,7 @@ def lint(text, rubric=None, media=False, brand=None, growth=False,
         add(issues, "ERROR", "E-FOOTER-OLD-LABEL",
             "старый ярлык [DEMO]: канал в футере подписываем [ТГК]")
 
-    # --- структурные следы машины: reference/sepia.md ---
+    # --- структурные следы машины: reference/beauty.md ---
     if PARTICIPLE_TAIL.search(body):
         add(issues, "WARN", "W-PARTICIPLE-TAIL",
             "деепричастный хвост после запятой: два коротких предложения живее")
@@ -1565,6 +1565,25 @@ def report(name, issues, rubric, strict, as_json, brand="vs"):
     return 1 if errors else 0
 
 
+def read_fixtures(tests):
+    """Фикстуры лежат одним файлом tests/fixtures.md, чтобы не плодить мелочь.
+
+    Формат простой: между <!-- FIXTURE: имя --> и <!-- /FIXTURE --> лежит тело.
+    Отдельные файлы тоже работают: их читаем напрямую.
+    """
+    path = os.path.join(tests, "fixtures.md")
+    if not os.path.exists(path):
+        return {}
+    with open(path, encoding="utf-8") as handle:
+        text = handle.read()
+    out = {}
+    for chunk in text.split("<!-- FIXTURE: ")[1:]:
+        head, _, rest = chunk.partition(" -->\n")
+        body, _, _ = rest.partition("<!-- /FIXTURE -->")
+        out[head.strip()] = body.rstrip("\n") + "\n"
+    return out
+
+
 def selftest():
     """Прогнать tools/tests/ и проверить сам линтер.
 
@@ -1581,15 +1600,19 @@ def selftest():
         manifest = json.load(handle)
 
     failed = 0
+    bundle = read_fixtures(tests)
     cases = manifest.get("cases", [])
     for case in cases:
         path = os.path.join(tests, case["file"])
-        if not os.path.exists(path):
-            print("FAIL %s: файла нет" % case["file"])
+        if case["file"] in bundle:
+            text = bundle[case["file"]]
+        elif os.path.exists(path):
+            with open(path, encoding="utf-8") as handle:
+                text = handle.read()
+        else:
+            print("FAIL %s: файла нет ни в папке, ни в fixtures.md" % case["file"])
             failed += 1
             continue
-        with open(path, encoding="utf-8") as handle:
-            text = handle.read()
 
         strict = bool(case.get("strict"))
         issues, _ = lint(text, case.get("rubric"), brand=case.get("brand"))
@@ -1665,8 +1688,7 @@ def main():
         return fix_selftest()
 
     if args.file:
-        with open(args.file, encoding="utf-8") as handle:
-            text = handle.read()
+        text = P.read_post(args.file)
         name = args.file
     else:
         text = sys.stdin.read()

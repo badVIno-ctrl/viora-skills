@@ -1,4 +1,4 @@
-# CHANNEL SKILL 6.1.0 - точка входа для агента
+# CHANNEL SKILL 6.2.1 - точка входа для агента
 
 Это рабочая папка скилла, который пишет посты, статьи и сценарии для
 телеграм-канала голосом его автора, а также ресерчит интернет и смотрит видео.
@@ -38,8 +38,8 @@ echo "текст ответа" | python3 tools/lint_chat.py
 | Автор отвечает в чате, а не в консоли | берёшь вопросы `python3 tools/onboard.py --questions`, потом кладёшь ответы через `--stdin` |
 | Не уверена, чей это канал | `python3 tools/profile.py --who` и `python3 tools/profile.py --check` |
 | Автор поменял темы, ссылки или рубрики | `python3 tools/onboard.py --force`, потом `--render` |
-| Надо понять поля профиля | `channel-skill/profile/README.md` и `channel-skill/profile/profile.example.json` |
-| Автор хочет связать Телеграм | `docs/TELEGRAM.md` |
+| Надо понять поля профиля | `channel-skill/docs/GUIDE.md` и `channel-skill/profile/profile.example.json` |
+| Автор хочет связать Телеграм | `docs/GUIDE.md` |
 
 Длинное описание интервью и того, что скилл делает с ответами: `channel-skill/ONBOARDING.md`.
 
@@ -69,18 +69,18 @@ echo "текст ответа" | python3 tools/lint_chat.py
 | Задача автора | Куда идти |
 |---|---|
 | Написать пост в канал | `channel-skill/SKILL.md`, пайплайн из восьми шагов |
-| Не понятно, в каком порядке идут блоки текста | `channel-skill/reference/frameworks.md` |
+| Не понятно, в каком порядке идут блоки текста | `channel-skill/reference/matrix.md` |
 | Посты похожи один на другой, всегда список | `channel-skill/reference/matrix.md` |
-| Пост правильный, но его никто не пересылает | `channel-skill/reference/mirror.md` |
+| Пост правильный, но его никто не пересылает | `channel-skill/reference/voice.md` |
 | Пост получился длинный, больше семи пунктов | `channel-skill/reference/split.md` |
-| Собрать статью на telegra.ph | `channel-skill/reference/telegraph.md` |
+| Собрать статью на telegra.ph | `channel-skill/reference/publish.md` |
 | Найти инфу в интернете, проверить сервис, посмотреть чужие посты | `channel-skill/channel-research/SKILL.md` |
 | Посмотреть видео, разобрать чужой ролик | `channel-skill/channel-video/SKILL.md` |
 | Сделать пост красивее, разобрать вёрстку | `channel-skill/reference/beauty.md` |
 | Убрать ИИ-слова, вычистить текст | `channel-skill/reference/antislop.md` |
-| Настроить канал, ключи, описание | `channel-skill/reference/seo.md` |
-| Собрать шортс | `channel-skill/reference/shorts.md` |
-| У автора есть второй канал или мемная лента | `channel-skill/reference/second-brand.md` |
+| Настроить канал, ключи, описание | `channel-skill/reference/distribution.md` |
+| Собрать шортс | `channel-skill/reference/publish.md` |
+| У автора есть второй канал или мемная лента | `channel-skill/reference/distribution.md` |
 | Понять, что уже выходило | `channel-skill/memory/post-log.md`, `channel-skill/posts/INDEX.md` |
 | Понять, что зашло по цифрам | `channel-skill/memory/metrics.md` |
 | Вспомнить решения автора про формат | `channel-skill/memory/decisions.md` |

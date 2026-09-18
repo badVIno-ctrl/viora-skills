@@ -8,7 +8,7 @@ It interviews you first, then writes. Not the other way around.
 
 MIT license, version 6.1.0, python 3.8+, zero external dependencies
 
-[Russian README](README.md) - [Quickstart](docs/QUICKSTART.md) - [Profile](docs/PROFILE.md) - [Telegram](docs/TELEGRAM.md) - [Architecture](docs/ARCHITECTURE.md) - [FAQ](docs/FAQ.md)
+[Russian README](README.md) - [Quickstart](docs/GUIDE.md) - [Profile](docs/GUIDE.md) - [Telegram](docs/GUIDE.md) - [Architecture](docs/GUIDE.md) - [FAQ](docs/GUIDE.md)
 
 </div>
 
@@ -101,7 +101,7 @@ python3 channel-skill/tools/tg.py doctor
 ```
 
 No keys, tokens or sessions are committed. Everything in `secrets` is an example file,
-real ones are ignored by git. Details in [docs/TELEGRAM.md](docs/TELEGRAM.md).
+real ones are ignored by git. Details in [docs/GUIDE.md](docs/GUIDE.md).
 
 ## Quality gate
 

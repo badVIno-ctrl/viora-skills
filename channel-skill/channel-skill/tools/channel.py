@@ -17,7 +17,7 @@ import os
 import subprocess
 import sys
 
-VERSION = "6.1.0"
+VERSION = "6.2.1"
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL = os.path.dirname(HERE)
 if HERE not in sys.path:
@@ -86,17 +86,17 @@ RUBRIC_WORDS = (
 TASK_FILES = (
     (("крючок", "первая строка", "первый экран", "хук", "заголовок поста"), "reference/hook.md"),
     (("тире", "ии-текст", "нейросетев", "слоп", "вычист", "живее", "по-человечес"), "reference/antislop.md"),
-    (("телеграф", "telegraph", "статью", "статья"), "reference/telegraph.md"),
+    (("телеграф", "telegraph", "статью", "статья"), "reference/publish.md"),
     (("резать", "разрезать", "делить", "не влезает", "слишком длинн"), "reference/split.md"),
-    (("seo", "поисков", "сниппет", "title", "слаг"), "reference/seo.md"),
-    (("каркас", "структур", "pas", "aida", "bab", "star", "slay"), "reference/frameworks.md"),
+    (("seo", "поисков", "сниппет", "title", "слаг"), "reference/distribution.md"),
+    (("каркас", "структур", "pas", "aida", "bab", "star", "slay"), "reference/matrix.md"),
     (("приветств", "здарова", "начало поста"), "reference/greetings.md"),
     (("красот", "оформлен", "верстк", "эмодзи", "жирн"), "reference/beauty.md"),
     (("слова", "замен", "синоним", "лексик"), "reference/words.md"),
     (("голос", "тон", "стиль автора"), "reference/voice.md"),
-    (("кроспост", "дзен", "хабр", "твиттер"), "reference/crosspost.md"),
+    (("кроспост", "дзен", "хабр", "твиттер"), "reference/distribution.md"),
     (("пример", "образец", "как было"), "reference/examples.md"),
-    (("github", "гитхаб", "репозитор"), "reference/github.md"),
+    (("github", "гитхаб", "репозитор"), "reference/publish.md"),
     (("ресерч", "research", "найди в интернете", "проверь факт", "источник", "актуальн"), "channel-research/LITE.md"),
     (("видео", "youtube", "ютуб", "транскрипт", "таймкод", "перескажи"), "channel-video/LITE.md"),
 )
@@ -190,7 +190,7 @@ def take_brand(argv):
 def route(task, brand="vs"):
     if brand == "second-brand":
         print("Бренд: ВТОРОЙ БРЕНД, мемы про код и ИИ")
-        print("Читаешь РОВНО один файл: reference/second-brand.md")
+        print("Читаешь РОВНО один файл: reference/distribution.md")
         print("")
         print("Порядок:")
         print('  1. python3 tools/memory.py check-meme "шутка одной строкой"')
@@ -480,8 +480,8 @@ def hook(argv, brand="vs"):
         print("Бренд: ВТОРОЙ БРЕНД")
         print("")
         print("У мема крючок это текст на экране в первые 2 секунды, а не строка поста.")
-        print("Восемь шаблонов с примерами: reference/second-brand.md")
-        print("Хронометраж и кадр: reference/shorts.md, раздел про мем-шортс")
+        print("Восемь шаблонов с примерами: reference/distribution.md")
+        print("Хронометраж и кадр: reference/publish.md, раздел про мем-шортс")
         print("")
         print("Дальше:")
         print('  python3 tools/memory.py check-meme "%s"' % topic)

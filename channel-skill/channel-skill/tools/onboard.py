@@ -38,7 +38,7 @@ if HERE not in sys.path:
 
 import profile as P  # noqa: E402
 
-VERSION = "6.1.0"
+VERSION = "6.2.1"
 SKILL = os.path.dirname(HERE)
 PROFILE_DIR = os.path.join(SKILL, "profile")
 TARGET = os.path.join(PROFILE_DIR, "profile.json")

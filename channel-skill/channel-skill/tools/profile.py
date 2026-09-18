@@ -30,7 +30,7 @@ import os
 import re
 import sys
 
-VERSION = "6.1.0"
+VERSION = "6.2.1"
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL = os.path.dirname(HERE)
 ROOT = os.path.dirname(SKILL)
@@ -50,7 +50,7 @@ RUBRIC_DEFAULTS = {
     "гайд": {"min": 900, "max": 1800, "points": None, "forward": "wanted",
              "frame": "PAS", "frame_alt": "AIDA", "file": "reference/formats.md"},
     "релиз": {"min": 400, "max": 700, "points": [1, 3], "forward": "none",
-              "frame": "BAB", "frame_alt": "STAR", "file": "reference/github.md"},
+              "frame": "BAB", "frame_alt": "STAR", "file": "reference/publish.md"},
     "девлог": {"min": 500, "max": 900, "points": [1, 3], "forward": "none",
                "frame": "STAR", "frame_alt": "BAB", "file": "reference/examples.md",
                "soft_first_screen": True},
@@ -60,11 +60,11 @@ RUBRIC_DEFAULTS = {
     "опрос": {"min": 200, "max": 450, "points": [2, 4], "forward": "wanted",
               "frame": "PAS", "frame_alt": "AIDA", "file": "reference/formats.md"},
     "шортс": {"min": 250, "max": 500, "points": [1, 1], "forward": "wanted",
-              "frame": "AIDA", "frame_alt": "BAB", "file": "reference/shorts.md"},
+              "frame": "AIDA", "frame_alt": "BAB", "file": "reference/publish.md"},
     "лидмагнит": {"min": 400, "max": 700, "points": [1, 1], "forward": "wanted",
-                  "frame": "BAB", "frame_alt": "AIDA", "file": "reference/telegraph.md"},
+                  "frame": "BAB", "frame_alt": "AIDA", "file": "reference/publish.md"},
     "второй": {"min": 250, "max": 500, "points": [1, 2], "forward": "wanted",
-               "frame": "STAR", "frame_alt": "PAS", "file": "reference/second-brand.md"},
+               "frame": "STAR", "frame_alt": "PAS", "file": "reference/distribution.md"},
     "мем": {"min": 40, "max": 220, "points": None, "forward": "none"},
     "реклама": {"forward": "none"},
 }
@@ -752,3 +752,28 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
+HERE_FIXTURES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tests")
+
+
+def read_post(path):
+    """Прочитать черновик. Фикстуры линтера лежат одним файлом.
+
+    В репозитории не держим шестнадцать мелких файлов: все они склеены в
+    tools/tests/fixtures.md между метками FIXTURE. Обычные пути работают как раньше.
+    """
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as handle:
+            return handle.read()
+    name = os.path.basename(path)
+    bundle = os.path.join(os.path.dirname(os.path.abspath(path)), "fixtures.md")
+    if not os.path.exists(bundle):
+        bundle = os.path.join(HERE_FIXTURES, "fixtures.md")
+    if os.path.exists(bundle):
+        with open(bundle, encoding="utf-8") as handle:
+            text = handle.read()
+        head = "<!-- FIXTURE: %s -->\n" % name
+        if head in text:
+            body = text.split(head, 1)[1]
+            return body.split("<!-- /FIXTURE -->", 1)[0].rstrip("\n") + "\n"
+    raise SystemExit("\u043d\u0435\u0442 \u0444\u0430\u0439\u043b\u0430: %s" % path)

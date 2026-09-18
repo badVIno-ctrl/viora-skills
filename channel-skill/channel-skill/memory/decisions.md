@@ -23,8 +23,8 @@
 Отсюда же выросло правило про план распространения: у каждого материала
 есть приток, действие и замер. Без этого канал работает в пустоту.
 
-Файлы: `reference/shorts.md`, `reference/crosspost.md`, `reference/growth.md`,
-`reference/second-brand.md`, `memory/metrics.md`, `SKILL.md`, `QUICKCARD.txt`
+Файлы: `reference/publish.md`, `reference/distribution.md`, `reference/distribution.md`,
+`reference/distribution.md`, `memory/metrics.md`, `SKILL.md`, `QUICKCARD.txt`
 
 ## 2026-08-25. Заявки из Избранного по префиксу
 
@@ -39,7 +39,7 @@
 Сообщения агента всегда начинаются со слова CHANNEL в первой строке: так он не ловит своё
 же эхо как новую заявку, а автор находит черновики поиском.
 
-Файлы: `tools/tg.py`, `tools/tg_watch.py`, `reference/telegram.md`, `SKILL.md`, `QUICKCARD.txt`
+Файлы: `tools/tg.py`, `tools/tg_watch.py`, `reference/publish.md`, `SKILL.md`, `QUICKCARD.txt`
 
 ## 2026-08-20. Первый экран важнее приветствия
 

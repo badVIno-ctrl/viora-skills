@@ -39,7 +39,7 @@ import shutil
 import sys
 import tempfile
 
-VERSION = "6.1.0"
+VERSION = "6.2.1"
 
 NAME_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 LINK_RE = re.compile(r"`([A-Za-z0-9_./-]+\.(?:md|txt|py|sh|json))`")
@@ -89,7 +89,8 @@ REQUIRED_FILES = (
     "PROMPT-FULL.txt",
     os.path.join("reference", "formats.md"),
     os.path.join("reference", "antislop.md"),
-    os.path.join("reference", "seo.md"),
+    os.path.join("reference", "distribution.md"),
+    os.path.join("reference", "publish.md"),
     os.path.join("memory", "metrics.md"),
     os.path.join("memory", "post-log.md"),
     os.path.join("tools", "channel.py"),

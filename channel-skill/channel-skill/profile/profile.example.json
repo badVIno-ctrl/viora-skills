@@ -1,5 +1,5 @@
 {
-  "_help": "Демо-профиль поставки. Свой профиль собирается интервью: python3 tools/onboard.py. Полное описание полей: docs/PROFILE.md",
+  "_help": "Демо-профиль поставки. Свой профиль собирается интервью: python3 tools/onboard.py. Полное описание полей: docs/GUIDE.md",
   "schema": 1,
   "brand": {
     "name": "DEMO STUDIO",

@@ -118,7 +118,7 @@
       "forward": "none",
       "frame": "BAB",
       "frame_alt": "STAR",
-      "file": "reference/github.md"
+      "file": "reference/publish.md"
     },
     "devlog": {
       "min": 500,
@@ -165,7 +165,7 @@
       "forward": "wanted",
       "frame": "AIDA",
       "frame_alt": "BAB",
-      "file": "reference/shorts.md"
+      "file": "reference/publish.md"
     },
     "meme": {
       "min": 40,
