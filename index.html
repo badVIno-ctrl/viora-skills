@@ -6313,8 +6313,12 @@ body.nexus-menu-open .nexus-mobile-menu {
   .proto-actions { display: grid; grid-template-columns: 1fr 1fr; }
   .proto-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.85rem 0.5rem; cursor: pointer; font-family: "Space Mono", monospace; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; border: none; background: transparent; color: rgba(248, 243, 255, 0.7); text-decoration: none; transition: background 200ms ease, color 200ms ease; }
   .proto-btn.view { border-right: 1px solid rgba(248, 243, 255, 0.1); }
-  .proto-btn.view:hover { background: rgba(53, 221, 242, 0.1); color: var(--nexus-cyan); }
-  .proto-btn.pick:hover { background: rgba(164, 119, 255, 0.14); color: var(--nexus-purple); }
+  .proto-btn.view:hover,
+  .proto-btn.view:focus-visible { background: rgba(53, 221, 242, 0.1); color: var(--nexus-cyan); }
+  .proto-btn.pick:hover,
+  .proto-btn.pick:focus-visible { background: rgba(164, 119, 255, 0.14); color: var(--nexus-purple); }
+  .proto-btn:focus-visible,
+  .proto-bar-cta:focus-visible { outline: 2px solid var(--nexus-cyan); outline-offset: -3px; }
   .proto-card.is-picked .proto-btn.pick { background: rgba(164, 119, 255, 0.16); color: var(--nexus-purple); }
   .proto-bar { position: fixed; left: 50%; bottom: 1rem; transform: translateX(-50%) translateY(180%); z-index: 85; width: calc(100% - 2rem); max-width: 40rem; display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; padding: 0.85rem 0.95rem; border: 1px solid rgba(164, 119, 255, 0.4); background: rgba(8, 5, 22, 0.96); box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(164, 119, 255, 0.15); transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1); }
   .proto-bar.is-on { transform: translateX(-50%) translateY(0); }
@@ -6331,7 +6335,7 @@ body.nexus-menu-open .nexus-mobile-menu {
   <div class="proto-lab-head">
     <div class="proto-eyebrow"><span class="font-arcade text-2xl leading-none">//</span> Design Lab · 40 концептов</div>
     <h2 class="proto-title">Выбери <span class="acc">дизайн</span><br>который зашёл</h2>
-    <p class="proto-copy">40+ готовых прототипов главных экранов: типографика, тёмные темы, 3D и motion. Полистай, открой любой вживую — и если что-то понравилось, жми «Это нравится». Я получу твой выбор в личке и сделаю похожий под твой проект.</p>
+    <p class="proto-copy">40+ готовых прототипов главных экранов: типографика, тёмные темы, 3D и motion. Полистай, открой любой вживую — и если что-то понравилось, жми «Это нравится». Сообщение с выбором скопируется — останется вставить его мне в Telegram.</p>
     <div class="proto-steps">
       <span class="proto-step"><b>01</b> Листай галерею</span>
       <span class="proto-step"><b>02</b> Открой вживую</span>
@@ -6343,9 +6347,9 @@ body.nexus-menu-open .nexus-mobile-menu {
 
 <div class="proto-bar" id="proto-bar">
   <span class="proto-bar-label">Выбран прототип <b id="proto-bar-id">—</b></span>
-  <a class="proto-bar-cta" id="proto-bar-cta" href="https://t.me/badVInq" target="_blank" rel="noopener">Написать мне в ЛС <iconify-icon icon="solar:round-alt-arrow-right-linear" class="text-xl"></iconify-icon></a>
+  <a class="proto-bar-cta" id="proto-bar-cta" href="https://t.me/badVInq" target="_blank" rel="noopener">Открыть Telegram <iconify-icon icon="solar:round-alt-arrow-right-linear" class="text-xl"></iconify-icon></a>
 </div>
-<div class="proto-toast" id="proto-toast"></div>
+<div class="proto-toast" id="proto-toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script id="proto-lab-controller">
 (function () {
@@ -6416,7 +6420,7 @@ body.nexus-menu-open .nexus-mobile-menu {
       '</a>' +
       '<div class="proto-actions">' +
         '<a class="proto-btn view" href="' + live + '" target="_blank" rel="noopener"><iconify-icon icon="solar:eye-linear"></iconify-icon> Смотреть</a>' +
-        '<button type="button" class="proto-btn pick"><iconify-icon icon="solar:heart-linear"></iconify-icon> Это нравится</button>' +
+        '<button type="button" class="proto-btn pick" aria-pressed="false" aria-label="Выбрать прототип ' + id + '"><iconify-icon icon="solar:heart-linear"></iconify-icon> Это нравится</button>' +
       '</div>';
     frag.appendChild(card);
   });
@@ -6449,23 +6453,41 @@ body.nexus-menu-open .nexus-mobile-menu {
       document.body.appendChild(ta);
       ta.focus();
       ta.select();
-      document.execCommand("copy");
+      var copied = document.execCommand("copy");
       document.body.removeChild(ta);
-    } catch (e) {}
+      return copied;
+    } catch (e) {
+      return false;
+    }
   }
 
   function copyText(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).catch(function () { fallbackCopy(text); });
-    } else {
-      fallbackCopy(text);
+      return navigator.clipboard.writeText(text).then(function () {
+        return true;
+      }).catch(function () {
+        return fallbackCopy(text);
+      });
     }
+    return Promise.resolve(fallbackCopy(text));
+  }
+
+  function copySelection(id) {
+    copyText(messageFor(id)).then(function (copied) {
+      showToast(copied
+        ? "Сообщение про " + id + " скопировано — вставь его мне в чат Telegram ✦"
+        : "Не удалось скопировать сообщение. Открой Telegram и напиши, что выбрал " + id + ".");
+    });
   }
 
   function pick(id) {
     picked = id;
     Array.prototype.forEach.call(grid.querySelectorAll(".proto-card"), function (c) {
-      c.classList.toggle("is-picked", c.getAttribute("data-id") === id);
+      var isPicked = c.getAttribute("data-id") === id;
+      c.classList.toggle("is-picked", isPicked);
+      var button = c.querySelector(".proto-btn.pick");
+      button.setAttribute("aria-pressed", String(isPicked));
+      button.setAttribute("aria-label", (isPicked ? "Выбран прототип " : "Выбрать прототип ") + c.getAttribute("data-id"));
     });
     barId.textContent = id;
     bar.classList.add("is-on");
@@ -6479,14 +6501,12 @@ body.nexus-menu-open .nexus-mobile-menu {
     if (!card) return;
     var id = card.getAttribute("data-id");
     pick(id);
-    copyText(messageFor(id));
-    showToast("Сообщение про " + id + " скопировано — вставь его мне в чат Telegram ✦");
+    copySelection(id);
   });
 
   barCta.addEventListener("click", function () {
     if (picked) {
-      copyText(messageFor(picked));
-      showToast("Сообщение про " + picked + " скопировано — вставь в чат ✦");
+      copySelection(picked);
     }
   });
 })();
@@ -9284,27 +9304,38 @@ setupSection5Animations();
   if (!burger || !menu) return;
 
   var isOpen = false;
+  var closeTimer = null;
+
+  function focusableElements() {
+    return [burger].concat(Array.prototype.slice.call(menu.querySelectorAll('a[href], button:not([disabled])')));
+  }
 
   function open() {
     if (isOpen) return;
     isOpen = true;
     menu.hidden = false;
+    window.clearTimeout(closeTimer);
     // force reflow so the open transition runs from the hidden state
     void menu.offsetWidth;
     document.body.classList.add('nexus-menu-open');
     burger.setAttribute('aria-expanded', 'true');
     burger.setAttribute('aria-label', 'Закрыть меню');
+    var firstLink = menu.querySelector('a[href]');
+    if (firstLink) firstLink.focus();
   }
 
-  function close() {
+  function close(focusTarget) {
     if (!isOpen) return;
     isOpen = false;
     document.body.classList.remove('nexus-menu-open');
     burger.setAttribute('aria-expanded', 'false');
     burger.setAttribute('aria-label', 'Открыть меню');
     // hide after the transition so it stays out of the tab order
-    window.setTimeout(function () {
-      if (!isOpen) menu.hidden = true;
+    closeTimer = window.setTimeout(function () {
+      if (!isOpen) {
+        menu.hidden = true;
+        (focusTarget || burger).focus({ preventScroll: true });
+      }
     }, 340);
   }
 
@@ -9317,13 +9348,32 @@ setupSection5Animations();
   // Close when any in-menu link is tapped (after the anchor scroll fires).
   menu.querySelectorAll('[data-menu-close]').forEach(function (link) {
     link.addEventListener('click', function () {
-      close();
+      var hash = link.getAttribute('href');
+      var target = hash && hash.length > 1 ? document.querySelector(hash) : document.getElementById('hero');
+      if (target) target.setAttribute('tabindex', '-1');
+      close(target);
     });
   });
 
-  // Close on Escape for keyboard users.
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && isOpen) close();
+    if (!isOpen) return;
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      close();
+      return;
+    }
+    if (e.key !== 'Tab') return;
+
+    var focusable = focusableElements();
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
   });
 
   // If the viewport grows past the mobile breakpoint, make sure the
