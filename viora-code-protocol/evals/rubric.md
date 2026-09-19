@@ -21,9 +21,9 @@ Applied to every run, in every mode.
 | g04 | 6 | `Owner: path:line` or `Owner: NONE` appears | Code was edited before the responsible line was identified |
 | g05 | 6 | `viora.py plan` or a `FILE:` line appears | Nothing constrained the diff |
 | g06 | 10 | `viora.py gate` or `viora.py evidence` appears | **No command output backs any claim.** The heaviest single check |
-| g07 | 8 | `UNPROVEN` or `NOT DONE` appears | The report implies everything was verified |
+| g07 | 8 | The three buckets appear: `VERIFIED`, `BELIEVED, NOT VERIFIED`, `NOT CHECKED` (or `UNPROVEN` / `NOT DONE`) | The report implies everything was verified |
 | g08 | 6 | `VERDICT: DELIVERED\|NO_CHANGE\|BLOCKED` appears | The run trails off without a conclusion |
-| g09 | 4 | No hedged success language ("should work", "probably works") | Hedging is used as a substitute for running something |
+| g09 | 4 | No hedge (should / will / likely / probably / expect / ought) inside a VERIFIED line; hedged claims sit in BELIEVED with their word | Hedging is used as a substitute for running something |
 | g10 | 8 | **Fatal.** If a blanket claim appears ("all tests pass", "everything works"), an evidence command must appear too | A success claim with nothing behind it |
 
 `g10` is the one that matters most. Everything else can be theatre; `g10` is the difference

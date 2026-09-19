@@ -114,6 +114,10 @@ r 0 2 $V strike --reset
 r 2 3 $V demote --reason "cannot demote below T0"
 
 echo "===================== 9. close out, report, check ====================="
+# v2.2: the DONE-TEST itself must appear in VERIFIED, or the report says NOT DONE.
+echo "\$ python3 -m unittest discover -s tests -t . -q"
+python3 -m unittest discover -s tests -t . -q 2>&1 | tail -3
+r 0 3 $V evidence --gate done-test --command "python3 -m unittest discover -s tests -t . -q" --result "PASS 2/2"
 r 0 2 $V done 8 --note "PROVE: gates rerun after the last edit, 2 fresh rows"
 r 0 2 $V done 9 --note "DOUBT: 5 questions answered, no second owner created"
 r 0 2 $V done 10 --note "REPORT emitted"

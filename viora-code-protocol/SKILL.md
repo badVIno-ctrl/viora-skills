@@ -1,6 +1,7 @@
 ---
 name: viora-code-protocol
-description: Universal engineering protocol for AI coding agents (Codex, Claude Code, Cursor, Windsurf, Antigravity, Gemini CLI, Copilot, Cline). Ship the smallest, clearest, single-owner change that is proven to work by fresh command output. Use for every code task - fix, feature, refactor, UI, performance, debugging, review. Runs on a three-tier ladder (T0 MICRO / T1 LITE / T2 FULL) so a fast cheap model runs the same gates as a frontier model, with more scaffolding and fewer judgment calls.
+description: Universal engineering protocol for AI coding agents (Codex, Claude Code, Cursor, Windsurf, Antigravity, Gemini CLI, Copilot, Cline). Ship the smallest, clearest, single-owner change that is proven to work by fresh command output. Use for every code task - fix, feature, refactor, UI, performance, debugging, review.
+version: 2.2
 ---
 
 # VioraCode Protocol
@@ -65,7 +66,7 @@ Every task runs these ten steps in order. The tier decides how expensive each on
 | 4 | **PLAN** | exact file list, line budget, frozen interfaces | 1 file only | ≤3 files | full plan |
 | 5 | **RED** | a check that fails *now* for the right reason | 1 assert | 1-2 tests | seams confirmed first |
 | 6 | **GREEN** | smallest edit inside the owner | 1 file, ≤80 lines | ≤3 files | ≤300 lines |
-| 7 | **CLEAN** | same behaviour, fewer concepts | run limits check | simplify pass | simplify + dead-code sweep |
+| 7 | **CLEAN** | same behaviour, fewer concepts | run limits check | simplify pass + `less.py` | simplify + dead-code sweep + `less.py` |
 | 8 | **PROVE** | fresh gate output, pasted verbatim | `verify.sh` | `verify.sh` | `verify.sh` + runtime check |
 | 9 | **DOUBT** | findings from a hostile re-read | 5 fixed questions | 8-lens cold pass | clean-context reviewer / second opinion |
 | 10 | **REPORT** | the fixed report contract | template | template | template |
@@ -73,6 +74,12 @@ Every task runs these ten steps in order. The tier decides how expensive each on
 **RED before GREEN.** A change you never watched fail is a change you cannot prove works. If the stack has no test runner, RED is a command whose output changes: a failing `curl`, a script that prints the wrong number, a log line that is missing. → `references/05-tests-and-evidence.md`
 
 **One owner.** Before you create a file, function, component, constant or route, you have already found who owns that behaviour. Two owners of one concept is the most expensive defect an agent produces. → `references/01-recon-and-reuse.md`
+
+**Expectations, stated before the gate runs.** For a `red`/`repro` row, say what the output must contain: `viora.py gate --expect "TypeError"`. A mismatch marks the row **SURPRISE** - your model of the bug is wrong, so the PLAN built on it is guesswork. `next` then demands a re-derived plan and `done 6` refuses until `plan` is recorded again. → `references/05-tests-and-evidence.md`
+
+**Risk order.** `viora.py plan --risk "<file>=<one-line risk>"` (repeatable) puts the riskiest file first, and step 6 names it first. Edit the file that can break the most while you still have attention to spend on it.
+
+**DECISION lines** for choices that change stored data or user-visible behaviour: `viora.py decision "<X over Y because Z>"`. Add `--irreversible` when it cannot be undone - `check` refuses until the user approved it with `--approved`.
 
 ---
 
@@ -90,6 +97,8 @@ Name the mode in your header line. It sets the floor, and you may always do more
 | **PERF** | speed, memory, size | all ten; RED = a measurement, before/after in one table | `04-performance-and-resources.md` |
 | **REVIEW** | judge a diff you or another agent wrote | 1, 2, 9, 10 | `13-differential-review.md` |
 | **DEBUG** | you are lost, not yet fixing | 1, 2, 5 then re-enter FIX | `10-debugging.md` |
+
+**FEATURE pattern - lazy, then honest.** Ship the smallest version that satisfies the contract and question the rest in the *same* reply: "Did X; Y covers it. Need full X? Say so." Do not build the general case nobody asked for, and do not hide the shortcut - mark it `viora:ceiling`. Laziness is forbidden in five places: validation at trust boundaries, error handling that prevents data loss, security controls, accessibility basics, and anything the user explicitly asked for. → `references/14-rationalizations.md`
 
 ---
 
@@ -123,8 +132,18 @@ Break one only by naming it in the report with the reason.
 | magic literals | 0 (name it or make it a constant) |
 | nested ternaries | 0 |
 | new dependencies | 0 without an explicit ask |
+| unmarked deliberate simplification | 0 - it carries `viora:ceiling <ceiling>; <upgrade path>` on the line above |
 
 **Change sizing.** ~100 changed lines reviews well. ~300 is acceptable for one logical change. ~1000 means split it: stack it, split by file group, build the shared layer first, or slice it vertically. Refactor and feature in one diff is two diffs. → `references/02-design-and-limits.md`
+
+**Ceilings are marked, not remembered.** A shortcut taken on purpose gets a comment on the line above it:
+
+```python
+# viora:ceiling in-memory only, single process; move to Redis when a second worker exists
+_cache = {}
+```
+
+`scope` counts those markers, `report` lists them under FOLLOW-UPS. An unmarked shortcut is rediscovered later as a bug. → `references/15-less-code.md`
 
 ---
 
@@ -154,6 +173,10 @@ bash scripts/verify.sh . --list                # show what it would run
 
 A gate that did not run is written `SKIP` and appears under **UNPROVEN** in the report. Silence is not a pass.
 
+**Squeezed for thinking, full for auditing.** `viora.py gate` writes the whole command output to `.viora/logs/<ts>-<gate>.log` and puts only the squeezed text in the evidence row; the report links the full log per row. Pipe anything else through the same filter: `<cmd> 2>&1 | python3 scripts/squeeze.py`.
+
+`viora.py evidence` prints the squeezed form by default and `--full` reads the log back off disk. Shrinking what you *read* is free; shrinking what you *record* would be fabrication. → `references/16-token-discipline.md`
+
 | Claim | Only this proves it |
 |---|---|
 | tests pass | test command output, 0 failures, this reply |
@@ -179,6 +202,8 @@ Attempts are counted, and the count changes what you are allowed to do next.
 | 3rd failure | stop. The shape is wrong, not the line. Report `BLOCKED` with: what you tried (3 items), what you learned, the two options you see, and the one question that unblocks you. |
 
 **Never** try fix #4 on the same theory. Three failures that each reveal a new problem elsewhere is an architecture signal - escalate it as one.
+
+**Route versus destination.** You may pick the route without asking. You may not pick the destination. A choice is a destination - STOP-AND-ASK - when it alters the DONE-TEST, deletes or transforms stored data, changes a public interface, or relaxes a stated requirement. Record either kind with `viora.py decision "<X over Y because Z>"`; destinations also take `--irreversible`, and `check` refuses until the user approved it.
 
 **Anti-loop rules.** The same command twice with the same output is a signal, not a retry. A file opened three times means you are searching without a query - go back to step 2. Two identical replies mean you are stalling - report state and ask.
 
@@ -214,6 +239,8 @@ When one of these sentences forms in your output, the sentence is the bug.
 | "I know what the bug is" | you are right ~70% of the time; the other 30% costs hours. Reproduce first. |
 | "Just this once" | the exception is the failure mode. |
 | "AI-generated code is probably fine" | it needs more scrutiny, not less: confident and plausible even when wrong. |
+| "tool X isn't available" | with no `which X` output, that is a guess. Run `viora.py doctor` - it prints the `which` table for this stack. |
+| "the pieces are all correct, so it works" | integration is where it breaks. Run the thing end to end, or it is UNPROVEN. |
 
 → Full table with rebuttals for every source skill: `references/14-rationalizations.md`
 
@@ -222,7 +249,7 @@ When one of these sentences forms in your output, the sentence is the bug.
 ## 8. Report contract - the only accepted ending
 
 ```
-VERDICT: DELIVERED | NO_CHANGE | BLOCKED
+VERDICT: DELIVERED | NO_CHANGE | BLOCKED | NOT DONE
 MODE: <mode> | TIER: <T0|T1|T2>
 
 WHAT CHANGED
@@ -236,6 +263,18 @@ EVIDENCE
 |---|---|---|
 | test | `<cmd>` | PASS 34/34 |
 
+VERIFIED (command + pasted tail, produced after the last edit)
+- <gate>: `<command>` -> <tail>   [full log: .viora/logs/...]
+
+BELIEVED, NOT VERIFIED
+- <claim> - hedge: <word>, or: forced step, pre-fix row
+
+NOT CHECKED
+- <what was never exercised> - it would take: <the command that would check it>
+
+DECISIONS
+- <X over Y because Z> [IRREVERSIBLE, approved]
+
 DELETED / REPLACED
 - what is gone, and what took over
 
@@ -243,8 +282,10 @@ NOT DONE / UNPROVEN
 - every SKIP gate, every assumption, every deferred item
 
 FOLLOW-UPS
-- smallest next step, or "none"
+- smallest next step, every `viora:ceiling` marker in the diff, or "none"
 ```
+
+**Three buckets, and the rule that moves lines between them.** A line belongs in VERIFIED only if a command produced it *after the last edit*. Any VERIFIED line containing a hedge - should, will, likely, probably, expect, expected to, once, ought - is moved to BELIEVED with the reason `hedge: <word>`, by `report` and by `check`, automatically. And a run whose DONE-TEST has no VERIFIED row renders `VERDICT: NOT DONE`, however green the other rows are.
 
 `NOT DONE / UNPROVEN` is never empty on a real task. An empty one means you did not look. → `references/06-review-and-report.md`
 
@@ -263,10 +304,15 @@ python3 scripts/viora.py scope                                      # real diff 
 python3 scripts/viora.py gate                                      # run gates, record fingerprinted evidence
 python3 scripts/viora.py report                                     # emit the report from recorded facts
 python3 scripts/viora.py check                                      # audit: what did I skip, what went stale?
+python3 scripts/viora.py decision "<X over Y because Z>" [--irreversible]  # record a choice that changes data or behaviour
+python3 scripts/viora.py resume                                     # one screen for a fresh session, after context loss
+python3 scripts/viora.py check --hook                               # Stop-hook mode: exit 2 blocks a premature "done"
 
 python3 scripts/scan_repo.py .              # stack, real commands, rules files, big files
 python3 scripts/find_duplicates.py . --top 15   # clones, duplicate symbols, repeated literals
 python3 scripts/ui_guard.py . --strict      # mount roots, z-index wars, listener leaks, class collisions
+python3 scripts/less.py .                   # ranked delete/simplify/replace list (volume only, not correctness)
+python3 scripts/squeeze.py                  # shrink any noisy output before it costs context
 bash    scripts/verify.sh .                 # the repo's own gates + evidence table
 ```
 
@@ -302,6 +348,8 @@ No scripts available? Use the grep fallbacks in `references/01-recon-and-reuse.m
 | `12-review-loop-and-ledger.md` | autonomous "review and fix until clean" runs, findings ledger |
 | `13-differential-review.md` | REVIEW mode - risk-first diff review, blast radius, git history |
 | `14-rationalizations.md` | you are about to explain why a step does not apply |
+| `15-less-code.md` | step 7 CLEAN - what to delete, what the platform already does, marking ceilings |
+| `16-token-discipline.md` | the run is expensive - squeezing, terse register, context budget |
 
 **Templates:** `templates/contract.md` · `templates/report.md` · `templates/ledger.md` · `templates/review-request.md` · `templates/handoff.md`
 

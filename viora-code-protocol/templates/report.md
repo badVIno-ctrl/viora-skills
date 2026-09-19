@@ -5,7 +5,7 @@ own effort. Generate the skeleton with `python3 scripts/viora.py report`, then f
 lines.
 
 ```
-VERDICT: DELIVERED | NO_CHANGE | BLOCKED
+VERDICT: DELIVERED | NO_CHANGE | BLOCKED | NOT DONE
 MODE: <TRIVIAL|FIX|FEATURE|REFACTOR|UI|PERF|REVIEW|DEBUG> | TIER: <T0|T1|T2>
 
 WHAT CHANGED
@@ -18,7 +18,19 @@ HOW IT WAS SOLVED
 EVIDENCE
 | Gate  | Command | Result |
 |-------|---------|--------|
-| <gate> | `<exact command>` | PASS / FAIL / SKIP-UNPROVEN |
+| <gate> | `<exact command>` | PASS / FAIL / SKIP-UNPROVEN | full log: .viora/logs/<ts>-<gate>.log |
+
+VERIFIED (command + pasted tail, produced after the last edit)
+- <gate>: `<exact command>` -> <the last lines of its real output>
+
+BELIEVED, NOT VERIFIED
+- <claim> - hedge: <should|will|likely|probably|expect|ought>, or: forced step, pre-fix row
+
+NOT CHECKED
+- <what was never exercised> - it would take: <the command that would check it>
+
+DECISIONS
+- <X over Y because Z> [IRREVERSIBLE, approved]
 
 DELETED / REPLACED
 - <what is gone, and what took over>
@@ -30,6 +42,7 @@ NOT DONE / UNPROVEN
 
 FOLLOW-UPS
 - <exact path> - <the smallest next step>
+- ceiling @ <path:line> - <the ceiling and its upgrade path>
 ```
 
 ---
