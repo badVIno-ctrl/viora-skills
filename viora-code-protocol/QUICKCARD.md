@@ -126,7 +126,7 @@ Any answer that worries you sends you back to the step it belongs to.
 **10. REPORT** - copy this shape and fill it:
 
 ```
-VERDICT: DELIVERED | NO_CHANGE | BLOCKED
+VERDICT: DELIVERED | NO_CHANGE | BLOCKED | NOT DONE
 MODE: <mode> | TIER: T0
 
 WHAT CHANGED
@@ -140,12 +140,24 @@ EVIDENCE
 |---|---|---|
 | test | `<cmd>` | PASS 12/12 |
 
+VERIFIED (run after the last edit)
+- <gate>: `<cmd>` -> <the real tail>
+
+BELIEVED, NOT VERIFIED
+- <claim> - hedge: <should|will|likely|probably|expect|ought>
+
+NOT CHECKED
+- <what you never ran> - it would take: <the command>
+
 NOT DONE / UNPROVEN
 - <every SKIP, every assumption>
 
 FOLLOW-UPS
 - <smallest next step, or none>
 ```
+
+The DONE-TEST must appear in VERIFIED. If it does not, the verdict is `NOT DONE`, however
+green everything else looks - `viora.py report` writes that verdict for you.
 
 ---
 
