@@ -9,7 +9,9 @@
     "vendor/**",
     "third_party/**",
     "**/*.min.js",
-    "**/fixtures/**"
+    "**/fixtures/**",
+    "rules/**",
+    "evals/**"
   ],
 
   "disabledRules": [],

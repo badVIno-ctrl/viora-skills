@@ -2,7 +2,7 @@
   "$schema": "viora-pack/1",
   "name": "viora-aegis",
   "displayName": "Viora Aegis",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "brand": "Viora",
   "license": "MIT",
   "description": "Universal defensive security skill for coding agents: threat modelling, secure code review, vulnerability triage with false-positive control, insecure-defaults auditing, supply-chain and agentic-CI review, pre-install auditing of other skills, hardening, secret scanning and CI gating. Ships a deterministic planner so small and fast models can execute the same procedures.",

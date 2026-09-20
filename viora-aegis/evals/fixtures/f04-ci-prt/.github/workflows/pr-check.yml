@@ -1,0 +1,25 @@
+# Fixture f04 — pull_request_target checking out the PR head.
+#
+# The job runs with the base repository's secrets, then checks out code any
+# fork can write. Whatever the fork puts in package.json runs with those
+# secrets. Positive fixture for the CI-AUDIT rules.
+name: PR check
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+permissions: write-all
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - run: npm install && npm test
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Greet
+        run: echo "thanks ${{ github.event.pull_request.title }}"

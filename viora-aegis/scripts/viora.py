@@ -40,9 +40,10 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 
-__version__ = "2.0.0"
+__version__ = "2.1.0"
 BRAND = "Viora Aegis"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -141,6 +142,11 @@ def load_rules():
             except re.error as exc:
                 eprint("! rule %s has an invalid pattern: %s" % (r.get("id"), exc))
                 continue
+            # Some rules describe a two-line shape ("except ...:" then "pass").
+            # Matched per line they silently never fire, which is the worst
+            # failure a detector can have: a rule that looks present. Opt-in,
+            # because pairing every rule doubles the false-positive surface.
+            r["_pair"] = bool(r.get("multiline"))
             if r.get("exclude_line"):
                 try:
                     r["_ex"] = re.compile(r["exclude_line"])
@@ -349,7 +355,12 @@ def scan_project(root, cfg, only=None, diff_ref=None):
                     continue
                 if len(line) > MAX_LINE_LEN or SUPPRESS.search(line):
                     continue
-                if not rule["_re"].search(line):
+                # A two-line rule is matched against this line plus the next,
+                # and reported at the first of the pair.
+                window = line
+                if rule.get("_pair") and i < len(lines):
+                    window = line + "\n" + lines[i]
+                if not rule["_re"].search(window):
                     continue
                 ex = rule.get("_ex")
                 if ex and ex.search(line):
@@ -1068,9 +1079,17 @@ def cmd_report(args):
     merged, sources = [], []
     for f in files:
         data = load_json(f)
-        if isinstance(data, dict) and isinstance(data.get("findings"), list):
-            merged.extend(data["findings"])
-            sources.append(os.path.basename(f))
+        if not (isinstance(data, dict) and isinstance(data.get("findings"), list)):
+            continue
+        # Prose is rendered only from validated JSON. A report that renders an
+        # unvalidated finding invents shape the evidence never had.
+        err = validate_findings(data["findings"], os.path.basename(f))
+        if err:
+            eprint("error: %s" % err)
+            eprint("       see rules/finding.schema.json. Nothing was written.")
+            return 2
+        merged.extend(normalise_findings(data["findings"]))
+        sources.append(os.path.basename(f))
     seen, uniq = set(), []
     for f in merged:
         key = f.get("id") or fingerprint(f)
@@ -1095,9 +1114,343 @@ def cmd_report(args):
                    .replace("{{LOW}}", str(counts["low"]))
                    .replace("{{SOURCES}}", ", ".join(sources) or "n/a"))
         body = head + "\n\n---\n\n" + body
+    root = os.path.dirname(src) if os.path.isfile(src) else os.path.dirname(src.rstrip("/"))
+    root = os.path.abspath(root or ".")
+    body += "\n\n" + render_not_assessed(root) + "\n\n" + render_unproven(root)
     write_out(args.out, body)
     print("report written: %s (%d unique findings from %d artifact(s))" % (args.out, len(uniq), len(files)))
     return 0
+
+
+def render_not_assessed(root):
+    """Absent measurement is never a clean verdict — so it gets its own section."""
+    gaps = coverage_gaps(root)
+    L = ["## Not assessed", ""]
+    if gaps is None:
+        L.append("No coverage ledger. Run `coverage init` before an AUDIT, or this")
+        L.append("report cannot distinguish \"clean\" from \"not looked at\".")
+        return "\n".join(L)
+    if not gaps:
+        L.append("Every coverage unit was marked. Nothing is outstanding.")
+        return "\n".join(L)
+    L.append("These units were planned and never closed. Treat them as unknown,")
+    L.append("not as clean.")
+    L.append("")
+    L.append("| Unit | Entry group | Boundary | Category |")
+    L.append("|---|---|---|---|")
+    for u in gaps:
+        L.append("| `%s` | %s | %s | %s |"
+                 % (u["id"], u["entry_group"], u["boundary"], u["rule_category"]))
+    return "\n".join(L)
+
+
+def render_unproven(root):
+    """A fix with no green fixcheck row is a claim, and reads as one here."""
+    rows = unproven_fixes(root)
+    L = ["## UNPROVEN fixes", ""]
+    if not rows:
+        L.append("No FIX item is outstanding: every recorded fix has a green")
+        L.append("`fixcheck` row (fails at base, passes on the patch).")
+        return "\n".join(L)
+    L.append("| FIX | Status | Why | Command |")
+    L.append("|---|---|---|---|")
+    for r in rows:
+        L.append("| `%s` | %s | %s | `%s` |"
+                 % (r.get("id", "?"), r.get("status", "?"),
+                    (r.get("why", "") or "").replace("|", "/"),
+                    " ".join(r.get("cmd", []))[:60]))
+    return "\n".join(L)
+
+
+# --------------------------------------------------------------------------
+# finding schema (rules/finding.schema.json), validated with the stdlib
+#
+# Why validate at all: `report` turns JSON into prose, and prose is what the
+# user acts on. A finding with an invented severity, or a severity attached to
+# an UNDETERMINED verdict, reads as measurement that never happened.
+# --------------------------------------------------------------------------
+FINDING_SCHEMA = None
+
+
+def load_finding_schema():
+    global FINDING_SCHEMA
+    if FINDING_SCHEMA is None:
+        FINDING_SCHEMA = load_json(
+            os.path.join(PACK, "rules", "finding.schema.json"), default={}) or {}
+    return FINDING_SCHEMA
+
+
+def validate_findings(findings, source="input"):
+    """Return the FIRST error as a string, or None. First error only: a list of
+    forty complaints is a wall; one line is a fix."""
+    schema = load_finding_schema()
+    spec = schema.get("finding", {})
+    required = spec.get("required", ["rule", "title", "file"])
+    enums = spec.get("enums", {})
+    types = spec.get("types", {})
+    py_types = {"string": str, "integer": int}
+
+    for n, f in enumerate(findings, 1):
+        where = "%s finding #%d" % (source, n)
+        if not isinstance(f, dict):
+            return "%s is not an object" % where
+        for key in required:
+            if not f.get(key):
+                return "%s is missing required key '%s'" % (where, key)
+        for key, tname in types.items():
+            if key in f and f[key] is not None:
+                want = py_types.get(tname)
+                if want is int and isinstance(f[key], bool):
+                    return "%s key '%s' must be an integer" % (where, key)
+                if want and not isinstance(f[key], want):
+                    return "%s key '%s' must be a %s" % (where, key, tname)
+        for key, allowed in enums.items():
+            if f.get(key) is not None and f[key] not in allowed:
+                return ("%s has %s=%r, which is not one of: %s"
+                        % (where, key, f[key], ", ".join(allowed)))
+        verdict = f.get("verdict")
+        if verdict == "UNDETERMINED" and f.get("severity"):
+            return ("%s is UNDETERMINED and carries severity=%r — an unknown "
+                    "reachability has no severity (FS-003)" % (where, f["severity"]))
+        if verdict and verdict != "UNDETERMINED" and not f.get("severity"):
+            return "%s has verdict %s but no severity (FS-004)" % (where, verdict)
+    return None
+
+
+def normalise_findings(findings):
+    """Fill the optional keys the renderer reads, after validation has passed.
+
+    Defaults only ever add absence (line 0, empty severity floor of info), so
+    nothing here can upgrade a finding into something the input did not say.
+    """
+    out = []
+    for f in findings:
+        g = dict(f)
+        g.setdefault("line", 0)
+        g.setdefault("severity", "info")
+        g.setdefault("confidence", "unstated")
+        g.setdefault("category", g.get("rule", "").split("-")[0] or "GEN")
+        out.append(g)
+    return out
+
+
+# --------------------------------------------------------------------------
+# coverage ledger
+#
+# "No findings" and "not looked at" render identically in a report unless
+# something keeps score. A unit is one (entry-point group x trust boundary x
+# rule category) cell; every cell starts `planned` and has to be moved by hand.
+# --------------------------------------------------------------------------
+COVERAGE_STATUSES = ["planned", "covered", "blocked", "deferred", "out_of_scope"]
+
+
+def coverage_path(root):
+    return os.path.join(root, ".viora", "coverage.json")
+
+
+def derive_units(root):
+    """Units from what `doctor` can see: entry points, trust boundaries, rule
+    categories. Same walk as the scan, so the ledger and the scan agree on what
+    the repository contains."""
+    entry_groups = []
+    for rel, _full in walk_files(root):
+        low = rel.lower()
+        if re.search(r"(^|/)(routes?|api|controllers?|handlers?|endpoints?|views?|pages/api)/", low):
+            entry_groups.append("http-routes")
+        elif re.search(r"(^|/)\.github/workflows/", low):
+            entry_groups.append("ci-pipeline")
+        elif re.search(r"(^|/)(cli|bin|cmd|scripts)/", low) or low.endswith("main.py"):
+            entry_groups.append("cli-entry")
+        elif re.search(r"(^|/)(worker|jobs?|tasks?|queue|consumers?)/", low):
+            entry_groups.append("async-worker")
+        elif re.search(r"(^|/)(migrations?|models?|db|schema)/", low):
+            entry_groups.append("data-layer")
+    groups = sorted(set(entry_groups)) or ["unclassified-entry"]
+
+    boundaries = ["untrusted-input", "authn-authz", "data-store", "outbound-egress"]
+    _rules, meta = load_rules()
+    cats = sorted(set((meta.get("categories") or {}).keys()))
+    cats = [c for c in cats if c] or ["SECRET", "DEFAULT"]
+
+    units = []
+    for g in groups:
+        for b in boundaries:
+            for cat in cats:
+                units.append({
+                    "id": "%s/%s/%s" % (g, b, cat),
+                    "entry_group": g, "boundary": b, "rule_category": cat,
+                    "status": "planned", "note": "",
+                })
+    return units
+
+
+def cmd_coverage(args):
+    root = os.path.abspath(args.path)
+    path = coverage_path(root)
+    if args.action == "init":
+        units = derive_units(root)
+        write_out(path, json.dumps({"$schema": "viora-coverage/1",
+                                    "root": root, "units": units}, indent=2) + "\n")
+        print("coverage ledger: %s (%d unit(s), all 'planned')" % (path, len(units)))
+        print("Mark each one as you work: coverage mark <id> covered --note '...'")
+        return 0
+
+    data = load_json(path)
+    if not data:
+        eprint("error: no ledger at %s — run: coverage init" % path)
+        return 2
+
+    if args.action == "status":
+        by = {}
+        for u in data["units"]:
+            by[u["status"]] = by.get(u["status"], 0) + 1
+        for s in COVERAGE_STATUSES:
+            print("%-13s %d" % (s, by.get(s, 0)))
+        return 0
+
+    hits = [u for u in data["units"] if u["id"] == args.unit]
+    if not hits:
+        eprint("error: no unit %r in %s" % (args.unit, path))
+        return 2
+    for u in hits:
+        u["status"] = args.status
+        u["note"] = args.note or u.get("note", "")
+    write_out(path, json.dumps(data, indent=2) + "\n")
+    print("%s -> %s" % (args.unit, args.status))
+    return 0
+
+
+def coverage_gaps(root):
+    data = load_json(coverage_path(root))
+    if not data:
+        return None
+    return [u for u in data.get("units", []) if u.get("status") == "planned"]
+
+
+# --------------------------------------------------------------------------
+# fixcheck — proof that a fix fixes something
+#
+# A fix with no failing test before it is a claim. This runs the same command
+# at the base ref and in the working tree and demands the pair fail/pass. The
+# VIORA_REACHED marker exists because a command that exits 1 for an unrelated
+# reason (a syntax error, a missing dependency) looks exactly like a repro.
+# --------------------------------------------------------------------------
+FIX_LOG = ".viora/fixes.jsonl"
+MARKER = "VIORA_REACHED"
+
+
+def tree_fingerprint(root):
+    out = git(root, "rev-parse", "HEAD") or "no-git"
+    dirty = git(root, "status", "--porcelain") or ""
+    h = hashlib.sha256((out + "\n" + dirty).encode("utf-8")).hexdigest()[:16]
+    return {"head": out.strip()[:12], "dirty": bool(dirty.strip()), "sha": h}
+
+
+def _run_cmd(argv, cwd, timeout=600):
+    try:
+        p = subprocess.run(argv, cwd=cwd, stdout=subprocess.PIPE,
+                           stderr=subprocess.STDOUT, timeout=timeout)
+        return p.returncode, p.stdout.decode("utf-8", "replace")
+    except FileNotFoundError as exc:
+        return 127, str(exc)
+    except subprocess.TimeoutExpired:
+        return 124, "timeout"
+
+
+def cmd_fixcheck(args):
+    root = os.path.abspath(args.path)
+    argv = list(args.cmd or [])
+    if not argv:
+        eprint("error: --cmd needs the command to run, e.g. --cmd pytest -q tests/test_x.py")
+        return 2
+    if not git(root, "rev-parse", "--git-dir"):
+        eprint("error: not a git repository — fixcheck needs a base ref to compare against")
+        return 2
+
+    worktree = os.path.join(tempfile.mkdtemp(prefix="viora-fixcheck-"), "base")
+    added = git(root, "worktree", "add", "--detach", worktree, args.base)
+    if added is None or not os.path.isdir(worktree):
+        eprint("error: cannot create a worktree at %s — is it a valid ref?" % args.base)
+        return 2
+    try:
+        base_rc, base_out = _run_cmd(argv, worktree)
+        head_rc, head_out = _run_cmd(argv, root)
+    finally:
+        git(root, "worktree", "remove", "--force", worktree)
+
+    reached_base = MARKER in base_out
+    reached_head = MARKER in head_out
+    if not (reached_base and reached_head):
+        status = "marker_missing"
+        why = ("the command never printed %s on %s — it did not reach the "
+               "vulnerable code, so neither exit code means anything"
+               % (MARKER, "base" if not reached_base else "the working tree"))
+    elif base_rc != 0 and head_rc == 0:
+        status = "proven"
+        why = "fails at %s, passes on the patch" % args.base
+    elif base_rc == 0:
+        status = "no_repro"
+        why = "the command already passes at %s — it does not demonstrate the bug" % args.base
+    else:
+        status = "not_fixed"
+        why = "still fails in the working tree"
+
+    rec = {
+        "time": time.strftime("%Y-%m-%dT%H:%M:%S"),
+        "id": args.id or "FIX-%s" % time.strftime("%Y%m%d-%H%M%S"),
+        "base": args.base, "cmd": argv, "status": status, "why": why,
+        "base_exit": base_rc, "head_exit": head_rc,
+        "marker": {"base": reached_base, "head": reached_head},
+        "tree": tree_fingerprint(root),
+    }
+    log = os.path.join(root, FIX_LOG)
+    os.makedirs(os.path.dirname(log), exist_ok=True)
+    with open(log, "a", encoding="utf-8") as fh:
+        fh.write(json.dumps(rec) + "\n")
+
+    print("")
+    print("  %s  %s" % (rec["id"], status.upper()))
+    print("  %s" % why)
+    print("  base exit=%d   working tree exit=%d   marker base=%s head=%s"
+          % (base_rc, head_rc, reached_base, reached_head))
+    print("  logged to %s" % FIX_LOG)
+    print("")
+    return 0 if status == "proven" else 1
+
+
+def unproven_fixes(root):
+    """FIX entries with no green row. Anything not 'proven' is a claim."""
+    path = os.path.join(root, FIX_LOG)
+    text = read_text(path)
+    if not text:
+        return []
+    latest = {}
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            rec = json.loads(line)
+        except ValueError:
+            continue
+        latest[rec.get("id", "?")] = rec
+    return [r for r in latest.values() if r.get("status") != "proven"]
+
+
+def cmd_check(args):
+    """The gate: findings, plus the two things a scanner cannot see."""
+    root = os.path.abspath(args.path)
+    rc = cmd_scan(args)
+    gaps = coverage_gaps(root)
+    if (args.mode or "").lower() == "audit" and gaps:
+        eprint("")
+        eprint("! %d coverage unit(s) are still 'planned'. An AUDIT with unplanned"
+               % len(gaps))
+        eprint("  units has not finished; report them as 'not assessed' or mark them.")
+        for u in gaps[:10]:
+            eprint("    - %s" % u["id"])
+        rc = 1
+    return rc
 
 
 PRECOMMIT = """#!/bin/sh
@@ -1182,6 +1535,38 @@ def repo_relative_skill_dir(root):
     return rel
 
 
+def install_agent_hooks(root, skilldir):
+    """Merge the PreToolUse secret guard into .claude/settings.json.
+
+    Merge, never overwrite: the user's other hooks are their configuration,
+    and a security tool that silently deletes them has traded one problem for
+    a worse one. Re-running is a no-op.
+    """
+    template = load_json(os.path.join(PACK, "hooks", "agent", "claude-code.json"))
+    if not template:
+        eprint("! hooks/agent/claude-code.json is missing — skipping agent hooks")
+        return []
+    entry = json.loads(
+        json.dumps(template["hooks"]["PreToolUse"][0])
+        .replace(".viora/skills/viora-aegis", skilldir))
+
+    settings_path = os.path.join(root, ".claude", "settings.json")
+    settings = load_json(settings_path, default={}) or {}
+    hooks = settings.setdefault("hooks", {})
+    pre = hooks.setdefault("PreToolUse", [])
+    if not isinstance(pre, list):
+        eprint("! .claude/settings.json has a PreToolUse that is not a list — left untouched")
+        return []
+
+    marker = "pre-write-secrets.py"
+    for existing in pre:
+        if marker in json.dumps(existing):
+            return [".claude/settings.json (agent hook already present)"]
+    pre.append(entry)
+    write_out(settings_path, json.dumps(settings, indent=2) + "\n")
+    return [".claude/settings.json (+ PreToolUse secret guard)"]
+
+
 def cmd_init(args):
     root = os.path.abspath(args.path)
     skilldir = repo_relative_skill_dir(root)
@@ -1225,6 +1610,9 @@ def cmd_init(args):
         with open(gi, "a", encoding="utf-8") as fh:
             fh.write("\n# Viora Aegis working files\n.viora/\nviora.sarif\n")
         created.append(".gitignore (+ .viora/)")
+
+    if getattr(args, "agent_hooks", False):
+        created += install_agent_hooks(root, skilldir)
 
     print("")
     print(c("  %s initialised" % BRAND, "1;95"))
@@ -1338,11 +1726,56 @@ def main(argv=None):
     i.add_argument("--path", default=".")
     i.add_argument("--ci", choices=["github", "gitlab", "none"], default="github")
     i.add_argument("--hook", action="store_true")
+    i.add_argument("--agent-hooks", action="store_true", dest="agent_hooks",
+                   help="merge the PreToolUse secret guard into .claude/settings.json")
     i.set_defaults(func=cmd_init)
+
+    cv = sub.add_parser("coverage", help="coverage ledger: what was assessed, and what was not")
+    cv.add_argument("action", choices=["init", "mark", "status"])
+    cv.add_argument("unit", nargs="?", help="unit id, for: coverage mark <id> <status>")
+    cv.add_argument("status", nargs="?", choices=COVERAGE_STATUSES,
+                    help="covered | blocked | deferred | out_of_scope")
+    cv.add_argument("--note", help="why — required in spirit for blocked and deferred")
+    cv.add_argument("--path", default=".")
+    cv.set_defaults(func=cmd_coverage)
+
+    fc = sub.add_parser("fixcheck",
+                        help="prove a fix: same command fails at the base ref, passes on the patch")
+    fc.add_argument("--base", required=True, help="git ref to run the command against")
+    fc.add_argument("--cmd", nargs=argparse.REMAINDER, required=True,
+                    help="the command, verbatim; it must print VIORA_REACHED on stdout")
+    fc.add_argument("--id", help="FIX id to record; generated if omitted")
+    fc.add_argument("--path", default=".")
+    fc.set_defaults(func=cmd_fixcheck)
+
+    ck = sub.add_parser("check",
+                        help="scan plus the coverage gate (an AUDIT with planned units exits 1)")
+    ck.add_argument("--path", default=".")
+    ck.add_argument("--mode", help="audit | review | ... — 'audit' enables the coverage gate")
+    ck.add_argument("--diff")
+    ck.add_argument("--staged", action="store_true")
+    ck.add_argument("--only")
+    ck.add_argument("--severity", choices=SEVERITIES)
+    ck.add_argument("--fail-on", choices=SEVERITIES + ["none"])
+    ck.add_argument("--format", choices=["text", "json", "sarif", "markdown"], default="text")
+    ck.add_argument("--out")
+    ck.add_argument("--json")
+    ck.add_argument("--baseline", nargs="?", const="", default=None)
+    ck.add_argument("--no-baseline", action="store_true")
+    ck.add_argument("--quiet", action="store_true")
+    ck.set_defaults(func=cmd_check)
 
     sa = sub.add_parser("skill-audit",
                         help="audit a skill / plugin / MCP server BEFORE installing it (static only)")
-    sa.add_argument("target", help="path to the skill directory, or one file")
+    sa.add_argument("target", nargs="?", default=".",
+                    help="path to the skill directory, or one file")
+    sa.add_argument("--installed", action="store_true",
+                    help="enumerate skills, plugins and MCP configs already installed at the known paths")
+    sa.add_argument("--lock", action="store_true",
+                    help="with --installed: write .viora/skills.lock.json")
+    sa.add_argument("--verify", action="store_true",
+                    help="compare the installed units against the lock; drift is HIGH SA-SUP-006")
+    sa.add_argument("--path", default=".", help="project root for --installed / --verify")
     sa.add_argument("--vendor-domain", action="append", default=[],
                     help="domain you accept as the vendor's own; downgrades egress to it (repeatable)")
     sa.add_argument("--format", choices=["text", "json", "markdown"], default="text")

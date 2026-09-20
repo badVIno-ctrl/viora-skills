@@ -96,6 +96,31 @@ the deployment that forgets to turn it on is the deployment that gets breached.
 
 ---
 
+## Your own API: the sharp-edge pass
+
+The rules above hunt misuse of other people's APIs. Now turn the same question
+on the code you ship, for every function that takes a security decision:
+
+1. **Can the dangerous call be shorter than the safe one?** `verify=False` is
+   one keyword; pinning a CA bundle is three lines. The shorter path is the
+   default in practice, whatever the documentation says.
+2. **Does the call site name the risk?** A reviewer with no context should see
+   what is given up without opening your docs. A bare bool never does
+   (`DEFAULT-001`).
+3. **Can the answer be ignored?** A permission function called as a statement
+   is not a gate (`DEFAULT-005`).
+4. **Is an illegal combination accepted in silence?** Wildcard origin with
+   credentials, `SameSite=None` without `Secure` (`DEFAULT-006`). Validate the
+   pair at startup and refuse to boot.
+5. **Does any sentinel invert the meaning?** `ttl=0` usually means "never"
+   (`DEFAULT-003`).
+
+Six footgun classes, with the fix for each: `references/14-sharp-edges.md`.
+If a signature fails questions 1–3, documentation will not save it. Change the
+signature.
+
+---
+
 ## Common false positives - check before reporting
 
 - A default in a **test fixture or example file** that production never loads.

@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.viora/skills/viora-aegis/hooks/agent/pre-write-secrets.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

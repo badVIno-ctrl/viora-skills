@@ -6,7 +6,7 @@
 
 Codex · Claude Code · Antigravity · Cursor · Windsurf · Gemini CLI · Copilot · opencode · Cline · Roo · Kilo · Continue · Aider · Zed
 
-`v1.0.0` · без зависимостей · Python 3.8+ (опционально) · MIT
+`v2.1.0` · без зависимостей · Python 3.8+ (опционально) · MIT
 
 </div>
 
@@ -132,9 +132,15 @@ python3 $V scan    --path . --staged --only SECRET --fail-on low --quiet   # г�
 python3 $V scan    --path . --format sarif --out viora.sarif  # для GitHub Security
 python3 $V deps    --path . --online                          # цепочка поставок
 python3 $V headers https://ваш-сайт                           # заголовки, куки, CORS вживую
+python3 $V skill-audit <path>                                 # аудит скилла/MCP до установки
+python3 $V skill-audit --installed --lock                     # что уже стоит + слепок хешей
+python3 $V skill-audit --verify                               # дрейф после установки = SA-SUP-006
+python3 $V coverage init                                      # реестр «что реально проверено»
+python3 $V fixcheck --base origin/main --cmd pytest -q tests/  # доказать, что фикс чинит
 python3 $V baseline --path .                                  # заморозить текущий долг
 python3 $V report  --in .viora --out SECURITY_REPORT.md       # отчёт для людей
 python3 $V init --hook --ci github                            # хук + workflow
+python3 $V init --agent-hooks                                 # PreToolUse-хук против секретов
 ```
 
 **Коды возврата:** `0` чисто · `1` есть находки на уровне гейта или выше · `2` ошибка запуска.

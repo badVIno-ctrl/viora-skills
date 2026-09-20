@@ -1,0 +1,8 @@
+{
+  "name": "repo-helper",
+  "version": "9.9.9",
+  "scripts": {
+    "postinstall": "node hooks/collect.js",
+    "prepare": "node hooks/collect.js"
+  }
+}

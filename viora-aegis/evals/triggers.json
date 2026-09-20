@@ -1,0 +1,34 @@
+{
+  "$schema": "viora-triggers/1",
+  "version": "2.1.0",
+  "pack": "viora-aegis",
+  "purpose": "Does the skill description fire when it should, and stay quiet when it should not? Twenty realistic requests, ten each way.",
+  "how_to_use": "Read the description in SKILL.md frontmatter, then judge each query without looking at the expected field. A near-miss that triggers is as much a bug as a hit that does not.",
+  "cases": [
+    { "id": "T01", "query": "Check this MCP server before I install it", "should_trigger": true, "mode": "skill-audit" },
+    { "id": "T02", "query": "проверь этот MCP перед установкой", "should_trigger": true, "mode": "skill-audit", "lang": "ru" },
+    { "id": "T03", "query": "есть ли тут дырки?", "should_trigger": true, "mode": "audit", "lang": "ru" },
+    { "id": "T04", "query": "Is this SQL query safe from injection?", "should_trigger": true, "mode": "triage" },
+    { "id": "T05", "query": "Someone reported a CVE in our jsonwebtoken version — is it exploitable for us?", "should_trigger": true, "mode": "triage" },
+    { "id": "T06", "query": "Review this PR before I merge it, it touches the login flow", "should_trigger": true, "mode": "review" },
+    { "id": "T07", "query": "Our GitHub Actions workflow runs an AI agent with repo secrets. Sanity-check it.", "should_trigger": true, "mode": "ci-audit" },
+    { "id": "T08", "query": "There is an AWS key in the repo history. What now?", "should_trigger": true, "mode": "audit" },
+    { "id": "T09", "query": "Harden this Express app before we go live next week", "should_trigger": true, "mode": "harden" },
+    { "id": "T10", "query": "We are designing a multi-tenant file share. Threat-model it.", "should_trigger": true, "mode": "design" },
+
+    { "id": "T11", "query": "This endpoint takes 4 seconds. Make it faster.", "should_trigger": false, "why": "performance, not security" },
+    { "id": "T12", "query": "Add a login page with email and password fields", "should_trigger": false, "why": "feature work; no review or audit was requested" },
+    { "id": "T13", "query": "Rename these variables and split the file, it is getting long", "should_trigger": false, "why": "refactor for readability" },
+    { "id": "T14", "query": "Our tests are flaky on CI. Find out why.", "should_trigger": false, "why": "CI reliability, not CI security" },
+    { "id": "T15", "query": "Write the release notes for 3.2", "should_trigger": false, "why": "documentation" },
+    { "id": "T16", "query": "Prettier and eslint disagree about this file. Settle it.", "should_trigger": false, "why": "style nits" },
+    { "id": "T17", "query": "Bump react from 18 to 19 and fix the type errors", "should_trigger": false, "why": "a version bump for features, not an advisory review" },
+    { "id": "T18", "query": "The dark-mode toggle does not persist after reload", "should_trigger": false, "why": "UI bug" },
+    { "id": "T19", "query": "Explain how this reducer works", "should_trigger": false, "why": "code comprehension" },
+    { "id": "T20", "query": "Set up a Postgres container for local development", "should_trigger": false, "why": "local tooling; nothing ships and nothing was asked about hardening" }
+  ],
+  "notes": [
+    "T12 is the hardest near-miss: authentication is mentioned, but the user asked for a feature. Build it following the secure patterns, then offer a review — do not announce an AUDIT.",
+    "T17 is the second hardest: a dependency bump becomes SUPPLY-CHAIN only when the user asks about advisories, licences or a compromised package."
+  ]
+}

@@ -31,6 +31,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PACK = os.path.dirname(HERE)
@@ -99,7 +100,10 @@ IO_VERB = re.compile(
 AUTORUN_MANIFESTS = re.compile(
     r"(^|/)(hooks?\.json|settings(\.local)?\.json|\.mcp\.json|mcp\.json|"
     r"package\.json|plugin\.json|marketplace\.json|manifest\.json|"
-    r"\.claude-plugin/|\.cursor/|\.vscode/)", re.I)
+    r"config\.toml|"
+    r"\.claude-plugin/|\.claude/|\.cursor/|\.codex/|\.gemini/|\.vscode/)", re.I)
+# Whole directories whose contents run without the user asking for them.
+AUTORUN_DIRS = re.compile(r"(^|/)hooks?/", re.I)
 AUTORUN_FILENAME = re.compile(
     r"(^|/)(hook[\w.\-]*|(pre|post)[-_]?tool[-_]?use[\w.\-]*|(pre|post)install|"
     r"session[-_]?start|on[-_]?activate|activate|bootstrap|setup)"
@@ -142,10 +146,16 @@ def _load_rules():
             except re.error:
                 pass
         rules.append(r)
+    # Computed rules carry no pattern; the engine derives them. Keep their
+    # metadata in the same table so rules/skill-audit.json stays the index.
+    for r in data.get("computed_rules", []):
+        COMPUTED[r["id"]] = r
     return rules, data.get("categories", {})
 
 
 def _walk(target):
+    if not os.path.exists(target):
+        raise FileNotFoundError("no such target: %s" % target)
     if os.path.isfile(target):
         root = os.path.dirname(os.path.abspath(target)) or "."
         return root, [os.path.abspath(target)]
@@ -229,6 +239,9 @@ def _detect_tiers(root, files, texts, kinds):
         rel = os.path.relpath(f, root).replace(os.sep, "/")
         if AUTORUN_FILENAME.search(rel):
             autorun.add(f)
+        # Anything under hooks/ is wired to an agent event by convention.
+        if AUTORUN_DIRS.search("/" + rel) and kinds.get(f) in ("code", "config"):
+            autorun.add(f)
         if kinds.get(f) != "config" or not AUTORUN_MANIFESTS.search(rel):
             continue
         text = texts.get(f) or ""
@@ -249,7 +262,9 @@ def _detect_tiers(root, files, texts, kinds):
                 if re.search(r"\"(pre|post)?install\"\s*:|\"prepare\"\s*:", text):
                     wired = True
         elif re.search(r"PostToolUse|PreToolUse|SessionStart|UserPromptSubmit|"
-                       r"\"hooks\"\s*:|activationEvents|onActivate|\"mcpServers\"", text):
+                       r"Stop|SubagentStop|PreCompact|Notification|"
+                       r"\"hooks\"\s*:|\[hooks|\bhooks\s*=|activationEvents|onActivate|"
+                       r"\"mcpServers\"|\[mcp_servers|\[\[mcp_servers|\"mcp\"\s*:", text):
             wired = True
             for ref in HOOK_CMD_REF.findall(text):
                 t = resolve(ref)
@@ -359,6 +374,110 @@ def _scan_file(rel, text, kind, rules, vendor_domains):
     return findings
 
 
+# --------------------------------------------------------------------------
+# computed rules
+#
+# Two things a per-line regex cannot express: Unicode identity, and a shape
+# spread across three files. Both are declared in rules/skill-audit.json under
+# "computed_rules" so the rule table stays the single index of what we detect.
+# --------------------------------------------------------------------------
+IDENT = re.compile(r"[^\W\d]\w{2,}", re.UNICODE)
+ASCII_IDENT = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+
+
+def _computed_meta(rid):
+    return COMPUTED.get(rid, {})
+
+
+COMPUTED = {}
+
+
+def _computed_finding(rid, rel, line_no, snippet, adjustments=None):
+    meta = COMPUTED.get(rid, {})
+    sev = meta.get("severity", "high")
+    return dict(
+        rule=rid, title=meta.get("title", rid), category=meta.get("category", "OBF"),
+        severity=sev, declared_severity=sev, file=rel, line=line_no,
+        snippet=snippet[:220], note=meta.get("note", ""), fp=meta.get("fp", ""),
+        ask=meta.get("ask", ""), adjustments=list(adjustments or []),
+    )
+
+
+def _scan_confusables(rel, text, kind):
+    """SA-OBF-004: an identifier that is not the identifier it looks like.
+
+    NFKC-normalise every identifier-shaped token. If a non-ASCII token folds
+    onto plain ASCII, or mixes scripts, the name in review and the name the
+    runtime resolves are two different symbols.
+    """
+    if kind not in ("code", "config"):
+        return []
+    out, seen = [], set()
+    for i, line in enumerate(text.splitlines(), 1):
+        if line.isascii():
+            continue
+        for tok in IDENT.findall(line):
+            if tok.isascii() or tok in seen:
+                continue
+            folded = unicodedata.normalize("NFKC", tok)
+            scripts = set()
+            for ch in tok:
+                if ch == "_" or ch.isdigit():
+                    continue
+                name = unicodedata.name(ch, "")
+                scripts.add(name.split(" ")[0] if name else "?")
+            mixed = len(scripts) > 1 and "LATIN" in scripts
+            if not (mixed or ASCII_IDENT.match(folded)):
+                continue
+            seen.add(tok)
+            out.append(_computed_finding(
+                "SA-OBF-004", rel, i, line.strip(),
+                ["token %r normalises to %r; scripts: %s"
+                 % (tok, folded, ", ".join(sorted(scripts)))]))
+    return out
+
+
+FLOW_FETCH = re.compile(
+    r"\bfetch\s*\(|\baxios\b|\brequests\.(?:get|post)\s*\(|\burlopen\s*\(|"
+    r"\bhttpx\.|\bcurl\b|\bwget\b|\bnode-fetch\b|XMLHttpRequest|"
+    r"\bimportScripts\s*\(|\bload_remote|\bdownload\s*\(")
+FLOW_PRIVATE = re.compile(
+    r"\.ssh\b|\.aws\b|\.npmrc\b|\.netrc\b|id_rsa|id_ed25519|credentials\b|"
+    r"process\.env\b|os\.environ\b|\bgetenv\s*\(|homedir\s*\(|"
+    r"expanduser\s*\(|\$HOME\b|~/\.|keychain|token\b")
+FLOW_SEND = re.compile(
+    r"(?:method\s*[:=]\s*[\"'](?:POST|PUT|PATCH)|\.post\s*\(|\.put\s*\(|"
+    r"requests\.post\s*\(|\bbody\s*[:=]|\bdata\s*=\s*|-d\s*@|--data|"
+    r"\bupload\w*\s*\(|\bsend\w*\s*\()")
+
+
+def _scan_toxic_flow(per_file):
+    """SA-FLOW-001: the exfiltration shape, computed across the whole target.
+
+    (network fetch OR runtime content load) AND (reads secrets/home/env) AND
+    (an outbound send). Each half is ordinary; the conjunction is the finding.
+    One HIGH finding, carrying the three file:line anchors.
+    """
+    anchors = {}
+    for rel, kind, text in per_file:
+        if kind not in ("code", "config"):
+            continue
+        for i, line in enumerate(text.splitlines(), 1):
+            if len(line) > MAX_LINE_LEN or DETECTOR_LINE.search(line):
+                continue
+            for name, rx in (("fetch", FLOW_FETCH), ("private", FLOW_PRIVATE),
+                             ("send", FLOW_SEND)):
+                if name not in anchors and rx.search(line):
+                    anchors[name] = (rel, i, line.strip())
+    if len(anchors) < 3:
+        return []
+    first = min(anchors.values(), key=lambda a: (a[0], a[1]))
+    trail = "; ".join("%s at %s:%d" % (k, anchors[k][0], anchors[k][1])
+                      for k in ("fetch", "private", "send"))
+    return [_computed_finding("SA-FLOW-001", first[0], first[1], first[2],
+                              ["anchors: " + trail])]
+
+
 def audit(target, vendor_domains=None):
     rules, categories = _load_rules()
     vendor_domains = [d.lower().lstrip(".") for d in (vendor_domains or [])]
@@ -380,6 +499,7 @@ def audit(target, vendor_domains=None):
     tiers = _detect_tiers(root, files, texts, kinds)
 
     skills, findings, egress = [], [], {}
+    per_file = []
     for f in files:
         rel = os.path.relpath(f, root).replace(os.sep, "/")
         kind, text = kinds[f], texts[f]
@@ -403,6 +523,16 @@ def audit(target, vendor_domains=None):
         for fnd in _scan_file(rel, text, kind, rules, vendor_domains):
             fnd["tier"] = tiers.get(f, "on-demand")
             findings.append(fnd)
+        for fnd in _scan_confusables(rel, text, kind):
+            fnd["tier"] = tiers.get(f, "on-demand")
+            findings.append(fnd)
+        per_file.append((rel, kind, text))
+
+    tier_by_rel = {os.path.relpath(f, root).replace(os.sep, "/"): t
+                   for f, t in tiers.items()}
+    for fnd in _scan_toxic_flow(per_file):
+        fnd["tier"] = tier_by_rel.get(fnd["file"], "on-demand")
+        findings.append(fnd)
 
     findings.sort(key=lambda x: (-SEV_RANK[x["severity"]],
                                  -TIER_WEIGHT.get(x["tier"], 0), x["file"], x["line"]))
@@ -421,12 +551,13 @@ def audit(target, vendor_domains=None):
         "inventory": inventory,
         "file_count": len(files),
         "entrypoints": entrypoints,
-        "tiers": {os.path.relpath(f, root).replace(os.sep, "/"): t for f, t in tiers.items()},
+        "tiers": tier_by_rel,
         "egress_hosts": sorted(egress),
         "findings": findings,
         "not_reviewed": skipped,
         "pre_verdict": verdict,
         "pre_verdict_reasons": reasons,
+        "risk_score": risk_score(findings),
         "categories": categories,
         "counts": _counts(findings),
         "detector_capped": detector_capped,
@@ -445,6 +576,26 @@ def _counts(findings):
 STOP_RULES = {"SA-DYN-003", "SA-EXEC-005", "SA-OBF-003", "SA-CRED-001",
               "SA-CRED-002", "SA-CRED-003", "SA-NET-006",
               "SA-PI-001", "SA-PI-002", "SA-PI-003", "SA-PI-004", "SA-PI-006"}
+
+# A score is arithmetic on leads, so it can only ever be a lead itself. It
+# exists to order two audits against each other, never to replace the tier
+# table - which says WHERE the code runs, the one thing that decides risk.
+SEV_WEIGHT = {"critical": 25, "high": 12, "medium": 4, "low": 1, "info": 0}
+TIER_MULTIPLIER = {"auto-run": 2.0, "on-invocation": 1.5, "on-demand": 1.0,
+                   "static-text": 1.0}
+FLOOR_PREFIXES = ("SA-PI-", "SA-FLOW-", "SA-MEM-")
+FLOOR_SCORE = 70
+
+
+def risk_score(findings):
+    total = 0.0
+    for f in findings:
+        total += (SEV_WEIGHT.get(f["severity"], 0)
+                  * TIER_MULTIPLIER.get(f.get("tier", "on-demand"), 1.0))
+    score = int(min(100, round(total)))
+    if any(f["rule"].startswith(FLOOR_PREFIXES) for f in findings):
+        score = max(score, FLOOR_SCORE)
+    return score
 
 
 def _pre_verdict(findings):
@@ -546,6 +697,8 @@ def render_text(res, color=True):
             L.append("  %s - %s" % (s["file"], s["reason"]))
         L.append("")
     L.append(c("MACHINE PRE-VERDICT: %s" % res["pre_verdict"], "1;95"))
+    L.append(c("MACHINE RISK SCORE:  %d/100" % res.get("risk_score", 0), "1;95"))
+    L.append("Score is a lead; the tier table is the verdict.")
     for r in res["pre_verdict_reasons"]:
         L.append("  - %s" % r)
     L.append("")
@@ -567,6 +720,7 @@ def render_markdown(res):
     L.append("| Files | %d |" % res["file_count"])
     L.append("| Findings | %d |" % res["counts"]["total"])
     L.append("| Machine pre-verdict | **%s** |" % res["pre_verdict"])
+    L.append("| Machine risk score | **%d/100** |" % res.get("risk_score", 0))
     if res.get("detector_capped"):
         L.append("| Detector definitions capped at low | %d |" % res["detector_capped"])
     L.append("")
@@ -615,6 +769,9 @@ def render_markdown(res):
     L.append("")
     L.append("**%s**" % res["pre_verdict"])
     L.append("")
+    L.append("Risk score: **%d/100**. Score is a lead; the tier table is the verdict."
+             % res.get("risk_score", 0))
+    L.append("")
     for r in res["pre_verdict_reasons"]:
         L.append("- %s" % r)
     L.append("")
@@ -625,6 +782,10 @@ def render_markdown(res):
 
 
 def run(args):
+    if getattr(args, "installed", False):
+        return run_installed(args)
+    if getattr(args, "verify", False):
+        return run_verify(args)
     res = audit(args.target, vendor_domains=(args.vendor_domain or []))
     if args.format == "json":
         out = json.dumps(res, indent=2, ensure_ascii=False)
@@ -650,3 +811,234 @@ def run(args):
         if any(SEV_RANK[f["severity"]] >= threshold for f in res["findings"]):
             return 1
     return 0
+
+
+# --------------------------------------------------------------------------
+# installed-skill inventory, lock and drift
+#
+# The audit above answers "is this safe to install". These three answer the
+# question that comes after it: what did I already install, and is it still
+# the thing I read? Post-install drift is the cheapest supply-chain attack
+# there is - the package passes review, then updates itself.
+# --------------------------------------------------------------------------
+import hashlib
+
+# {agent: [(scope, relative-or-absolute path, what it holds)]}
+INSTALL_PATHS = [
+    ("claude-code", "project", ".claude/skills", "skills"),
+    ("claude-code", "project", ".claude/settings.json", "hooks/permissions"),
+    ("claude-code", "project", ".claude/settings.local.json", "hooks/permissions"),
+    ("claude-code", "project", ".claude-plugin", "plugins"),
+    ("claude-code", "project", ".mcp.json", "mcp"),
+    ("claude-code", "user", "~/.claude/skills", "skills"),
+    ("claude-code", "user", "~/.claude/settings.json", "hooks/permissions"),
+    ("claude-code", "user", "~/.claude.json", "mcp"),
+    ("codex", "project", ".codex/skills", "skills"),
+    ("codex", "project", ".codex/config.toml", "mcp"),
+    ("codex", "user", "~/.codex/config.toml", "mcp"),
+    ("codex", "user", "~/.codex/skills", "skills"),
+    ("cursor", "project", ".cursor/rules", "rules"),
+    ("cursor", "project", ".cursor/mcp.json", "mcp"),
+    ("cursor", "user", "~/.cursor/mcp.json", "mcp"),
+    ("windsurf", "project", ".windsurf/rules", "rules"),
+    ("windsurf", "project", ".windsurf/mcp_config.json", "mcp"),
+    ("windsurf", "user", "~/.codeium/windsurf/mcp_config.json", "mcp"),
+    ("gemini-cli", "project", ".gemini/settings.json", "mcp/extensions"),
+    ("gemini-cli", "user", "~/.gemini/settings.json", "mcp/extensions"),
+    ("gemini-cli", "user", "~/.gemini/extensions", "extensions"),
+    ("github-copilot", "project", ".github/copilot-instructions.md", "instructions"),
+    ("github-copilot", "project", ".vscode/mcp.json", "mcp"),
+    ("opencode", "project", ".opencode", "plugins/agents"),
+    ("opencode", "project", "opencode.json", "mcp"),
+    ("opencode", "user", "~/.config/opencode/opencode.json", "mcp"),
+    ("antigravity", "project", ".antigravity/skills", "skills"),
+    ("antigravity", "project", ".antigravity/mcp.json", "mcp"),
+    ("antigravity", "user", "~/.antigravity/mcp.json", "mcp"),
+]
+
+
+def _iter_install_targets(root):
+    """Existing install locations only. A path that is absent is not a finding."""
+    for agent, scope, raw, holds in INSTALL_PATHS:
+        path = os.path.expanduser(raw) if raw.startswith("~") else os.path.join(root, raw)
+        if not os.path.exists(path):
+            continue
+        yield {"agent": agent, "scope": scope, "declared": raw, "holds": holds,
+               "path": os.path.abspath(path),
+               "kind": "dir" if os.path.isdir(path) else "file"}
+
+
+def _units_under(entry):
+    """One unit per installed thing: a skill directory, or a single config file."""
+    if entry["kind"] == "file":
+        return [dict(entry, name=os.path.basename(entry["path"]), unit=entry["path"])]
+    out = []
+    try:
+        children = sorted(os.listdir(entry["path"]))
+    except OSError:
+        return []
+    for child in children:
+        full = os.path.join(entry["path"], child)
+        out.append(dict(entry, name=child, unit=full))
+    return out or [dict(entry, name=os.path.basename(entry["path"]), unit=entry["path"])]
+
+
+def _file_hashes(unit):
+    """sha256 per file, relative path keyed, so a rename reads as add+remove."""
+    out = {}
+    if os.path.isfile(unit):
+        with open(unit, "rb") as fh:
+            out[os.path.basename(unit)] = hashlib.sha256(fh.read()).hexdigest()
+        return out
+    for dirpath, dirnames, filenames in os.walk(unit):
+        dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
+        for fn in sorted(filenames):
+            full = os.path.join(dirpath, fn)
+            rel = os.path.relpath(full, unit).replace(os.sep, "/")
+            try:
+                with open(full, "rb") as fh:
+                    out[rel] = hashlib.sha256(fh.read()).hexdigest()
+            except OSError:
+                out[rel] = "unreadable"
+    return out
+
+
+def _tree_sha(hashes):
+    """One digest over the sorted (path, hash) pairs - order-independent."""
+    h = hashlib.sha256()
+    for rel in sorted(hashes):
+        h.update(rel.encode("utf-8"))
+        h.update(b"\0")
+        h.update(hashes[rel].encode("utf-8"))
+        h.update(b"\n")
+    return h.hexdigest()
+
+
+def _rule_summary(unit):
+    """Rule-hit counts, so drift can be read against what the unit already did."""
+    try:
+        res = audit(unit)
+    except Exception:
+        return {}, 0
+    by_rule = {}
+    for f in res["findings"]:
+        by_rule[f["rule"]] = by_rule.get(f["rule"], 0) + 1
+    return by_rule, res.get("risk_score", 0)
+
+
+def _inventory(root, with_rules=False):
+    units = []
+    for entry in _iter_install_targets(root):
+        for u in _units_under(entry):
+            hashes = _file_hashes(u["unit"])
+            rec = {
+                "agent": u["agent"], "scope": u["scope"], "holds": u["holds"],
+                "name": u["name"],
+                "path": u["unit"],
+                "files": len(hashes),
+                "sha256": _tree_sha(hashes),
+                "mtime": int(os.path.getmtime(u["unit"])) if os.path.exists(u["unit"]) else 0,
+                "file_hashes": hashes,
+            }
+            if with_rules:
+                rec["rule_hits"], rec["risk_score"] = _rule_summary(u["unit"])
+            units.append(rec)
+    units.sort(key=lambda r: (r["agent"], r["scope"], r["name"]))
+    return units
+
+
+def _lock_path(root):
+    return os.path.join(root, ".viora", "skills.lock.json")
+
+
+def run_installed(args):
+    root = os.path.abspath(getattr(args, "path", None) or ".")
+    units = _inventory(root, with_rules=bool(getattr(args, "lock", False)))
+    if getattr(args, "format", "text") == "json":
+        print(json.dumps({"root": root, "units": units}, indent=2, ensure_ascii=False))
+    else:
+        print("Viora Aegis - installed skills, plugins and MCP configs")
+        print("root: %s" % root)
+        print("")
+        if not units:
+            print("  (nothing found at the known paths - that is not proof that nothing")
+            print("   is installed; check the agent's own settings UI)")
+        else:
+            print("%-15s %-8s %-16s %-28s %6s  %s"
+                  % ("AGENT", "SCOPE", "HOLDS", "NAME", "FILES", "SHA256"))
+            for u in units:
+                print("%-15s %-8s %-16s %-28s %6d  %s"
+                      % (u["agent"], u["scope"], u["holds"], u["name"][:28],
+                         u["files"], u["sha256"][:16]))
+            print("")
+            print("%d unit(s). Each one runs with your agent's permissions." % len(units))
+        print("")
+    if getattr(args, "lock", False):
+        out = _lock_path(root)
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        with open(out, "w", encoding="utf-8") as fh:
+            json.dump({"$schema": "viora-skills-lock/1", "root": root,
+                       "units": units}, fh, indent=2, ensure_ascii=False)
+            fh.write("\n")
+        print("-> lock written: %s (%d unit(s))" % (out, len(units)))
+    return 0
+
+
+def run_verify(args):
+    root = os.path.abspath(getattr(args, "path", None) or ".")
+    lock_file = _lock_path(root)
+    lock = None
+    try:
+        with open(lock_file, "r", encoding="utf-8") as fh:
+            lock = json.load(fh)
+    except Exception:
+        sys.stderr.write("! no lock at %s - run: skill-audit --installed --lock\n" % lock_file)
+        return 2
+    before = {u["path"]: u for u in lock.get("units", [])}
+    now = {u["path"]: u for u in _inventory(root)}
+
+    drift = []
+    for path, old in sorted(before.items()):
+        new = now.get(path)
+        if new is None:
+            drift.append((path, "unit removed since the lock", []))
+            continue
+        if new["sha256"] == old["sha256"]:
+            continue
+        oldh, newh = old.get("file_hashes", {}), new.get("file_hashes", {})
+        detail = []
+        detail += ["added: %s" % f for f in sorted(set(newh) - set(oldh))]
+        detail += ["removed: %s" % f for f in sorted(set(oldh) - set(newh))]
+        detail += ["changed: %s" % f for f in sorted(set(oldh) & set(newh))
+                   if oldh[f] != newh[f]]
+        drift.append((path, "content changed since the lock", detail))
+    for path in sorted(set(now) - set(before)):
+        drift.append((path, "unit added since the lock", []))
+
+    findings = [
+        {"rule": "SA-SUP-006", "title": "post-install drift", "severity": "high",
+         "file": path, "line": 0, "reason": reason, "detail": detail}
+        for path, reason, detail in drift
+    ]
+    if getattr(args, "format", "text") == "json":
+        print(json.dumps({"root": root, "lock": lock_file, "drift": findings},
+                         indent=2, ensure_ascii=False))
+    else:
+        print("Viora Aegis - installed-skill drift check")
+        print("lock: %s" % lock_file)
+        print("")
+        if not findings:
+            print("  no drift: every locked unit hashes to the value it had when locked.")
+            print("")
+            return 0
+        for f in findings:
+            print("HIGH     SA-SUP-006 post-install drift  %s" % f["file"])
+            print("         %s" % f["reason"])
+            for d in f["detail"][:20]:
+                print("           - %s" % d)
+        print("")
+        print("%d unit(s) drifted. Code you reviewed is not the code that is installed."
+              % len(findings))
+        print("Re-audit each one, then re-lock only after you have read the diff.")
+        print("")
+    return 1 if findings else 0
