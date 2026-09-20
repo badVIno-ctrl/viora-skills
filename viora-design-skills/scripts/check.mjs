@@ -108,8 +108,21 @@ const PRODUCT_TEXT = PRODUCT_MD ? (() => {
 		return ""
 	}
 })() : ""
+/* Only the truth claims table sources a number. The forbidden claims list quotes the
+   figures that must never ship, so reading the whole file would licence them. */
+const PRODUCT_CLAIMS = (() => {
+	const lines = PRODUCT_TEXT.split("\n")
+	const kept = []
+	let inForbidden = false
+	for (const line of lines) {
+		if (/^#{1,6}\s/.test(line)) inForbidden = /forbidden|never\s+ship|banned/i.test(line)
+		if (inForbidden) continue
+		kept.push(line)
+	}
+	return kept.join("\n")
+})()
 const PRODUCT_NUMBERS = new Set(
-	[...PRODUCT_TEXT.matchAll(/(\d[\d.,]*)\s*(%|x|\+)/gi)].map((m) => `${m[1].replace(/[,\s]/g, "")}${m[2].toLowerCase()}`),
+	[...PRODUCT_CLAIMS.matchAll(/(\d[\d.,]*)\s*(%|x|\+)/gi)].map((m) => `${m[1].replace(/[,\s]/g, "")}${m[2].toLowerCase()}`),
 )
 const LAST_SURFACE = LAST_LOG && LAST_LOG.surface ? String(LAST_LOG.surface).trim().toLowerCase() : ""
 
@@ -674,8 +687,10 @@ const RULES = [
 		id: "system-display-face",
 		level: "warn",
 		ext: PAINT,
-		re: /(?:--font-display|font-family)\s*:\s*["']?(?:Impact|Arial\s*Black|system-ui)["']?\s*(?:,\s*(?:sans-serif|serif|monospace)\s*)?[;}\n]/gi,
-		msg: "Impact, Arial Black or system-ui alone as the display family. The headline then renders differently on every machine, and none of them is the design. Name a real face with a fallback stack.",
+		/* the display role only: --font-display, or a font-family on a heading or display
+		   selector. A body stack of system-ui is a legitimate choice, not a tell. */
+		re: /(?:--font-display\s*:\s*["']?(?:Impact|Arial\s*Black|system-ui)["']?\s*(?:,\s*(?:ui-[a-z-]+|sans-serif|serif|monospace)\s*)?[;}\n]|\b(?:h[1-3]|\.display[\w-]*|\.title[\w-]*|\.headline[\w-]*)\b[^{}\n]*\{[^{}\n]*font-family:\s*["']?(?:Impact|Arial\s*Black)["']?)/gi,
+		msg: "Impact, Arial Black or a bare system-ui as the display face. The headline then renders differently on every machine, and none of them is the design. Name a real face with a fallback stack. A system-ui body stack is fine; this is about --font-display.",
 	},
 	{
 		id: "glyph-icon",
@@ -747,15 +762,20 @@ const RULES = [
 		id: "shadow-opacity",
 		level: "warn",
 		ext: new Set([...STYLE, ...MARKUP]),
+		whole: true,
 		msg: "shadow alpha above 0.12 on a light surface. A shadow that dark reads as a drop shadow from a slide deck. Raise the blur and the offset instead, and tint it from the ink hue.",
-		scan(line) {
-			if (/prefers-color-scheme:\s*dark|\[data-theme=["']?dark|\.dark\b|--shadow-boost/.test(line)) return []
+		wholeScan(all, lineAt) {
 			const hits = []
-			const re = /box-shadow:[^;{}\n]*?(?:rgba?\([^)]*?[,/]\s*(0?\.\d+)\s*\)|hsla?\([^)]*?\/\s*(0?\.\d+)\s*\))/g
+			const re = /box-shadow:[^;{}]*?(?:rgba?\([^)]*?[,/]\s*(0?\.\d+)\s*\)|hsla?\([^)]*?\/\s*(0?\.\d+)\s*\))/g
 			let m
-			while ((m = re.exec(line))) {
+			while ((m = re.exec(all))) {
 				const a = Number(m[1] ?? m[2])
-				if (a > 0.12) hits.push(m.index)
+				if (a <= 0.12) continue
+				/* a dark theme wants a heavier shadow: look back for the block that
+				   encloses this declaration, not only at the declaration's own line. */
+				const before = all.slice(Math.max(0, m.index - 1200), m.index)
+				if (/prefers-color-scheme:\s*dark|\[data-theme=["']?dark|\.dark\b|--shadow-boost|:root\[data-theme/.test(before)) continue
+				hits.push(lineAt(m.index))
 			}
 			return hits
 		},
@@ -766,6 +786,9 @@ const RULES = [
 		level: "warn",
 		ext: new Set([...MARKUP, ".jsx", ".tsx", ...COPY]),
 		msg: "this percentage, multiple or plus-figure is not in PRODUCT.md. A figure with no source reads as decoration, and it makes the real figures look invented too. Add it to the truth claims table with where it came from, or drop the claim. Counts, prices and dates are not checked here: review those by hand.",
+		/* PRODUCT.md is the source, not shipped copy: its forbidden claims list quotes
+		   the figures that must never ship, and flagging those is the rule eating itself. */
+		fileSkip: (_c, path) => /^product\.md$/i.test(basename(path)),
 		scan(line) {
 			if (!PRODUCT_TEXT) return []
 			const hits = []

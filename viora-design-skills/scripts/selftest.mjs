@@ -572,7 +572,7 @@ const productDir = mkdtempSync(join(tmpdir(), "viora-product-"))
 try {
 	writeFileSync(
 		join(productDir, "PRODUCT.md"),
-		"# PRODUCT.md\n\n| Claim | Wording | Source |\n|---|---|---|\n| draft speed | 3 min | telemetry |\n| adoption | 340 workspaces | billing |\n| close rate | 92% | telemetry |\n",
+		"# PRODUCT.md\n\n| Claim | Wording | Source |\n|---|---|---|\n| draft speed | 3 min | telemetry |\n| adoption | 340 workspaces | billing |\n| close rate | 92% | telemetry |\n\n## Forbidden claims\n\n- \"99.9% uptime\"\n",
 	)
 	writeFileSync(
 		join(productDir, "page.html"),
@@ -587,6 +587,12 @@ try {
 	}
 	const hits = out ? out.findings.filter((f) => f.id === "unsourced-number") : []
 	tell(hits.length === 1, hits.length === 1 ? "rule fires: unsourced-number, once, on the number PRODUCT.md does not carry" : `unsourced-number fired ${hits.length} time(s)`)
+	/* the source file is not shipped copy: its forbidden claims list quotes the figures
+	   that must never ship, and flagging those would be the rule eating itself. */
+	tell(
+		hits.every((f) => !/PRODUCT\.md$/i.test(String(f.file))),
+		hits.every((f) => !/PRODUCT\.md$/i.test(String(f.file))) ? "unsourced-number leaves PRODUCT.md itself alone" : "unsourced-number flags its own source file",
+	)
 } finally {
 	rmSync(productDir, { recursive: true, force: true })
 }
