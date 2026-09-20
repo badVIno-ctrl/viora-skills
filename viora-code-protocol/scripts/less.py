@@ -148,7 +148,7 @@ def declared_deps(root: Path):
     req = root / "requirements.txt"
     if req.exists():
         for line in read(req).splitlines():
-            name = re.split(r"[=<>!\[; ]", line.strip(), 1)[0]
+            name = re.split(r"[=<>!\[; ]", line.strip(), maxsplit=1)[0]
             if name and not name.startswith("#"):
                 deps[name.lower()] = "py"
     pyproject = root / "pyproject.toml"

@@ -190,7 +190,7 @@ Clean up the smoke test with `rm -rf .viora`.
 bash viora-code-protocol/tests/run-all.sh
 ```
 
-85 assertions across three suites, no network and nothing to install beyond `bash`, `git` and
+171 assertions across four suites, no network and nothing to install beyond `bash`, `git` and
 `python3`. Each suite builds a throwaway repo under `/tmp`, drives the real `viora.py`, the real
 pre-commit hook and the real grader, and never touches your project.
 
