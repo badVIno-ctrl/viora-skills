@@ -2,7 +2,7 @@
 name: viora-design-skills
 title: Виора Design Skills
 description: Design and build interfaces that look and feel exceptional. Use for any request to design, redesign, build, style, polish, audit, or fix a UI - websites, landing pages, marketing pages, dashboards, product UI, app screens, components, forms, onboarding, empty states, design systems, tokens, typography, color, layout, spacing, motion, micro-interactions, animation, accessibility, responsive behavior, dark mode, or requests like "make this look better", "more premium", "less generic", "less AI-looking", "сделай красиво", "выглядит как шаблон". Also use for interface review, for picking palettes, font pairs and landing patterns from the bundled offline catalog, and for the design side of performance (LCP, CLS, font loading). Not for backend-only or non-visual work.
-version: 4.1.0
+version: 4.2.0
 license: MIT
 metadata:
   author: Виора Design Skills
@@ -81,16 +81,21 @@ Capability table, degradation ladder, and the typical failure of each tier: `ref
 
 Run in order. Print the marker line for each gate as you pass it, on one line, nothing else.
 
-| Gate | Name | Load | Produce | Marker |
+| Gate | Name | Load | Produce | Record it |
 |---|---|---|---|---|
-| G0 | Route | nothing | job + mode + stack + lane | `G0 route: <job>/<mode>/<stack>, lane FULL` |
-| G1 | Read | `DESIGN.md` if it exists | the Design Read line | `G1 read: ...` |
-| G2 | Direct | `reference/01-direction.md`, then `scripts/pick.mjs` | direction contract + catalog picks (skip if DESIGN.md exists) | `G2 direction: <world>` |
-| G3 | Frame | `reference/02-tokens.md` + `reference/03-layout.md` | token file + section plan | `G3 frame: <n> sections, <n> families` |
-| G4 | Build | see build router below | working code | `G4 build: <files>` |
-| G5 | Detail | `reference/07-components.md` then `reference/08-states-a11y.md` | states, edges, browser surfaces, signature | `G5 detail: signature <what>` |
-| G6 | Verify | `reference/10-review.md` | script output + screenshot fixes + deletions | `G6 verify: <errors> errors, <warnings> warnings, wig <n>` |
-| G7 | Report | nothing | short report + user to-dos | `G7 done` |
+| G0 | Route | nothing | job + mode + stack + lane | `node scripts/gate.mjs start <job> <mode> <stack> <lane>` then `gate.mjs pass G0 "route: <job>/<mode>/<stack>, lane FULL"` |
+| G1 | Read | `DESIGN.md` if it exists | the Design Read line | `node scripts/gate.mjs pass G1 "read: ..."` |
+| G2 | Direct | `reference/01-direction.md`, then `scripts/pick.mjs` | direction contract + catalog picks (skip if DESIGN.md exists) | `node scripts/gate.mjs pass G2 "direction: <world>"` |
+| G3 | Frame | `reference/02-tokens.md` + `reference/03-layout.md`, then `reference/20-structure.md` | token file + structure line + section plan | `node scripts/gate.mjs pass G3 "frame: <shape>, <n> sections, <n> families"` |
+| G4 | Build | see build router below | working code | `node scripts/gate.mjs pass G4 "build: <files>"` |
+| G5 | Detail | `reference/07-components.md` then `reference/08-states-a11y.md` | states, edges, browser surfaces, signature | `node scripts/gate.mjs pass G5 "detail: signature <what>"` |
+| G6 | Verify | `reference/10-review.md` | script output + screenshot fixes + deletions | `node scripts/gate.mjs pass G6 "verify: <errors> errors, <warnings> warnings, wig <n>"` |
+| G7 | Report | nothing | short report + user to-dos | `node scripts/gate.mjs pass G7 "done"` then `gate.mjs log ...` |
+
+The marker is the command, not a line you type into the answer. `gate.mjs` writes
+`.viora/design-run.json`; `verify.mjs` reads it at G6 and refuses to print a verdict while a
+gate this job requires is missing. NEW and REDESIGN owe G0 to G6, CHANGE owes G1, G3, G4 and
+G5, FIX owes G1 and G4, REVIEW owes G1.
 
 ### G0 Route
 
@@ -101,6 +106,29 @@ Pick one **job**:
 - `REDESIGN` replace the look, keep the product truth. All gates. The old look is evidence, not authority.
 - `REVIEW` audit only, write no product code. G1, G6, G7.
 - `FIX` a named defect. G1, G4, G6.
+
+One more router row, before the mode. Three **verbs** replace the job when the request names
+one, and one **scope** narrows it. Both are defined in `reference/21-verbs.md`, loaded only
+when a row matches:
+
+| The request | Job line |
+|---|---|
+| "make this survive real content", long strings, empty and error states, RTL, 200 % zoom, offline | `HARDEN`, runs G1, G4, G5, G6 |
+| "calmer", "louder", "more confident", "less shouty" | `QUIET` or `BOLD`, one dial, runs G1, G3, G4, G6 |
+| "tell me what is wrong with this" with no code expected | `CRITIQUE`, runs G1, G6, G7, at most five findings |
+| a reference screenshot or URL: "something like this, but ours" | `STUDY`, see `reference/01-direction.md` section 5 |
+
+**Scope.** If the brief is one component and nothing else, print `lane FULL, scope COMPONENT`
+at G0. Scope COMPONENT skips the structure half of G2 and G3 with one line (`structure:
+skipped, single component`), and G5 emits `<Name>.preview.html` from
+`assets/blocks/html/preview-shell.html`: eight states in one page, default, hover, focus,
+active, disabled, loading, error and success. The companion classes `.is-hover`,
+`.is-focus` and `.is-active` only work if the component CSS targets them next to the real
+pseudo-classes, and `wig.mjs component-states` is an error when `:focus-visible` and the
+disabled state are both missing.
+
+**Refinement preserves; redesign replaces; never split the difference.** A half-kept look is
+two directions arguing on one page.
 
 Pick one **mode**. The mode decides what wins when two goods collide:
 
@@ -124,6 +152,11 @@ If the user named a stack, it is pinned and this pick is over. If the repo shows
 Answer in at most five short lines, then print the Design Read on one line:
 
 `G1 read: <surface> for <audience>, <mode>, feeling <3 adjectives>, script <Latin|Cyrillic|both>, pinned: <what the user fixed, or "nothing">`
+
+If the project root has `PRODUCT.md`, load it here too: it is what the product is allowed to
+claim. Every number in the copy must appear in its truth claims table, and `check.mjs
+unsourced-number` warns when one does not. If it is missing and the brief carries numbers,
+offer `assets/PRODUCT.template.md` in one line and continue.
 
 The audience is a real group with real expectations, not "users". The feeling is what rule 9 will be judged against. The script decides the font pool: get this wrong and every later gate inherits broken typography.
 
@@ -159,9 +192,17 @@ Take what serves the contract. Refuse what fights it. Never take all of it: the 
 
 If the script cannot run, use the offline digest in `reference/16-catalog.md` and say so on that line. Never invent a row number.
 
+**Do not repeat the last surface.** Add `--avoid-last` to the `pick.mjs` call: it reads what G7 logged last time and excludes that world, that palette and that structure, printing what it excluded. `check.mjs repeat-world` warns when this `DESIGN.md` names the previous world for a different surface.
+
 ### G3 Frame
 
 Load `reference/02-tokens.md`, copy `assets/tokens.css` into the project, fill in the palette and the type pair. Then load `reference/03-layout.md` and write the section plan as a short list: section name, layout family, content it carries. No component code in this gate.
+
+Then load `reference/20-structure.md` and decide the arrangement, not only the sections. Pick one page shape, one navigation archetype and one footer archetype by name, and print one line:
+
+`STRUCTURE: <shape> / nav <N> / footer <F>`
+
+Write the same line into `DESIGN.md`. Three arrangements are unavailable by default and `check.mjs` enforces two of them: wordmark plus links plus a filled button as the nav, a four column link footer with social icons (`stock-footer`), and hero then three equal cards then a CTA band (`template-rhythm`).
 
 Hard limits set here, checked at G6: neutrals plus at most two chromatic families, one radius family, one type pair, one shadow scale.
 
@@ -201,6 +242,11 @@ This gate is where "good" becomes "beautiful". Load `reference/07-components.md`
 - copy: every label names its action, every error names its recovery,
 - the **signature moment** from the contract, built for real. One moment, executed completely, beats five sprinkled effects. If the contract's `SIGNATURE` line is not visible in the built result, this gate is not finished.
 
+For scope COMPONENT this gate also emits the preview page: copy
+`assets/blocks/html/preview-shell.html` to `<Name>.preview.html`, paste the component into
+all eight stages, and look at it. Eight identical cells means seven states were never
+styled.
+
 ### G6 Verify
 
 Load `reference/10-review.md`. Then, in this order:
@@ -216,6 +262,14 @@ Load `reference/10-review.md`. Then, in this order:
 ### G7 Report
 
 At most eight lines: what you built, the direction in one line, the signature moment, the two or three craft decisions worth naming, what you deleted in the subtraction pass, what the user must supply (real images, real copy, real data), and what you deliberately left out. No checklists, no self-congratulation.
+
+Then record what was shipped, so the next surface cannot land in the same world by accident:
+
+```
+node scripts/gate.mjs pass G7 "done"
+node scripts/gate.mjs log --surface "<what>" --world <world> --palette <id> --type "<pair>" \
+  --structure <shape> --nav <N> --footer <F> --paper <dark|mid|light> --accent <warm|cool|neutral|other>
+```
 
 ## File map
 
@@ -241,11 +295,14 @@ reference/16-catalog.md       how to use data/ well, plus the offline digest
 reference/17-model-tiers.md   lane routing, capability tiers, degradation ladder
 reference/18-stacks.md        Tailwind, Next, Vue, shadcn, native, templates
 reference/19-mobile.md        phones: reach, targets, safe areas, keyboards, load
+reference/20-structure.md     page shapes, nav and footer archetypes, what is spent
+reference/21-verbs.md         HARDEN, QUIET/BOLD, CRITIQUE: jobs that are not "build"
 assets/tokens.css             copy into the project, never read
 assets/starter.html           copy as the shell of a single-file artifact, never read
 assets/palettes.css           13 measured palettes, one paste-in block each, never read
-assets/blocks/html/*.html     paste-in shell, marketing and app blocks, open one, not all
+assets/blocks/html/*.html     paste-in shell, marketing, app and component preview blocks
 assets/blocks/react/*.tsx     the same patterns as behaviour: state, keyboard, formatting
+assets/PRODUCT.template.md    what the product may claim: audience scene, sourced numbers
 assets/snippets.md            component snippets, open only for the component you need
 assets/DESIGN.template.md     project memory template
 scripts/check.mjs             mechanical slop and craft linter, execute only

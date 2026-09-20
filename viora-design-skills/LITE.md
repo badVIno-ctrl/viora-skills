@@ -259,6 +259,18 @@ node scripts/wig.mjs .              # interface rules, file:line output
 node scripts/contrast.mjs <tokens>  # WCAG measurement, never argue with the number
 ```
 
+LITE records four gates, not eight. One command each, and only if `node` runs:
+
+```bash
+node scripts/gate.mjs start NEW LAND FILE LITE     # after Step 1
+node scripts/gate.mjs pass G3 "recipe R4, tokens pasted"   # after Step 3
+node scripts/gate.mjs pass G6 "check clean, contrast clean"  # after this step
+node scripts/gate.mjs pass G7 "done"               # after Step 7
+```
+
+If you cannot run commands, skip this block entirely. A gate you cannot record is not a
+reason to stop working.
+
 Fix everything in one batch. Run once more. Stop. Do not open a third round.
 
 **If you cannot run commands**, read your own output once against this list and fix what fails:

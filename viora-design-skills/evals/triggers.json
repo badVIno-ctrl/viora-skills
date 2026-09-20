@@ -1,0 +1,27 @@
+{
+  "note": "Trigger set for the SKILL.md description. should = the skill must load; should_not = a near miss that must not pull it in. Run by hand against a router, or read as the boundary of this skill. viora-allow-file: these are user queries quoted verbatim, JSON delimits them with straight quotes, so Russian typography rules do not apply.",
+  "should": [
+    "make this landing page look less generic, it feels like every other SaaS site",
+    "выглядит как шаблон, сделай дороже",
+    "redesign our pricing page, the three plan cards look like a bootstrap demo",
+    "our dashboard is unreadable at a glance, fix the hierarchy and spacing",
+    "build a one page site for a bakery, Russian copy, warm and not corporate",
+    "audit this checkout screen for accessibility and state coverage before we ship",
+    "pick a palette and a font pair for a legal tech product that must feel calm",
+    "the empty state and the loading state are missing in this component, add them properly",
+    "dark mode looks washed out, our greys have no contrast",
+    "our hero image causes a layout shift and the fonts flash, fix the LCP and CLS"
+  ],
+  "should_not": [
+    "add a route at /api/invoices that returns the last ten invoices as JSON",
+    "our Postgres queries time out under load, add the right indexes",
+    "rewrite these three product descriptions to be shorter and punchier",
+    "write the launch email and two tweets for this release",
+    "set up GitHub Actions to run the test suite on pull requests",
+    "migrate the repo from npm to pnpm workspaces",
+    "the webhook signature check fails intermittently, find the race",
+    "draft the privacy policy section about analytics cookies",
+    "add a new field to the user model and backfill it",
+    "configure Sentry alerting thresholds for the worker queue"
+  ]
+}

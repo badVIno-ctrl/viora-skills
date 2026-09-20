@@ -219,4 +219,40 @@ export const WIG = {
 		"<td>1,284</td>",
 		'<td class="a-num">1,284</td> with tabular-nums',
 	],
+	"overlay-inert": [
+		"A closed drawer left in the layout keeps its links in the tab order, so a keyboard user tabs into a panel nobody can see.",
+		"Set inert on the closed panel, or hide it with the hidden attribute.",
+		'<div class="drawer is-closed"><a href="/pricing">Pricing</a></div>',
+		'<div class="drawer is-closed" inert><a href="/pricing">Pricing</a></div>',
+	],
+	"input-mode": [
+		"Without inputmode the phone shows the full alphabetic keyboard for a code, a phone number or a search field, and the Enter key says the wrong thing.",
+		"inputmode matched to the value, enterkeyhint matched to what Enter does.",
+		'<input type="tel" name="phone" />',
+		'<input type="tel" name="phone" inputmode="tel" enterkeyhint="next" />',
+	],
+	"anchor-scroll-margin": [
+		"With a sticky header, jumping to an in-page anchor parks the heading behind the bar, so the section looks like it starts mid sentence.",
+		"scroll-margin-top on the anchor targets, equal to the header height.",
+		'<h2 id="pricing">Pricing</h2> under a sticky header',
+		"[id] { scroll-margin-top: calc(var(--header-h) + var(--space-4)) }",
+		],
+	"will-change-sprinkle": [
+		"will-change promotes an element to its own compositor layer and keeps it there. Sprinkled everywhere it costs memory for the whole session and makes scrolling worse, not better.",
+		"Remove it. Add it back on the one element that measurably janks, and only while it animates.",
+		"will-change: transform on cards, header, modal and every list row",
+		"no will-change, or one element during its animation",
+	],
+	"heading-wrap": [
+		"Without text-wrap: balance a headline breaks into a last line holding one word, which reads as a layout accident.",
+		"text-wrap: balance on h1 and h2, text-wrap: pretty on body copy. It belongs in the token layer.",
+		"h1 { font-size: var(--text-h1) }",
+		"h1 { font-size: var(--text-h1); text-wrap: balance }",
+	],
+	"component-states": [
+		"Hover styles with no :focus-visible and no disabled state means the component works for a mouse and for nothing else.",
+		"Every interactive component defines rest, hover, focus-visible, active and disabled before it ships.",
+		".btn:hover { background: var(--accent-hover) }",
+		".btn:hover, .btn:focus-visible, .btn:disabled each defined",
+	],
 }

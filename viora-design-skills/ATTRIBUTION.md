@@ -73,9 +73,23 @@ Changes made:
 - Where it lives: `reference/01-direction.md`, `reference/09-slop-bans.md`, and the failure
   modes list in `SKILL.md`. No text was copied.
 
+## Sources absorbed in 4.2.0
+
+Five more public skills contributed ideas to this release. Every row is an idea, restated
+in this skill's own words against its own rule format. No text, no regex and no table was
+copied from any of them.
+
+| Source | Licence | Idea taken | Where it lives | Text copied |
+|---|---|---|---|---|
+| `hallmark` | MIT | a run is a recorded sequence of gates on disk, not a claim in the answer | `scripts/gate.mjs`, the refusal in `scripts/verify.mjs` | no text copied |
+| `impeccable` | Apache-2.0 | craft defects worth linting mechanically: hard offset shadows, over-tight tracking, borrowed display faces, shadows too dark for a light ground | `offset-shadow`, `over-tracking`, `system-display-face`, `shadow-opacity` in `scripts/check.mjs` | no text copied |
+| `ui-skills` | MIT | a component is only finished when every state is rendered side by side, including the ones a pseudo-class hides | `component-states` in `scripts/wig.mjs` | no text copied |
+| `huashu` | MIT | name the arrangement a category always ships, then make it unavailable by default | `reference/20-structure.md`, `template-rhythm`, `stock-footer` | no text copied |
+| `styleseed` (rohitg00) | Apache-2.0 | keep a short memory of what was shipped so the next surface rotates away from it | `gate.mjs log`, `pick.mjs --avoid-last`, `repeat-world` | no text copied |
+
 ## Everything else
 
 The gate system, the ten laws, the fourteen worlds, the thirteen palettes, `tokens.css`,
 `starter.html`, `check.mjs`, `contrast.mjs`, `shot.mjs`, `verify.mjs`, `selftest.mjs`,
-`pick.mjs`, `wig.mjs`, `LITE.md`, all `reference/*.md` files and the Cyrillic type pool are
-original to Viora Design Skills.
+`pick.mjs`, `wig.mjs`, `gate.mjs`, `docsync.mjs`, `LITE.md`, all `reference/*.md` files and
+the Cyrillic type pool are original to Viora Design Skills.

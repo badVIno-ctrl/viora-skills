@@ -23,6 +23,7 @@ import { spawnSync } from "node:child_process"
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs"
 import { dirname, extname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
+import { REQUIRED, readRun } from "./gate.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const argv = process.argv.slice(2)
@@ -38,9 +39,29 @@ const getFlag = (name) => {
 const url = getFlag("url")
 const strict = Boolean(getFlag("strict"))
 const skipShots = Boolean(getFlag("no-shots"))
+const skipGates = Boolean(getFlag("no-gates"))
 const consumed = new Set([String(url), String(getFlag("out"))])
 const targets = argv.filter((a) => !a.startsWith("--") && !consumed.has(a))
 if (targets.length === 0) targets.push(".")
+
+/* The gate record is the first thing checked: a verdict printed over skipped
+   gates is the failure mode this whole script exists to prevent. */
+if (!skipGates) {
+	const root = resolve(targets.find((t) => existsSync(t) && statSync(resolve(t)).isDirectory()) || ".")
+	const run = readRun(root)
+	if (run && run.job) {
+		const need = REQUIRED[String(run.job).toUpperCase()] || []
+		const missing = need.filter((g) => !run.gates || !run.gates[g])
+		if (missing.length) {
+			console.log(`\n>>> gate.mjs`)
+			console.log(`run ${run.job}/${run.mode}/${run.stack} is missing ${missing.join(" ")}.`)
+			console.log(`Close each one, then run this again:`)
+			for (const g of missing) console.log(`  node scripts/gate.mjs pass ${g} "<marker>"`)
+			console.log("no verdict printed. A gate nobody recorded is a gate nobody ran.")
+			process.exit(2)
+		}
+	}
+}
 
 const SKIP = new Set([
 	"node_modules", ".git", ".next", ".nuxt", ".svelte-kit", ".astro", "dist",

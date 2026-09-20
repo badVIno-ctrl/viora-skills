@@ -1,6 +1,10 @@
 # Виора Design Skills
 
-**v4.1.0** A design skill for coding agents. It makes the agent produce interfaces that look designed
+![version](https://img.shields.io/badge/version-v4.2.0-000000)
+![craft rules](https://img.shields.io/badge/craft_rules-79-000000)
+![interface rules](https://img.shields.io/badge/interface_rules-42-000000)
+
+**v4.2.0** A design skill for coding agents. It makes the agent produce interfaces that look designed
 rather than generated: a committed visual direction, a measured palette, real states, and a
 mechanical floor that is checked by scripts instead of claimed in a summary.
 

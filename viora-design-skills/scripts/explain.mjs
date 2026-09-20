@@ -41,7 +41,7 @@ function listRules(script) {
 	})
 	const found = new Map()
 	for (const line of out.split("\n")) {
-		const m = line.match(/^(error|warn)\s+(\S+)/)
+		const m = line.match(/^(error|warn|hint)\s+(\S+)/)
 		if (m) found.set(m[2], m[1])
 	}
 	return found

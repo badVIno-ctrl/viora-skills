@@ -49,6 +49,16 @@ This file is the design contract for this project. It overrides any default in
 any skill or tool. Read it before changing visual code. Update it in the same
 commit as any decision that changes a value here.
 
+## Structure
+
+```
+STRUCTURE: <shape> / nav <N> / footer <F>
+REFUSES:   <the arrangement this surface will not use>
+```
+
+Shape, nav and footer ids come from `reference/20-structure.md`. Written at G3, before any
+component code. A section order that drifts from the shape means one of the two is wrong.
+
 ## Direction
 
 **World:** Software Craft.

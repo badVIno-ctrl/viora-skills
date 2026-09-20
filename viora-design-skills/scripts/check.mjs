@@ -25,6 +25,7 @@
 
 import { readdirSync, readFileSync, statSync, existsSync } from "node:fs"
 import { join, extname, basename, relative, resolve } from "node:path"
+import { lastEntry } from "./gate.mjs"
 
 /* ------------------------------------------------------------------ setup */
 
@@ -73,6 +74,44 @@ if (targets.length === 0) targets.push(".")
 const between = (line, i, cls) => cls.test(line[i - 1] || "") && cls.test(line[i + 1] || "")
 
 const CYRILLIC = /[\u0400-\u04FF]/
+
+/* Two rules depend on what the project already decided, not on the line alone.
+   Both read cheap files once, and both stay silent when those files are absent. */
+const DESIGN_MD = ["DESIGN.md", "design.md"].map((n) => resolve(process.cwd(), n)).find((p) => existsSync(p))
+const DESIGN_TEXT = DESIGN_MD ? (() => {
+	try {
+		return readFileSync(DESIGN_MD, "utf8")
+	} catch {
+		return ""
+	}
+})() : ""
+
+/* a hard offset shadow is the material of these worlds, and a defect everywhere else */
+const POSTER_WORLD = /\b(poster|neobrutal|neo-brutal|brutalis[tm]|swiss\s*poster|risograph|zine)\b/i.test(DESIGN_TEXT)
+
+const LAST_LOG = (() => {
+	try {
+		return lastEntry(process.cwd())
+	} catch {
+		return null
+	}
+})()
+const LAST_WORLD = LAST_LOG && LAST_LOG.world ? String(LAST_LOG.world).trim().toLowerCase() : ""
+
+/* PRODUCT.md is the list of things this product may claim. When it exists, a number
+   in the copy that is not in it is a claim nobody sourced. */
+const PRODUCT_MD = ["PRODUCT.md", "product.md"].map((n) => resolve(process.cwd(), n)).find((p) => existsSync(p))
+const PRODUCT_TEXT = PRODUCT_MD ? (() => {
+	try {
+		return readFileSync(PRODUCT_MD, "utf8")
+	} catch {
+		return ""
+	}
+})() : ""
+const PRODUCT_NUMBERS = new Set(
+	[...PRODUCT_TEXT.matchAll(/(\d[\d.,]*)\s*(%|x|\+)/gi)].map((m) => `${m[1].replace(/[,\s]/g, "")}${m[2].toLowerCase()}`),
+)
+const LAST_SURFACE = LAST_LOG && LAST_LOG.surface ? String(LAST_LOG.surface).trim().toLowerCase() : ""
 
 /* Faces with no Cyrillic coverage. Naming one over Cyrillic copy ships a system
    fallback instead of the design. Extend the list, never silence the rule. */
@@ -563,6 +602,202 @@ const RULES = [
 		ext: ALL,
 		re: /\bblur-(?:2xl|3xl)\b|filter:\s*blur\(\s*(?:[4-9]\d|\d{3,})px/g,
 		msg: "a giant blur is the mesh-gradient blob behind the hero. Use a real image, a flat field, or nothing.",
+	},
+	{
+		id: "offset-shadow",
+		level: "warn",
+		ext: ALL,
+		msg: "hard offset shadow with no blur. It belongs to the poster and neobrutal worlds only. Outside them it is a sticker, not depth. Declare the world in DESIGN.md or use the shadow scale.",
+		scan(line) {
+			const hits = []
+			const re = /box-shadow:\s*(-?\d+(?:\.\d+)?)px\s+(-?\d+(?:\.\d+)?)px\s+(0|0px|0rem)\b/g
+			let m
+			while ((m = re.exec(line))) {
+				const x = Math.abs(Number(m[1]))
+				const y = Math.abs(Number(m[2]))
+				if (x !== 0 && x === y) hits.push(m.index)
+			}
+			return hits
+		},
+		fileSkip: () => POSTER_WORLD,
+	},
+	{
+		id: "svg-grain",
+		level: "warn",
+		ext: new Set([...MARKUP, ...STYLE, ".jsx", ".tsx", ".svg"]),
+		re: /feTurbulence/g,
+		msg: "SVG turbulence grain over the whole surface. Noise is a texture decision, not a fix for a flat palette. Use one tinted ground, or a real photograph.",
+	},
+	{
+		id: "stripe-bg",
+		level: "warn",
+		ext: ALL,
+		re: /(background(-image)?|background:)[^;{}\n]*repeating-linear-gradient/g,
+		msg: "repeating-linear-gradient as a background field. Diagonal stripes read as a placeholder swatch. Use a flat ground plus a hairline, or a real image.",
+	},
+	{
+		id: "ghost-card",
+		level: "warn",
+		ext: new Set([...STYLE, ...MARKUP]),
+		whole: true,
+		msg: "one rule carries both a 1px border and a wide soft shadow. Pick one edge language: a hairline, or a lift. Both together is the framework default card.",
+		wholeScan(all, lineAt) {
+			const hits = []
+			for (const m of all.matchAll(/\{[^{}]{0,600}\}/g)) {
+				const body = m[0]
+				if (!/border(?:-\w+)?:\s*(?:1px|0\.0?\d+rem)\s+solid/.test(body)) continue
+				const shadow = body.match(/box-shadow:\s*[^;}]+/)
+				if (!shadow) continue
+				const blurs = [...shadow[0].matchAll(/(?:^|\s)-?\d+(?:\.\d+)?(?:px|rem)?\s+-?\d+(?:\.\d+)?(?:px|rem)?\s+(\d+(?:\.\d+)?)px/g)]
+				if (blurs.some((b) => Number(b[1]) >= 20)) hits.push(lineAt(m.index))
+			}
+			return hits
+		},
+	},
+	{
+		id: "over-tracking",
+		level: "warn",
+		ext: ALL,
+		msg: "letter-spacing tighter than -0.04em. Past that, display type collides and body type stops being readable. -0.035em is the floor for display, 0 for body.",
+		scan(line) {
+			const hits = []
+			const re = /letter-spacing:\s*(-\d*\.?\d+)em|tracking-\[(-\d*\.?\d+)em\]/g
+			let m
+			while ((m = re.exec(line))) {
+				const v = Number(m[1] ?? m[2])
+				if (v <= -0.04) hits.push(m.index)
+			}
+			return hits
+		},
+	},
+	{
+		id: "system-display-face",
+		level: "warn",
+		ext: PAINT,
+		re: /(?:--font-display|font-family)\s*:\s*["']?(?:Impact|Arial\s*Black|system-ui)["']?\s*(?:,\s*(?:sans-serif|serif|monospace)\s*)?[;}\n]/gi,
+		msg: "Impact, Arial Black or system-ui alone as the display family. The headline then renders differently on every machine, and none of them is the design. Name a real face with a fallback stack.",
+	},
+	{
+		id: "glyph-icon",
+		level: "warn",
+		ext: new Set([...MARKUP, ".jsx", ".tsx"]),
+		re: /<(?:button|a|li)\b[^>]*>\s*[\u2713\u2715\u2192\u2605\u25cf\u25b6]\s*<\/(?:button|a|li)>/g,
+		msg: "a bare glyph as the whole label of a control. It inherits the text font, sits off the optical centre, and reads as a character to a screen reader. Use the icon set, and name the control.",
+	},
+	{
+		id: "template-rhythm",
+		level: "warn",
+		ext: new Set([...MARKUP, ".jsx", ".tsx"]),
+		whole: true,
+		msg: "hero, then three equal cards, then a band with one button. That is the arrangement every generator ships. Take a shape from reference/20-structure.md instead.",
+		wholeScan(all, lineAt) {
+			const hero = all.search(/<(?:section|header|div)[^>]*\b(?:class|className)="[^"]*\bhero\b/i)
+			if (hero === -1) return []
+			const after = all.slice(hero)
+			const grid = after.search(/(?:grid-cols-3|grid-template-columns:\s*repeat\(\s*3\b|\bcols-3\b)/)
+			if (grid === -1) return []
+			const cardish = [...after.slice(grid, grid + 3000).matchAll(/(?:class|className)="([^"]{15,200})"/g)]
+			const counts = new Map()
+			for (const c of cardish) {
+				if (!/rounded|border|card|shadow/.test(c[1])) continue
+				counts.set(c[1].trim(), (counts.get(c[1].trim()) || 0) + 1)
+			}
+			if (![...counts.values()].some((n) => n === 3)) return []
+			const band = after.slice(grid).search(/<(?:section|div)[^>]*\b(?:class|className)="[^"]*\b(?:cta|close|band|signup)\b/i)
+			if (band === -1) return []
+			return [lineAt(hero)]
+		},
+	},
+	{
+		id: "stock-footer",
+		level: "warn",
+		ext: new Set([...MARKUP, ".jsx", ".tsx"]),
+		whole: true,
+		msg: "four or more link columns plus a row of social icons. Most of those columns hold one link. Take F1 or F5 from reference/20-structure.md.",
+		wholeScan(all, lineAt) {
+			const at = all.search(/<footer\b/i)
+			if (at === -1) return []
+			const foot = all.slice(at, all.indexOf("</footer>", at) === -1 ? at + 4000 : all.indexOf("</footer>", at))
+			const columns = (foot.match(/<(?:ul|nav|div)[^>]*\b(?:class|className)="[^"]*\b(?:col|column|links?|group)\b[^"]*"/gi) || []).length
+			if (columns < 4) return []
+			const social = /twitter|linkedin|facebook|instagram|youtube|github|telegram|\bsocial\b/i.test(foot)
+			return social ? [lineAt(at)] : []
+		},
+	},
+	{
+		id: "kpi-clones",
+		level: "warn",
+		ext: new Set([...MARKUP, ".jsx", ".tsx"]),
+		whole: true,
+		msg: "four or more sibling blocks with identical markup where only the number changes. A number wall proves nothing and reads as filler. Keep the one measured figure that carries the argument.",
+		wholeScan(all, lineAt) {
+			const shapes = new Map()
+			for (const m of all.matchAll(/<(?:div|article|li)[^>]*>\s*<[^>]+>\s*[\d.,]+\s*(?:%|x|k|m|\+|&nbsp;\w+)?\s*<\/[^>]+>\s*<[^>]+>[^<]{2,60}<\/[^>]+>\s*<\/(?:div|article|li)>/gi)) {
+				const shape = m[0].replace(/>[^<]*</g, "><")
+				if (!shapes.has(shape)) shapes.set(shape, [])
+				shapes.get(shape).push(m.index)
+			}
+			for (const [, idxs] of shapes) {
+				if (idxs.length >= 4) return [lineAt(idxs[3])]
+			}
+			return []
+		},
+	},
+	{
+		id: "shadow-opacity",
+		level: "warn",
+		ext: new Set([...STYLE, ...MARKUP]),
+		msg: "shadow alpha above 0.12 on a light surface. A shadow that dark reads as a drop shadow from a slide deck. Raise the blur and the offset instead, and tint it from the ink hue.",
+		scan(line) {
+			if (/prefers-color-scheme:\s*dark|\[data-theme=["']?dark|\.dark\b|--shadow-boost/.test(line)) return []
+			const hits = []
+			const re = /box-shadow:[^;{}\n]*?(?:rgba?\([^)]*?[,/]\s*(0?\.\d+)\s*\)|hsla?\([^)]*?\/\s*(0?\.\d+)\s*\))/g
+			let m
+			while ((m = re.exec(line))) {
+				const a = Number(m[1] ?? m[2])
+				if (a > 0.12) hits.push(m.index)
+			}
+			return hits
+		},
+		fileSkip: (content) => /prefers-color-scheme:\s*dark/.test(content) && !/box-shadow/.test(content),
+	},
+	{
+		id: "unsourced-number",
+		level: "warn",
+		ext: new Set([...MARKUP, ".jsx", ".tsx", ...COPY]),
+		msg: "this number is not in PRODUCT.md. A figure with no source reads as decoration, and it makes the real figures look invented too. Add it to the truth claims table with where it came from, or drop the claim.",
+		scan(line) {
+			if (!PRODUCT_TEXT) return []
+			const hits = []
+			const re = /(\d[\d.,]*)\s*(%|x|\+)(?![\w-])/gi
+			let m
+			while ((m = re.exec(line))) {
+				/* code, not copy: a CSS value, a class name or a transform is not a claim */
+				const before = line.slice(Math.max(0, m.index - 24), m.index)
+				if (/[-\w](\s*[:=(]|$)|translate|scale|rotate|calc|width|height|flex|opacity/i.test(before)) continue
+				const key = `${m[1].replace(/[,\s]/g, "")}${m[2].toLowerCase()}`
+				if (PRODUCT_NUMBERS.has(key)) continue
+				hits.push(m.index)
+			}
+			return hits
+		},
+	},
+	{
+		id: "repeat-world",
+		level: "warn",
+		ext: COPY,
+		msg: "this DESIGN.md names the world the previous surface already used. Two unrelated surfaces in one world means the world was a default. Rotate, or say in one line why this subject inherits it.",
+		scan(line) {
+			if (!LAST_WORLD) return []
+			const m = line.match(/^\s*(?:[-*>|]\s*)?\**\s*WORLD\**\s*[:|]\s*(.+)$/i)
+			if (!m) return []
+			const world = m[1].replace(/[|*`]/g, " ").trim().toLowerCase()
+			if (!world) return []
+			/* same surface continuing its own direction is consistency, not repetition */
+			if (LAST_SURFACE && DESIGN_TEXT.toLowerCase().includes(LAST_SURFACE)) return []
+			return world.includes(LAST_WORLD) || LAST_WORLD.includes(world.split(/[\s,.]/)[0]) ? [line.indexOf(m[1])] : []
+		},
+		fileSkip: (_c, path) => !/^design\.md$/i.test(basename(path)),
 	},
 	{
 		id: "center-everything",
