@@ -62,6 +62,11 @@ actually fixes anything.
 - Rules may declare `"multiline": true` to match a two-line shape; `DEFAULT-105`
   (fail-open auth) uses it and now fires on the `try/except` form it always
   described.
+- `install.sh` and `install.ps1` no longer copy `evals/` or `tests/` into the
+  target repository. The fixtures carry invented credentials that would trip a
+  user's own secret scanning, and `f05` is a deliberately hostile `SKILL.md`
+  that an agent globbing for skills could read. `install.sh` also marks the new
+  agent hook executable.
 - The pack ships its own `.viora/baseline.json`: its rule corpora necessarily
   contain every string it hunts for, and that is accepted debt, recorded rather
   than hidden.

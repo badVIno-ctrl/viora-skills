@@ -255,6 +255,30 @@ printf '{"tool_name":"Read","tool_input":{"file_path":"cfg.py"}}' | python3 "$HO
 assert_eq "a non-write tool is ignored" "$?" "0"
 
 # --------------------------------------------------------------------------
+section "install.sh never ships the fixtures"
+# f05 is a deliberately hostile SKILL.md and f03 holds invented credentials.
+# Copying either into a user's repository would trip their secret scanning and
+# put an attack fixture where an agent globbing for skills could read it.
+INSTALLED="$TMP/installed"; mkdir -p "$INSTALLED"
+( cd "$INSTALLED" && git init -q . )
+bash "$PACK/install.sh" --agent claude-code --target "$INSTALLED" >/dev/null 2>&1
+DEST="$INSTALLED/.viora/skills/viora-aegis"
+if [ -d "$DEST" ]; then ok "install.sh copies the pack"
+else bad "install.sh copies the pack"; fi
+if [ -e "$DEST/evals" ]; then bad "evals/ must not be installed"
+else ok "evals/ is not installed"; fi
+if [ -e "$DEST/tests" ]; then bad "tests/ must not be installed"
+else ok "tests/ is not installed"; fi
+if [ -f "$DEST/rules/secrets.json" ]; then ok "the rule packs are installed"
+else bad "the rule packs are installed"; fi
+if [ -x "$DEST/hooks/agent/pre-write-secrets.py" ]; then ok "the agent hook is installed executable"
+else bad "the agent hook is installed executable"; fi
+if grep -q "notmatch '\\\\\\\\evals\\\\\\\\'" "$PACK/install.ps1"; then ok "install.ps1 excludes evals/ too"
+else bad "install.ps1 excludes evals/ too"; fi
+if grep -q "notmatch '\\\\\\\\tests\\\\\\\\'" "$PACK/install.ps1"; then ok "install.ps1 excludes tests/ too"
+else bad "install.ps1 excludes tests/ too"; fi
+
+# --------------------------------------------------------------------------
 section "the pack scans itself clean"
 # With the tracked baseline: the pack's own rule corpora and its deliberate
 # `headers` urlopen are accepted debt, and the baseline is the record of that.
