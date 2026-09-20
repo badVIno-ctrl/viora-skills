@@ -275,6 +275,8 @@ for the eight the FULL lane owes.
 If you cannot run commands, skip this block entirely. A gate you cannot record is not a
 reason to stop working.
 
+`.viora/` is run state. Add it to the project's `.gitignore` and never commit it.
+
 Fix everything in one batch. Run once more. Stop. Do not open a third round.
 
 **If you cannot run commands**, read your own output once against this list and fix what fails:

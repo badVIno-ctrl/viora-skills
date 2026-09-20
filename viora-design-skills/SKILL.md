@@ -96,6 +96,9 @@ The marker is the command, not a line you type into the answer. `gate.mjs` write
 `.viora/design-run.json`; `verify.mjs` walks up from the working directory to find it and
 refuses to print a verdict while a gate this job owes is missing.
 
+`.viora/` is run state, not product code: add it to the project's `.gitignore` the first
+time you start a run there, in the same commit as the work.
+
 | Job | Owes |
 |---|---|
 | `NEW`, `REDESIGN` | G0 to G6 |
