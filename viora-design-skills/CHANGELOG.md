@@ -36,6 +36,9 @@ sonnet 5 families, the gpt-5.x pro and codex variants, gemini-3-pro to FULL, and
 nano, flash and haiku variants to LITE. `docsync.mjs` gains a badges stage that compares the
 README version and rule-count badges with `SKILL.md` and with the linters themselves.
 
+`wig.mjs` reports `hint` findings separately from warnings and never fails a `--strict` run
+on one, so an advisory rule cannot block a handover.
+
 **Trigger set (C6).** `evals/triggers.json`: ten queries the skill must answer, including
 Russian, and ten near misses it must decline.
 

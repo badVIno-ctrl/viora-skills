@@ -16,6 +16,7 @@
  *   node pick.mjs --list-domains
  *
  * Flags: --domain <name>  -n <count>  --tier <text>  --cyrillic  --full  --css  --json
+ *        --avoid-last   drop the world, palette and structure the last G7 logged
  *
  * The catalog is raw material. The laws in SKILL.md outrank every row it returns.
  */
@@ -191,7 +192,7 @@ if (!existsSync(DATA)) {
 	process.exit(3)
 }
 if (!query) {
-	console.error('usage: node pick.mjs "<what you are designing>" [--domain palette|type|style|product|landing|ux|app|motion|icons|reasoning|charts|react|stack] [--system] [-n 5] [--cyrillic] [--tier subtle] [--full] [--css] [--json]')
+	console.error('usage: node pick.mjs "<what you are designing>" [--domain palette|type|style|product|landing|ux|app|motion|icons|reasoning|charts|react|stack] [--system] [-n 5] [--cyrillic] [--tier subtle] [--avoid-last] [--full] [--css] [--json]')
 	process.exit(2)
 }
 

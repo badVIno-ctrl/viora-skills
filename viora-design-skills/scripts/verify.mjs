@@ -6,6 +6,10 @@
  *   node verify.mjs . --url http://localhost:3000
  *   node verify.mjs . --url ./dist/index.html --strict
  *   node verify.mjs src app --url http://localhost:5173
+ *   node verify.mjs . --no-gates          skip the gate record check
+ *
+ * Reads .viora/design-run.json first. When a gate this job requires was never recorded
+ * with scripts/gate.mjs, it names the missing gates and exits 2 without a verdict.
  *
  * Runs, in this order:
  *   1. check.mjs        craft linter: slop, tokens, rhythm, type, motion

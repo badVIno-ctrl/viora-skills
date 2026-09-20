@@ -299,7 +299,9 @@ for (const file of files) {
 /* ---------------------------------------------------------------- report */
 
 const errors = findings.filter((f) => f.sev === "error").length
-const warnings = findings.length - errors
+const hints = findings.filter((f) => f.sev === "hint").length
+/* a hint is advisory: it is reported, and it never fails a strict run */
+const warnings = findings.length - errors - hints
 
 if (wants("github")) {
 	/* GitHub Actions annotations: every interface defect gets a line in the diff */
@@ -308,19 +310,19 @@ if (wants("github")) {
 		const where = relative(process.cwd(), f.file) || f.file
 		console.log(`::${kind} file=${where},line=${Math.max(1, f.line || 1)},title=viora ${f.id}::${String(f.msg).replace(/\s+/g, " ")}`)
 	}
-	console.log(`viora wig: ${errors} errors, ${warnings} warnings across ${scanned} files`)
+	console.log(`viora wig: ${errors} errors, ${warnings} warnings, ${hints} hints across ${scanned} files`)
 	process.exit(errors > 0 || (strict && warnings > 0) ? 1 : 0)
 }
 
 if (asJson) {
-	console.log(JSON.stringify({ scanned, clean, errors, warnings, findings }, null, 2))
+	console.log(JSON.stringify({ scanned, clean, errors, warnings, hints, findings }, null, 2))
 	process.exit(errors > 0 || (strict && warnings > 0) ? 1 : 0)
 }
 
 if (summaryOnly) {
 	const byRule = new Map()
 	for (const f of findings) byRule.set(f.id, (byRule.get(f.id) || 0) + 1)
-	console.log(`wig: ${scanned} files, ${errors} errors, ${warnings} warnings`)
+	console.log(`wig: ${scanned} files, ${errors} errors, ${warnings} warnings, ${hints} hints`)
 	console.log("why: node scripts/explain.mjs <rule-id>")
 	for (const [id, n] of [...byRule.entries()].sort((a, b) => b[1] - a[1])) {
 		const rule = RULES.find((r) => r.id === id)
@@ -347,7 +349,7 @@ for (const [file, list] of grouped) {
 		console.log(`${rel}:${f.line} - ${f.msg} [${f.id}]`)
 	}
 }
-console.log(`\n${errors} error(s), ${warnings} warning(s) across ${grouped.size} file(s). ${clean} file(s) clean.`)
+console.log(`\n${errors} error(s), ${warnings} warning(s), ${hints} hint(s) across ${grouped.size} file(s). ${clean} file(s) clean.`)
 if (errors) {
 	const worst = findings.find((f) => f.sev === "error")
 	console.log(`start with: ${relative(process.cwd(), worst.file) || worst.file}:${worst.line} ${worst.msg}`)
