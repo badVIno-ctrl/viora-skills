@@ -79,6 +79,7 @@
       "confidence": "low",
       "cwe": "CWE-636",
       "owasp": "A01:2021 Broken Access Control",
+      "multiline": true,
       "pattern": "(?i)(?:except[^\\n:]{0,60}:\\s*(?:#[^\\n]*)?\\n\\s*(?:return\\s+True|return\\s+1|pass\\b|continue\\b)|catch\\s*\\([^)]*\\)\\s*\\{\\s*(?://[^\\n]*)?\\s*(?:return\\s+true|next\\(\\)|resolve\\(\\s*true)|on_error\\s*[:=]\\s*['\"]?(?:allow|permit|continue|ignore)|fail(?:_|-)?open\\s*[:=]\\s*(?:true|True|1)|default\\s*[:=]\\s*(?:ALLOW|PERMIT|ALLOWED))",
       "note": "Law 4. This is the highest-value shape in the whole pack and no regex finds it reliably - use this hit as a prompt to read every security decision and ask: what happens if it THROWS, TIMES OUT, or returns NULL?",
       "fix": "Deny on every abnormal path. The catch block returns false, the timeout denies, and the null result denies. If availability genuinely requires fail-open, document it, bound it, and alarm on it."
@@ -206,6 +207,78 @@
       "pattern": "(?i)(?:(?:if|when|unless)[^\\n]{0,40}(?:test_?mode|dev_?mode|is_?dev|local_?only|bypass_?auth|skip_?auth|no_?auth|mock_?auth|fake_?login|impersonate|god_?mode|backdoor|master_?(?:key|password)|super_?user_?token)|(?:bypass|skip|disable)_?(?:auth|authz|login|permission|security|check)s?\\s*[:=]\\s*(?:True|true|1)|X-(?:Debug|Test|Admin|Bypass)-[A-Za-z-]+|ALLOW_INSECURE|UNSAFE_[A-Z_]+\\s*[:=]\\s*(?:True|true|1))",
       "note": "The classic breach shape: a bypass added for local testing, guarded by a flag or header that turns out to be attacker-reachable. Answer V2 in writing - name the build-time exclusion, or treat it as production code.",
       "fix": "Remove it, or exclude it at BUILD time rather than at runtime, so the code physically is not in the shipped artifact. A runtime flag is a switch someone can flip."
+    },
+    {
+      "id": "DEFAULT-001",
+      "title": "Security decision carried by a bare boolean flag",
+      "category": "DEFAULT",
+      "severity": "medium",
+      "confidence": "low",
+      "cwe": "CWE-1188",
+      "owasp": "A05:2021 Security Misconfiguration",
+      "pattern": "(?i)\\b(?:secure|safe|strict|validate|verify|authenticated|authorized|encrypt(?:ed)?|signed|sanitiz(?:e|ed))\\s*[:=]\\s*(?:False|false|0|None|null|nil)\\b",
+      "note": "A bool at a call site says nothing about what it turns off. `verify=False` reads the same as `retry=False`, so it survives review. Sharp edge class 1: unreadable call sites.",
+      "fix": "Take an explicit enum or a policy object instead of a bool, so the call site names the risk it accepts."
+    },
+    {
+      "id": "DEFAULT-002",
+      "title": "Certificate or hostname verification turned off",
+      "category": "DEFAULT",
+      "severity": "high",
+      "confidence": "high",
+      "cwe": "CWE-295",
+      "owasp": "A02:2021 Cryptographic Failures",
+      "pattern": "(?i)\\b(?:verify|ssl_verify|verify_mode|checkServerIdentity|rejectUnauthorized|validate_certs|insecureSkipVerify|CURLOPT_SSL_VERIFYPEER|strictSSL)\\s*[:=]\\s*(?:False|false|0|None|null|CERT_NONE)|NODE_TLS_REJECT_UNAUTHORIZED\\s*[:=]\\s*[\"']?0|curl[^\\n]{0,40}\\s(?:-k|--insecure)\\b",
+      "note": "TLS without verification is an encrypted channel to whoever answers. Sharp edge class 2: a security control disabled by an ordinary-looking keyword argument.",
+      "fix": "Keep verification on and pin the internal CA bundle instead. If a test needs it, scope it to the test client, never the shared session."
+    },
+    {
+      "id": "DEFAULT-003",
+      "title": "Zero or negative lifetime that means \"never expires\"",
+      "category": "DEFAULT",
+      "severity": "medium",
+      "confidence": "low",
+      "cwe": "CWE-613",
+      "owasp": "A07:2021 Identification and Authentication Failures",
+      "pattern": "(?i)\\b(?:ttl|expir(?:y|es|es_in|ation)|max_?age|timeout|lifetime|lease|valid_?for|session_?duration|token_?age)\\s*[:=]\\s*(?:-1|0)\\b(?!\\s*\\.)",
+      "note": "In most APIs 0 or -1 on a lifetime means unlimited, not immediate. A token that never expires is a permanent credential nobody tracks. Sharp edge class 3: a sentinel that inverts the meaning.",
+      "fix": "Set an explicit bounded duration and reject 0 at config load, naming the field."
+    },
+    {
+      "id": "DEFAULT-004",
+      "title": "Role or permission compared as a free-form string",
+      "category": "DEFAULT",
+      "severity": "medium",
+      "confidence": "low",
+      "cwe": "CWE-285",
+      "owasp": "A01:2021 Broken Access Control",
+      "pattern": "(?i)(?:role|permission|scope|tier|plan|group)\\s*(?:==|===|!=|!==|\\.equals\\s*\\(|\\bis\\b)\\s*[\"'](?:admin|owner|root|superuser|super_?admin|staff|user|member)[\"']|[\"'](?:admin|owner|root)[\"']\\s*(?:==|===|in)\\s*(?:\\w+\\.)?(?:roles?|permissions?|scopes?)\\b",
+      "note": "A typo in a string role check fails open or closed silently, and nothing enumerates the valid values. Sharp edge class 4: stringly-typed security state.",
+      "fix": "Use an enum or a constant, and make the authorisation function total so an unknown role denies."
+    },
+    {
+      "id": "DEFAULT-005",
+      "title": "Security return value computed and ignored",
+      "category": "DEFAULT",
+      "severity": "high",
+      "confidence": "low",
+      "cwe": "CWE-252",
+      "owasp": "A01:2021 Broken Access Control",
+      "pattern": "(?i)^\\s*(?:await\\s+)?(?:\\w+\\.)?(?:can|may|is_?allowed|is_?authorized|is_?authenticated|has_?(?:permission|access|role)|check_?(?:permission|access|auth|acl)|authorize|verify_?(?:signature|token|sig)|validate_?(?:token|signature))\\w*\\s*\\([^\\n;]*\\)\\s*;?\\s*$",
+      "note": "The check ran, the answer was discarded, the code continued. A permission function called as a statement is not a gate. Sharp edge class 5: a security answer that is easy to drop.",
+      "fix": "Make the function raise on denial, or return a value the caller must consume (a checked result type)."
+    },
+    {
+      "id": "DEFAULT-006",
+      "title": "Dangerous option combination accepted without complaint",
+      "category": "DEFAULT",
+      "severity": "high",
+      "confidence": "low",
+      "cwe": "CWE-16",
+      "owasp": "A05:2021 Security Misconfiguration",
+      "pattern": "(?i)Access-Control-Allow-Origin[\"']?\\s*[:=,]\\s*[\"']\\*[\"'][^\\n]{0,80}credentials|credentials\\s*[:=]\\s*(?:True|true)[^\\n]{0,80}origins?\\s*[:=]\\s*[\\[\\s\"']*\\*|(?:same_?site|sameSite)\\s*[:=]\\s*[\"']?[Nn]one[\"']?(?![^\\n]{0,60}(?:secure|Secure)\\s*[:=]\\s*(?:True|true))|(?:algorithms?|alg)\\s*[:=]\\s*[\\[\\s\"']*(?:none|HS256)[\"']?[^\\n]{0,40}verify\\w*\\s*[:=]\\s*(?:False|false)",
+      "note": "Each option is legal on its own; together they are the vulnerability. The library accepts the pair silently. Sharp edge class 6: no configuration validation at load.",
+      "fix": "Validate the combination at startup and refuse to boot. A wildcard origin with credentials, or SameSite=None without Secure, should be a fatal config error."
     }
   ]
 }

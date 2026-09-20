@@ -105,6 +105,25 @@ the eventual pull request can check them one by one.
 
 ---
 
+## Second pass: SPEC-CHECK, after the code exists
+
+A threat model reviewed only at design time describes an intention. Come back
+once the feature is built and fill in **§5b Controls vs code** in
+`templates/THREAT_MODEL.md`: one row per control, each with a `file:line` you
+actually read.
+
+| Verdict | What to do |
+|---|---|
+| `holds` | cite the line; nothing else needed |
+| `contradicted` | this is a finding — run it through the §5 gate and report it |
+| `absent` | the control was agreed and never built; that is the highest-value row in the table |
+| `undocumented` | the code enforces something the model never named. Add it to §4: an undocumented control is deleted by the next refactor |
+
+An `absent` row with no owner and no date is how a control disappears quietly.
+Give every non-`holds` row both.
+
+---
+
 ## Hard stops
 
 - **No verdicts, no severities, no CVE names on hypothetical code.**

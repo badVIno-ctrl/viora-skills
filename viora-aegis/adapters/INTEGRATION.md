@@ -80,6 +80,36 @@ python3 .viora/skills/viora-aegis/scripts/viora.py doctor --path .
 Then ask your agent: **"Run a Viora Aegis review of this project."** A correctly installed pack makes
 the agent state the mode it picked (GUARD / REVIEW / AUDIT / …) before it starts.
 
+## Agent hooks
+
+A scan finds a committed secret. A hook stops the write that would have
+committed it.
+
+```bash
+python3 scripts/viora.py init --agent-hooks
+```
+
+That merges one `PreToolUse` entry into `.claude/settings.json`. **Merge, not
+overwrite**: your other hooks stay, and re-running is a no-op.
+
+| | |
+|---|---|
+| Hook | `hooks/agent/pre-write-secrets.py` |
+| Fires on | `Write`, `Edit`, `MultiEdit` |
+| Input | the PreToolUse event as JSON on stdin |
+| Checks | every regex in `rules/secrets.json` against `content` / `new_string` |
+| Exit 2 | the write is blocked; one line on stderr: `SECRET-0xx <title> in <file_path>` |
+| Exit 0 | allowed |
+
+The hook never prints the matched value. A guard that echoes the secret into
+the transcript has moved the leak, not stopped it.
+
+Other agents: the script is plain stdin-JSON-in, exit-code-out, so any hook
+system that can run a command and read its exit status can use it. Point your
+agent's pre-write event at it and treat exit 2 as "deny".
+
+---
+
 ## Notes
 
 - **Python 3.8+** is the only requirement, and only for the CLI. Without it the skill still works in

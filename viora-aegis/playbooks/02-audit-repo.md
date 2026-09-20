@@ -62,13 +62,26 @@ python3 scripts/viora.py plan audit
 7. **Chain the confirmed findings.** Two mediums that compose into an account
    takeover are a critical. Report chains before individual findings.
 
-8. **Write the report** using `templates/SECURITY_REPORT.md`.
+8. **Open the coverage ledger before you hunt, and close it before you report.**
+   ```bash
+   python3 scripts/viora.py coverage init          # units: entry group x boundary x category
+   python3 scripts/viora.py coverage mark <id> covered --note "read auth/*.py by hand"
+   ```
+   Every unit starts `planned`. Move each one to `covered`, `blocked`,
+   `deferred` or `out_of_scope` with a note as you work. `check --mode audit`
+   exits 1 while any unit is still `planned`, because an audit with unlooked-at
+   cells is not finished — and "no findings there" and "never looked there"
+   render identically unless something keeps score.
+
+9. **Write the report** using `templates/SECURITY_REPORT.md`.
    ```bash
    python3 scripts/viora.py report --out SECURITY_REPORT.md
    ```
+   The "Not assessed" section is built from the ledger, so it cannot be
+   forgotten.
 
-9. **Close with "Not assessed"** - every file, area and check you skipped, and
-   why.
+10. **Close with "Not assessed"** - every file, area and check you skipped, and
+    why.
 
 ---
 

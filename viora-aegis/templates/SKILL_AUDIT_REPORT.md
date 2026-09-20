@@ -8,6 +8,15 @@
 **Declared version / licence:** <!-- from the frontmatter, not from the README -->
 **Method:** Static review only. **Nothing in the target was executed.**
 
+**Machine pre-verdict:** {{PRE_VERDICT}}
+**Machine risk score:** {{RISK_SCORE}}/100
+<!-- Score is a lead; the tier table below is the verdict. Severity weights x
+     tier multiplier (auto-run x2, on-invocation x1.5), capped at 100, floored
+     at 70 by any SA-PI / SA-FLOW / SA-MEM hit. Never report the score alone. -->
+
+**Installed-state check:** <!-- if it is already installed: the result of
+     `skill-audit --verify` against `.viora/skills.lock.json`, or "not locked" -->
+
 ---
 
 ## Verdict in one paragraph

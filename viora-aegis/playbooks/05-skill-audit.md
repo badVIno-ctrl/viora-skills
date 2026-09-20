@@ -166,6 +166,25 @@ This is Law 1 applied to the tool itself: a regex hit is a lead, not a finding.
 Use `templates/SKILL_AUDIT_REPORT.md`. Findings first, ordered by tier
 (`auto-run` before `on-invocation` before the rest) and then by severity.
 
+Record the `MACHINE RISK SCORE` the scanner printed, then say in the same
+breath what it is worth: the score orders two audits against each other, the
+tier table decides the verdict.
+
+## After the verdict: lock what is installed
+
+A pre-install audit is a snapshot of one version. The cheapest supply-chain
+attack is the update after it.
+
+```bash
+python3 scripts/viora.py skill-audit --installed          # every agent, both scopes
+python3 scripts/viora.py skill-audit --installed --lock   # .viora/skills.lock.json
+python3 scripts/viora.py skill-audit --verify             # after any update
+```
+
+`--verify` reports changed, added and removed files as HIGH
+`SA-SUP-006 post-install drift`. Re-audit before you re-lock: re-locking a
+drifted unit without reading the diff launders the change into the baseline.
+
 ```
 Verdict:      do-not-install | needs-caution | safe-with-caveats | safe
 What it does: one sentence, from reading the code - not from the README

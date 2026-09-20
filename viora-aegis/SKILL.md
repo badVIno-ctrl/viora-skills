@@ -8,7 +8,7 @@ description: >
   threat-model a design. Use whenever the user mentions security, a security or
   code review, vulnerabilities, secrets, dependencies, CVEs, hardening, prompt
   injection, or installing a third-party skill, plugin or MCP server.
-version: 2.0.0
+version: 2.1.0
 license: MIT
 allowed-tools: Read, Grep, Glob, Bash, Edit, Write, WebFetch
 metadata:
@@ -78,7 +78,7 @@ Take the **first** row that matches, then stop.
 | 6 | Dependencies, packages, lockfiles, licences, a package version | **SUPPLY-CHAIN** | `plan supply-chain` |
 | 7 | Configuration, defaults, env vars, “is this hardened?” | **DEFAULTS** | `plan defaults` |
 | 8 | A request for gates: CI, pre-commit, headers | **HARDEN** | `plan harden` |
-| 9 | A design or feature that does not exist yet | **DESIGN** | `plan design` |
+| 9 | A design or feature that does not exist yet — or one that now exists and needs a SPEC-CHECK of controls vs code | **DESIGN** | `plan design` |
 | 10 | Prompts, LLM features, tools or agents **inside the user's own product** | **AGENT-SEC** | `plan agent-sec` |
 | 11 | You just confirmed a bug and want its siblings | **VARIANTS** | `plan variants` |
 | 12 | The codebase is unfamiliar and you do not know what it does yet | **CONTEXT** | `plan context` |
@@ -147,13 +147,21 @@ python3 scripts/viora.py scan               # static scan (67+ rules)
 python3 scripts/viora.py scan --diff HEAD   # only changed lines
 python3 scripts/viora.py scan --staged      # pre-commit
 python3 scripts/viora.py skill-audit <path> # NEW: audit a skill before install
+python3 scripts/viora.py skill-audit --installed        # what is already installed
+python3 scripts/viora.py skill-audit --installed --lock # freeze hashes
+python3 scripts/viora.py skill-audit --verify           # drift = HIGH SA-SUP-006
 python3 scripts/viora.py ci-audit           # NEW: workflows + agentic CI
 python3 scripts/viora.py defaults           # NEW: insecure defaults / fail-open
 python3 scripts/viora.py deps               # dependencies and supply chain
 python3 scripts/viora.py headers <url>      # live headers, cookies, CORS
+python3 scripts/viora.py coverage init      # NEW: ledger of what was assessed
+python3 scripts/viora.py coverage mark <id> covered --note "..."
+python3 scripts/viora.py fixcheck --base <ref> --cmd <argv...>  # NEW: prove a fix
+python3 scripts/viora.py check --mode audit # scan + the coverage gate
 python3 scripts/viora.py baseline           # freeze current findings as debt
 python3 scripts/viora.py report             # merge artifacts into markdown
 python3 scripts/viora.py init               # config + pre-commit + CI gate
+python3 scripts/viora.py init --agent-hooks # NEW: PreToolUse secret guard
 ```
 
 Useful flags: `--format text|json|markdown|sarif`, `--out FILE`, `--only
@@ -206,6 +214,10 @@ you would need.
 **Verdicts:** CONFIRMED · LIKELY · DEFENCE-IN-DEPTH · FALSE POSITIVE ·
 UNDETERMINED. Never “probably fine”.
 
+**UNDETERMINED carries no severity** — severity is impact × reachability, and
+an unknown reachability has no product. `rules/finding.schema.json` enforces
+this; `report` exits 2 on the first violation.
+
 **Rationalisations to reject.** These are how real bugs get closed:
 
 | Excuse | Why it fails |
@@ -251,6 +263,10 @@ Refs:    CWE / OWASP / advisory
 
 **Order findings by exploitability, never by file path.**
 
+`severity` is one of the five above and `verdict` one of the five in §5 —
+nothing else validates. A finding whose verdict is UNDETERMINED must omit
+`severity` entirely rather than guessing one.
+
 ---
 
 ## 7. Fix protocol
@@ -264,7 +280,11 @@ Refs:    CWE / OWASP / advisory
    logic. These changes lock people out or let people in.
 5. **Secrets:** rotate → remove from code → purge from history → add a gate. In
    that order. It was public the moment it was pushed.
-6. **Leave a test** that fails without the fix. A fix with no test comes back.
+6. **Leave a test** that fails without the fix, and prove the pair:
+   `fixcheck --base <ref> --cmd <argv...>` runs it at the base ref and in the
+   working tree and demands fail-then-pass, with a `VIORA_REACHED` marker so a
+   crash cannot masquerade as a reproduction. A FIX with no green row is listed
+   as **UNPROVEN** in the report.
 7. **Never weaken a check or a test to get green.** If a test asserted the
    insecure behaviour, change it deliberately and say so loudly.
 8. **Say what could break** for callers.
@@ -314,6 +334,19 @@ the code reaches execution:
 **Verdict — exactly one of four:** `safe` · `safe-with-caveats` ·
 `needs-caution` · `do-not-install`. Then list what you did not review.
 
+**Risk score.** The output prints `MACHINE RISK SCORE: n/100` next to the
+pre-verdict — severity weights × tier multiplier, floored at 70 by any
+`SA-PI` / `SA-FLOW` / `SA-MEM` hit. **Score is a lead; the tier table is the
+verdict.**
+
+**After it is installed.** Review is a snapshot; an update is a new package.
+
+```bash
+python3 scripts/viora.py skill-audit --installed          # per agent, per scope
+python3 scripts/viora.py skill-audit --installed --lock   # .viora/skills.lock.json
+python3 scripts/viora.py skill-audit --verify             # HIGH SA-SUP-006 on drift
+```
+
 **Immediate `do-not-install`, no further analysis required:** a download piped
 into a shell · decode-then-execute · reading `~/.ssh` or cloud credentials ·
 local data assembled into an outbound request body · text instructing you to
@@ -360,6 +393,9 @@ Load **on demand, one level deep**. Do not chain-load.
 | CodeQL, Semgrep, SARIF, writing rules | `references/11-static-analysis.md` |
 | Triage maxims | `references/12-triage-brocards.md` |
 | Crypto and side channels | `references/13-crypto-side-channels.md` |
+| Sharp edges — APIs that misuse easily | `references/14-sharp-edges.md` |
+| Self-check and fixtures | `tests/README.md` |
+| Sources and licences | `ATTRIBUTION.md` |
 
 ---
 

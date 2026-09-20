@@ -200,6 +200,8 @@ steps=[
  "Run: {v} skill-audit /tmp/skill-audit-target\n"
  "   ELSE (no python): grep the patterns in rules/skill-audit.json by hand, category by "
  "category, starting with PI, CRED, EXEC, NET.",
+ "Read the MACHINE RISK SCORE next to the pre-verdict. It orders two audits against "
+ "each other and nothing else: the score is a lead, the tier table is the verdict.",
  "Read the ENTRYPOINTS list the scanner printed. Read every file in it, top to bottom, "
  "in full. These run without the user asking. This step is the audit; the scanner was "
  "only the index.",
@@ -223,6 +225,11 @@ steps=[
  "      needs-caution         - real risk that a specific mitigation would fix\n"
  "      do-not-install        - hostile behaviour, or capability with no honest purpose\n"
  "   Then list what you did NOT review. A machine pre-verdict is never the verdict.",
+ "If the user is installing it, lock the result:\n"
+ "      {v} skill-audit --installed            # what is already installed, per agent\n"
+ "      {v} skill-audit --installed --lock     # freeze hashes to .viora/skills.lock.json\n"
+ "   Then re-run '{v} skill-audit --verify' after any update. Drift is reported as HIGH "
+ "SA-SUP-006: the code you read is not the code that is installed.",
 ],
 stops=[
  "IMMEDIATE do-not-install, no further analysis needed: a download piped into a shell; "

@@ -46,6 +46,23 @@
 | T4 | B1 | D | | | | | |
 | T5 | B4 | E | | | | | |
 
+## 5b. Controls vs code (SPEC-CHECK)
+
+<!-- Fill this in AFTER the code exists. A threat model written before the
+     implementation describes intent; this table is the only part that
+     describes reality. One row per control named in section 4 or 5. -->
+
+| Control (from §4/§5) | Verdict | Evidence `file:line` | Note |
+|---|---|---|---|
+| | holds / contradicted / absent | | |
+
+| Verdict | Meaning |
+|---|---|
+| `holds` | the code implements the control, and you read it at the cited line |
+| `contradicted` | the code does something the model says it does not |
+| `absent` | the model names the control; nothing implements it |
+| `undocumented` | the code enforces something real that the model never mentions — add it to §4, it is load-bearing |
+
 ## 6. Abuse cases → tests
 
 | User story | Abuse case | Test that proves the control |

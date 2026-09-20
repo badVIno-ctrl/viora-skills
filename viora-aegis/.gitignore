@@ -1,0 +1,9 @@
+# Viora Aegis working files. The baseline is tracked on purpose: it is the
+# accepted-debt list for the pack's own self-scan, and a reviewer should see
+# it change.
+__pycache__/
+*.pyc
+.viora/coverage.json
+.viora/fixes.jsonl
+.viora/skills.lock.json
+viora.sarif

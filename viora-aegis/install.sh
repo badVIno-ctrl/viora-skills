@@ -116,13 +116,22 @@ copy_pack() {             # copy_pack <destination dir>
   if [ "$DRY" = "1" ]; then skip "would copy pack → ${dest#$TARGET_ROOT/}"; return; fi
   [ "$(cd "$dest" 2>/dev/null && pwd || echo x)" = "$SRC" ] && { skip "pack already at ${dest#$TARGET_ROOT/}"; return; }
   mkdir -p "$dest"
-  # portable copy of contents, excluding VCS noise
-  ( cd "$SRC" && find . -type d -name '.git' -prune -o -type d -name '__pycache__' -prune -o -type f -print ) \
+  # Portable copy of contents, excluding VCS noise — and excluding evals/ and
+  # tests/, which are development-only and must never land in a user's repo:
+  # the fixtures hold invented credentials that would trip the user's own
+  # secret scanning, and f05 is a deliberately hostile SKILL.md that an agent
+  # globbing for skills could pick up.
+  ( cd "$SRC" && find . -type d -name '.git' -prune \
+      -o -type d -name '__pycache__' -prune \
+      -o -type d -name 'evals' -prune \
+      -o -type d -name 'tests' -prune \
+      -o -type f -print ) \
   | while IFS= read -r f; do
       mkdir -p "$dest/$(dirname "$f")"
       cp "$SRC/$f" "$dest/$f"
     done
-  chmod +x "$dest/scripts/viora.py" "$dest/install.sh" 2>/dev/null || true
+  chmod +x "$dest/scripts/viora.py" "$dest/install.sh" \
+           "$dest/hooks/agent/pre-write-secrets.py" 2>/dev/null || true
   step "pack → ${dest#$TARGET_ROOT/}"
 }
 

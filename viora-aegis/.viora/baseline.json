@@ -1,0 +1,528 @@
+{
+  "tool": "Viora Aegis",
+  "version": "2.1.0",
+  "created": "2026-09-20T08:01:46",
+  "note": "Accepted findings for the pack's OWN source. Most are the scanner describing what it hunts for, plus the deliberate urlopen in the `headers` command. Remove an entry to make the gate enforce it again.",
+  "fingerprints": [
+    "01051a1008662871",
+    "0267b6ff8ad61a54",
+    "096ab14fbe2631e5",
+    "0dced6fc7c94b54a",
+    "16443e835b24de43",
+    "173815249af68d49",
+    "1a89e8dcbc6129bf",
+    "1e5c7e41038a87e4",
+    "20ea58d451d51b40",
+    "29f1c6c2a0295cad",
+    "2c839ed0662bfb7e",
+    "31f5b5d5382b883d",
+    "3bd272095174b25c",
+    "3bf1e0c65dcd2325",
+    "4a335d32d2e0d01c",
+    "53193bc4103287ef",
+    "53f5612c7c40eedc",
+    "55cdfe69ceb84ef6",
+    "584b6778d9dde441",
+    "58599e7b61572f51",
+    "5c2ee8cd354af2df",
+    "62a80d91bc8471c6",
+    "63fdda3a618dee3a",
+    "68d1bc835cd59043",
+    "6df84c8c1ef0ffc9",
+    "721515e5255eafba",
+    "731bbc4700463b6d",
+    "76e59fb5b84440bf",
+    "76eee46c4885b1da",
+    "7f605ab57681bc82",
+    "866039d4d127da90",
+    "8e467d1cffccf3d6",
+    "8f469817e41cf7af",
+    "957246fcdbd21686",
+    "9588c090b1420066",
+    "9e2a0ad6db2acff1",
+    "a8561435483e3019",
+    "ab1244ea1e41c39f",
+    "ac652fbf6c894e00",
+    "ae5a486b51d4cc7a",
+    "b2a277604e86286a",
+    "bec72ad0693a8a86",
+    "bfd10ca2c3da0124",
+    "c216bd9563a494ff",
+    "c3f7c38b98567250",
+    "c4f69a0e80aae9a5",
+    "c62efd9e207c7b27",
+    "ca7fbc489bae7523",
+    "cebd565620ce2d5c",
+    "cffc67f252db8221",
+    "d467bc414dd622d8",
+    "d85d89f9b4095d74",
+    "d95a2e0dc6feae5b",
+    "e1027a3c35b9326f",
+    "e2e8be2b3479624c",
+    "ea1b5121f1fee267",
+    "ed7a81c933bf1f94",
+    "ef0869be303a7f49",
+    "f3ea99a5d0c0ab2d",
+    "f44e58171af2a430",
+    "f7277e964799854b",
+    "f824bc550068ad64",
+    "fd2593550457897b"
+  ],
+  "items": [
+    {
+      "id": "e2e8be2b3479624c",
+      "rule": "AI-001",
+      "file": "scripts/viora_ciaudit.py",
+      "line": 56,
+      "severity": "critical"
+    },
+    {
+      "id": "6df84c8c1ef0ffc9",
+      "rule": "AUTH-001",
+      "file": "scripts/viora_plan.py",
+      "line": 408,
+      "severity": "critical"
+    },
+    {
+      "id": "ae5a486b51d4cc7a",
+      "rule": "DEFAULT-105",
+      "file": "hooks/agent/pre-write-secrets.py",
+      "line": 42,
+      "severity": "high"
+    },
+    {
+      "id": "ca7fbc489bae7523",
+      "rule": "DEFAULT-105",
+      "file": "scripts/viora.py",
+      "line": 184,
+      "severity": "high"
+    },
+    {
+      "id": "d95a2e0dc6feae5b",
+      "rule": "SSRF-001",
+      "file": "scripts/viora.py",
+      "line": 963,
+      "severity": "high"
+    },
+    {
+      "id": "2c839ed0662bfb7e",
+      "rule": "SSRF-001",
+      "file": "scripts/viora.py",
+      "line": 969,
+      "severity": "high"
+    },
+    {
+      "id": "b2a277604e86286a",
+      "rule": "PATH-001",
+      "file": "scripts/viora.py",
+      "line": 969,
+      "severity": "high"
+    },
+    {
+      "id": "5c2ee8cd354af2df",
+      "rule": "SSRF-001",
+      "file": "scripts/viora.py",
+      "line": 976,
+      "severity": "high"
+    },
+    {
+      "id": "9e2a0ad6db2acff1",
+      "rule": "DEFAULT-105",
+      "file": "scripts/viora.py",
+      "line": 1354,
+      "severity": "high"
+    },
+    {
+      "id": "f3ea99a5d0c0ab2d",
+      "rule": "DEFAULT-105",
+      "file": "scripts/viora.py",
+      "line": 1356,
+      "severity": "high"
+    },
+    {
+      "id": "29f1c6c2a0295cad",
+      "rule": "DEFAULT-105",
+      "file": "scripts/viora.py",
+      "line": 1434,
+      "severity": "high"
+    },
+    {
+      "id": "3bd272095174b25c",
+      "rule": "DEFAULT-113",
+      "file": "scripts/viora.py",
+      "line": 1458,
+      "severity": "high"
+    },
+    {
+      "id": "d467bc414dd622d8",
+      "rule": "DEFAULT-113",
+      "file": "scripts/viora.py",
+      "line": 1466,
+      "severity": "high"
+    },
+    {
+      "id": "62a80d91bc8471c6",
+      "rule": "AI-004",
+      "file": "scripts/viora.py",
+      "line": 1542,
+      "severity": "high"
+    },
+    {
+      "id": "ca7fbc489bae7523",
+      "rule": "DEFAULT-105",
+      "file": "scripts/viora.py",
+      "line": 1594,
+      "severity": "high"
+    },
+    {
+      "id": "f44e58171af2a430",
+      "rule": "AI-004",
+      "file": "scripts/viora_ciaudit.py",
+      "line": 205,
+      "severity": "high"
+    },
+    {
+      "id": "c62efd9e207c7b27",
+      "rule": "AI-004",
+      "file": "scripts/viora_ciaudit.py",
+      "line": 358,
+      "severity": "high"
+    },
+    {
+      "id": "a8561435483e3019",
+      "rule": "CRYPTO-004",
+      "file": "scripts/viora_plan.py",
+      "line": 649,
+      "severity": "high"
+    },
+    {
+      "id": "957246fcdbd21686",
+      "rule": "CRYPTO-004",
+      "file": "scripts/viora_plan.py",
+      "line": 652,
+      "severity": "high"
+    },
+    {
+      "id": "866039d4d127da90",
+      "rule": "PATH-001",
+      "file": "scripts/viora_plan.py",
+      "line": 810,
+      "severity": "high"
+    },
+    {
+      "id": "9588c090b1420066",
+      "rule": "DEFAULT-105",
+      "file": "scripts/viora_skillaudit.py",
+      "line": 136,
+      "severity": "high"
+    },
+    {
+      "id": "9588c090b1420066",
+      "rule": "DEFAULT-105",
+      "file": "scripts/viora_skillaudit.py",
+      "line": 146,
+      "severity": "high"
+    },
+    {
+      "id": "7f605ab57681bc82",
+      "rule": "PATH-001",
+      "file": "scripts/viora_skillaudit.py",
+      "line": 800,
+      "severity": "high"
+    },
+    {
+      "id": "76eee46c4885b1da",
+      "rule": "DEFAULT-113",
+      "file": "templates/pre-commit",
+      "line": 4,
+      "severity": "high"
+    },
+    {
+      "id": "173815249af68d49",
+      "rule": "DEFAULT-113",
+      "file": "templates/pre-commit",
+      "line": 34,
+      "severity": "high"
+    },
+    {
+      "id": "55cdfe69ceb84ef6",
+      "rule": "DEFAULT-101",
+      "file": "playbooks/08-insecure-defaults.md",
+      "line": 40,
+      "severity": "medium"
+    },
+    {
+      "id": "f824bc550068ad64",
+      "rule": "DOS-002",
+      "file": "scripts/viora.py",
+      "line": 299,
+      "severity": "medium"
+    },
+    {
+      "id": "fd2593550457897b",
+      "rule": "LOG-001",
+      "file": "scripts/viora.py",
+      "line": 1048,
+      "severity": "medium"
+    },
+    {
+      "id": "53f5612c7c40eedc",
+      "rule": "DEFAULT-111",
+      "file": "scripts/viora_plan.py",
+      "line": 409,
+      "severity": "medium"
+    },
+    {
+      "id": "1e5c7e41038a87e4",
+      "rule": "DEFAULT-110",
+      "file": "scripts/viora_plan.py",
+      "line": 410,
+      "severity": "medium"
+    },
+    {
+      "id": "68d1bc835cd59043",
+      "rule": "DEFAULT-111",
+      "file": "scripts/viora_plan.py",
+      "line": 642,
+      "severity": "medium"
+    },
+    {
+      "id": "c3f7c38b98567250",
+      "rule": "SECRET-001",
+      "file": "tests/run-all.sh",
+      "line": 246,
+      "severity": "medium"
+    },
+    {
+      "id": "20ea58d451d51b40",
+      "rule": "SECRET-001",
+      "file": "tests/run-all.sh",
+      "line": 250,
+      "severity": "medium"
+    },
+    {
+      "id": "63fdda3a618dee3a",
+      "rule": "DEFAULT-104",
+      "file": "playbooks/08-insecure-defaults.md",
+      "line": 18,
+      "severity": "low"
+    },
+    {
+      "id": "0dced6fc7c94b54a",
+      "rule": "DEFAULT-104",
+      "file": "playbooks/11-crypto-review.md",
+      "line": 56,
+      "severity": "low"
+    },
+    {
+      "id": "31f5b5d5382b883d",
+      "rule": "DEFAULT-113",
+      "file": "playbooks/11-crypto-review.md",
+      "line": 56,
+      "severity": "low"
+    },
+    {
+      "id": "cebd565620ce2d5c",
+      "rule": "DEFAULT-002",
+      "file": "playbooks/11-crypto-review.md",
+      "line": 56,
+      "severity": "low"
+    },
+    {
+      "id": "58599e7b61572f51",
+      "rule": "DEFAULT-104",
+      "file": "playbooks/11-crypto-review.md",
+      "line": 57,
+      "severity": "low"
+    },
+    {
+      "id": "721515e5255eafba",
+      "rule": "DEFAULT-113",
+      "file": "playbooks/11-crypto-review.md",
+      "line": 57,
+      "severity": "low"
+    },
+    {
+      "id": "8f469817e41cf7af",
+      "rule": "DEFAULT-002",
+      "file": "playbooks/11-crypto-review.md",
+      "line": 57,
+      "severity": "low"
+    },
+    {
+      "id": "0267b6ff8ad61a54",
+      "rule": "DEFAULT-113",
+      "file": "playbooks/13-harden.md",
+      "line": 54,
+      "severity": "low"
+    },
+    {
+      "id": "584b6778d9dde441",
+      "rule": "DEFAULT-113",
+      "file": "playbooks/13-harden.md",
+      "line": 109,
+      "severity": "low"
+    },
+    {
+      "id": "8e467d1cffccf3d6",
+      "rule": "DEFAULT-113",
+      "file": "playbooks/13-harden.md",
+      "line": 134,
+      "severity": "low"
+    },
+    {
+      "id": "16443e835b24de43",
+      "rule": "DEFAULT-104",
+      "file": "references/03-language-playbooks.md",
+      "line": 53,
+      "severity": "low"
+    },
+    {
+      "id": "c4f69a0e80aae9a5",
+      "rule": "DEFAULT-113",
+      "file": "references/03-language-playbooks.md",
+      "line": 53,
+      "severity": "low"
+    },
+    {
+      "id": "096ab14fbe2631e5",
+      "rule": "DEFAULT-002",
+      "file": "references/03-language-playbooks.md",
+      "line": 53,
+      "severity": "low"
+    },
+    {
+      "id": "e1027a3c35b9326f",
+      "rule": "DEFAULT-104",
+      "file": "references/03-language-playbooks.md",
+      "line": 117,
+      "severity": "low"
+    },
+    {
+      "id": "f7277e964799854b",
+      "rule": "DEFAULT-113",
+      "file": "references/03-language-playbooks.md",
+      "line": 117,
+      "severity": "low"
+    },
+    {
+      "id": "731bbc4700463b6d",
+      "rule": "DEFAULT-112",
+      "file": "scripts/viora.py",
+      "line": 331,
+      "severity": "low"
+    },
+    {
+      "id": "01051a1008662871",
+      "rule": "DEFAULT-111",
+      "file": "playbooks/08-insecure-defaults.md",
+      "line": 43,
+      "severity": "info"
+    },
+    {
+      "id": "ef0869be303a7f49",
+      "rule": "DEFAULT-110",
+      "file": "playbooks/08-insecure-defaults.md",
+      "line": 44,
+      "severity": "info"
+    },
+    {
+      "id": "76e59fb5b84440bf",
+      "rule": "DEFAULT-111",
+      "file": "playbooks/08-insecure-defaults.md",
+      "line": 109,
+      "severity": "info"
+    },
+    {
+      "id": "ed7a81c933bf1f94",
+      "rule": "DEFAULT-106",
+      "file": "playbooks/08-insecure-defaults.md",
+      "line": 119,
+      "severity": "info"
+    },
+    {
+      "id": "ab1244ea1e41c39f",
+      "rule": "DEFAULT-111",
+      "file": "playbooks/11-crypto-review.md",
+      "line": 44,
+      "severity": "info"
+    },
+    {
+      "id": "bfd10ca2c3da0124",
+      "rule": "DEFAULT-001",
+      "file": "playbooks/11-crypto-review.md",
+      "line": 56,
+      "severity": "info"
+    },
+    {
+      "id": "c216bd9563a494ff",
+      "rule": "DEFAULT-111",
+      "file": "playbooks/11-crypto-review.md",
+      "line": 119,
+      "severity": "info"
+    },
+    {
+      "id": "ac652fbf6c894e00",
+      "rule": "DEFAULT-111",
+      "file": "references/02-owasp-top10-2025.md",
+      "line": 82,
+      "severity": "info"
+    },
+    {
+      "id": "53193bc4103287ef",
+      "rule": "DEFAULT-111",
+      "file": "references/03-language-playbooks.md",
+      "line": 18,
+      "severity": "info"
+    },
+    {
+      "id": "d85d89f9b4095d74",
+      "rule": "DEFAULT-111",
+      "file": "references/03-language-playbooks.md",
+      "line": 52,
+      "severity": "info"
+    },
+    {
+      "id": "4a335d32d2e0d01c",
+      "rule": "DEFAULT-001",
+      "file": "references/03-language-playbooks.md",
+      "line": 53,
+      "severity": "info"
+    },
+    {
+      "id": "1a89e8dcbc6129bf",
+      "rule": "DEFAULT-114",
+      "file": "references/03-language-playbooks.md",
+      "line": 59,
+      "severity": "info"
+    },
+    {
+      "id": "ea1b5121f1fee267",
+      "rule": "DEFAULT-111",
+      "file": "references/03-language-playbooks.md",
+      "line": 78,
+      "severity": "info"
+    },
+    {
+      "id": "cffc67f252db8221",
+      "rule": "DEFAULT-115",
+      "file": "references/03-language-playbooks.md",
+      "line": 92,
+      "severity": "info"
+    },
+    {
+      "id": "3bf1e0c65dcd2325",
+      "rule": "DEFAULT-111",
+      "file": "references/09-checklists.md",
+      "line": 68,
+      "severity": "info"
+    },
+    {
+      "id": "bec72ad0693a8a86",
+      "rule": "DEFAULT-111",
+      "file": "references/13-crypto-side-channels.md",
+      "line": 165,
+      "severity": "info"
+    }
+  ]
+}

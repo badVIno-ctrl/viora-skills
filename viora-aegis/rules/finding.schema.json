@@ -1,0 +1,49 @@
+{
+  "$schema": "viora-finding/1",
+  "version": "2.1.0",
+  "pack": "viora-aegis",
+  "purpose": "Shape every finding must have before it is rendered into prose. Validated by scripts/viora.py with the standard library only - no jsonschema, no network.",
+  "envelope": {
+    "required": ["findings"],
+    "findings": "array of finding objects"
+  },
+  "finding": {
+    "required": ["rule", "title", "file"],
+    "optional": ["severity", "verdict", "line", "category", "confidence", "snippet", "fix", "impact", "path", "verify", "refs", "owasp", "cwe", "id", "meta", "tier", "note", "fp", "ask", "adjustments", "declared_severity", "anchors"],
+    "types": {
+      "rule": "string",
+      "title": "string",
+      "file": "string",
+      "severity": "string",
+      "verdict": "string",
+      "line": "integer",
+      "category": "string"
+    },
+    "enums": {
+      "severity": ["info", "low", "medium", "high", "critical"],
+      "verdict": ["CONFIRMED", "LIKELY", "DEFENCE-IN-DEPTH", "FALSE POSITIVE", "UNDETERMINED"]
+    }
+  },
+  "constraints": [
+    {
+      "id": "FS-001",
+      "rule": "severity must be one of the enum values",
+      "why": "An invented severity cannot be ordered, so the report cannot rank by exploitability."
+    },
+    {
+      "id": "FS-002",
+      "rule": "verdict must be one of the enum values",
+      "why": "\"probably fine\" is not a verdict."
+    },
+    {
+      "id": "FS-003",
+      "rule": "verdict UNDETERMINED must not carry a severity",
+      "why": "Severity is impact x reachability. If reachability is unknown the product is unknown, and a number there reads as measurement that never happened."
+    },
+    {
+      "id": "FS-004",
+      "rule": "a finding with a verdict other than UNDETERMINED must carry a severity",
+      "why": "A judged finding without a severity cannot be gated on."
+    }
+  ]
+}

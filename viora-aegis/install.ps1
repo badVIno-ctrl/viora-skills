@@ -106,7 +106,15 @@ function Copy-Pack([string]$Dest) {
   if ((Resolve-Path -ErrorAction SilentlyContinue $Dest).Path -eq $Src) { Skip "pack already at $rel"; return }
   New-Item -ItemType Directory -Force -Path $Dest | Out-Null
   Get-ChildItem -Path $Src -Recurse -File |
-    Where-Object { $_.FullName -notmatch '__pycache__' -and $_.FullName -notmatch '\\\.git\\' } |
+    Where-Object {
+      # evals/ and tests/ are development-only: the fixtures carry invented
+      # credentials and a deliberately hostile SKILL.md, neither of which
+      # belongs in a user's repository.
+      $_.FullName -notmatch '__pycache__' -and
+      $_.FullName -notmatch '\\\.git\\' -and
+      $_.FullName -notmatch '\\evals\\' -and
+      $_.FullName -notmatch '\\tests\\'
+    } |
     ForEach-Object {
       $rp  = $_.FullName.Substring($Src.Length).TrimStart('\','/')
       $out = Join-Path $Dest $rp

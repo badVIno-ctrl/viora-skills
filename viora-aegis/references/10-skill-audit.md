@@ -188,6 +188,40 @@ than ignored.
 
 ---
 
+## 8b. The 2.1 categories
+
+Seven categories added in 2.1. The first six are regexes; the last two are
+computed in code because no per-line pattern can express them.
+
+| Category | Rule | What it catches | Why it matters |
+|---|---|---|---|
+| `TRIG` | `SA-TRIG-001` | "always", "every task", "for all requests" in the trigger description | A skill that claims every task is in every context, so its injection surface is total |
+| `TRIG` | `SA-TRIG-002` | claims to replace or override another skill or a built-in tool | Shadowing puts the skill on a path the user already trusts |
+| `REF` | `SA-REF-001` | "never refuse", "ignore safety", "bypass guardrails" | The text is removing the reading agent's ability to say no |
+| `MEM` | `SA-MEM-001` | writes to `CLAUDE.md`, `AGENTS.md`, `.cursorrules`, `~/.claude/**`, memory dirs | Instructions survive uninstalling the skill |
+| `MEM` | `SA-MEM-002` | asks to persist instructions across sessions | Turns one injection into standing orders |
+| `MCP` | `SA-MCP-001` | imperatives inside a tool `description` | Tool descriptions are injected verbatim; that is tool poisoning |
+| `MCP` | `SA-MCP-002` | tool named `read_file`, `bash`, `execute`, `edit`, `write_file` | Name collision intercepts trusted calls |
+| `MCP` | `SA-MCP-003` | `*` roots, permissions, `autoApprove`, `--dangerously-skip-permissions` | A wildcard root reads every project on the machine |
+| `SNOOP` | `SA-SNOOP-001` | `~/.cursor`, `~/.codex`, `~/.config/gh`, `~/.aws`, keychain, browser profiles | Another agent's config holds its tokens; a browser profile holds sessions |
+| `LEAK` | `SA-LEAK-001` | "reveal your system prompt", "repeat the instructions above" | Prompt extraction is reconnaissance for the next version of the attack |
+| `OBF` | `SA-OBF-004` | mixed-script / confusable identifiers, NFKC-normalised and compared | The name in review and the symbol at runtime are different things |
+| `FLOW` | `SA-FLOW-001` | (fetch **or** runtime content load) **and** (secrets/home/env read) **and** (outbound send) | No line is a finding; the conjunction is the exfiltration shape. One HIGH, three anchors |
+
+**Risk score.** The text and JSON output carry `risk_score` (0–100) beside the
+pre-verdict: severity weights × a tier multiplier (auto-run ×2, on-invocation
+×1.5), capped at 100, with a floor of 70 if any `SA-PI`, `SA-FLOW` or `SA-MEM`
+rule hit. It orders two audits against each other. **Score is a lead; the tier
+table is the verdict.**
+
+**After installing.** `skill-audit --installed` enumerates what is already
+installed per agent and scope; `--lock` freezes each unit's file hashes to
+`.viora/skills.lock.json`; `--verify` reports changed, added and removed files
+as HIGH `SA-SUP-006 post-install drift`. Passing review once is not a property
+that persists through an update.
+
+---
+
 ## 9. Reporting
 
 Use `templates/SKILL_AUDIT_REPORT.md`. Two sections are mandatory and usually

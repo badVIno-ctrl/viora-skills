@@ -87,6 +87,32 @@ python3 scripts/viora.py plan fix
 
 ---
 
+## Prove it: fail on base, pass on the patch
+
+A fix with no failing check before it is a claim.
+
+```bash
+python3 scripts/viora.py fixcheck --base origin/main --id FIX-001 \
+  --cmd pytest -q tests/test_authz.py
+```
+
+The command must print `VIORA_REACHED` on stdout in **both** runs. Without the
+marker the tool reports `marker_missing` and stops: a command that exits 1
+because of a syntax error or a missing dependency looks exactly like a
+reproduction, and the difference is the whole point.
+
+| Result | Meaning |
+|---|---|
+| `proven` | fails at base, passes on the patch — the only green row |
+| `no_repro` | already passes at base; it never demonstrated the bug |
+| `not_fixed` | still fails in the working tree |
+| `marker_missing` | the code was never reached; neither exit code means anything |
+
+Every run appends to `.viora/fixes.jsonl` with a tree fingerprint. `report`
+lists every FIX without a green row under **UNPROVEN**.
+
+---
+
 ## Output
 
 For each finding:
