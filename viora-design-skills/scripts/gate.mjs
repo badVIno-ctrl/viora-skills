@@ -32,14 +32,41 @@ import { join } from "node:path"
 
 export const GATES = ["G0", "G1", "G2", "G3", "G4", "G5", "G6", "G7"]
 
-/* which gates a job may not skip. REVIEW writes no product code, so it owes the
-   read and nothing else; FIX owes the read and the build. */
+/* The gates each job runs, exactly as SKILL.md routes them. Five jobs and the four
+   verbs from reference/21-verbs.md, so a HARDEN or CRITIQUE pass can be recorded too. */
 export const REQUIRED = {
 	NEW: ["G0", "G1", "G2", "G3", "G4", "G5", "G6"],
 	REDESIGN: ["G0", "G1", "G2", "G3", "G4", "G5", "G6"],
-	CHANGE: ["G1", "G3", "G4", "G5"],
-	FIX: ["G1", "G4"],
-	REVIEW: ["G1"],
+	CHANGE: ["G1", "G3", "G4", "G5", "G6"],
+	FIX: ["G1", "G4", "G6"],
+	REVIEW: ["G1", "G6", "G7"],
+	HARDEN: ["G1", "G4", "G5", "G6"],
+	QUIET: ["G1", "G3", "G4", "G6"],
+	BOLD: ["G1", "G3", "G4", "G6"],
+	CRITIQUE: ["G1", "G6", "G7"],
+	STUDY: ["G1", "G2"],
+}
+
+/* LITE is one pass, not eight gates: it records the start, the frame, the verify and
+   the report. Holding it to the FULL list would refuse every LITE run. */
+export const REQUIRED_LITE = ["G3", "G6", "G7"]
+
+/* G6 is the gate verify.mjs is running, and G7 comes after it. Neither can be on disk
+   while the verdict is being computed, so the refusal list stops before them. */
+export const PENDING_AT_VERIFY = ["G6", "G7"]
+
+export function requiredFor(run) {
+	if (!run || !run.job) return []
+	const job = String(run.job).toUpperCase()
+	const lane = String(run.lane || "FULL").toUpperCase()
+	const full = REQUIRED[job] || []
+	if (lane === "LITE") return REQUIRED_LITE
+	return full
+}
+
+/* what verify.mjs may demand: everything the job owes, minus the gates still in flight */
+export function requiredBeforeVerdict(run) {
+	return requiredFor(run).filter((g) => !PENDING_AT_VERIFY.includes(g))
 }
 export const JOBS = Object.keys(REQUIRED)
 export const MODES = ["LAND", "APP", "READ", "SHOW"]
@@ -77,9 +104,7 @@ export function readRun(root = process.cwd()) {
 }
 
 export function missingGates(run) {
-	if (!run || !run.job) return []
-	const need = REQUIRED[String(run.job).toUpperCase()] || []
-	return need.filter((g) => !run.gates || !run.gates[g])
+	return requiredFor(run).filter((g) => !run.gates || !run.gates[g])
 }
 
 function writeRun(run, root = process.cwd()) {
@@ -117,7 +142,7 @@ if (isMain) {
 	if (cmd === "start") {
 		const [, job, mode, stack, lane] = args
 		if (!job || !mode || !stack) {
-			die("usage: node scripts/gate.mjs start <NEW|CHANGE|REDESIGN|REVIEW|FIX> <LAND|APP|READ|SHOW> <FILE|PARTS|APP> [FULL|FULL-NARROW|LITE]")
+			die(`usage: node scripts/gate.mjs start <${JOBS.join("|")}> <LAND|APP|READ|SHOW> <FILE|PARTS|APP> [FULL|FULL-NARROW|LITE]`)
 		}
 		const J = job.toUpperCase()
 		if (!JOBS.includes(J)) die(`unknown job "${job}". One of: ${JOBS.join(", ")}`)
@@ -133,7 +158,7 @@ if (isMain) {
 			console.log(JSON.stringify(run, null, 2))
 		} else {
 			console.log(`gate: run started ${J}/${M}/${S}, lane ${L}`)
-			console.log(`gate: required ${REQUIRED[J].join(" ")}`)
+			console.log(`gate: required ${requiredFor(run).join(" ")}`)
 			console.log(`gate: state ${statePath()}`)
 		}
 		process.exit(0)
@@ -173,7 +198,7 @@ if (isMain) {
 		console.log(`gate: ${run.job}/${run.mode}/${run.stack}, lane ${run.lane}`)
 		for (const g of GATES) {
 			const hit = run.gates[g]
-			const need = (REQUIRED[run.job] || []).includes(g)
+			const need = requiredFor(run).includes(g)
 			if (hit) console.log(`  ${g} pass    ${hit.marker}`)
 			else if (need) console.log(`  ${g} MISSING required for ${run.job}`)
 		}

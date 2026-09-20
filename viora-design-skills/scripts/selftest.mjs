@@ -443,7 +443,7 @@ const WIG_CRAFT_HTML = `<!doctype html>
   <div class="drawer is-closed"><a href="/docs">Docs</a></div>
   <h1>Release notes that ship themselves</h1>
   <h2 id="pricing">Pricing</h2>
-  <input type="tel" name="phone" autocomplete="tel" />
+  <input type="text" name="otp" autocomplete="one-time-code" />
 </body>
 </html>
 `
@@ -464,7 +464,7 @@ const WIG_CRAFT_CLEAN = `<!doctype html>
   <div class="drawer is-closed" inert><a href="/docs">Docs</a></div>
   <h1>Release notes that ship themselves</h1>
   <h2 id="pricing">Pricing</h2>
-  <input type="tel" name="phone" inputmode="tel" enterkeyhint="next" autocomplete="tel" />
+  <input type="text" name="otp" inputmode="numeric" enterkeyhint="done" autocomplete="one-time-code" />
 </body>
 </html>
 `
@@ -536,6 +536,32 @@ try {
 		refused.status === 2 && /missing G1/.test(refusedOut) && !/mechanical floor passed/.test(refusedOut),
 		refused.status === 2 ? "verify.mjs refuses a verdict while gates are missing" : `verify.mjs printed a verdict anyway (exit ${refused.status})`,
 	)
+
+	/* the refusal must not demand the gate it is running, or nothing ever verifies */
+	for (const g of ["G1", "G2", "G3", "G4", "G5"]) {
+		spawnSync(process.execPath, [gate, "pass", g, "recorded"], { cwd: gateDir, encoding: "utf8" })
+	}
+	const reached = spawnSync(process.execPath, [join(here, "verify.mjs"), ".", "--no-shots", "--no-gates"], { cwd: gateDir, encoding: "utf8" })
+	const allowed = spawnSync(process.execPath, [join(here, "verify.mjs"), ".", "--no-shots"], { cwd: gateDir, encoding: "utf8" })
+	const allowedOut = `${allowed.stdout || ""}${allowed.stderr || ""}`
+	tell(
+		!/no verdict printed/.test(allowedOut) && allowed.status === reached.status,
+		/no verdict printed/.test(allowedOut) ? "verify.mjs still demands G6, the gate it is running" : "verify.mjs runs once the gates before G6 are recorded",
+	)
+
+	/* a run started on the LITE lane owes four gates, not eight */
+	rmSync(join(gateDir, ".viora"), { recursive: true, force: true })
+	spawnSync(process.execPath, [gate, "start", "NEW", "LAND", "FILE", "LITE"], { cwd: gateDir, encoding: "utf8" })
+	spawnSync(process.execPath, [gate, "pass", "G3", "recipe R4"], { cwd: gateDir, encoding: "utf8" })
+	const lite = spawnSync(process.execPath, [join(here, "verify.mjs"), ".", "--no-shots"], { cwd: gateDir, encoding: "utf8" })
+	const liteOut = `${lite.stdout || ""}${lite.stderr || ""}`
+	tell(!/no verdict printed/.test(liteOut), /no verdict printed/.test(liteOut) ? "a LITE run is held to the eight FULL gates" : "a LITE run owes four gates, not eight")
+
+	/* every verb in reference/21-verbs.md must be startable */
+	rmSync(join(gateDir, ".viora"), { recursive: true, force: true })
+	const verbs = ["HARDEN", "QUIET", "BOLD", "CRITIQUE", "STUDY"]
+	const rejected = verbs.filter((v) => spawnSync(process.execPath, [gate, "start", v, "LAND", "FILE", "FULL"], { cwd: gateDir, encoding: "utf8" }).status !== 0)
+	tell(rejected.length === 0, rejected.length ? `gate.mjs rejects documented verbs: ${rejected.join(", ")}` : "gate.mjs starts every documented verb")
 } finally {
 	rmSync(gateDir, { recursive: true, force: true })
 }

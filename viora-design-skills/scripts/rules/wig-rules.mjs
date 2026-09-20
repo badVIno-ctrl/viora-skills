@@ -226,10 +226,10 @@ export const WIG = {
 		'<div class="drawer is-closed" inert><a href="/pricing">Pricing</a></div>',
 	],
 	"input-mode": [
-		"Without inputmode the phone shows the full alphabetic keyboard for a code, a phone number or a search field, and the Enter key says the wrong thing.",
-		"inputmode matched to the value, enterkeyhint matched to what Enter does.",
-		'<input type="tel" name="phone" />',
-		'<input type="tel" name="phone" inputmode="tel" enterkeyhint="next" />',
+		"A code, a PIN or a card number has to stay type=text to keep its leading zeros, and then the phone shows the alphabetic keyboard unless inputmode says otherwise. type=tel and type=email already pick their own keyboard; this is about the fields that cannot use them.",
+		"inputmode matched to the value, and enterkeyhint when Enter does something other than go.",
+		'<input type="text" name="otp" />',
+		'<input type="text" name="otp" inputmode="numeric" enterkeyhint="done" autocomplete="one-time-code" />',
 	],
 	"anchor-scroll-margin": [
 		"With a sticky header, jumping to an in-page anchor parks the heading behind the bar, so the section looks like it starts mid sentence.",

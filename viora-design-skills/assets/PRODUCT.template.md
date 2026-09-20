@@ -1,8 +1,12 @@
 # PRODUCT.md
 
 What is true about this product. `DESIGN.md` decides how it looks; this file decides what it
-is allowed to say. Loaded at G1 when it exists, and `check.mjs unsourced-number` measures the
-copy against it: a number in shipped copy that does not appear here is a warning.
+is allowed to say. Loaded at G1 when it exists.
+
+`check.mjs unsourced-number` measures one slice of it mechanically: a percentage, a multiple
+(`3x`) or a `+` figure in shipped copy that does not appear in this file is a warning. Those
+are the shapes a model invents. Every other number here, counts, prices, dates and durations,
+is held by review, not by the linter.
 
 Copy this file to the project root, fill it in, delete the guidance lines.
 

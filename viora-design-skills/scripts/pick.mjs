@@ -156,13 +156,13 @@ const AVOID = []
 if (avoidLast) {
 	const last = lastEntry(process.cwd())
 	if (!last) {
-		console.log("--avoid-last: no .viora/design-log.json yet, nothing excluded")
+		console.error("--avoid-last: no .viora/design-log.json yet, nothing excluded")
 	} else {
 		for (const [label, value] of [["world", last.world], ["palette", last.palette], ["structure", last.structure]]) {
 			const v = String(value || "").trim()
 			if (v) AVOID.push({ label, value: v })
 		}
-		console.log(
+		console.error(
 			AVOID.length
 				? `--avoid-last: excluding ${AVOID.map((a) => `${a.label} ${a.value}`).join(", ")} (last surface: ${last.surface || "unnamed"})`
 				: "--avoid-last: the last log entry names no world, palette or structure",

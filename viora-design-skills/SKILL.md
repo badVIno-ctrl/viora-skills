@@ -83,19 +83,32 @@ Run in order. Print the marker line for each gate as you pass it, on one line, n
 
 | Gate | Name | Load | Produce | Record it |
 |---|---|---|---|---|
-| G0 | Route | nothing | job + mode + stack + lane | `node scripts/gate.mjs start <job> <mode> <stack> <lane>` then `gate.mjs pass G0 "route: <job>/<mode>/<stack>, lane FULL"` |
+| G0 | Route | nothing | job + mode + stack + lane | `node scripts/gate.mjs start <job> <mode> <stack> <lane>` then `node scripts/gate.mjs pass G0 "route: <job>/<mode>/<stack>, lane FULL"` |
 | G1 | Read | `DESIGN.md` if it exists | the Design Read line | `node scripts/gate.mjs pass G1 "read: ..."` |
 | G2 | Direct | `reference/01-direction.md`, then `scripts/pick.mjs` | direction contract + catalog picks (skip if DESIGN.md exists) | `node scripts/gate.mjs pass G2 "direction: <world>"` |
 | G3 | Frame | `reference/02-tokens.md` + `reference/03-layout.md`, then `reference/20-structure.md` | token file + structure line + section plan | `node scripts/gate.mjs pass G3 "frame: <shape>, <n> sections, <n> families"` |
 | G4 | Build | see build router below | working code | `node scripts/gate.mjs pass G4 "build: <files>"` |
 | G5 | Detail | `reference/07-components.md` then `reference/08-states-a11y.md` | states, edges, browser surfaces, signature | `node scripts/gate.mjs pass G5 "detail: signature <what>"` |
 | G6 | Verify | `reference/10-review.md` | script output + screenshot fixes + deletions | `node scripts/gate.mjs pass G6 "verify: <errors> errors, <warnings> warnings, wig <n>"` |
-| G7 | Report | nothing | short report + user to-dos | `node scripts/gate.mjs pass G7 "done"` then `gate.mjs log ...` |
+| G7 | Report | nothing | short report + user to-dos | `node scripts/gate.mjs pass G7 "done"` then `node scripts/gate.mjs log ...` |
 
 The marker is the command, not a line you type into the answer. `gate.mjs` writes
-`.viora/design-run.json`; `verify.mjs` reads it at G6 and refuses to print a verdict while a
-gate this job requires is missing. NEW and REDESIGN owe G0 to G6, CHANGE owes G1, G3, G4 and
-G5, FIX owes G1 and G4, REVIEW owes G1.
+`.viora/design-run.json`; `verify.mjs` walks up from the working directory to find it and
+refuses to print a verdict while a gate this job owes is missing.
+
+| Job | Owes |
+|---|---|
+| `NEW`, `REDESIGN` | G0 to G6 |
+| `CHANGE` | G1, G3, G4, G5, G6 |
+| `FIX` | G1, G4, G6 |
+| `REVIEW`, `CRITIQUE` | G1, G6, G7 |
+| `HARDEN` | G1, G4, G5, G6 |
+| `QUIET`, `BOLD` | G1, G3, G4, G6 |
+| `STUDY` | G1, G2 |
+
+G6 is the gate `verify.mjs` is running and G7 comes after it, so neither is demanded while
+the verdict is being computed: record them once it passes. On the LITE lane the run owes four
+gates only, G3, G6 and G7 after the start.
 
 ### G0 Route
 

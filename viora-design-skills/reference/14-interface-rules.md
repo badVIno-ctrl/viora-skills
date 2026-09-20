@@ -64,8 +64,10 @@ reader, or the layout. `warn` is a craft miss: fix it or justify it in one claus
 ## C. Forms
 
 - Inputs carry a meaningful `name` and the right `autocomplete`. `warn`
-- `number`, `tel`, `email` and `search` inputs carry `inputmode` and `enterkeyhint`, so the
-  phone shows the right keyboard and the right Enter key. `input-mode` `warn`
+- A numeric field that must stay `type="text"` (code, PIN, card number, postal code) carries
+  `inputmode`, or the phone shows the alphabetic keyboard. `type="tel"` and `type="email"`
+  already pick their own. `input-mode` `warn`
+- `enterkeyhint` when Enter does something other than go: `search`, `next`, `send`, `done`.
 - Correct `type` and `inputmode`: `email`, `tel`, `url`, `numeric`, `decimal`. `warn`
 - Never block paste. `error`
 - Labels are clickable, and a checkbox or radio shares one hit target with its label:

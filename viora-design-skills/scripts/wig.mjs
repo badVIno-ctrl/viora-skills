@@ -102,7 +102,10 @@ const RULES = [
 	/* the hidden attribute already removes the subtree. This is about the overlay
 	   that stays in the layout, invisible, with its links still tabbable. */
 	L("overlay-inert", "warn", MARKUP, /(?:class|className)="[^"]*\b(?:modal|drawer|sheet|overlay|dialog)\b[^"]*(?:\bis-closed\b|\bis-hidden\b|\bclosed\b)[^"]*"|data-state=["']closed["']/i, "closed overlay left in the layout without inert or aria-hidden, its controls stay in the tab order", { not: /\binert\b|aria-hidden|\bhidden\b/ }),
-	L("input-mode", "warn", MARKUP, /<input(?=[^>]*type=["'](?:number|tel|email|search)["'])(?![^>]*(?:inputmode|inputMode|enterkeyhint|enterKeyHint))[^>]*>/i, "numeric, tel, email or search input without inputmode or enterkeyhint, the mobile keyboard is wrong"),
+	/* type= already picks the keyboard. What it cannot express is a numeric field that
+	   must stay type=text (codes, card numbers, anything with leading zeros), and an
+	   Enter key that should say something other than "go". */
+	L("input-mode", "warn", MARKUP, /<input(?=[^>]*type=["']text["'])(?=[^>]*(?:name|id)=["'][^"']*(?:code|otp|pin|zip|postal|card|cvv|cvc|phone|tel|amount|qty|quantity)[^"']*["'])(?![^>]*(?:inputmode|inputMode))[^>]*>/i, "numeric text input without inputmode, the phone shows the alphabetic keyboard for a number"),
 	L("will-change-sprinkle", "warn", ALL, /will-change/, "will-change on more than three places, each one holds a compositor layer for the whole session", { countAtLeast: 4 }),
 	/* whole pages only: a fragment inherits the heading rule from the token layer */
 	L("heading-wrap", "hint", new Set([".html", ".htm", ".vue", ".svelte", ".astro"]), /<h1\b/, "page headline without text-wrap: balance anywhere in this file, it breaks into orphan words", { fileLacks: /text-wrap:\s*balance|text-balance|\btext-wrap\b/, firstOnly: true }),

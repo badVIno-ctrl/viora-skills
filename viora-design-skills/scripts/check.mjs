@@ -765,7 +765,7 @@ const RULES = [
 		id: "unsourced-number",
 		level: "warn",
 		ext: new Set([...MARKUP, ".jsx", ".tsx", ...COPY]),
-		msg: "this number is not in PRODUCT.md. A figure with no source reads as decoration, and it makes the real figures look invented too. Add it to the truth claims table with where it came from, or drop the claim.",
+		msg: "this percentage, multiple or plus-figure is not in PRODUCT.md. A figure with no source reads as decoration, and it makes the real figures look invented too. Add it to the truth claims table with where it came from, or drop the claim. Counts, prices and dates are not checked here: review those by hand.",
 		scan(line) {
 			if (!PRODUCT_TEXT) return []
 			const hits = []

@@ -12,6 +12,11 @@ first and exits 2 without printing a verdict while a gate the job requires is mi
 each one. The Marker column in the `SKILL.md` gate table is now the command that records it.
 `LITE.md` records four gates: start, G3, G6, G7.
 
+`gate.mjs` knows the four verbs and `STUDY` as well as the five jobs, holds a LITE run to its
+four gates, and never demands G6 or G7 while `verify.mjs` is computing the verdict they
+describe. `verify.mjs` walks up from the working directory to find the run, so
+`verify.mjs src app` reads the same record as `verify.mjs .`.
+
 **Structure layer (C2).** `reference/20-structure.md`: six structural axes, sixteen named page
 shapes with section orders and what each one is wrong for, ten nav archetypes, six footer
 archetypes, and three arrangements that are unavailable by default. G3 prints
