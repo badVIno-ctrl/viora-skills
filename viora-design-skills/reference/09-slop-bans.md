@@ -130,10 +130,14 @@ The examples below are literal characters. Copy the character, not the descripti
 - **Uniform density.** A page where every section has the same amount of content and the same visual weight has no rhythm and no emphasis.
 - **No opinion.** Nothing on the page could be argued with. Design carries a point of view; a page that offends nobody impresses nobody.
 - **Aesthetic cluster reflex.** Cream plus serif plus terracotta, or near-black plus neon. See `01-direction.md` section 3.
+- **Generated page rhythm.** Hero, three equal cards, a band with one button. Enforced as `template-rhythm`; the alternatives are the page shapes in `20-structure.md`.
+- **Template footer.** Four or more link columns plus a social icon row, most columns holding one link. Enforced as `stock-footer`.
+- **Number wall.** Four identical blocks where only the figure changes. Enforced as `kpi-clones`. One measured figure with its method beats four decorative ones.
+- **Borrowed world.** The same world as the previous surface, for an unrelated subject. Enforced as `repeat-world` against the diversification log.
 
 ## H. What is mechanically enforced
 
-`scripts/check.mjs` implements 49 rules across `.css`, `.scss`, `.html`, `.vue`, `.svelte`, `.astro`, `.js`, `.jsx`, `.ts`, `.tsx`, `.md`, and `.mdx`. Run `node scripts/check.mjs --list-rules` for the current list. The mapping from this document:
+`scripts/check.mjs` implements 79 rules across `.css`, `.scss`, `.html`, `.vue`, `.svelte`, `.astro`, `.js`, `.jsx`, `.ts`, `.tsx`, `.md`, and `.mdx`. Run `node scripts/check.mjs --list-rules` for the current list. The mapping from this document:
 
 | Section | Rule ids |
 |---|---|
@@ -142,11 +146,14 @@ The examples below are literal characters. Copy the character, not the descripti
 | C | `gradient-text`, `neon-glow`, `pure-black-text`, `pure-black-surface`, `raw-hex`, `hue-count`, `radius-family` |
 | D | `banned-font`, `font-count`, `cyrillic-latin-face`, `tiny-text`, `icon-stroke-mixed` |
 | E | `transition-all`, `scale-zero`, `ease-in-enter`, `transition-layout`, `slow-motion`, `scroll-listener`, `motion-axis-keys`, `hover-ungated`, `marquee-multi`, `image-hover`, `reduced-motion-missing` |
-| F | `vh-height`, `focus-none`, `focus-ring-missing`, `important`, `zindex-high`, `img-no-alt`, `viewport-no-zoom`, `tabindex-positive`, `icon-button-unnamed`, `emoji-icon`, `placeholder-as-label` |
+| F | `vh-height`, `focus-none`, `focus-ring-missing`, `important`, `zindex-high`, `img-no-alt`, `viewport-no-zoom`, `tabindex-positive`, `icon-button-unnamed`, `emoji-icon`, `placeholder-as-label`, `unsourced-number` |
+| G | `template-rhythm`, `stock-footer`, `kpi-clones`, `repeat-world` |
+
+Craft, added in 4.2.0 and not tied to one section above: `offset-shadow`, `svg-grain`, `stripe-bg`, `ghost-card`, `over-tracking`, `system-display-face`, `glyph-icon`, `shadow-opacity`.
 
 `scripts/contrast.mjs` covers what a text search cannot: it resolves `var()`, `color-mix()`, `oklch()`, and `hsl()` in both themes and measures every pair in the contract. The contrast claims in section C are checked there, not here.
 
-Section G and the composition judgements in section B are not machine-checkable. That is what the squint test at G6 and the review pass in `10-review.md` are for.
+The rest of section G, and the composition judgements in section B, are not machine-checkable. That is what the squint test at G6 and the review pass in `10-review.md` are for.
 
 ## How to use this list
 

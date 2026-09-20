@@ -1,0 +1,133 @@
+<!--
+  Виора block library / component preview shell
+
+  G5 with scope COMPONENT emits <Name>.preview.html from this file. It renders the
+  component eight times, once per state, so the states nobody can screenshot on hover
+  are visible side by side in one static page.
+
+  How to use:
+    1. Copy this file to <Name>.preview.html next to the component.
+    2. Replace the href of the token file if the path differs.
+    3. Paste the component markup into every .p-stage, once per state, and add the
+       companion class named in the cell.
+
+  The companion classes exist because :hover, :focus-visible and :active cannot be
+  forced in a static page. The component CSS must target them alongside the real
+  pseudo-classes:
+
+    .btn:hover, .btn.is-hover { ... }
+    .btn:focus-visible, .btn.is-focus { ... }
+    .btn:active, .btn.is-active { ... }
+
+  A component whose preview shows eight identical cells has seven states it never
+  styled. That is the point of the page.
+
+  Checked by: node scripts/check.mjs <Name>.preview.html
+              node scripts/wig.mjs   <Name>.preview.html
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- viora-allow: raw-hex a theme-color meta cannot reference a CSS variable -->
+<meta name="theme-color" content="#ffffff" />
+<title>Component states</title>
+<link rel="stylesheet" href="./tokens.css" />
+<style>
+  .p-page {
+    padding: var(--space-8) var(--gutter, var(--space-6));
+    display: grid;
+    gap: var(--space-8);
+    background: var(--canvas);
+    color: var(--ink);
+  }
+  .p-head h1 { font-size: var(--text-h3); margin: 0 0 var(--space-2); text-wrap: balance; }
+  .p-head p { margin: 0; color: var(--ink-muted); max-inline-size: var(--measure, 62ch); text-wrap: pretty; }
+  .p-grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  }
+  .p-cell {
+    display: grid;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+  }
+  .p-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--ink-subtle);
+    font-variant-numeric: tabular-nums;
+  }
+  .p-stage {
+    display: grid;
+    place-items: start;
+    min-block-size: 4.5rem;
+    align-content: center;
+  }
+  .p-note { font-size: var(--text-sm); color: var(--ink-muted); }
+</style>
+</head>
+<body class="p-page">
+
+<header class="p-head">
+  <h1>Component states</h1>
+  <p>
+    Eight states of one component, rendered at once. Companion classes stand in for the
+    pseudo-classes a static page cannot trigger: the component CSS must target
+    <code>.is-hover</code>, <code>.is-focus</code> and <code>.is-active</code> next to
+    <code>:hover</code>, <code>:focus-visible</code> and <code>:active</code>.
+  </p>
+</header>
+
+<section class="p-grid" aria-label="States">
+  <article class="p-cell">
+    <span class="p-label">1 default</span>
+    <div class="p-stage"><!-- component, no extra class --></div>
+  </article>
+
+  <article class="p-cell">
+    <span class="p-label">2 hover .is-hover</span>
+    <div class="p-stage"><!-- component + class="is-hover" --></div>
+  </article>
+
+  <article class="p-cell">
+    <span class="p-label">3 focus .is-focus</span>
+    <div class="p-stage"><!-- component + class="is-focus" --></div>
+  </article>
+
+  <article class="p-cell">
+    <span class="p-label">4 active .is-active</span>
+    <div class="p-stage"><!-- component + class="is-active" --></div>
+  </article>
+
+  <article class="p-cell">
+    <span class="p-label">5 disabled</span>
+    <div class="p-stage"><!-- component + disabled or aria-disabled="true" --></div>
+    <p class="p-note">Disabled still needs 3:1 against the surface, and a reason nearby.</p>
+  </article>
+
+  <article class="p-cell">
+    <span class="p-label">6 loading</span>
+    <div class="p-stage"><!-- component + aria-busy="true", label keeps its width --></div>
+    <p class="p-note">The label keeps its box, so nothing around it moves.</p>
+  </article>
+
+  <article class="p-cell">
+    <span class="p-label">7 error</span>
+    <div class="p-stage"><!-- component + aria-invalid="true", message in the flow --></div>
+    <p class="p-note">The message says what to do, not that something went wrong.</p>
+  </article>
+
+  <article class="p-cell">
+    <span class="p-label">8 success</span>
+    <div class="p-stage"><!-- component in its settled state, message via role="status" --></div>
+  </article>
+</section>
+
+</body>
+</html>

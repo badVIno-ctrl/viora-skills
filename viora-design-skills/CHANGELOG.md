@@ -1,5 +1,67 @@
 # Changelog
 
+## 4.2.0
+
+The release that makes the process recordable and the arrangement a decision. A gate that is
+only a sentence in the answer can be skipped and still claimed; a world that nobody logged is
+reused next project by accident.
+
+**Gate conductor (C1).** `scripts/gate.mjs` records a run in `.viora/design-run.json`:
+`start <job> <mode> <stack> <lane>`, `pass <G#> "<marker>"`, `status`. `verify.mjs` reads it
+first and exits 2 without printing a verdict while a gate the job requires is missing, naming
+each one. The Marker column in the `SKILL.md` gate table is now the command that records it.
+`LITE.md` records four gates: start, G3, G6, G7.
+
+`gate.mjs` knows the four verbs and `STUDY` as well as the five jobs, holds a LITE run to its
+four gates, and never demands G6 or G7 while `verify.mjs` is computing the verdict they
+describe. `verify.mjs` walks up from the working directory to find the run, so
+`verify.mjs src app` reads the same record as `verify.mjs .`.
+
+**Structure layer (C2).** `reference/20-structure.md`: six structural axes, sixteen named page
+shapes with section orders and what each one is wrong for, ten nav archetypes, six footer
+archetypes, and three arrangements that are unavailable by default. G3 prints
+`STRUCTURE: <shape> / nav <N> / footer <F>` and `DESIGN.md` carries the same block.
+`check.mjs template-rhythm` and `stock-footer` enforce two of the three mechanically.
+
+**Diversification memory (C3).** G7 appends world, palette, type pair, structure, nav, footer,
+paper band and accent hue to `.viora/design-log.json` through `gate.mjs log`.
+`pick.mjs --avoid-last` excludes the last entry's world, palette and structure and prints what
+it excluded. `check.mjs repeat-world` warns when a `DESIGN.md` names the previous world for a
+different surface.
+
+**Craft rules (C4, C13).** `check.mjs` gains `offset-shadow`, `svg-grain`, `stripe-bg`,
+`ghost-card`, `over-tracking`, `system-display-face`, `glyph-icon`, `kpi-clones` and
+`shadow-opacity`. `wig.mjs` gains `overlay-inert`, `input-mode`, `anchor-scroll-margin`,
+`will-change-sprinkle`, `heading-wrap` and `component-states`. Every one carries a why, a fix,
+a before and an after in the rule catalogue, and a positive plus a negative sample in the
+selftest: 79 craft rules, 42 interface rules.
+
+**Lane table and self-checks (C5).** `lane.mjs` routes the claude fable, mythos, opus and
+sonnet 5 families, the gpt-5.x pro and codex variants, gemini-3-pro to FULL, and the mini,
+nano, flash and haiku variants to LITE. `docsync.mjs` gains a badges stage that compares the
+README version and rule-count badges with `SKILL.md` and with the linters themselves.
+
+`wig.mjs` reports `hint` findings separately from warnings and never fails a `--strict` run
+on one, so an advisory rule cannot block a handover.
+
+**Trigger set (C6).** `evals/triggers.json`: ten queries the skill must answer, including
+Russian, and ten near misses it must decline.
+
+**Component scope (C7).** G0 prints `lane FULL, scope COMPONENT` for a single-component brief,
+skips the structure half of G2 and G3 in one line, and G5 emits `<Name>.preview.html` from
+`assets/blocks/html/preview-shell.html`: eight states in one page, with companion classes the
+component CSS must target next to the real pseudo-classes.
+
+**Verbs (C8).** `reference/21-verbs.md`: HARDEN, QUIET/BOLD and CRITIQUE, routed from G0, plus
+the rule that refinement preserves, redesign replaces, and neither splits the difference.
+
+**Product truth (C9).** `assets/PRODUCT.template.md` carries the audience scene, the sourced
+truth claims, the constraints and the forbidden claims. G1 loads it when present, and
+`check.mjs unsourced-number` warns on a number in the copy that it does not carry.
+
+**STUDY (C10).** A reference screenshot or URL becomes a five-line DNA report, never copied
+pixels and never copied copy, and template marketplaces are refused.
+
 ## 4.1.0
 
 The release that makes the skill checkable. Everything added here exists so a claim can be verified

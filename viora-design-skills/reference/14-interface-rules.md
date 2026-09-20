@@ -35,7 +35,10 @@ reader, or the layout. `warn` is a craft miss: fix it or justify it in one claus
 - Semantic HTML before ARIA: `main`, `nav`, `header`, `footer`, `section`, `dialog`. `warn`
 - Headings are hierarchical `h1` to `h6`, one `h1` per document, no level skipped. `warn`
 - Provide a skip link to main content. `warn`
-- `scroll-margin-top` on anchor targets so a sticky header does not cover them. `warn`
+- `scroll-margin-top` on anchor targets so a sticky header does not cover them.
+  `anchor-scroll-margin` `warn`
+- A closed overlay left in the layout carries `inert` or `aria-hidden`, or it is removed with
+  the `hidden` attribute. Its links must not stay in the tab order. `overlay-inert` `warn`
 - Keyboard reachability is not optional: every action reachable, tab order matching visual
   order, `Escape` closing every overlay, focus returned to the trigger on close. `error`
 - WCAG 2.2, the four that generated code misses most:
@@ -54,10 +57,17 @@ reader, or the layout. `warn` is a craft miss: fix it or justify it in one claus
 - Compound controls take group focus with `:focus-within`. `warn`
 - The focus ring needs its own contrast: at least 3:1 against both the control and the
   ground behind it. Measure it, do not eyeball it. `warn`
+- An interactive component defines `:focus-visible` and a disabled state, not only `:hover`.
+  Hover-only styling means the component works for a mouse and nothing else.
+  `component-states` `error`
 
 ## C. Forms
 
 - Inputs carry a meaningful `name` and the right `autocomplete`. `warn`
+- A numeric field that must stay `type="text"` (code, PIN, card number, postal code) carries
+  `inputmode`, or the phone shows the alphabetic keyboard. `type="tel"` and `type="email"`
+  already pick their own. `input-mode` `warn`
+- `enterkeyhint` when Enter does something other than go: `search`, `next`, `send`, `done`.
 - Correct `type` and `inputmode`: `email`, `tel`, `url`, `numeric`, `decimal`. `warn`
 - Never block paste. `error`
 - Labels are clickable, and a checkbox or radio shares one hit target with its label:
@@ -83,6 +93,8 @@ reader, or the layout. `warn` is a craft miss: fix it or justify it in one claus
 - Autoplaying motion longer than five seconds needs pause, stop or hide. `error`
 - Decorative loops stop under reduced motion. `warn`
 - Entrances use `ease-out`, exits use `ease-in`, and exits are faster than entrances. `warn`
+- `will-change` on more than three places holds a compositor layer for the whole session.
+  Add it to the one element that measurably janks, while it animates. `will-change-sprinkle` `warn`
 
 ## E. Typography and copy
 
@@ -92,7 +104,8 @@ reader, or the layout. `warn` is a craft miss: fix it or justify it in one claus
 - Loading and progress labels end with an ellipsis: `Saving...` becomes `Saving` plus the
   ellipsis character. `warn`
 - `font-variant-numeric: tabular-nums` on any column or comparison of numbers. `warn`
-- `text-wrap: balance` on headings, `text-wrap: pretty` on paragraphs. `warn`
+- `text-wrap: balance` on headings, `text-wrap: pretty` on paragraphs. A page whose headline
+  has neither breaks into orphan words. `heading-wrap` `hint`
 - Sentence case for headings and buttons. This overrides the Title Case convention in the
   upstream Vercel rules: Title Case reads as a marketing deck, and the linter flags it.
   Keep Title Case only when the user pinned a brand voice that requires it. `warn`

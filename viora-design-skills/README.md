@@ -1,6 +1,10 @@
 # Виора Design Skills
 
-**v4.1.0** A design skill for coding agents. It makes the agent produce interfaces that look designed
+![version](https://img.shields.io/badge/version-v4.2.0-000000)
+![craft rules](https://img.shields.io/badge/craft_rules-79-000000)
+![interface rules](https://img.shields.io/badge/interface_rules-42-000000)
+
+**v4.2.0** A design skill for coding agents. It makes the agent produce interfaces that look designed
 rather than generated: a committed visual direction, a measured palette, real states, and a
 mechanical floor that is checked by scripts instead of claimed in a summary.
 
@@ -67,16 +71,19 @@ gates and a confident summary. Details in `reference/17-model-tiers.md`.
 
 ## The gates
 
-| Gate | What happens | Marker |
+| Gate | What happens | Recorded by |
 |---|---|---|
-| G0 | route the job: new, change, redesign, review or fix, and the mode | `G0 route:` |
-| G1 | read only the files this job needs | `G1 read:` |
-| G2 | commit to a direction, name the world, fill the contract | `G2 direction:` |
-| G3 | tokens and the section plan, no component code yet | `G3 frame:` |
-| G4 | build, paste blocks where the pattern is standard | `G4 build:` |
-| G5 | one signature detail that no template would produce | `G5 detail:` |
-| G6 | verify with the scripts, fix, then delete something | `G6 verify:` |
-| G7 | report what was built and what was cut | `G7 done` |
+| G0 | route the job: new, change, redesign, review or fix, and the mode | `gate.mjs start <job> <mode> <stack> <lane>` |
+| G1 | read only the files this job needs, plus `PRODUCT.md` when it exists | `gate.mjs pass G1 "read: ..."` |
+| G2 | commit to a direction, name the world, fill the contract | `gate.mjs pass G2 "direction: ..."` |
+| G3 | tokens, page shape, nav and footer, then the section plan | `gate.mjs pass G3 "frame: ..."` |
+| G4 | build, paste blocks where the pattern is standard | `gate.mjs pass G4 "build: ..."` |
+| G5 | one signature detail that no template would produce | `gate.mjs pass G5 "detail: ..."` |
+| G6 | verify with the scripts, fix, then delete something | `gate.mjs pass G6 "verify: ..."` |
+| G7 | report what was built and what was cut, then log it | `gate.mjs pass G7 "done"`, `gate.mjs log ...` |
+
+The gates are recorded in `.viora/design-run.json`, not claimed in the answer.
+`verify.mjs` refuses to print a verdict while a gate the job requires is missing.
 
 ## Scripts
 
@@ -84,9 +91,10 @@ Everything here is plain Node with no dependencies. All of it runs offline.
 
 | Command | What it does |
 |---|---|
-| `node scripts/verify.mjs <paths>` | the whole pipeline, one verdict |
-| `node scripts/check.mjs <paths>` | 66 rules: slop copy, banned patterns, motion, colour, craft |
-| `node scripts/wig.mjs <paths>` | 36 interface rules with file and line output |
+| `node scripts/verify.mjs <paths>` | the whole pipeline, one verdict, refused while gates are missing |
+| `node scripts/gate.mjs start\|pass\|status\|log` | records the run and the diversification log |
+| `node scripts/check.mjs <paths>` | 79 rules: slop copy, banned patterns, motion, colour, structure, craft |
+| `node scripts/wig.mjs <paths>` | 42 interface rules with file and line output |
 | `node scripts/contrast.mjs <token file>` | measures 30 required pairs, light and dark |
 | `node scripts/palettes.mjs` | measures all 13 palettes in the library |
 | `node scripts/shot.mjs <url>` | screenshots at several widths, squint and scale tests |

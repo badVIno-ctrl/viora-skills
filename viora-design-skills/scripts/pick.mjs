@@ -16,6 +16,7 @@
  *   node pick.mjs --list-domains
  *
  * Flags: --domain <name>  -n <count>  --tier <text>  --cyrillic  --full  --css  --json
+ *        --avoid-last   drop the world, palette and structure the last G7 logged
  *
  * The catalog is raw material. The laws in SKILL.md outrank every row it returns.
  */
@@ -23,6 +24,7 @@
 import { readFileSync, existsSync, readdirSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 import { dirname, join, basename } from "node:path"
+import { lastEntry } from "./gate.mjs"
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const DATA = join(HERE, "..", "data")
@@ -145,6 +147,39 @@ const wantSystem = has("system")
 const asJson = has("json")
 const full = has("full")
 const cyrillic = has("cyrillic")
+const avoidLast = has("avoid-last")
+
+/* --avoid-last reads the last row G7 wrote to .viora/design-log.json and drops
+   the world, the palette and the structure it used. Rotation that relies on the
+   model remembering the previous project does not happen. */
+const AVOID = []
+if (avoidLast) {
+	const last = lastEntry(process.cwd())
+	if (!last) {
+		console.error("--avoid-last: no .viora/design-log.json yet, nothing excluded")
+	} else {
+		for (const [label, value] of [["world", last.world], ["palette", last.palette], ["structure", last.structure]]) {
+			const v = String(value || "").trim()
+			if (v) AVOID.push({ label, value: v })
+		}
+		console.error(
+			AVOID.length
+				? `--avoid-last: excluding ${AVOID.map((a) => `${a.label} ${a.value}`).join(", ")} (last surface: ${last.surface || "unnamed"})`
+				: "--avoid-last: the last log entry names no world, palette or structure",
+		)
+	}
+}
+
+function excluded(rec) {
+	const blob = Object.values(rec).join(" ").toLowerCase()
+	const no = String(rec.No || "").trim()
+	for (const a of AVOID) {
+		const v = a.value.toLowerCase()
+		if (a.label === "palette" && /^\d+$/.test(v) && no === v) return true
+		if (v.length >= 3 && blob.includes(v)) return true
+	}
+	return false
+}
 const tier = flag("tier", "")
 const dashN = argv.indexOf("-n")
 const countRaw = dashN !== -1 ? argv[dashN + 1] : flag("n", "")
@@ -157,7 +192,7 @@ if (!existsSync(DATA)) {
 	process.exit(3)
 }
 if (!query) {
-	console.error('usage: node pick.mjs "<what you are designing>" [--domain palette|type|style|product|landing|ux|app|motion|icons|reasoning|charts|react|stack] [--system] [-n 5] [--cyrillic] [--tier subtle] [--full] [--css] [--json]')
+	console.error('usage: node pick.mjs "<what you are designing>" [--domain palette|type|style|product|landing|ux|app|motion|icons|reasoning|charts|react|stack] [--system] [-n 5] [--cyrillic] [--tier subtle] [--avoid-last] [--full] [--css] [--json]')
 	process.exit(2)
 }
 
@@ -296,6 +331,7 @@ function rank(table, cfg, rawQuery, count, tierFilter) {
 			const blob = Object.values(rec).join(" ").toLowerCase()
 			if (!blob.includes(String(tierFilter).toLowerCase())) continue
 		}
+		if (AVOID.length && excluded(rec)) continue
 		const plain = []
 		const keyed = []
 		for (const [k, v] of Object.entries(rec)) {

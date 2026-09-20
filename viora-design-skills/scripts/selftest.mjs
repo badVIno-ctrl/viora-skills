@@ -25,7 +25,7 @@
  */
 
 import { spawnSync } from "node:child_process"
-import { mkdtempSync, writeFileSync, rmSync } from "node:fs"
+import { existsSync, mkdirSync, mkdtempSync, writeFileSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -292,6 +292,332 @@ try {
 	)
 } finally {
 	rmSync(installDir, { recursive: true, force: true })
+}
+
+/* 12. the 4.2.0 rules: each one fires on a positive sample and stays quiet on
+   the negative one. A rule that cannot tell them apart is not a rule. --------- */
+
+const CRAFT_CSS = `.poster { box-shadow: 6px 6px 0 var(--ink) }
+.field { background: repeating-linear-gradient(45deg, var(--surface) 0 10px, var(--canvas) 10px 20px) }
+.ghost { border: 1px solid var(--hairline); box-shadow: 0 10px 30px rgba(17, 17, 20, 0.08) }
+.shout { letter-spacing: -0.06em }
+.deck { box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25) }
+:root { --font-display: system-ui; }
+`
+
+const CRAFT_HTML = `<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Craft fixture</title></head>
+<body>
+  <svg><filter id="grain"><feTurbulence baseFrequency="0.8" /></filter></svg>
+  <button>\u2192</button>
+  <footer>
+    <div class="col"><a href="/a">A</a></div>
+    <div class="col"><a href="/b">B</a></div>
+    <div class="col"><a href="/c">C</a></div>
+    <div class="col"><a href="/d">D</a></div>
+    <a href="https://twitter.com/x">Twitter</a>
+  </footer>
+</body>
+</html>
+`
+
+const CRAFT_CLEAN_CSS = `.card { box-shadow: 0 8px 24px -6px hsl(220 20% 10% / 0.10); border-radius: var(--radius-md) }
+.title { letter-spacing: -0.03em }
+.field { background: var(--surface-2); border-top: 1px solid var(--hairline) }
+:root { --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif; }
+`
+
+const CRAFT_MUST_FIRE = [
+	"offset-shadow",
+	"stripe-bg",
+	"ghost-card",
+	"over-tracking",
+	"shadow-opacity",
+	"system-display-face",
+	"svg-grain",
+	"glyph-icon",
+	"stock-footer",
+]
+
+const craftDir = mkdtempSync(join(tmpdir(), "viora-craft-"))
+try {
+	writeFileSync(join(craftDir, "bad.css"), CRAFT_CSS)
+	writeFileSync(join(craftDir, "bad.html"), CRAFT_HTML)
+	const out = json([craftDir])
+	if (!out) {
+		tell(false, "checker did not return JSON on the craft fixture")
+	} else {
+		const fired = new Set(out.findings.map((f) => f.id))
+		for (const id of CRAFT_MUST_FIRE) tell(fired.has(id), `rule fires: ${id}`)
+	}
+} finally {
+	rmSync(craftDir, { recursive: true, force: true })
+}
+
+const craftCleanDir = mkdtempSync(join(tmpdir(), "viora-craft-ok-"))
+try {
+	writeFileSync(join(craftCleanDir, "ok.css"), CRAFT_CLEAN_CSS)
+	const out = json([craftCleanDir])
+	const fired = out ? new Set(out.findings.map((f) => f.id)) : new Set(CRAFT_MUST_FIRE)
+	const noisy = CRAFT_MUST_FIRE.filter((id) => fired.has(id))
+	tell(noisy.length === 0, noisy.length ? `craft rules fire on clean CSS: ${noisy.join(", ")}` : "craft rules stay quiet on clean CSS")
+} finally {
+	rmSync(craftCleanDir, { recursive: true, force: true })
+}
+
+/* the template rhythm and the KPI wall need a whole page to recognise */
+const TEMPLATE_HTML = `<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Template fixture</title></head>
+<body>
+  <section class="hero"><h1>Ship the release</h1></section>
+  <section class="grid grid-cols-3">
+    <div class="rounded-xl border p-6">One</div>
+    <div class="rounded-xl border p-6">Two</div>
+    <div class="rounded-xl border p-6">Three</div>
+  </section>
+  <section class="cta"><a href="/start">Start</a></section>
+  <section class="numbers">
+    <div><span>99%</span><span>uptime last quarter</span></div>
+    <div><span>340</span><span>workspaces running</span></div>
+    <div><span>12</span><span>integrations shipped</span></div>
+    <div><span>3</span><span>minutes to first draft</span></div>
+  </section>
+</body>
+</html>
+`
+
+const TEMPLATE_CLEAN_HTML = `<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Shaped fixture</title></head>
+<body>
+  <section class="hero"><h1>Ship the release</h1></section>
+  <section class="rows">
+    <div class="row"><span>Draft</span><p>Written the moment the pull request merges.</p></div>
+    <div class="row"><span>Review</span><p>One approver, in the tool they already use.</p></div>
+  </section>
+  <footer><p>Kvartal, Riga. Contact, legal, 2026.</p></footer>
+</body>
+</html>
+`
+
+const tmplDir = mkdtempSync(join(tmpdir(), "viora-tmpl-"))
+try {
+	writeFileSync(join(tmplDir, "page.html"), TEMPLATE_HTML)
+	const out = json([tmplDir])
+	const fired = out ? new Set(out.findings.map((f) => f.id)) : new Set()
+	tell(fired.has("template-rhythm"), "rule fires: template-rhythm")
+	tell(fired.has("kpi-clones"), "rule fires: kpi-clones")
+} finally {
+	rmSync(tmplDir, { recursive: true, force: true })
+}
+
+const tmplOkDir = mkdtempSync(join(tmpdir(), "viora-tmpl-ok-"))
+try {
+	writeFileSync(join(tmplOkDir, "page.html"), TEMPLATE_CLEAN_HTML)
+	const out = json([tmplOkDir])
+	const fired = out ? new Set(out.findings.map((f) => f.id)) : new Set(["template-rhythm"])
+	const noisy = ["template-rhythm", "kpi-clones", "stock-footer"].filter((id) => fired.has(id))
+	tell(noisy.length === 0, noisy.length ? `structure rules fire on a shaped page: ${noisy.join(", ")}` : "structure rules stay quiet on a shaped page")
+} finally {
+	rmSync(tmplOkDir, { recursive: true, force: true })
+}
+
+/* the new interface rules ------------------------------------------------- */
+
+const WIG_CRAFT_HTML = `<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Interface fixture</title>
+<style>
+  .head { position: sticky; top: 0 }
+  .btn:hover { background: var(--accent) }
+  .a { will-change: transform }
+  .b { will-change: opacity }
+  .c { will-change: transform }
+  .d { will-change: filter }
+</style>
+</head>
+<body>
+  <header class="head"><a href="#pricing">Pricing</a></header>
+  <div class="drawer is-closed"><a href="/docs">Docs</a></div>
+  <h1>Release notes that ship themselves</h1>
+  <h2 id="pricing">Pricing</h2>
+  <input type="text" name="otp" autocomplete="one-time-code" />
+</body>
+</html>
+`
+
+const WIG_CRAFT_CLEAN = `<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Interface fixture</title>
+<style>
+  .head { position: sticky; top: 0 }
+  [id] { scroll-margin-top: 5rem }
+  h1, h2 { text-wrap: balance }
+  .btn:hover, .btn:focus-visible { background: var(--accent) }
+  .btn:disabled { opacity: 0.5 }
+</style>
+</head>
+<body>
+  <header class="head"><a href="#pricing">Pricing</a></header>
+  <div class="drawer is-closed" inert><a href="/docs">Docs</a></div>
+  <h1>Release notes that ship themselves</h1>
+  <h2 id="pricing">Pricing</h2>
+  <input type="text" name="otp" inputmode="numeric" enterkeyhint="done" autocomplete="one-time-code" />
+</body>
+</html>
+`
+
+const WIG_CRAFT_MUST_FIRE = [
+	"overlay-inert",
+	"input-mode",
+	"anchor-scroll-margin",
+	"will-change-sprinkle",
+	"heading-wrap",
+	"component-states",
+]
+
+const wigCraftDir = mkdtempSync(join(tmpdir(), "viora-wig-craft-"))
+try {
+	writeFileSync(join(wigCraftDir, "bad.html"), WIG_CRAFT_HTML)
+	const out = readJson([join(here, "wig.mjs"), wigCraftDir, "--json"])
+	if (!out) {
+		tell(false, "wig.mjs did not return JSON on the craft fixture")
+	} else {
+		const fired = new Set(out.findings.map((f) => f.id))
+		for (const id of WIG_CRAFT_MUST_FIRE) tell(fired.has(id), `wig rule fires: ${id}`)
+	}
+} finally {
+	rmSync(wigCraftDir, { recursive: true, force: true })
+}
+
+const wigCleanDir = mkdtempSync(join(tmpdir(), "viora-wig-ok-"))
+try {
+	writeFileSync(join(wigCleanDir, "ok.html"), WIG_CRAFT_CLEAN)
+	const out = readJson([join(here, "wig.mjs"), wigCleanDir, "--json"])
+	const fired = out ? new Set(out.findings.map((f) => f.id)) : new Set(WIG_CRAFT_MUST_FIRE)
+	const noisy = WIG_CRAFT_MUST_FIRE.filter((id) => fired.has(id))
+	tell(noisy.length === 0, noisy.length ? `interface rules fire on the fixed page: ${noisy.join(", ")}` : "interface rules stay quiet once fixed")
+} finally {
+	rmSync(wigCleanDir, { recursive: true, force: true })
+}
+
+/* 13. the gate conductor: start, pass, status, and the verdict it refuses --- */
+
+const gateDir = mkdtempSync(join(tmpdir(), "viora-gate-"))
+try {
+	const gate = join(here, "gate.mjs")
+	const start = spawnSync(process.execPath, [gate, "start", "NEW", "LAND", "FILE", "FULL"], { cwd: gateDir, encoding: "utf8" })
+	tell(start.status === 0 && /NEW\/LAND\/FILE/.test(start.stdout), "gate.mjs start records the run")
+
+	const passed = spawnSync(process.execPath, [gate, "pass", "G0", "route: NEW/LAND/FILE"], { cwd: gateDir, encoding: "utf8" })
+	tell(passed.status === 0 && /G0 route/.test(passed.stdout), "gate.mjs pass records a marker")
+
+	const status = spawnSync(process.execPath, [gate, "status", "--json"], { cwd: gateDir, encoding: "utf8" })
+	let run = null
+	try {
+		run = JSON.parse(status.stdout)
+	} catch {
+		/* left null, reported below */
+	}
+	tell(
+		Boolean(run) && run.gates && run.gates.G0 && run.gates.G0.marker === "route: NEW/LAND/FILE",
+		run && run.gates && run.gates.G0 ? "gate.mjs status round trips the marker" : "gate.mjs status lost the marker",
+	)
+	tell(
+		Boolean(run) && Array.isArray(run.missing) && run.missing.includes("G6"),
+		run && run.missing ? `gate.mjs names what is still owed (${run.missing.join(" ")})` : "gate.mjs reported no missing gates",
+	)
+
+	const refused = spawnSync(process.execPath, [join(here, "verify.mjs"), ".", "--no-shots"], { cwd: gateDir, encoding: "utf8" })
+	const refusedOut = `${refused.stdout || ""}${refused.stderr || ""}`
+	tell(
+		refused.status === 2 && /missing G1/.test(refusedOut) && !/mechanical floor passed/.test(refusedOut),
+		refused.status === 2 ? "verify.mjs refuses a verdict while gates are missing" : `verify.mjs printed a verdict anyway (exit ${refused.status})`,
+	)
+
+	/* one run per project: a gate recorded from a subdirectory must land in the record
+	   verify.mjs reads, not in a second .viora/ beside whatever directory was current */
+	const deep = join(gateDir, "src", "components")
+	mkdirSync(deep, { recursive: true })
+	const fromDeep = spawnSync(process.execPath, [gate, "pass", "G6", "verify: from a subdirectory"], { cwd: deep, encoding: "utf8" })
+	const deepStatus = spawnSync(process.execPath, [gate, "status", "--json"], { cwd: deep, encoding: "utf8" })
+	let deepRun = null
+	try {
+		deepRun = JSON.parse(deepStatus.stdout)
+	} catch {
+		/* reported below */
+	}
+	tell(
+		fromDeep.status === 0 && Boolean(deepRun) && deepRun.gates && deepRun.gates.G6 && deepRun.gates.G0,
+		deepRun && deepRun.gates && deepRun.gates.G6 && deepRun.gates.G0
+			? "gate.mjs records from a subdirectory into the one run"
+			: "gate.mjs forked a second run from a subdirectory",
+	)
+	tell(
+		!existsSync(join(deep, ".viora")),
+		existsSync(join(deep, ".viora")) ? "gate.mjs wrote a second .viora/ into the subdirectory" : "no stray .viora/ beside the subdirectory",
+	)
+
+	/* the refusal must not demand the gate it is running, or nothing ever verifies */
+	for (const g of ["G1", "G2", "G3", "G4", "G5"]) {
+		spawnSync(process.execPath, [gate, "pass", g, "recorded"], { cwd: gateDir, encoding: "utf8" })
+	}
+	const reached = spawnSync(process.execPath, [join(here, "verify.mjs"), ".", "--no-shots", "--no-gates"], { cwd: gateDir, encoding: "utf8" })
+	const allowed = spawnSync(process.execPath, [join(here, "verify.mjs"), ".", "--no-shots"], { cwd: gateDir, encoding: "utf8" })
+	const allowedOut = `${allowed.stdout || ""}${allowed.stderr || ""}`
+	tell(
+		!/no verdict printed/.test(allowedOut) && allowed.status === reached.status,
+		/no verdict printed/.test(allowedOut) ? "verify.mjs still demands G6, the gate it is running" : "verify.mjs runs once the gates before G6 are recorded",
+	)
+
+	/* a run started on the LITE lane owes four gates, not eight */
+	rmSync(join(gateDir, ".viora"), { recursive: true, force: true })
+	spawnSync(process.execPath, [gate, "start", "NEW", "LAND", "FILE", "LITE"], { cwd: gateDir, encoding: "utf8" })
+	spawnSync(process.execPath, [gate, "pass", "G3", "recipe R4"], { cwd: gateDir, encoding: "utf8" })
+	const lite = spawnSync(process.execPath, [join(here, "verify.mjs"), ".", "--no-shots"], { cwd: gateDir, encoding: "utf8" })
+	const liteOut = `${lite.stdout || ""}${lite.stderr || ""}`
+	tell(!/no verdict printed/.test(liteOut), /no verdict printed/.test(liteOut) ? "a LITE run is held to the eight FULL gates" : "a LITE run owes four gates, not eight")
+
+	/* every verb in reference/21-verbs.md must be startable */
+	rmSync(join(gateDir, ".viora"), { recursive: true, force: true })
+	const verbs = ["HARDEN", "QUIET", "BOLD", "CRITIQUE", "STUDY"]
+	const rejected = verbs.filter((v) => spawnSync(process.execPath, [gate, "start", v, "LAND", "FILE", "FULL"], { cwd: gateDir, encoding: "utf8" }).status !== 0)
+	tell(rejected.length === 0, rejected.length ? `gate.mjs rejects documented verbs: ${rejected.join(", ")}` : "gate.mjs starts every documented verb")
+} finally {
+	rmSync(gateDir, { recursive: true, force: true })
+}
+
+/* 14. PRODUCT.md gates the numbers in the copy --------------------------- */
+
+const productDir = mkdtempSync(join(tmpdir(), "viora-product-"))
+try {
+	writeFileSync(
+		join(productDir, "PRODUCT.md"),
+		"# PRODUCT.md\n\n| Claim | Wording | Source |\n|---|---|---|\n| draft speed | 3 min | telemetry |\n| adoption | 340 workspaces | billing |\n| close rate | 92% | telemetry |\n\n## Forbidden claims\n\n- \"99.9% uptime\"\n",
+	)
+	writeFileSync(
+		join(productDir, "page.html"),
+		'<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><title>Claims</title></head><body>\n<p>92% of reviews close the same day.</p>\n<p>Teams ship 7x more release notes.</p>\n</body></html>\n',
+	)
+	const r = spawnSync(process.execPath, [check, ".", "--json"], { cwd: productDir, encoding: "utf8" })
+	let out = null
+	try {
+		out = JSON.parse(r.stdout)
+	} catch {
+		/* reported below */
+	}
+	const hits = out ? out.findings.filter((f) => f.id === "unsourced-number") : []
+	tell(hits.length === 1, hits.length === 1 ? "rule fires: unsourced-number, once, on the number PRODUCT.md does not carry" : `unsourced-number fired ${hits.length} time(s)`)
+	/* the source file is not shipped copy: its forbidden claims list quotes the figures
+	   that must never ship, and flagging those would be the rule eating itself. */
+	tell(
+		hits.every((f) => !/PRODUCT\.md$/i.test(String(f.file))),
+		hits.every((f) => !/PRODUCT\.md$/i.test(String(f.file))) ? "unsourced-number leaves PRODUCT.md itself alone" : "unsourced-number flags its own source file",
+	)
+} finally {
+	rmSync(productDir, { recursive: true, force: true })
 }
 
 console.log("\n" + "-".repeat(66))

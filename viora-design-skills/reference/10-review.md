@@ -226,9 +226,12 @@ One command runs the whole thing and prints one verdict:
 node scripts/verify.mjs <paths> --url <url|file>
 ```
 
-In order, it runs:
+It reads `.viora/design-run.json` first: if a gate this job requires was never recorded with
+`scripts/gate.mjs pass`, it names the missing gates and exits without a verdict.
 
-1. `check.mjs` craft and slop, 66 rules, errors and warnings.
+In order, it then runs:
+
+1. `check.mjs` craft and slop, 79 rules, errors and warnings.
 2. `wig.mjs` interface rules, output as `file:line`. Rule list: `reference/14-interface-rules.md`.
 3. `contrast.mjs` WCAG measurement over every token file it can find.
 4. `palettes.mjs` every palette block in `assets/palettes.css`, light and dark.

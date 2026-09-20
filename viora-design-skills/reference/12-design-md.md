@@ -26,6 +26,7 @@ Copy `assets/DESIGN.template.md`. Sections in order:
 |---|---|
 | Frontmatter | machine-readable tokens: colors, typography, radius, motion |
 | Direction | world name, what arrangement it refuses, dial values |
+| Structure | page shape, nav archetype, footer archetype, and the one arrangement this surface refuses |
 | Palette | every colour role with hex, both themes |
 | Type | families, sources, scale decisions, tracking |
 | Space and shape | radius family, spacing base, shadow scale |
@@ -34,6 +35,17 @@ Copy `assets/DESIGN.template.md`. Sections in order:
 | Voice | how copy sounds, with two real examples |
 | Do not | project-specific bans on top of the skill's bans |
 | Changelog | date, what changed, why |
+
+The Structure section is one block, written at G3 and copied from the gate line:
+
+```
+STRUCTURE: ledger / nav N3 / footer F1
+REFUSES:   hero, three equal cards, CTA band
+```
+
+The shape names the section order. A page whose sections drift out of that order has a
+different shape, so either change the line or change the page. Archetype ids come from
+`reference/20-structure.md`.
 
 Three sections look optional and are not:
 

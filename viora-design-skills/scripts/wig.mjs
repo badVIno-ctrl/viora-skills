@@ -47,7 +47,7 @@ const MAX_BYTES = 400_000
 /* ------------------------------------------------------------------ rules */
 
 const L = (id, sev, ext, re, msg, opts = {}) => ({ kind: "line", id, sev, ext, re, msg, ...opts })
-const F = (id, sev, ext, has, lacks, at, msg) => ({ kind: "file", id, sev, ext, has, lacks, at, msg })
+const F = (id, sev, ext, has, lacks, at, msg, opts = {}) => ({ kind: "file", id, sev, ext, has, lacks, at, msg, ...opts })
 
 const RULES = [
 	/* --- accessibility and forms ---------------------------------------- */
@@ -97,6 +97,39 @@ const RULES = [
 	F("escape-close-missing", "warn", MARKUP, /role=["']dialog|<dialog|Modal|Drawer|Sheet/, /Escape|keydown|onKeyDown|<dialog|useDialog|showModal/, /role=["']dialog|<dialog|Modal|Drawer|Sheet/, "overlay with no Escape handling"),
 	F("drag-no-keyboard", "warn", MARKUP, /onDrag(Start|End|Over)?=|draggable=["']true/, /onKeyDown|onKeyUp|keydown/, /onDrag(Start|End|Over)?=|draggable=["']true/, "drag interaction with no keyboard alternative"),
 	F("tabular-nums-missing", "warn", MARKUP, /<td[^>]*>\s*[\d\u2212-]/, /tabular-nums|tabular_nums|font-variant-numeric/, /<td[^>]*>\s*[\d\u2212-]/, "numeric table without tabular-nums"),
+
+	/* --- craft of the built surface -------------------------------------- */
+	/* the hidden attribute already removes the subtree. This is about the overlay
+	   that stays in the layout, invisible, with its links still tabbable. */
+	L("overlay-inert", "warn", MARKUP, /(?:class|className)="[^"]*\b(?:modal|drawer|sheet|overlay|dialog)\b[^"]*(?:\bis-closed\b|\bis-hidden\b|\bclosed\b)[^"]*"|data-state=["']closed["']/i, "closed overlay left in the layout without inert or aria-hidden, its controls stay in the tab order", { not: /\binert\b|aria-hidden|\bhidden\b/ }),
+	/* type= already picks the keyboard. What it cannot express is a numeric field that
+	   must stay type=text (codes, card numbers, anything with leading zeros), and an
+	   Enter key that should say something other than "go". */
+	L("input-mode", "warn", MARKUP, /<input(?=[^>]*type=["']text["'])(?=[^>]*(?:name|id)=["'][^"']*(?:code|otp|pin|zip|postal|card|cvv|cvc|phone|tel|amount|qty|quantity)[^"']*["'])(?![^>]*(?:inputmode|inputMode))[^>]*>/i, "numeric text input without inputmode, the phone shows the alphabetic keyboard for a number"),
+	L("will-change-sprinkle", "warn", ALL, /will-change/, "will-change on more than three places, each one holds a compositor layer for the whole session", { countAtLeast: 4 }),
+	/* whole pages only: a fragment inherits the heading rule from the token layer */
+	L("heading-wrap", "hint", new Set([".html", ".htm", ".vue", ".svelte", ".astro"]), /<h1\b/, "page headline without text-wrap: balance anywhere in this file, it breaks into orphan words", { fileLacks: /text-wrap:\s*balance|text-balance|\btext-wrap\b/, firstOnly: true }),
+	{
+		kind: "scan",
+		id: "anchor-scroll-margin",
+		sev: "warn",
+		ext: MARKUP,
+		msg: "in-page anchor target under a sticky header without scroll-margin-top, the heading lands behind the bar",
+		scan(content, lines) {
+			if (!/position:\s*sticky|\bsticky\b/.test(content)) return []
+			if (/scroll-margin-top|scroll-padding-top|scroll-mt-/.test(content)) return []
+			const wanted = new Set([...content.matchAll(/href=["']#([a-zA-Z][\w-]*)["']/g)].map((m) => m[1]))
+			if (!wanted.size) return []
+			const hits = []
+			for (let i = 0; i < lines.length; i++) {
+				for (const m of (lines[i] || "").matchAll(/\bid=["']([a-zA-Z][\w-]*)["']/g)) {
+					if (wanted.has(m[1])) hits.push(i)
+				}
+			}
+			return hits.slice(0, 1)
+		},
+	},
+	F("component-states", "error", new Set([...STYLE, ...MARKUP]), /:hover\s*[,{]|cursor:\s*pointer/, /:focus-visible/, /:hover\s*[,{]|cursor:\s*pointer/, "interactive styles with no :focus-visible and no disabled state, the component only works for a mouse", { alsoLacks: /:disabled|\[disabled\]|\.is-disabled|aria-disabled/ }),
 ]
 
 /* ------------------------------------------------------------------ args */
@@ -217,6 +250,10 @@ for (const file of files) {
 		if (rule.kind === "file") {
 			if (!rule.has.test(content)) continue
 			if (rule.lacks.test(content)) continue
+			/* a second condition the file must satisfy before the rule applies */
+			if (rule.requires && !rule.requires.test(content)) continue
+			/* a second escape hatch: either way out clears the finding */
+			if (rule.alsoLacks && rule.alsoLacks.test(content)) continue
 			let at = 0
 			for (let i = 0; i < lines.length; i++) {
 				if (rule.at.test(lines[i])) {
@@ -229,7 +266,21 @@ for (const file of files) {
 			continue
 		}
 
+		/* a rule that needs the whole file and reports its own line numbers */
+		if (rule.kind === "scan") {
+			for (const i of rule.scan(content, lines) || []) {
+				if (suppressed(i, rule.id)) continue
+				findings.push({ file, line: i + 1, id: rule.id, sev: rule.sev, msg: rule.msg })
+			}
+			continue
+		}
+
+
 		if (rule.fileLacks && rule.fileLacks.test(content)) continue
+		if (rule.countAtLeast) {
+			const source = new RegExp(rule.re.source, rule.re.flags.includes("g") ? rule.re.flags : `${rule.re.flags}g`)
+			if ((content.match(source) || []).length < rule.countAtLeast) continue
+		}
 		for (let i = 0; i < lines.length; i++) {
 			const line = lines[i]
 			if (!line || line.length > 2000) continue
@@ -242,6 +293,7 @@ for (const file of files) {
 			}
 			if (suppressed(i, rule.id)) continue
 			findings.push({ file, line: i + 1, id: rule.id, sev: rule.sev, msg: rule.msg })
+			if (rule.firstOnly) break
 		}
 	}
 	if (findings.length === before) clean++
@@ -250,7 +302,9 @@ for (const file of files) {
 /* ---------------------------------------------------------------- report */
 
 const errors = findings.filter((f) => f.sev === "error").length
-const warnings = findings.length - errors
+const hints = findings.filter((f) => f.sev === "hint").length
+/* a hint is advisory: it is reported, and it never fails a strict run */
+const warnings = findings.length - errors - hints
 
 if (wants("github")) {
 	/* GitHub Actions annotations: every interface defect gets a line in the diff */
@@ -259,19 +313,19 @@ if (wants("github")) {
 		const where = relative(process.cwd(), f.file) || f.file
 		console.log(`::${kind} file=${where},line=${Math.max(1, f.line || 1)},title=viora ${f.id}::${String(f.msg).replace(/\s+/g, " ")}`)
 	}
-	console.log(`viora wig: ${errors} errors, ${warnings} warnings across ${scanned} files`)
+	console.log(`viora wig: ${errors} errors, ${warnings} warnings, ${hints} hints across ${scanned} files`)
 	process.exit(errors > 0 || (strict && warnings > 0) ? 1 : 0)
 }
 
 if (asJson) {
-	console.log(JSON.stringify({ scanned, clean, errors, warnings, findings }, null, 2))
+	console.log(JSON.stringify({ scanned, clean, errors, warnings, hints, findings }, null, 2))
 	process.exit(errors > 0 || (strict && warnings > 0) ? 1 : 0)
 }
 
 if (summaryOnly) {
 	const byRule = new Map()
 	for (const f of findings) byRule.set(f.id, (byRule.get(f.id) || 0) + 1)
-	console.log(`wig: ${scanned} files, ${errors} errors, ${warnings} warnings`)
+	console.log(`wig: ${scanned} files, ${errors} errors, ${warnings} warnings, ${hints} hints`)
 	console.log("why: node scripts/explain.mjs <rule-id>")
 	for (const [id, n] of [...byRule.entries()].sort((a, b) => b[1] - a[1])) {
 		const rule = RULES.find((r) => r.id === id)
@@ -298,7 +352,7 @@ for (const [file, list] of grouped) {
 		console.log(`${rel}:${f.line} - ${f.msg} [${f.id}]`)
 	}
 }
-console.log(`\n${errors} error(s), ${warnings} warning(s) across ${grouped.size} file(s). ${clean} file(s) clean.`)
+console.log(`\n${errors} error(s), ${warnings} warning(s), ${hints} hint(s) across ${grouped.size} file(s). ${clean} file(s) clean.`)
 if (errors) {
 	const worst = findings.find((f) => f.sev === "error")
 	console.log(`start with: ${relative(process.cwd(), worst.file) || worst.file}:${worst.line} ${worst.msg}`)

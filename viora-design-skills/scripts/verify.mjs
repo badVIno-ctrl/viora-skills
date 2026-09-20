@@ -6,6 +6,10 @@
  *   node verify.mjs . --url http://localhost:3000
  *   node verify.mjs . --url ./dist/index.html --strict
  *   node verify.mjs src app --url http://localhost:5173
+ *   node verify.mjs . --no-gates          skip the gate record check
+ *
+ * Reads .viora/design-run.json first. When a gate this job requires was never recorded
+ * with scripts/gate.mjs, it names the missing gates and exits 2 without a verdict.
  *
  * Runs, in this order:
  *   1. check.mjs        craft linter: slop, tokens, rhythm, type, motion
@@ -23,6 +27,7 @@ import { spawnSync } from "node:child_process"
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs"
 import { dirname, extname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
+import { findRun, requiredBeforeVerdict } from "./gate.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const argv = process.argv.slice(2)
@@ -38,9 +43,31 @@ const getFlag = (name) => {
 const url = getFlag("url")
 const strict = Boolean(getFlag("strict"))
 const skipShots = Boolean(getFlag("no-shots"))
+const skipGates = Boolean(getFlag("no-gates"))
 const consumed = new Set([String(url), String(getFlag("out"))])
 const targets = argv.filter((a) => !a.startsWith("--") && !consumed.has(a))
 if (targets.length === 0) targets.push(".")
+
+/* The gate record is the first thing checked: a verdict printed over skipped
+   gates is the failure mode this whole script exists to prevent. */
+if (!skipGates) {
+	/* the run belongs to the project, not to the paths being linted: verify.mjs src app
+	   must find the same record as verify.mjs . , and gate.mjs pass must write to that
+	   same one from a subdirectory. findRun walks up, and both scripts share it. */
+	const run = findRun()
+	if (run && run.job) {
+		/* G6 is this run, and G7 follows it. Demanding either here would deadlock. */
+		const missing = requiredBeforeVerdict(run).filter((g) => !run.gates || !run.gates[g])
+		if (missing.length) {
+			console.log(`\n>>> gate.mjs`)
+			console.log(`run ${run.job}/${run.mode}/${run.stack} is missing ${missing.join(" ")}.`)
+			console.log(`Close each one, then run this again:`)
+			for (const g of missing) console.log(`  node scripts/gate.mjs pass ${g} "<marker>"`)
+			console.log("no verdict printed. A gate nobody recorded is a gate nobody ran.")
+			process.exit(2)
+		}
+	}
+}
 
 const SKIP = new Set([
 	"node_modules", ".git", ".next", ".nuxt", ".svelte-kit", ".astro", "dist",

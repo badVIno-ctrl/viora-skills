@@ -11,6 +11,7 @@
  *
  *   paths     every file the docs point at exists
  *   version   one version string across SKILL.md, LITE.md, README.md
+ *   badges    the README badges agree with SKILL.md and with the linters
  *   gates     G0 to G7 are all defined in SKILL.md
  *   lite      every LITE recipe measures against WCAG, not just the full palettes
  *   explain   every linter rule has a catalogue entry
@@ -102,6 +103,38 @@ const docs = markdownFiles()
 		}
 	}
 	push("version", [...new Set(gaps)], declared ? `v${declared}` : "none")
+}
+
+/* 2b. README badges ------------------------------------------------------- */
+{
+	/* The badges are the first thing a reader believes and the last thing anyone
+	   updates. They are checked against the frontmatter and against the linters. */
+	const skill = read("SKILL.md")
+	const declared = (skill.match(/^version:\s*(\d+\.\d+\.\d+)/m) || [])[1] || ""
+	const readme = read("README.md")
+	const gaps = []
+	const badges = [...readme.matchAll(/!\[[^\]]*\]\(https:\/\/img\.shields\.io\/badge\/([^)]+)\)/g)].map((m) => decodeURIComponent(m[1]))
+	if (!badges.length) gaps.push("README.md carries no shields.io badge")
+	const ruleCount = (script) => {
+		const r = node([join(ROOT, "scripts", script), "--list-rules"])
+		return r.out.split("\n").filter((l) => /^(error|warn|hint)\s+\S/.test(l)).length
+	}
+	const counted = { check: ruleCount("check.mjs"), wig: ruleCount("wig.mjs") }
+	for (const badge of badges) {
+		const [label, value] = badge.split("-")
+		const clean = String(value || "").replace(/_/g, " ").trim()
+		if (/^version$/i.test(label)) {
+			const v = clean.replace(/^v/, "")
+			if (declared && v !== declared) gaps.push(`README badge version ${v} but SKILL.md declares ${declared}`)
+		}
+		if (/^craft rules$/i.test(label) && Number(clean) !== counted.check) {
+			gaps.push(`README badge says ${clean} craft rules, check.mjs lists ${counted.check}`)
+		}
+		if (/^interface rules$/i.test(label) && Number(clean) !== counted.wig) {
+			gaps.push(`README badge says ${clean} interface rules, wig.mjs lists ${counted.wig}`)
+		}
+	}
+	push("badges", gaps, `${badges.length} badges, ${counted.check} craft + ${counted.wig} interface rules`)
 }
 
 /* 3. gates ---------------------------------------------------------------- */

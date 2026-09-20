@@ -66,6 +66,12 @@ One world per project. Read the whole menu once, then choose. Each world is a co
 
 If `DESIGN.md` history or the repo shows the previous surface used a world, do not reuse it for a materially different subject. Two unrelated projects in the same world means the world was a default, not a choice.
 
+This is mechanical now, not a memory exercise. G7 appends the shipped world, palette and
+structure to `.viora/design-log.json`. At G2, `node scripts/pick.mjs "<brief>" --system
+--avoid-last` drops all three from the results and prints what it dropped, and
+`check.mjs repeat-world` warns when this `DESIGN.md` names the previous world for a
+different surface. Overriding it is allowed; doing it silently is not.
+
 ## 3. Anti-default calibration
 
 Where the brief leaves the look free, these clusters are already spent. Landing in one means the choice was skipped, not made.
@@ -114,6 +120,35 @@ Seven blocks, 150 words maximum, named exactly as `SKILL.md` names them: `THESIS
 - Treat the old look as evidence of what the thing is, not as authority over what it becomes.
 - Never split the difference. Polishing a look you decided to replace produces the worst of both.
 - Before touching code, list in three lines what the old design got right. Those are the things a redesign most often destroys by accident.
+
+### STUDY: a reference someone handed you
+
+The request arrives with a screenshot, a URL or "something like this, but ours". `STUDY` runs
+before the direction contract and produces one artefact: a DNA report. Five lines, no more.
+
+```
+STRUCTURE:   <page shape and section order, in the vocabulary of reference/20-structure.md>
+TYPE:        <register: the pairing's job, not the font names you guessed>
+COLOUR:      <the one anchor the palette is built around, and what it is doing>
+DENSITY:     <how much air per unit of content, measured against a normal page>
+SIGNATURE:   <the one decision that makes it recognisable with the logo removed>
+```
+
+Then either write the direction contract from that report, or write `DESIGN.md` and stop,
+whichever the user asked for.
+
+Rules for this job, all of them hard:
+
+- **Never copy pixels.** No measuring the exact hex, no matching the exact scale, no
+  reproducing the layout section for section. The report names decisions, not values.
+- **Never copy copy.** Headlines, feature names and taglines are the other product's, and
+  they are usually the most recognisable thing in the reference.
+- **Never study a template marketplace.** A page from a theme store is the category default
+  with a price tag. Refuse it in one line and ask for a real product, or pick the world from
+  the menu above instead.
+- **A reference is evidence of what worked for someone else's audience.** Yours is a
+  different audience, so the report is a set of decisions to answer, not to inherit.
+- If the reference and the brief disagree, the brief wins, and say so in one line.
 
 ## Output of this gate
 
