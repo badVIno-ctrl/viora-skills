@@ -39,12 +39,27 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 import time
 from pathlib import Path
 
-VERSION = "2.1"
+# Importing a sibling module would drop a .pyc into the user's repository and show up
+# in their diff. The protocol refuses to write outside .viora/, so: no bytecode.
+sys.dont_write_bytecode = True
+
+try:  # squeeze.py ships next to this file; degrade to raw text if it is missing
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from squeeze import squeeze as squeeze_text
+except ImportError:  # pragma: no cover - only when the pack is installed partially
+    def squeeze_text(text, keep=15, tail=25, footer=False, as_json=None):
+        return text
+
+VERSION = "2.2"
+
+# Words that turn a claim into a forecast. A VERIFIED line may not contain one.
+HEDGES = ("should", "will", "likely", "probably", "expect", "expected to", "once ", "ought")
 
 TIERS = ("T0", "T1", "T2")
 MODES = ("TRIVIAL", "FIX", "FEATURE", "REFACTOR", "UI", "PERF", "REVIEW", "DEBUG")
@@ -432,6 +447,13 @@ def read_tier_file(root: str):
     return None
 
 
+def terse_on(args, root: str) -> bool:
+    """--terse, or a .viora/terse marker file. Errors stay exact either way."""
+    if getattr(args, "terse", False):
+        return True
+    return (vdir(root) / "terse").exists()
+
+
 def resolve_tier(root: str, explicit=None) -> str:
     """Pinned file first, then the caller's flag, then the fail-safe default."""
     pinned = read_tier_file(root)
@@ -675,7 +697,8 @@ def latest_by_gate(rows):
     return [latest[g] for g in order]
 
 
-def append_evidence(root: str, gate: str, command: str, result: str, st=None) -> dict:
+def append_evidence(root: str, gate: str, command: str, result: str, st=None,
+                    log=None, squeezed_text=None, expect=None) -> dict:
     d = vdir(root)
     d.mkdir(parents=True, exist_ok=True)
     row = {
@@ -685,6 +708,16 @@ def append_evidence(root: str, gate: str, command: str, result: str, st=None) ->
         "at": now(),
         "fingerprint": fingerprint(root),
     }
+    if log:
+        row["log"] = log
+    if squeezed_text:
+        row["squeezed"] = squeezed_text
+    if expect:
+        row["expect"] = expect
+        # A red/repro row states what the bug looks like. If the output does not
+        # contain it, the model's model of the bug is wrong - that is a SURPRISE,
+        # and the plan derived from it cannot be trusted.
+        row["surprise"] = expect not in str(result)
     if st:
         row["tier"] = st.get("tier")
         cur = current_step(st)
@@ -692,6 +725,93 @@ def append_evidence(root: str, gate: str, command: str, result: str, st=None) ->
     with evidence_path(root).open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, ensure_ascii=False) + "\n")
     return row
+
+
+# --------------------------------------------------------------------------- #
+# logs, squeezing, hedges, decisions, ceilings
+# --------------------------------------------------------------------------- #
+
+
+def logs_dir(root: str) -> Path:
+    return vdir(root) / "logs"
+
+
+def write_log(root: str, gate: str, text: str) -> str:
+    """Full output goes to disk; only the squeezed form enters the context."""
+    d = logs_dir(root)
+    d.mkdir(parents=True, exist_ok=True)
+    safe = "".join(c if c.isalnum() or c in "-_" else "-" for c in str(gate))[:40] or "gate"
+    rel = ".viora/logs/%s-%s.log" % (time.strftime("%Y%m%dT%H%M%S", time.gmtime()), safe)
+    (Path(root) / rel).write_text(text, encoding="utf-8")
+    return rel
+
+
+def squeezed(text: str, keep: int = 6, tail: int = 12, limit: int = 1600) -> str:
+    out = squeeze_text(text, keep=keep, tail=tail, footer=False)
+    return out[-limit:] if len(out) > limit else out
+
+
+# "once " keeps its trailing space on purpose: "once the cache warms" is a forecast,
+# "the guard reads once" is a fact.
+HEDGE_RE = re.compile(
+    r"\b(should|will|likely|probably|expect to|expected to|ought)\b|\bonce\s+\w", re.IGNORECASE
+)
+
+
+def hedge_in(text):
+    """The hedge word that turns a claim into a forecast, or None."""
+    m = HEDGE_RE.search(str(text or ""))
+    if not m:
+        return None
+    return (m.group(1) or m.group(0)).strip().lower()
+
+
+CEILING_RE = re.compile(r"viora:ceiling\s+(.+)")
+CEILING_EXTS = {
+    ".py", ".js", ".jsx", ".ts", ".tsx", ".go", ".rs", ".rb", ".java", ".kt", ".c",
+    ".h", ".cc", ".cpp", ".cs", ".php", ".swift", ".sh", ".css", ".scss", ".sql",
+    ".yml", ".yaml", ".toml", ".md",
+}
+
+
+def scan_ceilings(root: str, files=None):
+    """`viora:ceiling <ceiling>; <upgrade path>` markers in the changed files.
+
+    A deliberate simplification is only honest while its ceiling is visible, so the
+    marker is read off the real diff rather than trusted to the report prose.
+    """
+    if files is None:
+        files = changed_files(root) or []
+    found = []
+    for rel in files:
+        p = Path(root) / rel
+        if p.suffix.lower() not in CEILING_EXTS or not p.is_file():
+            continue
+        try:
+            if p.stat().st_size > 400_000:
+                continue
+            text = p.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        for i, line in enumerate(text.splitlines(), 1):
+            m = CEILING_RE.search(line)
+            if m:
+                found.append({"where": "%s:%d" % (rel, i), "text": m.group(1).strip()})
+    return found
+
+
+def surprise_open(st: dict):
+    """An unexplained gate result blocks GREEN until the PLAN is re-derived."""
+    s = st.get("surprise_open")
+    return s if s else None
+
+
+def decisions_of(st: dict):
+    return st.get("decisions", [])
+
+
+def unapproved_decisions(st: dict):
+    return [d for d in decisions_of(st) if d.get("irreversible") and not d.get("approved")]
 
 
 def open_findings(st: dict, blocking_only: bool = False):
@@ -887,18 +1007,34 @@ def cmd_next(args) -> int:
     st = load_state(root)
     n = current_step(st)
     print(header(st))
+    sur = surprise_open(st)
+    if sur:
+        print("")
+        print("SURPRISE on %s: re-derive PLAN (viora.py plan ...)" % sur)
+        print("The gate did not say what you expected, so the plan built on that expectation is guesswork.")
     if n is None:
         print("")
         print("All required steps are done. Emit the report: python3 scripts/viora.py report")
         return 0
     s = STEP_BY_N[n]
     tier = st["tier"]
+    if terse_on(args, root):
+        print("step %d %s - %s" % (s["n"], s["key"], s["done_when"]))
+        print('then: python3 scripts/viora.py done %d --note "%s"' % (s["n"], s["note_hint"]))
+        return 0
     print("")
     print("STEP %d - %s" % (s["n"], s["key"]))
     print("produces: %s" % s["produces"])
     print("")
     for line in s[tier]:
         print("  " + line)
+    if n == 6:
+        risks = (plan_of(st).get("risks") or {})
+        if risks:
+            first = next((f for f in plan_of(st).get("files", []) if f in risks), None)
+            if first:
+                print("")
+                print("  riskiest file first: %s - %s" % (first, risks[first]))
     if s["commands"]:
         print("")
         print("  run:")
@@ -945,6 +1081,13 @@ def cmd_done(args) -> int:
 
     # gate 2: GREEN and CLEAN must stay inside the declared scope
     if n in (6, 7) and not args.force:
+        sur = surprise_open(st)
+        if n == 6 and sur:
+            die(
+                "step 6 cannot close: SURPRISE on %s is unresolved.\n"
+                "  A gate contradicted your expectation, so the plan is built on a wrong model.\n"
+                "  Re-derive it: python3 scripts/viora.py plan --files <paths> --lines <n>" % sur
+            )
         sc = scope_report(root, st)
         if sc["problems"]:
             die(
@@ -1021,6 +1164,8 @@ def cmd_contract(args) -> int:
         "PROTECTED: %s" % (args.protected or "(nothing named - fill this in)"),
         "NON-GOALS: %s" % (args.non_goals or "(nothing named - fill this in)"),
         "",
+        "SPEC:      %s" % (args.spec or "(none recorded)"),
+        "",
         "Tier: %s | Written: %s" % (tier, now()),
         "",
         "This file is the definition of done. Anything outside it is a FOLLOW-UP, not this task.",
@@ -1034,6 +1179,7 @@ def cmd_contract(args) -> int:
             "done_test": args.done_test,
             "protected": args.protected or "",
             "non_goals": args.non_goals or "",
+            "spec": args.spec or "",
         }
         save_state(root, st)
     print("\n".join(body[2:6]))
@@ -1051,9 +1197,32 @@ def cmd_contract(args) -> int:
 def cmd_evidence(args) -> int:
     root = args.root
     st = load_state(root, required=False)
-    row = append_evidence(root, args.gate, args.command, args.result, st)
+    if args.full:
+        rows = [r for r in read_evidence(root) if not args.gate or r.get("gate") == args.gate]
+        if not rows:
+            print("no evidence rows recorded yet.")
+            return 1
+        for r in rows[-5:]:
+            rel = r.get("log")
+            print("%s | %s | %s" % (r.get("gate"), r.get("command"), r.get("result")))
+            if rel and (Path(root) / rel).exists():
+                print((Path(root) / rel).read_text(encoding="utf-8", errors="replace"))
+            else:
+                print("(no full log on disk for this row - it was recorded by hand)")
+            print("")
+        return 0
+    if not (args.gate and args.command and args.result):
+        die("evidence needs --gate, --command and --result (or --full to read a log back)")
+    row = append_evidence(root, args.gate, args.command, args.result, st, expect=args.expect)
     print("evidence recorded: %s | %s | %s" % (args.gate, args.command, args.result))
     print("bound to working tree %s" % row["fingerprint"])
+    if row.get("surprise"):
+        st = load_state(root, required=False)
+        if st:
+            st["surprise_open"] = args.gate
+            save_state(root, st)
+        print("SURPRISE on %s: expected %r, got %r" % (args.gate, args.expect, args.result))
+        print("re-derive PLAN before continuing: python3 scripts/viora.py plan --files ... --lines ...")
     rows = read_evidence(root)
     print(
         "rows: %d total, %d fresh (%s)"
@@ -1066,6 +1235,7 @@ def cmd_evidence(args) -> int:
 def cmd_gate(args) -> int:
     root = args.root
     st = load_state(root, required=False)
+    terse = terse_on(args, root)
     script = Path(__file__).resolve().with_name("verify.sh")
     if not script.exists():
         die(
@@ -1085,9 +1255,14 @@ def cmd_gate(args) -> int:
         append_evidence(root, "gates", " ".join(cmd), "TIMEOUT after %ss" % args.timeout, st)
         die("gates timed out after %ss. That is a real result: report it as UNPROVEN." % args.timeout, 1)
     out = (proc.stdout or "") + (proc.stderr or "")
-    sys.stdout.write(out)
-    if out and not out.endswith("\n"):
-        sys.stdout.write("\n")
+    # The full output goes to disk; the context gets the squeezed form.
+    log_rel = write_log(root, args.only or "gates", out)
+    shown = squeeze_text(out, keep=args.keep, tail=args.tail, footer=True)
+    if not terse:
+        sys.stdout.write(shown)
+        if shown and not shown.endswith("\n"):
+            sys.stdout.write("\n")
+        print("full log: %s  (read it with: viora.py evidence --full)" % log_rel)
     recorded = 0
     for line in out.splitlines():
         line = line.strip()
@@ -1097,14 +1272,40 @@ def cmd_gate(args) -> int:
         if len(cells) != 3 or cells[0].lower() == "gate":
             continue
         gate, command, result = cells[0], cells[1].strip("`"), cells[2]
-        append_evidence(root, gate, command, result, st)
+        row = append_evidence(
+            root, gate, command, result, st,
+            log=log_rel, squeezed_text=squeezed(out),
+            expect=args.expect,
+        )
+        if row.get("surprise"):
+            st = load_state(root, required=False) or st
         recorded += 1
     rows = read_evidence(root)
+    surprises = [r for r in latest_by_gate(rows) if r.get("surprise")]
+    if surprises and st:
+        st["surprise_open"] = surprises[-1].get("gate")
+        save_state(root, st)
+    if terse:
+        print(
+            "gate: %s | %d row(s) | %s | log %s"
+            % ("PASS" if proc.returncode == 0 else "FAIL", recorded,
+               "SURPRISE on %s" % surprises[-1].get("gate") if surprises else "no surprise",
+               log_rel)
+        )
+        if proc.returncode != 0:
+            sys.stdout.write(squeezed(out, keep=2, tail=8) + "\n")
+        return proc.returncode
     print("")
     print(
         "recorded %d gate row(s); evidence now %d fresh / %d total -> %s"
         % (recorded, len(fresh_evidence(rows)), len(rows), evidence_path(root))
     )
+    for r in surprises:
+        print(
+            "SURPRISE on %s: expected %r, got %r"
+            % (r.get("gate"), r.get("expect"), r.get("result"))
+        )
+        print("re-derive PLAN before continuing: python3 scripts/viora.py plan --files ... --lines ...")
     if recorded == 0:
         print("no gate table found in the output. Record what you ran by hand with 'evidence'.")
     if proc.returncode != 0:
@@ -1304,6 +1505,9 @@ def cmd_plan(args) -> int:
             )
             return 1 if args.show else 2
         print("FILES:  %s" % ", ".join(plan["files"]))
+        for f in plan["files"]:
+            if (plan.get("risks") or {}).get(f):
+                print("  RISK %s: %s" % (f, plan["risks"][f]))
         print("BUDGET: <= %s changed lines" % plan.get("lines"))
         print("FROZEN: %s" % (plan.get("frozen") or "(nothing frozen)"))
         print("recorded: %s" % plan.get("at"))
@@ -1317,6 +1521,15 @@ def cmd_plan(args) -> int:
                 files.append(part)
     if not files:
         die("--files needs at least one path")
+    risks = {}
+    for spec in (args.risk or []):
+        if "=" not in spec:
+            die('--risk takes "<file>=<one-line risk>"')
+        path, text = spec.split("=", 1)
+        risks[path.strip()] = text.strip()
+    # Riskiest file first: the order you read the plan in is the order you edit in.
+    order = {f: i for i, f in enumerate(files)}
+    files.sort(key=lambda f: (0 if f in risks else 1, order[f]))
     tier = st["tier"]
     cap = FILE_BUDGET[tier]
     if len(files) > cap and not args.force:
@@ -1338,13 +1551,22 @@ def cmd_plan(args) -> int:
         "frozen": args.frozen or "",
         "at": now(),
         "new_files": missing,
+        "risks": risks,
     }
+    # Re-deriving the plan is the only way to clear a SURPRISE.
+    if st.pop("surprise_open", None):
+        st.setdefault("history", []).append(
+            {"at": now(), "event": "surprise-cleared", "detail": "plan re-derived"}
+        )
     st.setdefault("history", []).append(
         {"at": now(), "event": "plan", "detail": "%d file(s), <=%d lines" % (len(files), lines)}
     )
     save_state(root, st)
     print("PLAN recorded")
     print("FILES:  %s" % ", ".join(files))
+    for f in files:
+        if risks.get(f):
+            print("  RISK %s: %s" % (f, risks[f]))
     print("BUDGET: <= %d changed lines" % lines)
     print("FROZEN: %s" % (args.frozen or "(nothing frozen)"))
     if missing:
@@ -1371,6 +1593,10 @@ def cmd_scope(args) -> int:
         "lines:    %s changed (budget %d) | files: %d (tier cap %d)"
         % (sc["lines"], sc["line_cap"], len(sc["touched"]), sc["file_cap"])
     )
+    ceilings = scan_ceilings(root, sc["touched"])
+    print("ceilings: %d viora:ceiling marker(s) in the diff" % len(ceilings))
+    for c in ceilings:
+        print("  %s - %s" % (c["where"], c["text"]))
     if sc.get("untouched"):
         print("declared but untouched: %s" % ", ".join(sc["untouched"]))
     print("")
@@ -1547,6 +1773,69 @@ def _detect_monorepo(root: str):
     return signals
 
 
+STACK_TOOLS = {
+    "node": ("node", "npm", "pnpm", "yarn", "npx", "tsc", "eslint", "prettier", "jest", "vitest"),
+    "python": ("python3", "pip3", "pytest", "ruff", "flake8", "mypy", "black"),
+    "go": ("go", "gofmt"),
+    "rust": ("cargo", "rustc"),
+    "base": ("git", "make", "bash"),
+}
+
+
+def detect_stacks(root: str):
+    p = Path(root)
+    found = ["base"]
+    if (p / "package.json").exists():
+        found.append("node")
+    if any((p / f).exists() for f in ("pyproject.toml", "requirements.txt", "setup.py", "setup.cfg")):
+        found.append("python")
+    elif next(p.glob("*.py"), None) is not None or next(p.glob("*/*.py"), None) is not None:
+        found.append("python")
+    if (p / "go.mod").exists():
+        found.append("go")
+    if (p / "Cargo.toml").exists():
+        found.append("rust")
+    return found
+
+
+def which_table(root: str):
+    """(tool, absolute path or '') for the detected stack. Proof, not belief."""
+    out, seen = [], set()
+    for stack in detect_stacks(root):
+        for tool in STACK_TOOLS[stack]:
+            if tool in seen:
+                continue
+            seen.add(tool)
+            path = ""
+            for d in os.environ.get("PATH", "").split(os.pathsep):
+                cand = Path(d) / tool
+                if cand.is_file() and os.access(str(cand), os.X_OK):
+                    path = str(cand)
+                    break
+            out.append((tool, path))
+    return out
+
+
+CONTEXT_GLOBS = ("AGENTS.md", "CLAUDE.md", ".cursor/rules/**/*", ".claude/skills/*/SKILL.md")
+
+
+def context_budget(root: str):
+    """Rough token cost of always-on context files: words x 1.3."""
+    p = Path(root)
+    out = []
+    for pattern in CONTEXT_GLOBS:
+        paths = [p / pattern] if "*" not in pattern else sorted(p.glob(pattern))
+        for f in paths:
+            if not f.is_file():
+                continue
+            try:
+                words = len(f.read_text(encoding="utf-8", errors="replace").split())
+            except OSError:
+                continue
+            out.append((str(f.relative_to(p)), int(words * 1.3)))
+    return out
+
+
 def cmd_doctor(args) -> int:
     root = args.root
     ok, warn, fail = [], [], []
@@ -1558,7 +1847,7 @@ def cmd_doctor(args) -> int:
         fail.append("python %d.%d is too old; this script needs 3.8+" % (v[0], v[1]))
 
     here = Path(__file__).resolve().parent
-    for name in ("verify.sh", "scan_repo.py", "find_duplicates.py", "ui_guard.py"):
+    for name in ("verify.sh", "scan_repo.py", "find_duplicates.py", "ui_guard.py", "squeeze.py"):
         if (here / name).exists():
             ok.append("script present: %s" % name)
         else:
@@ -1640,6 +1929,15 @@ def cmd_doctor(args) -> int:
 
     print("VioraCode doctor - v%s" % VERSION)
     print("root: %s" % Path(root).resolve())
+    tools = which_table(root)
+    if terse_on(args, root):
+        print("checks: %d OK, %d WARN, %d FAIL | gates: %d | tools: %s"
+              % (len(ok), len(warn), len(fail), len(gates),
+                 ", ".join("%s=%s" % (t, "yes" if p else "no") for t, p in tools)))
+        for line in fail:
+            print("  FAIL  %s" % line)
+        print("next: python3 scripts/viora.py start --mode FIX --task \"<the task>\"")
+        return 1 if fail else 0
     print("")
     for line in ok:
         print("  OK    %s" % line)
@@ -1648,6 +1946,24 @@ def cmd_doctor(args) -> int:
     for line in fail:
         print("  FAIL  %s" % line)
     print("")
+    # "tool X isn't available" is only a fact with a `which` behind it.
+    print("which - the tools this stack needs:")
+    for tool, path in tools:
+        print("  %-10s %s" % (tool, path or "NOT FOUND"))
+    print("")
+    if args.context:
+        print("context files loaded into every session:")
+        total = 0
+        for rel, toks in context_budget(root):
+            total += toks
+            print("  %-44s ~%d tokens" % (rel, toks))
+        print("  %-44s ~%d tokens" % ("TOTAL", total))
+        if total > 25000:
+            print(
+                "  WARN  above 25k tokens of always-on context. Trim it, or demote one tier: "
+                "a full window is the same failure as a weak model."
+            )
+        print("")
     if gates:
         print("gates this repo declares:")
         for g in gates:
@@ -1751,13 +2067,59 @@ def cmd_report(args) -> int:
         if not historical_gate(r) and "SKIP" in str(r.get("result", "")).upper()
     ]
     sc = scope_report(root, st)
+    surprises = [r for r in rows if r.get("surprise")]
+    ceilings = scan_ceilings(root, sc.get("touched") or [])
+    done_test = (st.get("contract") or {}).get("done_test", "")
+
+    # Three buckets. A row only reaches VERIFIED if a command produced it after the
+    # last edit and nothing in it hedges.
+    verified, believed, not_checked = [], [], []
+    for r in rows:
+        label = "%s: `%s` -> %s" % (r.get("gate", "?"), r.get("command", "?"), r.get("result", "?"))
+        if r.get("log"):
+            label += "  [full log: %s]" % r["log"]
+        result_text = str(r.get("result", ""))
+        h = hedge_in(result_text)
+        if r.get("stale") and not historical_gate(r):
+            not_checked.append(
+                "%s - STALE: the tree changed after it ran. Rerun: viora.py gate" % label
+            )
+        elif historical_gate(r) and r.get("stale"):
+            believed.append("%s - pre-fix row, describes the old tree" % label)
+        elif "SKIP" in result_text.upper():
+            not_checked.append("%s - gate SKIPPED; install the tool or run it by hand" % label)
+        elif h:
+            believed.append("%s - hedge: %s" % (label, h))
+        else:
+            verified.append(label)
+    for n in steps:
+        note = st.get("steps", {}).get(str(n), {}).get("note", "")
+        h = hedge_in(note)
+        if note and h:
+            believed.append("step %d %s: %s - hedge: %s" % (n, STEP_BY_N[n]["key"], note, h))
+    for n in missing:
+        not_checked.append(
+            "step %d %s never ran - it would take: %s"
+            % (n, STEP_BY_N[n]["key"], STEP_BY_N[n]["done_when"])
+        )
+    for n in forced:
+        believed.append("step %d %s was forced past its check" % (n, STEP_BY_N[n]["key"]))
+
+    # The done-test is the contract. If no VERIFIED row ran it, nothing else counts.
+    done_test_verified = bool(done_test) and any(
+        done_test.strip() and done_test.strip() in line for line in verified
+    )
 
     if args.verdict:
         verdict = args.verdict.upper()
+    elif done_test and not done_test_verified:
+        verdict = "NOT DONE"
     elif missing or blocking or failed or not fresh:
         verdict = "BLOCKED"
     else:
         verdict = "DELIVERED"
+    if args.verdict and done_test and not done_test_verified and verdict == "DELIVERED":
+        verdict = "NOT DONE"
 
     out = []
     out.append(header(st))
@@ -1794,16 +2156,64 @@ def cmd_report(args) -> int:
         out.append("|---|---|---|---|")
         for r in rows:
             out.append(
-                "| %s | `%s` | %s | %s |"
+                "| %s | `%s` | %s | %s |%s"
                 % (
                     r.get("gate", "?"),
                     r.get("command", "?"),
                     r.get("result", "?"),
                     ("pre-fix" if historical_gate(r) else "STALE") if r.get("stale") else "yes",
+                    (" full log: %s" % r["log"]) if r.get("log") else "",
                 )
             )
     else:
         out.append("- NONE RECORDED. Nothing here is proven; do not claim it works.")
+    out.append("")
+    out.append("VERIFIED (command run after the last edit, output on disk)")
+    if verified:
+        out += ["- %s" % v for v in verified]
+    else:
+        out.append("- (nothing) - no command in this run proves the current tree")
+    out.append("")
+    out.append("BELIEVED, NOT VERIFIED")
+    if believed:
+        out += ["- %s" % b for b in believed]
+    else:
+        out.append("- (nothing claimed without a command behind it)")
+    out.append("")
+    out.append("NOT CHECKED")
+    if not_checked:
+        out += ["- %s" % n for n in not_checked]
+    else:
+        out.append("- untested paths outside DONE-TEST; it would take a test per path")
+    if done_test and not done_test_verified:
+        out.append(
+            "- DONE-TEST `%s` has no VERIFIED row - run it and record it: viora.py gate" % done_test
+        )
+    dec = decisions_of(st)
+    if dec:
+        out.append("")
+        out.append("DECISIONS")
+        for d in dec:
+            flags = []
+            if d.get("irreversible"):
+                flags.append("IRREVERSIBLE")
+            if d.get("approved"):
+                flags.append("approved")
+            out.append("- %s%s" % (d["text"], (" [%s]" % ", ".join(flags)) if flags else ""))
+    if st["mode"] == "REVIEW":
+        out.append("")
+        out.append("SPEC")
+        spec = (st.get("contract") or {}).get("spec", "")
+        if spec:
+            out.append("- source: %s" % spec)
+            out.append("- holds / contradicts / absent / undocumented - one line each, from the diff:")
+            out.append("  - holds: <what the diff does that the spec asked for>")
+            out.append("  - contradicts: <what the diff does against the spec>")
+            out.append("  - absent: <what the spec asked for and the diff does not do>")
+            out.append("  - undocumented: <what the diff does that no spec covers>")
+        else:
+            out.append("- no spec available: record one with `contract --spec <path-or-url>`")
+            out.append("- holds / contradicts / absent / undocumented cannot be judged without it")
     out.append("")
     out.append("NOT DONE / UNPROVEN")
     unproven = []
@@ -1852,9 +2262,11 @@ def cmd_report(args) -> int:
     others = [f for f in open_findings(st) if f["severity"] not in BLOCKING]
     out.append("")
     out.append("FOLLOW-UPS")
-    if deferred or others:
+    if deferred or others or ceilings:
         for f in deferred + others:
             out.append("- %s %s @ %s: %s" % (f["id"], f["severity"], f["where"], f["text"]))
+        for c in ceilings:
+            out.append("- ceiling @ %s: %s" % (c["where"], c["text"]))
     else:
         out.append("- (none recorded)")
     if st.get("demotions"):
@@ -1878,6 +2290,8 @@ def cmd_report(args) -> int:
 
 def cmd_check(args) -> int:
     root = args.root
+    if getattr(args, "hook", False):
+        return check_hook(root)
     st = load_state(root)
     problems = []
     steps = required_steps(st)
@@ -1918,6 +2332,29 @@ def cmd_check(args) -> int:
     sc = scope_report(root, st)
     for p in sc["problems"]:
         problems.append("scope: %s" % p)
+    # A hedged note is a forecast wearing a result's clothes: it belongs in BELIEVED.
+    for n in steps:
+        note = st.get("steps", {}).get(str(n), {}).get("note", "")
+        h = hedge_in(note)
+        if note and h:
+            problems.append(
+                "step %d %s note is hedged (hedge: %s) - it counts as BELIEVED, not VERIFIED"
+                % (n, STEP_BY_N[n]["key"], h)
+            )
+    for r in rows:
+        h = hedge_in(r.get("result", ""))
+        if h:
+            problems.append(
+                "gate '%s' result is hedged (hedge: %s) - paste the command output instead"
+                % (r.get("gate"), h)
+            )
+        if r.get("surprise"):
+            problems.append(
+                "gate '%s' is a SURPRISE: expected %r, got %r - re-derive the PLAN"
+                % (r.get("gate"), r.get("expect"), r.get("result"))
+            )
+    for d in unapproved_decisions(st):
+        problems.append("irreversible decision without approval: %s" % d["text"])
     print(header(st))
     print("")
     if problems:
@@ -1932,6 +2369,121 @@ def cmd_check(args) -> int:
         "%d fresh evidence row(s), scope clean, no open blocking findings." % len(fresh)
     )
     print("Still state what remains unproven - green gates are not the same as correct behaviour.")
+    return 0
+
+
+CLAIM_RE = re.compile(r"\b(done|fixed|works|complete)\b", re.IGNORECASE)
+
+
+def check_hook(root: str) -> int:
+    """Claude Code Stop hook: exit 2 blocks the stop and feeds the reason back.
+
+    Reads the hook payload on stdin. Anything unreadable is not a reason to block -
+    a hook that fires on malformed input trains the user to disable it.
+    """
+    raw = sys.stdin.read() if not sys.stdin.isatty() else ""
+    payload = {}
+    try:
+        payload = json.loads(raw) if raw.strip() else {}
+    except ValueError:
+        payload = {}
+    st = load_state(root, required=False)
+    if not st:
+        print("viora: no run open, nothing to check")
+        return 0
+    rows = latest_by_gate(read_evidence(root))
+    for r in rows:
+        if r.get("surprise"):
+            sys.stderr.write(
+                "viora: gate '%s' is a SURPRISE (expected %r) - re-derive the PLAN before stopping\n"
+                % (r.get("gate"), r.get("expect"))
+            )
+            return 2
+    stale = current_stale(rows)
+    if stale:
+        sys.stderr.write(
+            "viora: %d gate(s) have STALE evidence (%s) - rerun: viora.py gate\n"
+            % (len(stale), gate_names(stale))
+        )
+        return 2
+    for d in unapproved_decisions(st):
+        sys.stderr.write(
+            "viora: irreversible decision without --approved: %s\n" % d["text"]
+        )
+        return 2
+    cur = current_step(st)
+    last = ""
+    for key in ("last_assistant_message", "assistant_message", "message", "transcript_tail"):
+        if isinstance(payload.get(key), str):
+            last = payload[key]
+            break
+    if cur is not None and cur < 10 and CLAIM_RE.search(last):
+        sys.stderr.write(
+            "viora: the reply claims completion at step %d of 10 - finish the spine or say BLOCKED\n"
+            % cur
+        )
+        return 2
+    print("viora: nothing blocks this stop (step %s)" % (cur if cur else "all closed"))
+    return 0
+
+
+def cmd_decision(args) -> int:
+    root = args.root
+    st = load_state(root)
+    text = args.text.strip()
+    if " because " not in text.lower():
+        print("note: a decision reads '<X> over <Y> because <Z>' - the because is the part that ages well.")
+    entry = {
+        "text": text,
+        "irreversible": bool(args.irreversible),
+        "approved": bool(args.approved),
+        "at": now(),
+        "step": current_step(st),
+    }
+    st.setdefault("decisions", []).append(entry)
+    st.setdefault("history", []).append({"at": now(), "event": "decision", "detail": text[:120]})
+    save_state(root, st)
+    print("DECISION recorded: %s" % text)
+    if entry["irreversible"] and not entry["approved"]:
+        print("IRREVERSIBLE and unapproved: `check` will refuse until the user approves it.")
+        print("  STOP-AND-ASK, then: viora.py decision \"<same line>\" --irreversible --approved")
+    return 0
+
+
+def cmd_resume(args) -> int:
+    """One screen for a fresh session: what is true, what is open, what is next."""
+    root = args.root
+    st = load_state(root)
+    rows = latest_by_gate(read_evidence(root))
+    plan = plan_of(st)
+    cur = current_step(st)
+    c = st.get("contract") or {}
+    print("RESUME - VioraCode v%s" % VERSION)
+    print("tier %s | mode %s | step %s | task: %s"
+          % (st["tier"], st["mode"], cur if cur else "all closed", st.get("task", "")))
+    print("DONE-TEST: %s" % (c.get("done_test") or "(no contract written)"))
+    if plan.get("files"):
+        print("plan: %s (<= %s lines)" % (", ".join(plan["files"]), plan.get("lines")))
+    else:
+        print("plan: (none recorded)")
+    stale = current_stale(rows)
+    sur = [r for r in rows if r.get("surprise")]
+    print("stale rows: %s" % (gate_names(stale) if stale else "none"))
+    print("surprises:  %s" % (gate_names(sur) if sur else "none"))
+    open_dec = unapproved_decisions(st)
+    print("open decisions: %s" % ("; ".join(d["text"] for d in open_dec) if open_dec else "none"))
+    ceilings = scan_ceilings(root)
+    print("ceilings: %s"
+          % ("; ".join("%s %s" % (x["where"], x["text"]) for x in ceilings) if ceilings else "none"))
+    notes = [
+        "%d %s: %s" % (n, STEP_BY_N[n]["key"], st.get("steps", {}).get(str(n), {}).get("note", ""))
+        for n in required_steps(st)
+        if st.get("steps", {}).get(str(n), {}).get("note")
+    ]
+    print("last notes:")
+    for line in notes[-3:] or ["  (none)"]:
+        print("  %s" % line)
+    print("next: python3 scripts/viora.py next")
     return 0
 
 
@@ -2046,10 +2598,18 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     p.add_argument("--root", default=".", help="repository root (default: .)")
+    p.add_argument(
+        "--terse", action="store_true",
+        help="one line per command (a .viora/terse file does the same); errors stay exact",
+    )
     p.add_argument("--version", action="version", version="VioraCode conductor %s" % VERSION)
     sub = p.add_subparsers(dest="command")
 
     s = sub.add_parser("doctor", help="check the install, the repo, and what can be proven here")
+    s.add_argument(
+        "--context", action="store_true",
+        help="estimate the always-on context bill (AGENTS.md, CLAUDE.md, rules, skills)",
+    )
     s.set_defaults(func=cmd_doctor)
 
     s = sub.add_parser("tier", help="show or pin the tier (T0/T1/T2)")
@@ -2081,12 +2641,17 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--done-test", required=True, dest="done_test")
     s.add_argument("--protected")
     s.add_argument("--non-goals", dest="non_goals")
+    s.add_argument("--spec", help="path or URL of the originating issue/spec (REVIEW uses it)")
     s.set_defaults(func=cmd_contract)
 
     s = sub.add_parser("plan", help="record the file list and line budget so scope can enforce it")
     s.add_argument("--files", action="append", help="comma-separated paths; repeatable")
     s.add_argument("--lines", help="changed-line budget")
     s.add_argument("--frozen", help="public names you will not rename")
+    s.add_argument(
+        "--risk", action="append",
+        help='"<file>=<one-line risk>"; repeatable. Riskiest file is edited first.',
+    )
     s.add_argument("--show", action="store_true", help="print the recorded plan")
     s.add_argument("--force", action="store_true", help="exceed the tier budget on purpose")
     s.set_defaults(func=cmd_plan)
@@ -2109,12 +2674,23 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("gate", help="run verify.sh and record every row as fingerprinted evidence")
     s.add_argument("--only", help="comma list: lint,types,test,build,format")
     s.add_argument("--timeout", type=int, default=900)
+    s.add_argument(
+        "--expect",
+        help="substring a red/repro row must contain; a mismatch marks the row SURPRISE",
+    )
+    s.add_argument("--keep", type=int, default=15, help="leading output lines kept verbatim")
+    s.add_argument("--tail", type=int, default=25, help="trailing output lines kept verbatim")
     s.set_defaults(func=cmd_gate)
 
-    s = sub.add_parser("evidence", help="record one command result by hand")
-    s.add_argument("--gate", required=True)
-    s.add_argument("--command", required=True)
-    s.add_argument("--result", required=True)
+    s = sub.add_parser("evidence", help="record one command result by hand (squeezed by default)")
+    s.add_argument("--gate")
+    s.add_argument("--command")
+    s.add_argument("--result")
+    s.add_argument(
+        "--expect",
+        help="substring the result must contain; a mismatch marks the row SURPRISE",
+    )
+    s.add_argument("--full", action="store_true", help="print the raw log file for recorded rows")
     s.set_defaults(func=cmd_evidence)
 
     s = sub.add_parser("strike", help="count a failed attempt; caps at the tier limit")
@@ -2148,7 +2724,22 @@ def build_parser() -> argparse.ArgumentParser:
     s.set_defaults(func=cmd_report)
 
     s = sub.add_parser("check", help="refuse-to-lie check before you claim completion")
+    s.add_argument(
+        "--hook", action="store_true",
+        help="read Claude Code hook JSON on stdin; exit 2 blocks the stop with one reason",
+    )
     s.set_defaults(func=cmd_check)
+
+    s = sub.add_parser(
+        "decision", help='record "<X over Y because Z>" for choices that change data or behaviour'
+    )
+    s.add_argument("text", help='e.g. "soft delete over hard delete because exports need history"')
+    s.add_argument("--irreversible", action="store_true", help="destination, not route: needs approval")
+    s.add_argument("--approved", action="store_true", help="the user approved it, in this session")
+    s.set_defaults(func=cmd_decision)
+
+    s = sub.add_parser("resume", help="one screen for a fresh session: state, risks, open decisions")
+    s.set_defaults(func=cmd_resume)
 
     s = sub.add_parser("handoff", help="print a context-loss handoff block")
     s.set_defaults(func=cmd_handoff)
@@ -2159,16 +2750,25 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("stats", help="where runs actually fail, across runs")
     s.set_defaults(func=cmd_stats)
 
+    # --terse is global, but nobody types the global flag first. Accept it after the
+    # subcommand too; SUPPRESS keeps the sub-level default from erasing the global one.
+    for parser in sub.choices.values():
+        parser.add_argument(
+            "--terse", action="store_true", default=argparse.SUPPRESS,
+            help="one line of output; errors stay exact",
+        )
+
     return p
 
 
 def main(argv=None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
-    if not getattr(args, "command", None):
+    # `evidence --command` shares the subparser dest, so the handler is the ground truth.
+    if not getattr(args, "func", None):
         parser.print_help()
         return 2
-    if args.command == "ledger" and not getattr(args, "ledger_cmd", None):
+    if args.func is cmd_ledger and not getattr(args, "ledger_cmd", None):
         die("ledger needs a subcommand: add | list | resolve")
     if not Path(args.root).is_dir():
         die("--root %s is not a directory" % args.root)

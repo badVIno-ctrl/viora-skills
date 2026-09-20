@@ -1,4 +1,4 @@
-# VioraCode Protocol v2.1
+# VioraCode Protocol v2.2
 
 Протокол для ИИ-агентов, которые пишут код: Codex, Claude Code, Cursor, Windsurf, Antigravity,
 Gemini CLI, Copilot, Cline. Задача одна — чтобы агент выдавал маленькие, понятные, проверенные
@@ -6,6 +6,33 @@ Gemini CLI, Copilot, Cline. Задача одна — чтобы агент вы
 
 **Закон протокола:** отдать самое маленькое понятное изменение с одним владельцем, работа
 которого доказана свежим выводом команды.
+
+---
+
+## Что нового в v2.2
+
+v2.1 сделал доказательства протухающими. v2.2 берётся за **стоимость** прогона и за то, что
+отчёту вообще разрешено утверждать.
+
+- **Сжатие вывода.** `scripts/squeeze.py` схлопывает повторы в `×N`, сворачивает чужие кадры
+  стека в `… N frames in node_modules`, оставляет голову, хвост и каждую строку с ошибкой.
+  `gate` пишет полный лог в `.viora/logs/`, а в строку доказательства кладёт сжатый текст;
+  `evidence --full` читает исходник обратно. Флаг `--terse` — одна строка на команду, ошибки
+  остаются точными.
+- **Три корзины в отчёте:** VERIFIED / BELIEVED, NOT VERIFIED / NOT CHECKED. Любая строка
+  VERIFIED со словом-хеджем (should, will, likely, probably, expect, ought) автоматически
+  уезжает в BELIEVED с пометкой `hedge: <слово>`. Прогон, где DONE-TEST не попал в VERIFIED,
+  печатает `VERDICT: NOT DONE`.
+- **Решения.** `viora.py decision "<X вместо Y потому что Z>" [--irreversible] [--approved]`;
+  `check` не пропускает необратимое решение без согласия пользователя.
+- **Сюрпризы.** `gate --expect "<подстрока>"`: несовпадение помечает строку SURPRISE, и
+  `done 6` не закроется, пока PLAN не выведен заново.
+- **Потолки.** Сознательное упрощение несёт комментарий `viora:ceiling <потолок>; <путь роста>`;
+  `scope` их считает, `report` выносит в FOLLOW-UPS.
+- **Стоп-хук.** `check --hook` (exit 2) блокирует преждевременное «готово»:
+  `hooks/agent/claude-code.json`, раздел 4b в INSTALL.md.
+- **`resume`** — один экран состояния для новой сессии; **`less.py`** — ранжированный список
+  того, что можно удалить или заменить платформой.
 
 ---
 
@@ -179,19 +206,24 @@ python3 scripts/viora.py check       # аудит: где пропущен ша�
 SKILL.md          протокол: закон, тиры, десять шагов, режимы, лимиты, отговорки
 QUICKCARD.md      весь протокол на один экран — для T0
 INSTALL.md        установка под каждый агент, хуки, CI, измерение своей модели
-CHANGELOG.md      что изменилось в v2.0 и v2.1 и почему
-references/       01-14, читаются по требованию
+CHANGELOG.md      что изменилось в v2.0, v2.1 и v2.2 и почему
+references/       01-16, читаются по требованию
 templates/        contract, report, ledger, review-request, handoff
-scripts/          viora.py (20 команд), verify.sh, scan_repo.py, find_duplicates.py, ui_guard.py
+scripts/          viora.py (22 команды), verify.sh, scan_repo.py, find_duplicates.py, ui_guard.py,
+                  squeeze.py, less.py
 examples/         четыре полных стенограммы правильных прогонов — для подражания
-evals/            шесть фикстур, рубрика и скорер — проверить свою модель
-hooks/            pre-commit и установщик — работает без участия агента
+evals/            шесть фикстур, triggers.json, рубрика и скорер — проверить свою модель
+hooks/            pre-commit, установщик и agent/claude-code.json (Stop + PreCompact)
 ci/               viora.yml для GitHub Actions — проверки, размер, честность отчёта
-tests/            85 проверок самого протокола — bash tests/run-all.sh
+tests/            171 проверка самого протокола — bash tests/run-all.sh
 ```
 
+Новое в v2.2: `scripts/squeeze.py`, `scripts/less.py`, `references/15-less-code.md` и
+`16-token-discipline.md`, `evals/triggers.json`, `hooks/agent/claude-code.json`,
+`tests/04-v22.sh` (85 новых проверок), ATTRIBUTION.md.
+
 Новое в v2.1: `examples/` (4 файла), `evals/` (харнесс + 6 фикстур), `hooks/`, `ci/`,
-`tests/` (85 проверок самого протокола — они нашли восемь дефектов до релиза).
+`tests/` (проверки самого протокола — они нашли восемь дефектов до релиза).
 Полностью переписан `08-stack-notes.md` — теперь это точные команды проверок по стекам
 (Node/TS, фронтенд, Python, Go, Rust, Swift/iOS, Kotlin/Android, монорепы) и таблица таймаутов.
 

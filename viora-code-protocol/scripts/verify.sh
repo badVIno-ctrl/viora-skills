@@ -197,5 +197,13 @@ if [ "$FAILED" -eq 1 ]; then
   echo "VERDICT: FAIL - fix the failing gate before claiming completion."
   exit 1
 fi
+# Gates prove the change works. less.py asks the other question: what could go away?
+# It never fails the run - volume is a judgment call, correctness is not.
+if [ -f "$(dirname "$0")/less.py" ] && has_cmd python3; then
+  echo "## Step 7 CLEAN - what could be deleted (advisory, never a gate)"
+  echo
+  python3 "$(dirname "$0")/less.py" . --top 5 2>/dev/null | tail -n 7
+  echo
+fi
 echo "VERDICT: all executed gates PASS. Gates marked SKIP remain UNPROVEN."
 exit 0

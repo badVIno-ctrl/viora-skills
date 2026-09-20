@@ -5,7 +5,7 @@ unproven claims about itself. Every refusal promised in `SKILL.md` is asserted h
 real scripts.
 
 ```bash
-bash tests/run-all.sh          # all three suites, one summary line
+bash tests/run-all.sh          # all four suites, one summary line
 bash tests/01-conductor.sh     # one suite, full output
 ```
 
@@ -16,11 +16,12 @@ a throwaway git repo under `/tmp` and never touches your project.
 
 | Suite | Assertions | What it proves |
 |---|---|---|
-| `01-conductor.sh` | 53 | Every `viora.py` subcommand, the step machine, tier budgets, scope from git, checkpoint/rollback, strikes, demotion, and every exit code the docs promise |
+| `01-conductor.sh` | 54 | Every `viora.py` subcommand, the step machine, tier budgets, scope from git, checkpoint/rollback, strikes, demotion, and every exit code the docs promise |
 | `02-hooks-and-evals.sh` | 6 | `hooks/install-hooks.sh` (install, `--check`, backup, restore), the pre-commit hook (blocks an unready run, blocks conflict markers and focused tests, warns on debug residue, honours `VIORA_SKIP=1`), and the whole `evals/` harness end to end |
 | `03-prefix-evidence.sh` | 26 | Evidence staleness arithmetic: one row per gate, `pre-fix` rows exempt, a reproduction alone refused, a rerun clearing staleness, gate names matched case-insensitively |
+| `04-v22.sh` | 85 | v2.2: `squeeze.py` (repeats, vendor frames, windows, JSON, ANSI), gate logs and squeezed rows, `--terse`, `viora:ceiling` markers, `--expect`/SURPRISE refusing `done 6`, the three report buckets and the hedge rule, `NOT DONE` without a verified DONE-TEST, decisions and the approval refusal, the Stop hook's four blocking conditions, `resume`, the `which` table, `doctor --context`, `triggers.json`, `less.py`, and the REVIEW SPEC section |
 
-85 assertions total. All green as shipped.
+171 assertions total. All green as shipped.
 
 ## Why these particular tests exist
 

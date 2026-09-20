@@ -279,3 +279,30 @@ python3 scripts/viora.py evidence \
 
 This row is fingerprinted like any other, so it goes stale like any other. A before-value and an
 after-value is proof of a change. An after-value alone is proof that the code runs.
+
+---
+
+## Expectations: state the result before you run the gate
+
+A reproduction proves nothing unless you said in advance what it would show.
+
+```bash
+python3 scripts/viora.py gate --only test --expect "TypeError: add() does not accept None"
+```
+
+A mismatch marks that row **SURPRISE**. That is not a failure of the gate; it is the
+discovery that your model of the bug is wrong - and every later step was derived from that
+model. `next` prints `SURPRISE on <gate>: re-derive PLAN`, and `done 6` refuses until
+`plan` has been recorded again. The cheapest moment to notice you are fixing the wrong
+thing is before you fix it.
+
+## Risk order: the dangerous file first
+
+```bash
+python3 scripts/viora.py plan --files src/api.ts,src/util.ts --lines 80 \
+  --risk "src/api.ts=the only writer of the orders table"
+```
+
+Files with a recorded risk sort to the front of the plan, and step 6 names the riskiest one
+first. Attention is a budget that runs out mid-task; spend it on the file that can do the
+most damage while you still have it.

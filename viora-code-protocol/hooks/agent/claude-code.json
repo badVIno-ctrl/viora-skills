@@ -1,0 +1,29 @@
+{
+  "_comment": "VioraCode agent hooks for Claude Code. Copy these entries into .claude/settings.json (or settings.local.json). Stop exit code 2 blocks the stop and feeds stderr back to the model; PreCompact injects the resume screen so a compacted session does not lose the run. Paths assume the pack sits at .claude/skills/viora-code-protocol.",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/skills/viora-code-protocol/scripts/viora.py check --hook",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/skills/viora-code-protocol/scripts/viora.py resume",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

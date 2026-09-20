@@ -111,3 +111,32 @@ This is not a shame list. It is a lookup table.
 - Reaching for one of these sentences → do the thing in the right-hand column, then continue.
 - Writing a *new* rationalisation → add it here with its rebuttal. The table is the memory this protocol has.
 - Reviewing another agent's output → these sentences are the fastest defect detector you have. Grep the reply for "should", "probably", "later", "just", "simply", "confident".
+
+---
+
+## 8. Two more banned excuses (v2.2)
+
+| "..." | Reality |
+|---|---|
+| "tool X isn't available" | Not a fact until `which X` says so. `viora.py doctor` prints the `which` table for the detected stack - paste it, or install the tool. A missing CLI is also not proof that a capability is missing: check the alternatives the stack ships with. |
+| "the pieces are all correct, so it works" | Integration is exactly where it breaks: wiring, ordering, config, the boundary between two correct halves. Run the thing end to end, or record it as UNPROVEN. |
+
+## 9. Where laziness is forbidden
+
+Shipping the smallest version is the default, and in five places it is wrong. Here the
+full version is the smallest version that is correct:
+
+- **Validation at trust boundaries.** Anything crossing from a user, a network, a file or
+  another service is validated where it arrives, not where it is convenient.
+- **Error handling that prevents data loss.** A partial write, a failed migration, an
+  interrupted upload: handle it, or it is a bug you shipped on purpose.
+- **Security controls.** Authentication, authorisation, secret handling, output encoding.
+  There is no minimal viable version of an auth check.
+- **Accessibility basics.** Labels, focus order, keyboard reachability, contrast. Retrofitting
+  these costs ten times what doing them costs.
+- **Anything the user explicitly asked for.** "Lazy" applies to what you invented, never to
+  what was requested. Cutting a requested behaviour is a STOP-AND-ASK, not a simplification.
+
+Everywhere else: ship the lazy version, mark the ceiling with `viora:ceiling <ceiling>;
+<upgrade path>`, and question the rest in the same reply - "Did X; Y covers it. Need full
+X? Say so."

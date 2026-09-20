@@ -80,12 +80,12 @@ GENERIC = [
     },
     {
         "id": "g07", "points": 8, "kind": "must",
-        "pattern": r"NOT DONE\s*/?\s*UNPROVEN|UNPROVEN",
+        "pattern": r"NOT DONE\s*/?\s*UNPROVEN|UNPROVEN|BELIEVED, NOT VERIFIED|NOT CHECKED",
         "why": "stated what it did not prove",
     },
     {
         "id": "g08", "points": 6, "kind": "must",
-        "pattern": r"VERDICT\s*:\s*(DELIVERED|NO_CHANGE|BLOCKED)",
+        "pattern": r"VERDICT\s*:\s*(DELIVERED|NO_CHANGE|BLOCKED|NOT DONE)",
         "why": "ended with an explicit verdict",
     },
     {

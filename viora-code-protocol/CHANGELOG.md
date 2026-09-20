@@ -1,5 +1,56 @@
 # Changelog
 
+## v2.2 - the token bill, the three buckets, and a hook that says no
+
+v2.1 made evidence go stale on its own. v2.2 attacks what a run *costs* and what a report is
+allowed to *claim*, and it stops trusting the agent to run the final check on itself.
+
+### Added
+
+- **B13 token-pack.** `scripts/squeeze.py`: collapses identical lines to `×N`, folds vendor
+  stack frames to `… N frames in node_modules`, keeps the head, the tail and every failure
+  line, truncates long JSON arrays and strings. `gate` now writes the full output to
+  `.viora/logs/<ts>-<gate>.log`, stores the squeezed text in the evidence row, and `report`
+  links the log per row; `evidence --full` reads it back. `--terse` (or a `.viora/terse`
+  file) prints one line per command - errors stay exact. New `references/16-token-discipline.md`.
+- **B14 `viora:ceiling` comments.** A deliberate simplification carries
+  `viora:ceiling <ceiling>; <upgrade path>` on the line above. `scope` counts them, `report`
+  lists them under FOLLOW-UPS. SKILL.md §2 gains the lazy-FEATURE pattern;
+  `14-rationalizations.md` gains "Where laziness is forbidden".
+- **B1 three buckets.** The report contract is now VERIFIED / BELIEVED, NOT VERIFIED /
+  NOT CHECKED. Any VERIFIED line containing a hedge (should, will, likely, probably, expect,
+  expected to, once, ought) is moved to BELIEVED with `hedge: <word>`, by `report` and `check`.
+  A run whose DONE-TEST has no VERIFIED row renders `VERDICT: NOT DONE`, whatever else is green.
+- **B2 decisions.** `viora.py decision "<X over Y because Z>" [--irreversible] [--approved]`;
+  `report` prints a DECISIONS section; `check` exits 1 on an unapproved irreversible decision.
+  SKILL.md §6 gains the route-versus-destination rule.
+- **B3 expectations and risk order.** `gate --expect "<substring>"` marks a mismatching
+  red/repro row SURPRISE; `next` demands a re-derived PLAN and `done 6` refuses until one is
+  recorded. `plan --risk "<file>=<risk>"` sorts the riskiest file first and step 6 names it.
+- **B4 banned excuses.** "tool X isn't available" without `which X`, and "the pieces are all
+  correct, so it works". `doctor` prints a `which` table for the detected stack.
+- **B5 2026 model lineup.** T2 Claude Fable 5.1 / Mythos 5.1 / Opus 5, GPT-5.x, Gemini 3 Pro;
+  T1 Sonnet 5, GPT-5-mini class, Gemini 3 Flash; T0 Haiku 4.5, Flash-Lite/nano, 8-30B local.
+  New demotion trigger: context past ~60 % of the window. The SKILL description is trigger
+  conditions only.
+- **B6 `evals/triggers.json`.** 20 labelled queries, 10 should-trigger (one in Russian) and
+  10 near-miss should-nots: pure questions, design-only asks, security audits (viora-aegis).
+- **B7 `scripts/less.py`.** Ranks delete / stdlib / native / yagni / shrink candidates, with a
+  table of 45+ dependency replacements across JS/TS and Python. Correctness, security and
+  performance are out of scope, and `--help` says so. New `references/15-less-code.md`.
+- **B12 review depth.** A sixth review lens - twelve Fowler smells as labelled heuristics, each
+  with a fix line. `contract --spec <path-or-url>` records the originating issue; in REVIEW mode
+  `report` emits a SPEC section: holds / contradicts / absent / undocumented.
+- **B15 stop hook.** `check --hook` reads Claude Code hook JSON on stdin and exits 2 on a STALE
+  or SURPRISE row, an unapproved irreversible decision, or a completion claim below step 10.
+  `hooks/agent/claude-code.json` wires Stop and PreCompact; INSTALL.md §4b documents it.
+- **B9 `viora.py resume`.** One screen for a fresh session: tier, mode, step, plan and budget,
+  STALE/SURPRISE rows, open decisions, ceilings, last three notes.
+
+### Tests
+
+`tests/04-v22.sh` - 85 new assertions covering every item above. Suite total: 171, zero failed.
+
 ## v2.1 - the honesty holes, closed by machinery
 
 v2.0 moved the protocol from the model's memory onto disk. v2.1 closes the three ways a

@@ -11,7 +11,7 @@
 # Requirements: bash, git, python3. That is all.
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-EXPECTED_TOTAL=85
+EXPECTED_TOTAL=171
 TOTAL_OK=0
 TOTAL_FAIL=0
 BROKEN=""

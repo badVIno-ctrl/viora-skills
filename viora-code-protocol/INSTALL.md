@@ -1,4 +1,4 @@
-# Install VioraCode v2.0
+# Install VioraCode v2.2
 
 One folder, five files at the root plus `references/`, `templates/`, `scripts/`. No build step,
 no dependencies beyond Python 3.8+ and bash for the gate runner.
@@ -212,6 +212,64 @@ Except `.viora/tier`, if you want the tier committed for the whole team:
 .viora/*
 !.viora/tier
 ```
+
+---
+
+## 4b. Agent hooks - the protocol without the agent's cooperation
+
+A Stop hook runs when the agent wants to end its turn, and **exit code 2 blocks the stop**
+and feeds stderr back to the model as the reason. That is the only place where "no
+completion claim without fresh command output" stops being advice.
+
+`hooks/agent/claude-code.json` holds a ready pair. Merge it into `.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/skills/viora-code-protocol/scripts/viora.py check --hook",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/skills/viora-code-protocol/scripts/viora.py resume",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+`check --hook` reads the hook payload on stdin and exits 2, with one line of reason, when:
+
+| Condition | Why it blocks |
+|---|---|
+| any evidence row is STALE | the code changed after the gate ran |
+| any evidence row is SURPRISE | a gate contradicted the stated expectation |
+| an `--irreversible` decision has no `--approved` | the user has not agreed to the destination |
+| the run is below step 10 and the last reply says done/fixed/works/complete | fake completion, caught at the door |
+
+Anything else exits 0. Malformed input exits 0 too: a hook that fires on garbage is a hook
+the user disables.
+
+**Cursor and Codex:** both support external command hooks, but the payload shapes differ
+and are not pinned here. `check --hook` also runs fine as a manual pre-commit step:
+`echo '{}' | python3 scripts/viora.py check --hook`. Treat the Cursor/Codex wiring as a
+documented path, not a tested one.
 
 ---
 

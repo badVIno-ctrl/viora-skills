@@ -87,3 +87,16 @@ DO NOT: <the traps already discovered in this session>
 Disagreeing with a decision in the handoff? Say so as a question, with your reasoning. Do not
 silently reverse it - a reversed decision mid-task produces a change that half-follows two
 designs.
+
+---
+
+## Faster: let the machine write it
+
+```bash
+python3 scripts/viora.py resume    # one screen: tier, mode, step, plan + budget,
+                                   # STALE/SURPRISE rows, open decisions, ceilings, last 3 notes
+```
+
+`resume` reads `.viora/` rather than the transcript, so it survives a compaction that ate
+the conversation. Run it as the first action of a fresh session; use the block below only
+when you need prose a human will read.

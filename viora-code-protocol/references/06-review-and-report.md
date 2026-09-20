@@ -49,6 +49,27 @@ remark, and finding it after twenty nits wastes both passes.
 Plus two that apply to the change as a whole: **is anything missing** (test, teardown, error
 path, migration, doc) and **is anything unproven**.
 
+## 2b. The sixth lens - smells
+
+Named shapes, used as *heuristics*, never as verdicts. Write "possible Feature Envy here"
+and let the author disagree. Two rules bound this lens: a documented repository standard
+always wins over a smell, and anything the linter or formatter already enforces is not
+worth a review comment.
+
+| Smell | Signal | Fix line |
+|---|---|---|
+| Long Method | one function does three jobs, needs a comment per paragraph | extract each paragraph into a named function |
+| Large Class | a class that grew a second responsibility | split by responsibility, not by line count |
+| Long Parameter List | 5+ positional parameters | pass one options object, or the whole object it came from |
+| Feature Envy | a method reads another object's fields more than its own | move the method to the object it envies |
+| Data Clumps | the same 3 values travel together everywhere | make them one type |
+| Primitive Obsession | ids, money, dates as bare strings and ints | introduce the small value type |
+| Shotgun Surgery | one behaviour change touches six files | move the behaviour into one owner |
+| Divergent Change | one file changes for unrelated reasons | split it along those reasons |
+| Duplicated Code | the same 8+ lines twice | extract once, at the level both callers see |
+| Speculative Generality | an abstraction with one implementation and no second caller in sight | inline it, name it again when the second arrives |
+| Message Chains | `a.b().c().d()` | ask the first object for what you actually need |
+| Dead Code | unreachable branches, unused exports, commented blocks | delete it; git remembers |
 ## 3. Severity - one vocabulary everywhere
 
 | Label | Meaning | Action |

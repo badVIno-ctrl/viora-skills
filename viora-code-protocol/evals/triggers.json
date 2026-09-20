@@ -1,0 +1,28 @@
+{
+  "skill": "viora-code-protocol",
+  "version": "2.2",
+  "note": "Trigger eval. Half of these must load the skill, half must not. A pack that fires on every question is a pack the user turns off. Execute with evals/run.sh, never read as prose.",
+  "cases": [
+    {"id": "t01", "query": "the login endpoint 500s on an empty body, fix it", "should_trigger": true, "mode": "FIX", "why": "a named defect with a reproducible symptom - the spine applies end to end"},
+    {"id": "t02", "query": "поправь баг в экспорте, тесты падают", "should_trigger": true, "mode": "FIX", "why": "same request in Russian: a failing test is a RED step waiting to happen"},
+    {"id": "t03", "query": "add a CSV export button to the reports page", "should_trigger": true, "mode": "FEATURE", "why": "new user-visible behaviour, needs owner, plan and proof"},
+    {"id": "t04", "query": "this component re-renders on every keystroke, make it stop", "should_trigger": true, "mode": "PERF", "why": "a measurable claim: RED is a measurement, not an opinion"},
+    {"id": "t05", "query": "split UserService into something sane, behaviour must not change", "should_trigger": true, "mode": "REFACTOR", "why": "same behaviour, different shape - the suite must be green before and after"},
+    {"id": "t06", "query": "review this diff before I merge it", "should_trigger": true, "mode": "REVIEW", "why": "judging a diff is steps 1, 2, 9, 10 with a findings ledger"},
+    {"id": "t07", "query": "the modal closes when you click inside it, no idea why", "should_trigger": true, "mode": "DEBUG", "why": "lost, not yet fixing: reproduce first, then re-enter FIX"},
+    {"id": "t08", "query": "bump the copyright year in the footer", "should_trigger": true, "mode": "TRIVIAL", "why": "still needs a verdict and evidence, just the four-step floor"},
+    {"id": "t09", "query": "dark mode toggle flashes white on load, fix the flash", "should_trigger": true, "mode": "UI", "why": "anything a user sees runs the UI guard"},
+    {"id": "t10", "query": "our deploy script silently skips migrations, sort it out", "should_trigger": true, "mode": "FIX", "why": "a silent wrong behaviour in code the team owns"},
+
+    {"id": "t11", "query": "what is the difference between a mutex and a semaphore?", "should_trigger": false, "why": "a pure knowledge question - no repository, no diff, no done-test"},
+    {"id": "t12", "query": "should we pick Postgres or DynamoDB for this product?", "should_trigger": false, "why": "design-only: nothing is being changed yet, so there is nothing to prove"},
+    {"id": "t13", "query": "sketch an architecture for a multi-tenant billing service", "should_trigger": false, "why": "greenfield design talk; the protocol starts when a diff starts"},
+    {"id": "t14", "query": "audit this repo for security holes", "should_trigger": false, "why": "a security audit belongs to viora-aegis, not to the change protocol"},
+    {"id": "t15", "query": "is our JWT handling vulnerable to algorithm confusion?", "should_trigger": false, "why": "threat question, viora-aegis territory"},
+    {"id": "t16", "query": "explain what this regex does", "should_trigger": false, "why": "reading, not changing - an explanation has no done-test"},
+    {"id": "t17", "query": "write a commit message for the changes I already made", "should_trigger": false, "why": "prose about a finished diff, no gates to run"},
+    {"id": "t18", "query": "what did we ship last sprint?", "should_trigger": false, "why": "project history, not engineering work"},
+    {"id": "t19", "query": "recommend a book on distributed systems", "should_trigger": false, "why": "no code, no repository, no claim to prove"},
+    {"id": "t20", "query": "pros and cons of trunk-based development for a team of six", "should_trigger": false, "why": "process advice; the pack would add ceremony and produce nothing checkable"}
+  ]
+}

@@ -194,3 +194,19 @@ real defect into "might be a minor concern" is a dishonest review. Quantify wher
 | "no tests, not my problem" | missing tests raise the severity of everything else here |
 | "just a refactor" | refactors break unnamed invariants; HIGH until proven LOW |
 | "I'll explain it in chat" | no written findings means the findings are lost |
+
+---
+
+## 11. The spec step (v2.2)
+
+Before Phase 0, record where the change came from:
+
+```bash
+python3 scripts/viora.py contract --spec docs/issues/482.md --goal ... --done-test ...
+```
+
+In REVIEW mode `report` then emits a **SPEC** section with four lines - what the diff
+**holds**, what it **contradicts**, what is **absent**, and what it does that no spec covers
+(**undocumented**). With no spec recorded the section says `no spec available`, which is an
+honest answer and a visible gap. A diff can be flawless and still be the wrong diff; this is
+the only step that catches that.

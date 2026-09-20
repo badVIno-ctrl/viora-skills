@@ -45,11 +45,15 @@ mkdir -p .viora && echo T0 > .viora/tier
 
 | Class of model | Start at |
 |---|---|
-| Frontier reasoning models with a long budget | T2 |
-| Mid-tier and "fast" frontier variants | T1 |
-| Flash/mini/turbo class, 8-30B local models, heavily quantised models | T0 |
+| **T2 FULL** - Claude Fable 5.1, Mythos 5.1, Opus 5; GPT-5.x; Gemini 3 Pro | T2 |
+| **T1 LITE** - Sonnet 5; GPT-5-mini class; Gemini 3 Flash | T1 |
+| **T0 MICRO** - Haiku 4.5; Flash-Lite / nano class; 8-30B local and heavily quantised models | T0 |
 | Any model past ~15 replies in one task | drop one tier |
 | Any model in an unfamiliar repo on its first task | drop one tier |
+
+Names age faster than classes. If your model is not listed, place it by behaviour: can it
+hold ten steps and a plan in working memory without a checklist (T2), does it need the
+checklist but not the templates (T1), or does it need one action per turn (T0)?
 
 A model does not need to know its own name to run this protocol. The demotion triggers
 below are all observable events, which is what makes the system work without introspection.
@@ -69,6 +73,7 @@ below are all observable events, which is what makes the system work without int
 | 15th reply on one task | context is crowded; shrink the unit of work |
 | you re-opened the same file a third time | searching without a query |
 | you produced two near-identical replies | stalling |
+| context past ~60 % of the window | the model is reading more than it is reasoning; recall degrades before it announces itself |
 
 Announce it and keep going: `DEMOTE -> T0 (gate failed twice)`. Restart the *current* step
 under the new tier; keep everything already proven.
