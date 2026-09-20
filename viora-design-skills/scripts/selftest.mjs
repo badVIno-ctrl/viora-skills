@@ -25,7 +25,7 @@
  */
 
 import { spawnSync } from "node:child_process"
-import { mkdtempSync, writeFileSync, rmSync } from "node:fs"
+import { existsSync, mkdirSync, mkdtempSync, writeFileSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -535,6 +535,29 @@ try {
 	tell(
 		refused.status === 2 && /missing G1/.test(refusedOut) && !/mechanical floor passed/.test(refusedOut),
 		refused.status === 2 ? "verify.mjs refuses a verdict while gates are missing" : `verify.mjs printed a verdict anyway (exit ${refused.status})`,
+	)
+
+	/* one run per project: a gate recorded from a subdirectory must land in the record
+	   verify.mjs reads, not in a second .viora/ beside whatever directory was current */
+	const deep = join(gateDir, "src", "components")
+	mkdirSync(deep, { recursive: true })
+	const fromDeep = spawnSync(process.execPath, [gate, "pass", "G6", "verify: from a subdirectory"], { cwd: deep, encoding: "utf8" })
+	const deepStatus = spawnSync(process.execPath, [gate, "status", "--json"], { cwd: deep, encoding: "utf8" })
+	let deepRun = null
+	try {
+		deepRun = JSON.parse(deepStatus.stdout)
+	} catch {
+		/* reported below */
+	}
+	tell(
+		fromDeep.status === 0 && Boolean(deepRun) && deepRun.gates && deepRun.gates.G6 && deepRun.gates.G0,
+		deepRun && deepRun.gates && deepRun.gates.G6 && deepRun.gates.G0
+			? "gate.mjs records from a subdirectory into the one run"
+			: "gate.mjs forked a second run from a subdirectory",
+	)
+	tell(
+		!existsSync(join(deep, ".viora")),
+		existsSync(join(deep, ".viora")) ? "gate.mjs wrote a second .viora/ into the subdirectory" : "no stray .viora/ beside the subdirectory",
 	)
 
 	/* the refusal must not demand the gate it is running, or nothing ever verifies */

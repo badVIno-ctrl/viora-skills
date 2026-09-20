@@ -28,7 +28,7 @@
  */
 
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
-import { join } from "node:path"
+import { dirname, join, resolve } from "node:path"
 
 export const GATES = ["G0", "G1", "G2", "G3", "G4", "G5", "G6", "G7"]
 
@@ -103,6 +103,25 @@ export function readRun(root = process.cwd()) {
 	}
 }
 
+/* The run belongs to the project, not to the directory the command happens to be
+   typed in. G4 is often recorded from inside src/, and verify.mjs walks up the same
+   way, so both must resolve to one record instead of forking a second run. */
+export function findRunRoot(from = process.cwd()) {
+	let dir = resolve(from)
+	for (let up = 0; up < 6; up++) {
+		if (existsSync(statePath(dir))) return dir
+		const parent = dirname(dir)
+		if (parent === dir) break
+		dir = parent
+	}
+	return null
+}
+
+export const findRun = (from = process.cwd()) => {
+	const root = findRunRoot(from)
+	return root ? readRun(root) : null
+}
+
 export function missingGates(run) {
 	return requiredFor(run).filter((g) => !run.gates || !run.gates[g])
 }
@@ -168,11 +187,12 @@ if (isMain) {
 		const id = (args[1] || "").toUpperCase()
 		const marker = args.slice(2).join(" ").trim()
 		if (!GATES.includes(id)) die(`unknown gate "${args[1] || ""}". One of: ${GATES.join(", ")}`)
-		const run = readRun()
+		const root = findRunRoot()
+		const run = root ? readRun(root) : null
 		if (!run) die("no run started. Run: node scripts/gate.mjs start <job> <mode> <stack> <lane>")
 		if (!marker) die(`gate ${id} needs its marker text: node scripts/gate.mjs pass ${id} "<marker>"`)
 		run.gates[id] = { at: new Date().toISOString(), marker }
-		writeRun(run)
+		writeRun(run, root)
 		const left = missingGates(run)
 		if (asJson) {
 			console.log(JSON.stringify(run.gates[id], null, 2))
@@ -184,7 +204,7 @@ if (isMain) {
 	}
 
 	if (cmd === "status") {
-		const run = readRun()
+		const run = findRun()
 		if (!run) {
 			if (asJson) console.log(JSON.stringify({ started: false }, null, 2))
 			else console.log("gate: no run. Start one: node scripts/gate.mjs start <job> <mode> <stack> <lane>")
@@ -207,7 +227,7 @@ if (isMain) {
 	}
 
 	if (cmd === "reset") {
-		rmSync(stateDir(), { recursive: true, force: true })
+		rmSync(stateDir(findRunRoot() || process.cwd()), { recursive: true, force: true })
 		console.log("gate: run cleared")
 		process.exit(0)
 	}
@@ -220,7 +240,8 @@ if (isMain) {
 			const next = argv[i + 1]
 			return next && !next.startsWith("--") ? next : fallback
 		}
-		const run = readRun()
+		const logRoot = findRunRoot() || process.cwd()
+		const run = readRun(logRoot)
 		const paper = opt("paper").toLowerCase()
 		const accent = opt("accent").toLowerCase()
 		if (paper && !PAPER.includes(paper)) die(`--paper is one of: ${PAPER.join(", ")}`)
@@ -237,9 +258,9 @@ if (isMain) {
 			accent,
 		}
 		if (!entry.world) die('gate log needs at least --world: node scripts/gate.mjs log --surface "<what>" --world <name> ...')
-		const saved = appendLog(entry)
+		const saved = appendLog(entry, logRoot)
 		if (asJson) console.log(JSON.stringify(saved, null, 2))
-		else console.log(`gate: logged ${saved.surface}, world ${saved.world}, structure ${saved.structure || "-"} (${logPath()})`)
+		else console.log(`gate: logged ${saved.surface}, world ${saved.world}, structure ${saved.structure || "-"} (${logPath(logRoot)})`)
 		process.exit(0)
 	}
 

@@ -27,7 +27,7 @@ import { spawnSync } from "node:child_process"
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs"
 import { dirname, extname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
-import { readRun, requiredBeforeVerdict } from "./gate.mjs"
+import { findRun, requiredBeforeVerdict } from "./gate.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const argv = process.argv.slice(2)
@@ -52,18 +52,8 @@ if (targets.length === 0) targets.push(".")
    gates is the failure mode this whole script exists to prevent. */
 if (!skipGates) {
 	/* the run belongs to the project, not to the paths being linted: verify.mjs src app
-	   must find the same record as verify.mjs . , so this walks up from the cwd. */
-	const findRun = () => {
-		let dir = resolve(".")
-		for (let up = 0; up < 6; up++) {
-			const run = readRun(dir)
-			if (run) return run
-			const parent = dirname(dir)
-			if (parent === dir) break
-			dir = parent
-		}
-		return null
-	}
+	   must find the same record as verify.mjs . , and gate.mjs pass must write to that
+	   same one from a subdirectory. findRun walks up, and both scripts share it. */
 	const run = findRun()
 	if (run && run.job) {
 		/* G6 is this run, and G7 follows it. Demanding either here would deadlock. */
