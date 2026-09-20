@@ -236,7 +236,7 @@ export const WIG = {
 		"scroll-margin-top on the anchor targets, equal to the header height.",
 		'<h2 id="pricing">Pricing</h2> under a sticky header',
 		"[id] { scroll-margin-top: calc(var(--header-h) + var(--space-4)) }",
-		],
+	],
 	"will-change-sprinkle": [
 		"will-change promotes an element to its own compositor layer and keeps it there. Sprinkled everywhere it costs memory for the whole session and makes scrolling worse, not better.",
 		"Remove it. Add it back on the one element that measurably janks, and only while it animates.",

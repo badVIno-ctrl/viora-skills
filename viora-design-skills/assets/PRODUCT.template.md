@@ -41,6 +41,7 @@ anything unmeasured, anything the team disagrees about.
 
 - "the fastest"
 - "enterprise grade"
+<!-- viora-allow: fake-stat this line quotes a claim that must never ship, on purpose -->
 - "99.9% uptime"
 - any number not in the table above
 - any customer name without written permission
