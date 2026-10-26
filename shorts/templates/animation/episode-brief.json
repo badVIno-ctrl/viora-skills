@@ -1,0 +1,15 @@
+{
+  "episode": "",
+  "disaster": "",
+  "place": "",
+  "hero_name": "",
+  "hook": "",
+  "voice": "piper",
+  "duration_s": 75,
+  "fps": 30,
+  "size": [1080, 1920],
+  "text_min_px": 34,
+  "mode": "default",
+  "brand": {"channel": "", "handle": ""},
+  "notes": "voice: record (you record) | edge | piper | elevenlabs (paid, only with approval). mode: default (ffmpeg engine) | remotion (optional)."
+}

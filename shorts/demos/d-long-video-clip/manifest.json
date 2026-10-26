@@ -1,0 +1,720 @@
+{
+  "engine": "shorts",
+  "version": "1.1.0",
+  "name": "bbb-clip-1",
+  "video": "bbb-clip-1.mp4",
+  "plan_dir": "/data/work/repo/skills/shorts/examples",
+  "fps": 30,
+  "duration": 30.0,
+  "language": "en",
+  "platforms": [
+    "youtube_shorts",
+    "tiktok"
+  ],
+  "duration_target": [
+    20.0,
+    45.0
+  ],
+  "loop": true,
+  "layout": {
+    "mode": "center_bottom",
+    "top": null,
+    "center": {
+      "x": 0,
+      "y": 0,
+      "w": 1080,
+      "h": 1616
+    },
+    "bottom": {
+      "x": 0,
+      "y": 1616,
+      "w": 1080,
+      "h": 304
+    },
+    "safe": {
+      "rect": {
+        "x": 120,
+        "y": 288,
+        "w": 768,
+        "h": 960
+      },
+      "exclusions": [
+        {
+          "x": 780,
+          "y": 840,
+          "w": 300,
+          "h": 1080
+        }
+      ],
+      "platforms": [
+        "youtube_shorts",
+        "tiktok"
+      ]
+    },
+    "caption_band": {
+      "x": 120,
+      "y": 928,
+      "w": 660,
+      "h": 320
+    },
+    "label_box": {
+      "x": 120,
+      "y": 304,
+      "w": 768,
+      "h": 240
+    },
+    "cta_box": {
+      "x": 120,
+      "y": 304,
+      "w": 660,
+      "h": 608
+    },
+    "center_pct": 84.17
+  },
+  "brand": {
+    "name": "viora",
+    "palette": {
+      "bg": "#000000",
+      "fg": "#F5F5F5",
+      "accent": "#E63946"
+    },
+    "fonts": {
+      "display": "/data/work/repo/skills/shorts/assets/fonts/Montserrat-ExtraBold.ttf",
+      "body": "/data/work/repo/skills/shorts/assets/fonts/Jost-Medium.ttf",
+      "logo": "/data/work/repo/skills/shorts/assets/fonts/Jost-Light.ttf"
+    },
+    "font_families": {
+      "display": "Montserrat ExtraBold",
+      "body": "Jost Medium"
+    },
+    "caption": {
+      "fill": "#FFFFFF",
+      "accent": "#ED6E78",
+      "outline": "#000000",
+      "highlight_mode": "color"
+    },
+    "line_width": 4,
+    "radius": 0,
+    "label_style": "plate",
+    "upper": true,
+    "register": "punch",
+    "effects": {},
+    "fonts_reason": "",
+    "warnings": []
+  },
+  "top": {
+    "kind": "none"
+  },
+  "bottom": {
+    "handle": "VioraStudio",
+    "links": [
+      "https://t.me/VioraStudio"
+    ]
+  },
+  "scenes": [
+    {
+      "id": "part-1",
+      "type": "video",
+      "start": 0.0,
+      "length": 10.0,
+      "skipped": "",
+      "notes": [
+        "label plate #E63946 gives 5.0:1, changed to #ED6E78 (7.1:1 with #000000). To keep the exact colour, set brand.label_style to \"outline\" or pick an accent with 7:1"
+      ],
+      "say": "He was a gentle giant. Then they went too far.",
+      "on_screen_text": "THEY WENT TOO FAR",
+      "why": "hook: the gentle giant and the trouble",
+      "speed": [],
+      "source": {
+        "type": "video",
+        "ref": "media/film.mp4",
+        "in": 251.5,
+        "out": 261.5
+      }
+    },
+    {
+      "id": "part-2",
+      "type": "video",
+      "start": 10.0,
+      "length": 10.0,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "window score 0.81",
+      "speed": [],
+      "source": {
+        "type": "video",
+        "ref": "media/film.mp4",
+        "in": 261.5,
+        "out": 271.5
+      }
+    },
+    {
+      "id": "part-3",
+      "type": "video",
+      "start": 20.0,
+      "length": 10.0,
+      "skipped": "",
+      "notes": [],
+      "say": "Watch what the bunny does next.",
+      "on_screen_text": "",
+      "why": "window score 0.81",
+      "speed": [],
+      "source": {
+        "type": "video",
+        "ref": "media/film.mp4",
+        "in": 271.5,
+        "out": 281.5
+      }
+    }
+  ],
+  "music_sync": {
+    "enabled": false
+  },
+  "cta_schedule": [
+    {
+      "index": 0,
+      "kind": "handle",
+      "requested": 11.0,
+      "how": "anchor part-2+1.00",
+      "duration": 2.0,
+      "dropped": false,
+      "t": 11.0,
+      "final": 11.0,
+      "reason": "as requested"
+    },
+    {
+      "index": 1,
+      "kind": "qr",
+      "requested": 25.8,
+      "how": "t_pct 0.86",
+      "duration": 3.0,
+      "dropped": false,
+      "t": 25.8,
+      "final": 25.8,
+      "reason": "as requested"
+    }
+  ],
+  "alias_notes": [],
+  "schema_version": "1.1",
+  "overlays": [
+    {
+      "kind": "label",
+      "box": [
+        136,
+        304,
+        866,
+        608
+      ],
+      "text": "THEY WENT TOO FAR",
+      "min_font": 104,
+      "pairs": [
+        [
+          "#000000",
+          "#ED6E78",
+          7.0
+        ]
+      ],
+      "url": "",
+      "qr_box": null,
+      "note": "label plate #E63946 gives 5.0:1, changed to #ED6E78 (7.1:1 with #000000). To keep the exact colour, set brand.label_style to \"outline\" or pick an accent with 7:1",
+      "t0": 0.0,
+      "t1": 10.0
+    },
+    {
+      "kind": "cta_handle",
+      "box": [
+        128,
+        464,
+        772,
+        751
+      ],
+      "text": "@VioraStudio t.me/VioraStudio",
+      "min_font": 56,
+      "pairs": [
+        [
+          "#F5F5F5",
+          "#000000",
+          7.0
+        ],
+        [
+          "#E63946",
+          "#000000",
+          4.5
+        ]
+      ],
+      "url": "",
+      "qr_box": null,
+      "note": "",
+      "t0": 11.0,
+      "t1": 13.0
+    },
+    {
+      "kind": "cta_qr",
+      "box": [
+        200,
+        320,
+        700,
+        888
+      ],
+      "text": "t.me/VioraStudio",
+      "min_font": 56,
+      "pairs": [
+        [
+          "#000000",
+          "#F5F5F5",
+          7.0
+        ]
+      ],
+      "url": "https://t.me/VioraStudio",
+      "qr_box": [
+        246,
+        352,
+        653,
+        759
+      ],
+      "note": "",
+      "t0": 25.8,
+      "t1": 28.8
+    }
+  ],
+  "captions": {
+    "enabled": true,
+    "chunks": [
+      {
+        "text": "He was",
+        "start": 0.0,
+        "end": 0.24,
+        "box": [
+          288,
+          1098,
+          612,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "He",
+            "s": 0.0,
+            "e": 0.1,
+            "scene": "part-1"
+          },
+          {
+            "w": "was",
+            "s": 0.1,
+            "e": 0.24,
+            "scene": "part-1"
+          }
+        ]
+      },
+      {
+        "text": "a gentle giant.",
+        "start": 0.24,
+        "end": 1.12,
+        "box": [
+          256,
+          986,
+          644,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "a",
+            "s": 0.24,
+            "e": 0.34,
+            "scene": "part-1"
+          },
+          {
+            "w": "gentle",
+            "s": 0.34,
+            "e": 0.64,
+            "scene": "part-1"
+          },
+          {
+            "w": "giant.",
+            "s": 0.64,
+            "e": 1.12,
+            "scene": "part-1"
+          }
+        ]
+      },
+      {
+        "text": "Then they",
+        "start": 1.32,
+        "end": 1.7,
+        "box": [
+          228,
+          1098,
+          672,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "Then",
+            "s": 1.32,
+            "e": 1.5,
+            "scene": "part-1"
+          },
+          {
+            "w": "they",
+            "s": 1.5,
+            "e": 1.7,
+            "scene": "part-1"
+          }
+        ]
+      },
+      {
+        "text": "went too far.",
+        "start": 1.7,
+        "end": 2.42,
+        "box": [
+          232,
+          986,
+          668,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "went",
+            "s": 1.7,
+            "e": 1.88,
+            "scene": "part-1"
+          },
+          {
+            "w": "too",
+            "s": 1.88,
+            "e": 2.12,
+            "scene": "part-1"
+          },
+          {
+            "w": "far.",
+            "s": 2.12,
+            "e": 2.42,
+            "scene": "part-1"
+          }
+        ]
+      },
+      {
+        "text": "Watch what",
+        "start": 20.0,
+        "end": 20.5,
+        "box": [
+          167,
+          1098,
+          733,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "Watch",
+            "s": 20.0,
+            "e": 20.26,
+            "scene": "part-3"
+          },
+          {
+            "w": "what",
+            "s": 20.26,
+            "e": 20.5,
+            "scene": "part-3"
+          }
+        ]
+      },
+      {
+        "text": "the bunny",
+        "start": 20.5,
+        "end": 20.84,
+        "box": [
+          219,
+          1098,
+          681,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "the",
+            "s": 20.5,
+            "e": 20.64,
+            "scene": "part-3"
+          },
+          {
+            "w": "bunny",
+            "s": 20.64,
+            "e": 20.84,
+            "scene": "part-3"
+          }
+        ]
+      },
+      {
+        "text": "does next.",
+        "start": 20.84,
+        "end": 21.34,
+        "box": [
+          216,
+          1098,
+          684,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "does",
+            "s": 20.84,
+            "e": 21.04,
+            "scene": "part-3"
+          },
+          {
+            "w": "next.",
+            "s": 21.04,
+            "e": 21.34,
+            "scene": "part-3"
+          }
+        ]
+      }
+    ],
+    "words_spoken": [
+      {
+        "w": "He",
+        "s": 0.0,
+        "e": 0.1,
+        "scene": "part-1"
+      },
+      {
+        "w": "was",
+        "s": 0.1,
+        "e": 0.24,
+        "scene": "part-1"
+      },
+      {
+        "w": "a",
+        "s": 0.24,
+        "e": 0.34,
+        "scene": "part-1"
+      },
+      {
+        "w": "gentle",
+        "s": 0.34,
+        "e": 0.64,
+        "scene": "part-1"
+      },
+      {
+        "w": "giant.",
+        "s": 0.64,
+        "e": 1.12,
+        "scene": "part-1"
+      },
+      {
+        "w": "Then",
+        "s": 1.32,
+        "e": 1.5,
+        "scene": "part-1"
+      },
+      {
+        "w": "they",
+        "s": 1.5,
+        "e": 1.7,
+        "scene": "part-1"
+      },
+      {
+        "w": "went",
+        "s": 1.7,
+        "e": 1.88,
+        "scene": "part-1"
+      },
+      {
+        "w": "too",
+        "s": 1.88,
+        "e": 2.12,
+        "scene": "part-1"
+      },
+      {
+        "w": "far.",
+        "s": 2.12,
+        "e": 2.42,
+        "scene": "part-1"
+      },
+      {
+        "w": "Watch",
+        "s": 20.0,
+        "e": 20.26,
+        "scene": "part-3"
+      },
+      {
+        "w": "what",
+        "s": 20.26,
+        "e": 20.5,
+        "scene": "part-3"
+      },
+      {
+        "w": "the",
+        "s": 20.5,
+        "e": 20.64,
+        "scene": "part-3"
+      },
+      {
+        "w": "bunny",
+        "s": 20.64,
+        "e": 20.84,
+        "scene": "part-3"
+      },
+      {
+        "w": "does",
+        "s": 20.84,
+        "e": 21.04,
+        "scene": "part-3"
+      },
+      {
+        "w": "next.",
+        "s": 21.04,
+        "e": 21.34,
+        "scene": "part-3"
+      }
+    ],
+    "fill": "#FFFFFF",
+    "accent": "#ED6E78",
+    "outline": "#000000",
+    "highlight": "accent"
+  },
+  "events": [
+    {
+      "t": 0.0,
+      "kind": "scene",
+      "id": "part-1"
+    },
+    {
+      "t": 0.0,
+      "kind": "caption"
+    },
+    {
+      "t": 0.0,
+      "kind": "label"
+    },
+    {
+      "t": 0.24,
+      "kind": "caption"
+    },
+    {
+      "t": 1.32,
+      "kind": "caption"
+    },
+    {
+      "t": 1.7,
+      "kind": "caption"
+    },
+    {
+      "t": 3.0,
+      "kind": "punch"
+    },
+    {
+      "t": 6.0,
+      "kind": "punch"
+    },
+    {
+      "t": 8.5,
+      "kind": "punch"
+    },
+    {
+      "t": 10.0,
+      "kind": "scene",
+      "id": "part-2"
+    },
+    {
+      "t": 10.0,
+      "kind": "punch"
+    },
+    {
+      "t": 11.0,
+      "kind": "cta_handle"
+    },
+    {
+      "t": 14.0,
+      "kind": "punch"
+    },
+    {
+      "t": 16.5,
+      "kind": "punch"
+    },
+    {
+      "t": 19.0,
+      "kind": "punch"
+    },
+    {
+      "t": 20.0,
+      "kind": "scene",
+      "id": "part-3"
+    },
+    {
+      "t": 20.0,
+      "kind": "caption"
+    },
+    {
+      "t": 20.0,
+      "kind": "punch"
+    },
+    {
+      "t": 20.5,
+      "kind": "caption"
+    },
+    {
+      "t": 20.84,
+      "kind": "caption"
+    },
+    {
+      "t": 22.5,
+      "kind": "punch"
+    },
+    {
+      "t": 24.5,
+      "kind": "punch"
+    },
+    {
+      "t": 25.8,
+      "kind": "cta_qr"
+    }
+  ],
+  "sfx": [],
+  "audio": {
+    "voice": true,
+    "music_gain_db": -8.0,
+    "duck_db": -6.0,
+    "separation_db": 10.0,
+    "voice_minus_music_db": 12.1
+  },
+  "fx": {
+    "punch": [
+      3.0,
+      6.0,
+      8.5,
+      10.0,
+      14.0,
+      16.5,
+      19.0,
+      20.0,
+      22.5,
+      24.5
+    ]
+  },
+  "effects": {},
+  "issues": [],
+  "render_seconds": 136.5,
+  "forced": false
+}

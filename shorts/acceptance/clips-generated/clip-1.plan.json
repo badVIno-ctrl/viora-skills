@@ -1,0 +1,89 @@
+{
+  "schema_version": "1",
+  "meta": {
+    "name": "clip-1",
+    "language": "ru",
+    "platforms": [
+      "youtube_shorts"
+    ],
+    "duration_target": [
+      10,
+      30.0
+    ],
+    "loop": false
+  },
+  "layout": {
+    "mode": "center_only",
+    "cta_in_center": []
+  },
+  "brand": {
+    "preset": "mono"
+  },
+  "captions": {
+    "enabled": true,
+    "max_words": 3,
+    "highlight": "accent"
+  },
+  "audio": {
+    "voice": {
+      "engine": "auto"
+    },
+    "target_lufs": -14,
+    "sfx_auto": false
+  },
+  "fx": {
+    "punch": [
+      5.0,
+      10.0
+    ]
+  },
+  "scenes": [
+    {
+      "id": "part-1",
+      "why": "window score 1.00",
+      "duration": 5.0,
+      "source": {
+        "type": "video",
+        "ref": "../out-long/long-8min-training.mp4",
+        "in": 371.0,
+        "out": 376.0,
+        "keep_audio": true
+      }
+    },
+    {
+      "id": "part-2",
+      "why": "window score 1.00",
+      "duration": 5.0,
+      "source": {
+        "type": "video",
+        "ref": "../out-long/long-8min-training.mp4",
+        "in": 376.0,
+        "out": 381.0,
+        "keep_audio": true
+      }
+    },
+    {
+      "id": "part-3",
+      "why": "window score 1.00",
+      "duration": 5.0,
+      "source": {
+        "type": "video",
+        "ref": "../out-long/long-8min-training.mp4",
+        "in": 381.0,
+        "out": 386.0,
+        "keep_audio": true
+      }
+    }
+  ],
+  "metadata": {
+    "source_video": "../out-long/long-8min-training.mp4",
+    "window": [
+      371.0,
+      386.0
+    ],
+    "signals": {
+      "loudness": 1.0
+    },
+    "transcript_words": 0
+  }
+}

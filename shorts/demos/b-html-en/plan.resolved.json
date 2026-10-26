@@ -1,0 +1,143 @@
+{
+  "schema_version": "1",
+  "meta": {
+    "name": "one-html-file",
+    "language": "en",
+    "platforms": [
+      "youtube_shorts",
+      "tiktok",
+      "reels"
+    ],
+    "duration_target": [
+      12,
+      40
+    ],
+    "emotion": "tech",
+    "audience": "web devs",
+    "loop": true,
+    "fps": 30
+  },
+  "layout": {
+    "mode": "top_center",
+    "top": {
+      "height_pct": 20,
+      "source": "loop:spin"
+    },
+    "cta_in_center": [
+      {
+        "t": 7.5,
+        "duration": 2.0,
+        "kind": "handle",
+        "text": "VioraStudio",
+        "url": "https://t.me/VioraStudio"
+      },
+      {
+        "t": 99,
+        "duration": 3,
+        "kind": "qr",
+        "url": "https://t.me/VioraStudio"
+      }
+    ]
+  },
+  "brand": {
+    "preset": "terminal"
+  },
+  "captions": {
+    "enabled": true,
+    "max_words": 3,
+    "highlight": "accent",
+    "subs": {}
+  },
+  "audio": {
+    "voice": {
+      "engine": "auto",
+      "voice": "en-male-1",
+      "speed": 1.05
+    },
+    "music": {
+      "source": "assets/audio/bed.mp3"
+    },
+    "target_lufs": -14,
+    "sfx_auto": true
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "say": "This whole animation is one HTML file.",
+      "on_screen_text": "ONE HTML FILE",
+      "why": "result first",
+      "source": {
+        "type": "html",
+        "ref": "orbit.html"
+      },
+      "sfx": [
+        {
+          "t": 0,
+          "name": "hit"
+        }
+      ]
+    },
+    {
+      "id": "slowmo",
+      "say": "The engine steps its clock, so slow motion stays smooth.",
+      "why": "show controlled speed",
+      "source": {
+        "type": "html",
+        "ref": "orbit.html",
+        "in": 2.0
+      },
+      "speed": [
+        {
+          "t": 0,
+          "rate": 0.4
+        }
+      ]
+    },
+    {
+      "id": "fast",
+      "say": "Speed it up when the part is boring.",
+      "on_screen_text": "2X SPEED",
+      "why": "controlled speed, the other way",
+      "source": {
+        "type": "html",
+        "ref": "orbit.html",
+        "in": 6.0
+      },
+      "speed": [
+        {
+          "t": 0,
+          "rate": 2.0
+        }
+      ]
+    },
+    {
+      "id": "how",
+      "say": "Write code, get frames, post the video.",
+      "why": "the takeaway",
+      "source": {
+        "type": "text",
+        "ref": "Write *code* | get frames | post it"
+      }
+    },
+    {
+      "id": "loop",
+      "say": "The link is pinned, and the file is in the channel.",
+      "why": "cta after value, loops to the start",
+      "source": {
+        "type": "html",
+        "ref": "orbit.html"
+      }
+    }
+  ],
+  "metadata": {
+    "topic": "Animation from one HTML file",
+    "hashtags": [
+      "shorts",
+      "webdev",
+      "javascript",
+      "html",
+      "coding"
+    ]
+  },
+  "fx": {}
+}

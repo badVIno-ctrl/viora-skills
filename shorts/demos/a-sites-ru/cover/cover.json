@@ -1,0 +1,229 @@
+{
+  "generator": null,
+  "generated": false,
+  "words": [
+    "2",
+    "САЙТА",
+    "БЕСПЛАТНО"
+  ],
+  "symbol": "key",
+  "ideas": [
+    "minimal",
+    "hero",
+    "split"
+  ],
+  "recommended": "A",
+  "register": "",
+  "variants": [
+    {
+      "file": "cover-A-minimal-16x9.jpg",
+      "variant": "minimal",
+      "format": "16x9",
+      "source": "code:symbol",
+      "errors": [],
+      "box": [
+        80,
+        430,
+        779,
+        650
+      ],
+      "font_px": 102,
+      "text_color": "#FFFFFF",
+      "symbol": "key",
+      "symbol_box": [
+        768,
+        72,
+        1214,
+        518
+      ],
+      "idea": "symbol",
+      "graphic_boxes": [
+        [
+          0,
+          0,
+          1280,
+          720
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.105,
+        "blob": 0.095,
+        "tone": 5.0
+      }
+    },
+    {
+      "file": "cover-A-minimal-9x16.jpg",
+      "variant": "minimal",
+      "format": "9x16",
+      "source": "code:symbol",
+      "errors": [],
+      "box": [
+        144,
+        1042,
+        747,
+        1232
+      ],
+      "font_px": 88,
+      "text_color": "#FFFFFF",
+      "symbol": "key",
+      "symbol_box": [
+        264,
+        345,
+        744,
+        825
+      ],
+      "idea": "symbol",
+      "graphic_boxes": [
+        [
+          0,
+          0,
+          1080,
+          1920
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.038,
+        "blob": 0.019,
+        "tone": 5.4
+      }
+    },
+    {
+      "file": "cover-B-hero-16x9.jpg",
+      "variant": "hero",
+      "format": "16x9",
+      "source": "frame:017.00-site-2",
+      "errors": [],
+      "box": [
+        680,
+        242,
+        1255,
+        422
+      ],
+      "font_px": 84,
+      "text_color": "#FFFFFF",
+      "text_left": false,
+      "idea": "hero",
+      "graphic_boxes": [
+        [
+          664,
+          232,
+          1268,
+          430
+        ]
+      ],
+      "glow_lift": -150.0,
+      "squint": {
+        "ok": true,
+        "share": 0.162,
+        "blob": 0.178,
+        "tone": 3.9
+      }
+    },
+    {
+      "file": "cover-B-hero-9x16.jpg",
+      "variant": "hero",
+      "format": "9x16",
+      "source": "frame:017.00-site-2",
+      "errors": [],
+      "box": [
+        184,
+        449,
+        814,
+        647
+      ],
+      "font_px": 92,
+      "text_color": "#FFFFFF",
+      "text_left": false,
+      "idea": "hero",
+      "graphic_boxes": [
+        [
+          168,
+          440,
+          826,
+          654
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.085,
+        "blob": 0.096,
+        "tone": 5.0
+      }
+    },
+    {
+      "file": "cover-C-split-16x9.jpg",
+      "variant": "split",
+      "format": "16x9",
+      "source": "frame:001.93-hook",
+      "errors": [],
+      "box": [
+        64,
+        520,
+        639,
+        700
+      ],
+      "font_px": 84,
+      "text_color": "#FFFFFF",
+      "idea": "split",
+      "solid_band": false,
+      "graphic_boxes": [
+        [
+          0,
+          504,
+          1280,
+          720
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.355,
+        "blob": 0.35,
+        "tone": 15.1
+      }
+    },
+    {
+      "file": "cover-C-split-9x16.jpg",
+      "variant": "split",
+      "format": "9x16",
+      "source": "frame:001.93-hook",
+      "errors": [],
+      "box": [
+        144,
+        673,
+        747,
+        863
+      ],
+      "font_px": 88,
+      "text_color": "#FFFFFF",
+      "idea": "split",
+      "solid_band": false,
+      "graphic_boxes": [
+        [
+          0,
+          576,
+          1080,
+          960
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.047,
+        "blob": 0.018,
+        "tone": 3.4
+      }
+    }
+  ],
+  "prompt": "cover/prompt.md",
+  "notes": [
+    "C 16x9: first frames failed the squint test (weak silhouette at 320 px (figure 9%, blob 6.1%, tone 2.4:1)), used other frames (split)"
+  ],
+  "errors": [],
+  "ask_user": "Генератора картинок нет или он выключен: вариант A нарисован кодом, B и C из кадров ролика. Если нужна картинка от нейросети, сгенерируй по cover/prompt.md и пришли файл."
+}

@@ -1,0 +1,105 @@
+{
+  "schema_version": "1",
+  "meta": {
+    "name": "two-free-sites",
+    "language": "ru",
+    "platforms": ["youtube_shorts", "tiktok"],
+    "duration_target": [20, 40],
+    "emotion": "trust",
+    "audience": "students and indie devs",
+    "loop": true
+  },
+  "layout": {
+    "mode": "three",
+    "top": {"height_pct": 20, "source": "loop:auto"},
+    "bottom": {
+      "height_pct": 16,
+      "handle": "VioraStudio",
+      "links": ["https://t.me/VioraStudio"]
+    },
+    "cta_in_center": [
+      {"t": 14, "duration": 2.5, "kind": "handle", "text": "VioraStudio"},
+      {"t": 99, "duration": 3, "kind": "qr", "url": "https://t.me/VioraStudio"}
+    ]
+  },
+  "brand": {"preset": "viora"},
+  "captions": {
+    "enabled": true,
+    "max_words": 3,
+    "highlight": "accent",
+    "subs": {"лёрн энисинг": "learn-anything", "кэд лукап": "CAD Lookup", "линукс": "Linux"}
+  },
+  "audio": {
+    "voice": {"engine": "auto", "voice": "ru-male-1", "speed": 1.08},
+    "music": {"source": "auto", "mood": "tense", "duck_db": -10},
+    "target_lufs": -14
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "say": "Два бесплатных сайта, и оба вам пригодятся.",
+      "on_screen_text": "2 САЙТА БЕСПЛАТНО",
+      "why": "result first: the finished map of resources",
+      "source": {
+        "type": "site",
+        "ref": "https://learn-anything.xyz/",
+        "viewport": "mobile",
+        "actions": [{"do": "goto", "settle": 2.0}, {"do": "scroll", "dy": 300, "steps": 20, "t": 0.6}]
+      },
+      "sfx": [{"t": 0, "name": "whoosh"}]
+    },
+    {
+      "id": "site-1",
+      "say": "Первый, лёрн энисинг. Пишешь тему, например линукс, и получаешь подборку: книги, курсы, ссылки.",
+      "on_screen_text": "1 LEARN-ANYTHING",
+      "why": "demo of the first site: type -> result",
+      "source": {
+        "type": "site",
+        "ref": "https://learn-anything.xyz/",
+        "viewport": "mobile",
+        "actions": [
+          {"do": "goto", "settle": 2.0},
+          {"do": "type", "sel": "input", "text": "Linux", "delay": 120, "t": 0.6},
+          {"do": "press", "key": "Enter", "t": 2.4},
+          {"do": "click", "role": "button", "name": "Close", "t": 4.0},
+          {"do": "scroll", "dy": 500, "steps": 30, "t": 5.4},
+          {"do": "scroll", "dy": 500, "steps": 30, "t": 7.2}
+        ]
+      },
+      "speed": [{"t": 4.5, "rate": 1.4}]
+    },
+    {
+      "id": "site-2",
+      "say": "Второй, кэд лукап. Описываешь деталь обычными словами и получаешь готовые 3D модели.",
+      "on_screen_text": "2 CAD LOOKUP",
+      "why": "demo of the second site: plain words -> 3D models",
+      "source": {
+        "type": "site",
+        "ref": "https://www.cadlookup.com/",
+        "viewport": "mobile",
+        "actions": [
+          {"do": "goto", "settle": 2.0},
+          {"do": "type", "placeholder": "Search CAD models...", "text": "gear with 12 teeth", "delay": 70, "t": 0.5},
+          {"do": "press", "key": "Enter", "t": 2.3},
+          {"do": "scroll", "dy": 450, "steps": 30, "t": 5.0}
+        ]
+      }
+    },
+    {
+      "id": "loop",
+      "say": "Оба бесплатные. Ссылка на остальные находки в закрепе и в канале.",
+      "why": "cta after value, end leads back to the start",
+      "source": {
+        "type": "site",
+        "ref": "https://www.cadlookup.com/",
+        "viewport": "mobile",
+        "actions": [
+          {"do": "goto", "settle": 1.5},
+          {"do": "type", "placeholder": "Search CAD models...", "text": "robot arm", "delay": 70, "t": 0.3},
+          {"do": "press", "key": "Enter", "t": 1.4}
+        ]
+      }
+    }
+  ],
+  "metadata": {"topic": "Два бесплатных сайта для учёбы и 3D", "hashtags": ["shorts", "нейросети", "сервисы", "бесплатно", "3d"]}
+}

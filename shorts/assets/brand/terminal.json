@@ -1,0 +1,23 @@
+{
+  "description": "dark console, mono font, flat green, no neon glow",
+  "palette": {
+    "bg": "#0B0F0C",
+    "fg": "#E6E6E6",
+    "accent": "#3DDC84"
+  },
+  "fonts": {
+    "display": "assets/fonts/JetBrainsMono-Bold.ttf",
+    "body": "assets/fonts/JetBrainsMono-Medium.ttf",
+    "logo": "assets/fonts/JetBrainsMono-Medium.ttf"
+  },
+  "fonts_reason": "terminal preset: monospace is the point of the style",
+  "highlight_mode": "color",
+  "label_style": "plate",
+  "upper": false,
+  "emotion_default": "tech",
+  "tone": "dry, precise",
+  "line_width": 4,
+  "radius": 0,
+  "effects": {},
+  "name": "terminal"
+}

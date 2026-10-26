@@ -1,0 +1,75 @@
+{
+  "_comment": "Выдача: три обложки (A крупное лицо / B контекст / C постер) - разные кадры берутся сами. Текст обложки: 2-4 слова, *слово* = акцент, script = одно слово от руки. 2.2: без плашки-тега и подчёркивания; тег только с tag_style kicker|pill.",
+  "items": [
+    {
+      "slug": "interview",
+      "name": "Интервью",
+      "video": "01-interview.mp4",
+      "titles": [
+        {
+          "t": "БОЛЬШЕ $100 000 ЗА ИНТЕРВЬЮ? #shorts",
+          "why": "цифра + вопрос",
+          "tone": "loud"
+        },
+        {
+          "t": "Сколько принесло двойное интервью",
+          "why": "любопытство",
+          "tone": "medium"
+        },
+        {
+          "t": "Сколько заработали на интервью с Собчак",
+          "why": "поисковая фраза",
+          "tone": "calm"
+        },
+        {
+          "t": "Дудь спросил про деньги",
+          "why": "сюжет",
+          "tone": "medium"
+        },
+        {
+          "t": "Ответ про деньги за интервью",
+          "why": "суть",
+          "tone": "calm"
+        }
+      ],
+      "recommended": 2,
+      "descriptions": [
+        {
+          "tone": "loud",
+          "text": "Сколько на самом деле принесло интервью?\n\nИсточник: https://www.youtube.com/watch?v=0gvtAvT-xQ0\n\nРеклама. Quattro VPN\nhttps://telegram.me/QuattroVPN_BOT?start=r_O0Xa5v9BEFVvRioY\n\n#shorts #интервью",
+          "psychology": "разрыв любопытства"
+        },
+        {
+          "tone": "medium",
+          "text": "Вопрос про деньги и короткий ответ.\n\nИсточник: https://www.youtube.com/watch?v=0gvtAvT-xQ0\n\nРеклама. Quattro VPN\nhttps://telegram.me/QuattroVPN_BOT?start=r_O0Xa5v9BEFVvRioY\n\n#shorts #интервью",
+          "psychology": "сюжет"
+        },
+        {
+          "tone": "calm",
+          "text": "Фрагмент интервью о заработке.\n\nИсточник: https://www.youtube.com/watch?v=0gvtAvT-xQ0\n\nРеклама. Quattro VPN\nhttps://telegram.me/QuattroVPN_BOT?start=r_O0Xa5v9BEFVvRioY\n\n#shorts #интервью",
+          "psychology": "описание"
+        }
+      ],
+      "recommended_description": "medium",
+      "ad": {
+        "name": "Quattro VPN",
+        "url": "https://telegram.me/QuattroVPN_BOT?start=r_O0Xa5v9BEFVvRioY"
+      },
+      "covers": [
+        {
+          "text": "БОЛЬШЕ *$100 000*?",
+          "tone": "loud",
+          "script": "интервью"
+        },
+        {
+          "text": "СКОЛЬКО ЗАРАБОТАЛИ *НА ЭТОМ*",
+          "tone": "medium"
+        },
+        {
+          "text": "ДЕНЬГИ ЗА *ИНТЕРВЬЮ*",
+          "tone": "calm"
+        }
+      ]
+    }
+  ]
+}

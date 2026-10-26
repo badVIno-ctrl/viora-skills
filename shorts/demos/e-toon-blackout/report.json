@@ -1,0 +1,495 @@
+{
+ "duration": 80.963,
+ "scenes": 27,
+ "speech": [
+  {
+   "scene": 0,
+   "t": 0.06,
+   "wav": ".cache/tts/0980e68ace7a3fe9efc369a4.wav",
+   "duration": 3.696,
+   "estimated": false
+  },
+  {
+   "scene": 1,
+   "t": 3.462,
+   "wav": ".cache/tts/1f2f47827e684506a1251ddf.wav",
+   "duration": 1.968,
+   "estimated": false
+  },
+  {
+   "scene": 2,
+   "t": 5.128,
+   "wav": ".cache/tts/76fca54e9fc4c08db657ed1b.wav",
+   "duration": 3.048,
+   "estimated": false
+  },
+  {
+   "scene": 3,
+   "t": 7.871,
+   "wav": ".cache/tts/37139b4e24377c31dcdbfa06.wav",
+   "duration": 2.688,
+   "estimated": false
+  },
+  {
+   "scene": 4,
+   "t": 10.037,
+   "wav": ".cache/tts/1a68d132ef403c9322423dae.wav",
+   "duration": 2.664,
+   "estimated": false
+  },
+  {
+   "scene": 5,
+   "t": 12.352,
+   "wav": ".cache/tts/095fa764da8a08ae84ca1097.wav",
+   "duration": 4.2,
+   "estimated": false
+  },
+  {
+   "scene": 6,
+   "t": 16.194,
+   "wav": ".cache/tts/131ed76049e00fd018690535.wav",
+   "duration": 4.08,
+   "estimated": false
+  },
+  {
+   "scene": 7,
+   "t": 19.921,
+   "wav": ".cache/tts/ae833b916cab58a8590436ce.wav",
+   "duration": 2.4,
+   "estimated": false
+  },
+  {
+   "scene": 8,
+   "t": 22.027,
+   "wav": ".cache/tts/96917cb69ed2d68576a603b2.wav",
+   "duration": 2.952,
+   "estimated": false
+  },
+  {
+   "scene": 9,
+   "t": 24.608,
+   "wav": ".cache/tts/fd3ebf8e91cb68b0b93c54f6.wav",
+   "duration": 2.904,
+   "estimated": false
+  },
+  {
+   "scene": 10,
+   "t": 27.177,
+   "wav": ".cache/tts/38edfb9e82b8459b149a4250.wav",
+   "duration": 2.976,
+   "estimated": false
+  },
+  {
+   "scene": 11,
+   "t": 29.804,
+   "wav": ".cache/tts/60a83714b0b251ec4439b550.wav",
+   "duration": 3.192,
+   "estimated": false
+  },
+  {
+   "scene": 12,
+   "t": 32.639,
+   "wav": ".cache/tts/d509ecffff0d10655351e63d.wav",
+   "duration": 2.592,
+   "estimated": false
+  },
+  {
+   "scene": 13,
+   "t": 34.884,
+   "wav": ".cache/tts/c166a2943d475e9893944097.wav",
+   "duration": 3.552,
+   "estimated": false
+  },
+  {
+   "scene": 14,
+   "t": 38.067,
+   "wav": ".cache/tts/116b9b84e93fdd11bca57fe8.wav",
+   "duration": 2.76,
+   "estimated": false
+  },
+  {
+   "scene": 15,
+   "t": 40.52,
+   "wav": ".cache/tts/05b40a9f57f51f2d85897df4.wav",
+   "duration": 3.24,
+   "estimated": false
+  },
+  {
+   "scene": 16,
+   "t": 43.46,
+   "wav": ".cache/tts/a5a70329502b38a3882f8417.wav",
+   "duration": 4.752,
+   "estimated": false
+  },
+  {
+   "scene": 17,
+   "t": 47.843,
+   "wav": ".cache/tts/828d347f094da6763196a07d.wav",
+   "duration": 3.96,
+   "estimated": false
+  },
+  {
+   "scene": 18,
+   "t": 51.489,
+   "wav": ".cache/tts/dd846ba336f6746d548cecfa.wav",
+   "duration": 4.536,
+   "estimated": false
+  },
+  {
+   "scene": 19,
+   "t": 55.538,
+   "wav": ".cache/tts/37416a023b49467019041dd6.wav",
+   "duration": 2.616,
+   "estimated": false
+  },
+  {
+   "scene": 20,
+   "t": 57.783,
+   "wav": ".cache/tts/b7df0eb4b28cece421c87a3e.wav",
+   "duration": 5.088,
+   "estimated": false
+  },
+  {
+   "scene": 21,
+   "t": 62.388,
+   "wav": ".cache/tts/0a0a212bc981658ef9728fb6.wav",
+   "duration": 2.376,
+   "estimated": false
+  },
+  {
+   "scene": 22,
+   "t": 64.471,
+   "wav": ".cache/tts/6ec11be5f6868c68188925d0.wav",
+   "duration": 2.784,
+   "estimated": false
+  },
+  {
+   "scene": 23,
+   "t": 66.89,
+   "wav": ".cache/tts/311a1ab209cb367856d08746.wav",
+   "duration": 4.32,
+   "estimated": false
+  },
+  {
+   "scene": 24,
+   "t": 70.894,
+   "wav": ".cache/tts/0fb162eb67b91428d8ca9685.wav",
+   "duration": 3.768,
+   "estimated": false
+  },
+  {
+   "scene": 25,
+   "t": 74.285,
+   "wav": ".cache/tts/375aab80ae26df407d57abea.wav",
+   "duration": 2.424,
+   "estimated": false
+  },
+  {
+   "scene": 26,
+   "t": 76.345,
+   "wav": ".cache/tts/2fce4b41278f27aed2b47d1c.wav",
+   "duration": 4.44,
+   "estimated": false
+  }
+ ],
+ "problems": [],
+ "timing": [
+  {
+   "scene": 0,
+   "t0": 0.0,
+   "t1": 3.312,
+   "dur": 3.31,
+   "words": 9,
+   "set": "facade",
+   "scheme": null,
+   "camera": "push",
+   "transition": null
+  },
+  {
+   "scene": 1,
+   "t0": 3.312,
+   "t1": 4.978,
+   "dur": 1.67,
+   "words": 3,
+   "set": "stairwell",
+   "scheme": null,
+   "camera": "crash",
+   "transition": "slide"
+  },
+  {
+   "scene": 2,
+   "t0": 4.978,
+   "t1": 7.721,
+   "dur": 2.74,
+   "words": 5,
+   "set": "plain",
+   "scheme": "cutaway",
+   "camera": "push",
+   "transition": "zoom"
+  },
+  {
+   "scene": 3,
+   "t0": 7.721,
+   "t1": 9.887,
+   "dur": 2.17,
+   "words": 5,
+   "set": "stairwell",
+   "scheme": null,
+   "camera": "pan_right",
+   "transition": "slide"
+  },
+  {
+   "scene": 4,
+   "t0": 9.887,
+   "t1": 12.202,
+   "dur": 2.31,
+   "words": 4,
+   "set": "stairwell",
+   "scheme": null,
+   "camera": "push",
+   "transition": "cut"
+  },
+  {
+   "scene": 5,
+   "t0": 12.202,
+   "t1": 16.044,
+   "dur": 3.84,
+   "words": 8,
+   "set": "plain",
+   "scheme": "stairs",
+   "camera": "push",
+   "transition": "zoom"
+  },
+  {
+   "scene": 6,
+   "t0": 16.044,
+   "t1": 19.771,
+   "dur": 3.73,
+   "words": 6,
+   "set": "room",
+   "scheme": null,
+   "camera": "drift",
+   "transition": "cut"
+  },
+  {
+   "scene": 7,
+   "t0": 19.771,
+   "t1": 21.877,
+   "dur": 2.11,
+   "words": 4,
+   "set": "kitchen",
+   "scheme": null,
+   "camera": "pull",
+   "transition": "slide"
+  },
+  {
+   "scene": 8,
+   "t0": 21.877,
+   "t1": 24.458,
+   "dur": 2.58,
+   "words": 5,
+   "set": "plain",
+   "scheme": "chain",
+   "camera": "push",
+   "transition": "zoom"
+  },
+  {
+   "scene": 9,
+   "t0": 24.458,
+   "t1": 27.027,
+   "dur": 2.57,
+   "words": 5,
+   "set": "plain",
+   "scheme": "gauge",
+   "camera": "push",
+   "transition": "slide"
+  },
+  {
+   "scene": 10,
+   "t0": 27.027,
+   "t1": 29.654,
+   "dur": 2.63,
+   "words": 5,
+   "set": "plain",
+   "scheme": "cutaway",
+   "camera": "push",
+   "transition": "cut"
+  },
+  {
+   "scene": 11,
+   "t0": 29.654,
+   "t1": 32.489,
+   "dur": 2.83,
+   "words": 7,
+   "set": "plain",
+   "scheme": "counter",
+   "camera": "push",
+   "transition": "cut"
+  },
+  {
+   "scene": 12,
+   "t0": 32.489,
+   "t1": 34.734,
+   "dur": 2.25,
+   "words": 4,
+   "set": "plain",
+   "scheme": "bars",
+   "camera": "push",
+   "transition": "cut"
+  },
+  {
+   "scene": 13,
+   "t0": 34.734,
+   "t1": 37.917,
+   "dur": 3.18,
+   "words": 6,
+   "set": "plain",
+   "scheme": "timeline",
+   "camera": "push",
+   "transition": "cut"
+  },
+  {
+   "scene": 14,
+   "t0": 37.917,
+   "t1": 40.37,
+   "dur": 2.45,
+   "words": 5,
+   "set": "room",
+   "scheme": null,
+   "camera": "pull",
+   "transition": "whip"
+  },
+  {
+   "scene": 15,
+   "t0": 40.37,
+   "t1": 43.31,
+   "dur": 2.94,
+   "words": 5,
+   "set": "room",
+   "scheme": null,
+   "camera": "pan_right",
+   "transition": "cut"
+  },
+  {
+   "scene": 16,
+   "t0": 43.31,
+   "t1": 47.693,
+   "dur": 4.38,
+   "words": 7,
+   "set": "kitchen",
+   "scheme": null,
+   "camera": "push",
+   "transition": "zoom"
+  },
+  {
+   "scene": 17,
+   "t0": 47.693,
+   "t1": 51.339,
+   "dur": 3.65,
+   "words": 6,
+   "set": "plain",
+   "scheme": "checklist",
+   "camera": "push",
+   "transition": "iris"
+  },
+  {
+   "scene": 18,
+   "t0": 51.339,
+   "t1": 55.388,
+   "dur": 4.05,
+   "words": 6,
+   "set": "plain",
+   "scheme": "closeup",
+   "camera": "push",
+   "transition": "slide"
+  },
+  {
+   "scene": 19,
+   "t0": 55.388,
+   "t1": 57.633,
+   "dur": 2.25,
+   "words": 3,
+   "set": "room",
+   "scheme": null,
+   "camera": "pull",
+   "transition": "cut"
+  },
+  {
+   "scene": 20,
+   "t0": 57.633,
+   "t1": 62.238,
+   "dur": 4.6,
+   "words": 6,
+   "set": "room",
+   "scheme": null,
+   "camera": "pan_left",
+   "transition": "fade"
+  },
+  {
+   "scene": 21,
+   "t0": 62.238,
+   "t1": 64.321,
+   "dur": 2.08,
+   "words": 5,
+   "set": "plain",
+   "scheme": "topview",
+   "camera": "push",
+   "transition": "zoom"
+  },
+  {
+   "scene": 22,
+   "t0": 64.321,
+   "t1": 66.74,
+   "dur": 2.42,
+   "words": 3,
+   "set": "kitchen",
+   "scheme": null,
+   "camera": "drift",
+   "transition": "slide"
+  },
+  {
+   "scene": 23,
+   "t0": 66.74,
+   "t1": 70.744,
+   "dur": 4.0,
+   "words": 11,
+   "set": "plain",
+   "scheme": "cutaway",
+   "camera": "push",
+   "transition": "zoom"
+  },
+  {
+   "scene": 24,
+   "t0": 70.744,
+   "t1": 74.135,
+   "dur": 3.39,
+   "words": 9,
+   "set": "facade",
+   "scheme": null,
+   "camera": "pull",
+   "transition": "cut"
+  },
+  {
+   "scene": 25,
+   "t0": 74.135,
+   "t1": 76.195,
+   "dur": 2.06,
+   "words": 4,
+   "set": "plain",
+   "scheme": "radius",
+   "camera": "push",
+   "transition": "iris"
+  },
+  {
+   "scene": 26,
+   "t0": 76.195,
+   "t1": 80.963,
+   "dur": 4.77,
+   "words": 7,
+   "set": "room",
+   "scheme": null,
+   "camera": "drift",
+   "transition": "whip"
+  }
+ ]
+}

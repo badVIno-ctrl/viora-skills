@@ -1,0 +1,44 @@
+{
+  "_note": "Values for a 1080x1920 frame, px. Each platform: rectangle margins plus extra exclusion boxes [x0, y0, x1, y1]. Update source/checked when you re-check. The engine intersects all platforms of a plan.",
+  "youtube_shorts": {
+    "top": 288,
+    "bottom": 672,
+    "left": 48,
+    "right": 192,
+    "exclusions": [],
+    "source": "https://support.google.com/google-ads/answer/16041697",
+    "kind": "official Google Ads template for vertical video, used as an approximation for organic Shorts",
+    "checked": "2026-10-11"
+  },
+  "youtube": {
+    "alias": "youtube_shorts",
+    "kind": "vertical export for a regular YouTube upload uses the Shorts zone"
+  },
+  "tiktok": {
+    "top": 240,
+    "bottom": 660,
+    "left": 120,
+    "right": 120,
+    "exclusions": [
+      [
+        780,
+        840,
+        1080,
+        1920
+      ]
+    ],
+    "source": "https://ads.tiktok.com/help/article/tiktok-auction-in-feed-ads -> official template zip https://lf-tt4b.tiktokcdn.com/obj/i18nblog/tt4b_cms/en-US/5jqet0ab9qci-10e7f5Vig4uhAscNP8XPB0.zip, Feed.png 2880x5120 measured by pixels and scaled to 1080x1920: free area x 120..960, y 240..1260, action column x >= 780 from y 840",
+    "kind": "official In-Feed ad template, TikTok says the zone also depends on caption length; organic posts use the same UI",
+    "checked": "2026-10-11"
+  },
+  "reels": {
+    "top": 269,
+    "bottom": 672,
+    "left": 65,
+    "right": 65,
+    "exclusions": [],
+    "source": "https://www.facebook.com/business/ads-guide/update/video/instagram-reels/outcome-engagement (Meta: leave 14% top, 35% bottom and 6% each side free of text and logos) -> 269 / 672 / 65 / 65 px",
+    "kind": "official Meta ads guide percentages converted to px",
+    "checked": "2026-10-11"
+  }
+}

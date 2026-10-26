@@ -1,0 +1,28 @@
+{
+  "variants": [
+    {
+      "variant": "long_text",
+      "format": "16x9",
+      "file": "cover-A-16x9.png",
+      "text": "8 МИНУТ ЭКСПОРТА",
+      "errors": []
+    },
+    {
+      "variant": "long_text",
+      "format": "16x9",
+      "file": "cover-B-16x9.png",
+      "text": "8 МИНУТ ЭКСПОРТА",
+      "errors": []
+    },
+    {
+      "variant": "long_text",
+      "format": "16x9",
+      "file": "cover-C-16x9.png",
+      "text": "8 МИНУТ ЭКСПОРТА",
+      "errors": []
+    }
+  ],
+  "errors": [],
+  "generated": false,
+  "note": "Text layout variants, not proven separate creative concepts; review 150 px manually"
+}

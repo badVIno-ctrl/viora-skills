@@ -1,0 +1,73 @@
+[
+  {
+    "job": 1,
+    "requested_visible": [
+      "https://www.youtube.com/watch?v=46IpbQ_0FUw",
+      "https://www.youtube.com/watch?v=9mQN4E6ur-w"
+    ],
+    "requested_href": [
+      "https://www.youtube.com/watch?v=SpBwmoHMDEM",
+      "https://www.youtube.com/watch?v=0gvtAvT-xQ0"
+    ],
+    "state": "identity_unresolved",
+    "question": "GTA V или Fancade; Андрей Гайдулян или Моргенштерн у Дудя?",
+    "preview": "Fancade top from requested href; main from supplied failed export; NOT accepted final source choice"
+  },
+  {
+    "job": 2,
+    "url": "https://www.youtube.com/watch?v=RTifScOdX-U",
+    "state": "acquired_excerpt",
+    "excerpt": [
+      99,
+      140
+    ],
+    "file": "media/standup-0.mp4",
+    "evidence": "Browser metadata, local ASR, sampled images; not listened"
+  },
+  {
+    "job": 3,
+    "url": "https://www.youtube.com/watch?v=aDaaCGZz-Ok",
+    "state": "playback_failed",
+    "reason": "Metadata and storyboard loaded; distant seeks timed out; no verified full-source clip acquired",
+    "preview": "media/brat-provided.mp4 supplied weak export"
+  },
+  {
+    "job": 4,
+    "url": "https://www.youtube.com/watch?v=QVSoNEqdXvU",
+    "state": "identity_unverified",
+    "reason": "Page metadata and storyboard loaded; playback identity/duration conflict; no verified full-source clip acquired",
+    "preview": "media/patsan-lifted.mp4 derived from supplied weak export"
+  },
+  {
+    "job": 3,
+    "url": "https://www.youtube.com/watch?v=jOMsucSWpEs",
+    "state": "acquired_excerpt_pending_listening",
+    "excerpt": [
+      20,
+      48
+    ],
+    "file": "media/brat-music-0.wav"
+  },
+  {
+    "job": 4,
+    "url": "https://www.youtube.com/watch?v=Km8n0zmJ0r0",
+    "state": "acquired_excerpt_pending_listening",
+    "excerpt": [
+      30,
+      58
+    ],
+    "file": "media/patsan-music-0.wav",
+    "title": "OST Слово Пацана — Саундтрек 2023",
+    "relation_to_original_score": "not established by listening; no proven contradiction inferred"
+  },
+  {
+    "url": "https://mover.uz/watch/bDrCLTu9",
+    "state": "no_verified_copy",
+    "evidence": "matching interview metadata/chapters, yt-dlp unsupported; no acquired playable copy"
+  },
+  {
+    "url": "https://vkvideo.ru/video-199806114_456239030",
+    "state": "identity_unverified",
+    "evidence": "search candidate only; not acquired or accepted"
+  }
+]

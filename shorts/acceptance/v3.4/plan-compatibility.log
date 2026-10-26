@@ -1,0 +1,32 @@
+OK: 0 errors, 0 warnings
+OK: 0 errors, 0 warnings
+[warn] author_layer: foreign material (film/video/background gameplay) needs >= 2 own layers, one of them voice|thesis|own_footage|compare (now: text_point): add author_layer [{kind: voice|thesis|own_footage|compare|text_point|sound_design|interactive, note}] (reused content risk; your own long video: own_footage)
+[warn] media_missing: scene shot-01: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-02: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-03: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-04: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-05: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-06: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-07: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-08: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-09: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-10: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-11: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-12: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-13: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-14: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-15: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-16: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-17: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-18: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene shot-19: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+OK: 0 errors, 20 warnings
+[warn] media_missing: scene part-1: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene part-2: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+[warn] media_missing: scene part-3: file not found media/film.mp4 (paths are relative to the plan folder) [allowed: --allow-missing-media]
+OK: 0 errors, 3 warnings
+OK: 0 errors, 0 warnings
+OK: 0 errors, 0 warnings
+OK: 0 errors, 0 warnings
+OK: 0 errors, 0 warnings
+OK: 0 errors, 0 warnings

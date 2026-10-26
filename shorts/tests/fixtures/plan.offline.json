@@ -1,0 +1,29 @@
+{
+  "schema_version": "1",
+  "meta": {"name": "offline-demo", "language": "ru", "platforms": ["youtube_shorts", "tiktok"],
+           "duration_target": [8, 40], "emotion": "trust", "audience": "indie devs", "loop": true},
+  "layout": {
+    "mode": "three",
+    "top": {"height_pct": 20, "source": "loop:auto"},
+    "bottom": {"height_pct": 16, "handle": "VioraStudio", "links": ["https://t.me/VioraStudio"]},
+    "cta_in_center": [
+      {"t": 4.0, "duration": 2.0, "kind": "handle", "text": "VioraStudio"},
+      {"t": 99, "duration": 3, "kind": "qr", "url": "https://t.me/VioraStudio"}
+    ]
+  },
+  "brand": {"preset": "viora"},
+  "captions": {"enabled": true, "max_words": 3, "highlight": "accent", "subs": {"эйч ти эм эл": "HTML"}},
+  "audio": {"voice": {"engine": "auto", "voice": "ru-male-1", "speed": 1.05},
+            "music": {"source": "assets/audio/bed.mp3", "duck_db": -10}, "target_lufs": -14},
+  "scenes": [
+    {"id": "hook", "say": "Один эйч ти эм эл файл, и вот готовая анимация.", "on_screen_text": "1 ФАЙЛ = АНИМАЦИЯ",
+     "why": "result first", "source": {"type": "html", "ref": "orbit.html"},
+     "speed": [{"t": 2.0, "rate": 0.5}], "sfx": [{"t": 0, "name": "hit"}]},
+    {"id": "how", "say": "Пишешь код, движок снимает кадр за кадром.", "why": "explain",
+     "source": {"type": "text", "ref": "Код -> *кадры* -> видео"}},
+    {"id": "app", "say": "А скриншоты оживают сами.", "why": "second proof",
+     "source": {"type": "images", "images": ["app-screen.png"], "focus": [0.5, 0.2], "points": [[0.82, 0.9, 1.0]]}},
+    {"id": "loop", "say": "Ссылка в закрепе, а файл с анимацией в канале.", "why": "cta after value",
+     "source": {"type": "html", "ref": "orbit.html", "in": 1.0}}
+  ]
+}

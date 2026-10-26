@@ -1,0 +1,20 @@
+[
+  {
+    "id": "question",
+    "final_start": 0,
+    "final_end": 6.2,
+    "source": "../media/interview-provided.mp4",
+    "source_in": 0,
+    "source_out": 6.2,
+    "role": "Полный доступный вопрос: не резать слово по ошибочному старому SRT"
+  },
+  {
+    "id": "complete-answer",
+    "final_start": 6.2,
+    "final_end": 13.0,
+    "source": "../media/interview-provided.mp4",
+    "source_in": 6.6,
+    "source_out": 13.4,
+    "role": "Компактный самостоятельный ответ; не приписывать ему оборванное продолжение про алкоголь"
+  }
+]

@@ -1,0 +1,308 @@
+INFO rendered /vercel/sandbox/data/revised/shorts/acceptance/out-short/take-rebuild.mp4 (24.0s video) in 48s
+video: acceptance/out-short/take-rebuild.mp4  (24.0s, render 47.9s)
+# Подписи: take-rebuild
+
+## Названия (от громкого к спокойному)
+
+1. `КАК УБРАТЬ ЗАСТАВКУ И ПОКАЗАТЬ РЕЗУЛЬТАТ ПЕРВЫМ 😱 #shorts #монтаж`  (громкость 1, intrigue, 65 зн.)
+   - капс, эмодзи, крупное обещание
+2. `КАК УБРАТЬ ЗАСТАВКУ И ПОКАЗАТЬ РЕЗУЛЬТАТ ПЕРВЫМ #shorts #монтаж`  (громкость 2, intrigue, 63 зн.) **<- рекомендую**
+   - капс без эмодзи, для ленты
+3. `Как убрать заставку и показать результат первым: смотри, как это работает #shorts #монтаж`  (громкость 3, intrigue, 89 зн.)
+   - любопытство, без капса
+4. `Как убрать заставку и показать результат первым #shorts #монтаж`  (громкость 4, search, 63 зн.)
+   - суть в начале
+5. `Как убрать заставку и показать результат первым - коротко и по делу #shorts #монтаж`  (громкость 5, search, 83 зн.)
+   - поисковая фраза, спокойно
+
+Почему рекомендую: капс без эмодзи, для ленты
+
+## Описание
+
+```
+#монтаж
+Как убрать заставку и показать результат первым
+
+Полное видео - на канале.
+
+#shorts #ии #ai #полезное
+```
+
+## Закреплённый комментарий
+
+```
+Как убрать заставку и показать результат первым.
+Продолжение - в следующем ролике.
+Что показать следующим? Пиши в комментах.
+```
+
+## TikTok
+
+```
+КАК УБРАТЬ ЗАСТАВКУ И ПОКАЗАТЬ РЕЗУЛЬТАТ ПЕРВЫМ #монтаж #ии #ai #полезное
+```
+
+## Файлы
+
+- captions.srt (загрузить в YouTube как субтитры)
+
+> Черновик собран правилами. Модель должна переписать названия в metadata.draft.json и перезапустить meta.
+
+Перед загрузкой: проверь пометку «изменённый или синтетический контент» (реалистичный ИИ-контент).
+- warn: title 1: 2 hashtags (pattern: 3-6)
+- warn: title 2: 2 hashtags (pattern: 3-6)
+- warn: title 3: length guideline is about 49 for Shorts or 65-70 for long video; test on your data
+- warn: title 3: 2 hashtags (pattern: 3-6)
+- warn: title 4: 2 hashtags (pattern: 3-6)
+- warn: title 5: length guideline is about 49 for Shorts or 65-70 for long video; test on your data
+- warn: title 5: 2 hashtags (pattern: 3-6)
+- warn: no links in prefs or plan: description and pinned comment go without links
+
+{
+  "generator": null,
+  "generated": false,
+  "words": [
+    "КАК",
+    "УБРАТЬ",
+    "ЗАСТАВКУ",
+    "И",
+    "ПОКАЗАТЬ"
+  ],
+  "symbol": "play",
+  "ideas": [
+    "minimal",
+    "hero",
+    "split"
+  ],
+  "recommended": "A",
+  "register": "",
+  "variants": [
+    {
+      "file": "cover-A-minimal-16x9.jpg",
+      "variant": "minimal",
+      "format": "16x9",
+      "source": "code:symbol",
+      "errors": [],
+      "text": "КАК УБРАТЬ ЗАСТАВКУ И ПОКАЗАТЬ РЕЗУЛЬТАТ",
+      "mobile_review": "manual",
+      "box": [
+        80,
+        374,
+        680,
+        650
+      ],
+      "font_px": 86,
+      "text_color": "#FFFFFF",
+      "symbol": "play",
+      "symbol_box": [
+        768,
+        72,
+        1214,
+        518
+      ],
+      "idea": "symbol",
+      "graphic_boxes": [
+        [
+          0,
+          0,
+          1280,
+          720
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.145,
+        "blob": 0.122,
+        "tone": 4.9
+      }
+    },
+    {
+      "file": "cover-A-minimal-9x16.jpg",
+      "variant": "minimal",
+      "format": "9x16",
+      "source": "code:symbol",
+      "errors": [],
+      "text": "КАК УБРАТЬ ЗАСТАВКУ И ПОКАЗАТЬ РЕЗУЛЬТАТ",
+      "mobile_review": "manual",
+      "box": [
+        72,
+        878,
+        840,
+        1232
+      ],
+      "font_px": 110,
+      "text_color": "#FFFFFF",
+      "symbol": "play",
+      "symbol_box": [
+        228,
+        345,
+        708,
+        825
+      ],
+      "idea": "symbol",
+      "graphic_boxes": [
+        [
+          0,
+          0,
+          1080,
+          1920
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.081,
+        "blob": 0.021,
+        "tone": 7.0
+      }
+    },
+    {
+      "file": "cover-B-hero-16x9.jpg",
+      "variant": "hero",
+      "format": "16x9",
+      "source": "frame:003.30-result",
+      "errors": [],
+      "text": "КАК УБРАТЬ ЗАСТАВКУ И ПОКАЗАТЬ РЕЗУЛЬТАТ",
+      "mobile_review": "manual",
+      "box": [
+        680,
+        102,
+        1197,
+        562
+      ],
+      "font_px": 86,
+      "text_color": "#0A0A0A",
+      "text_left": false,
+      "idea": "hero",
+      "graphic_boxes": [
+        [
+          664,
+          110,
+          1210,
+          570
+        ]
+      ],
+      "glow_lift": -0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.238,
+        "blob": 0.257,
+        "tone": 10.6
+      }
+    },
+    {
+      "file": "cover-B-hero-9x16.jpg",
+      "variant": "hero",
+      "format": "9x16",
+      "source": "frame:003.30-result",
+      "errors": [],
+      "text": "КАК УБРАТЬ ЗАСТАВКУ И ПОКАЗАТЬ РЕЗУЛЬТАТ",
+      "mobile_review": "manual",
+      "box": [
+        112,
+        393,
+        782,
+        702
+      ],
+      "font_px": 96,
+      "text_color": "#0A0A0A",
+      "text_left": false,
+      "idea": "hero",
+      "graphic_boxes": [
+        [
+          95,
+          403,
+          791,
+          708
+        ]
+      ],
+      "glow_lift": -232.0,
+      "squint": {
+        "ok": true,
+        "share": 0.086,
+        "blob": 0.101,
+        "tone": 9.3
+      }
+    },
+    {
+      "file": "cover-C-split-16x9.jpg",
+      "variant": "split",
+      "format": "16x9",
+      "source": "frame:021.30-finish",
+      "errors": [],
+      "text": "КАК УБРАТЬ ЗАСТАВКУ И ПОКАЗАТЬ РЕЗУЛЬТАТ",
+      "mobile_review": "manual",
+      "box": [
+        64,
+        472,
+        664,
+        748
+      ],
+      "font_px": 86,
+      "text_color": "#FFFFFF",
+      "idea": "split",
+      "solid_band": false,
+      "graphic_boxes": [
+        [
+          0,
+          504,
+          1280,
+          720
+        ]
+      ],
+      "glow_lift": -13.0,
+      "squint": {
+        "ok": true,
+        "share": 0.11,
+        "blob": 0.11,
+        "tone": 4.3
+      }
+    },
+    {
+      "file": "cover-C-split-9x16.jpg",
+      "variant": "split",
+      "format": "9x16",
+      "source": "frame:021.30-finish",
+      "errors": [],
+      "text": "КАК УБРАТЬ ЗАСТАВКУ И ПОКАЗАТЬ РЕЗУЛЬТАТ",
+      "mobile_review": "manual",
+      "box": [
+        72,
+        603,
+        784,
+        933
+      ],
+      "font_px": 102,
+      "text_color": "#FFFFFF",
+      "idea": "split",
+      "solid_band": false,
+      "graphic_boxes": [
+        [
+          0,
+          576,
+          1080,
+          960
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.084,
+        "blob": 0.02,
+        "tone": 4.8
+      }
+    }
+  ],
+  "prompt": "cover/prompt.md",
+  "notes": [],
+  "errors": [
+    "9x16: variants A and B look alike (dhash 34 bits < 40)"
+  ],
+  "ask_user": "Генератора картинок нет или он выключен: вариант A нарисован кодом, B и C из кадров ролика. Если нужна картинка от нейросети, сгенерируй по cover/prompt.md и пришли файл."
+}
+acceptance/out-short/qa.md
+QA FAILED: 1 fail, 3 warn, 3 manual; checklist 12/16 auto, 4 for the agent
+acceptance/out-short/ПАКЕТ.txt
+WARN cover: 9x16: variants A and B look alike (dhash 34 bits < 40)
+all: QA FAILED, 1 warnings (exit 1)

@@ -1,0 +1,87 @@
+{
+  "schema_version": "1",
+  "meta": {
+    "name": "next-1",
+    "language": "ru",
+    "platforms": [
+      "youtube_shorts"
+    ],
+    "duration_target": [
+      20,
+      40
+    ],
+    "emotion": "trust",
+    "audience": "TODO",
+    "loop": true
+  },
+  "layout": {
+    "mode": "center_only",
+    "cta_in_center": []
+  },
+  "brand": {
+    "preset": "mono"
+  },
+  "captions": {
+    "enabled": true,
+    "max_words": 3,
+    "highlight": "accent",
+    "subs": {}
+  },
+  "audio": {
+    "voice": {
+      "engine": "auto",
+      "speed": 1.05
+    },
+    "music": {
+      "source": "assets/audio/bed.mp3",
+      "duck_db": -10
+    },
+    "target_lufs": -14
+  },
+  "scenes": [
+    {
+      "id": "s1",
+      "say": "TODO: результат или вопрос в первую секунду, без приветствия",
+      "why": "TODO",
+      "source": {
+        "type": "video",
+        "ref": "example.mp4",
+        "in": 0,
+        "out": 6
+      },
+      "on_screen_text": "TODO"
+    }
+  ],
+  "metadata": {
+    "topic": "Результат без заставки",
+    "niche_context": {
+      "niche": "Учебный монтаж, демонстрационная память, не профиль пользователя",
+      "niche_profile": {
+        "updated_at": "2026-10-18",
+        "review_after": "2026-11-18",
+        "audience": "Начинающие монтажёры",
+        "jobs": [
+          "убрать воду",
+          "показать результат без заставки"
+        ],
+        "language": [
+          "результат",
+          "шаги",
+          "вода"
+        ],
+        "winning_formats": [],
+        "gaps": [],
+        "author_difference": "показ структуры до объяснения",
+        "observations": [],
+        "hypotheses": [
+          {
+            "text": "ранний показ результата удобнее новичкам",
+            "label": "[Г]",
+            "check": "свои сопоставимые ролики и график ухода"
+          }
+        ],
+        "notes_ref": "notes.md"
+      }
+    }
+  }
+}

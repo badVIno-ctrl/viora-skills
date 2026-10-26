@@ -1,0 +1,1 @@
+PASS: ZIP CRC; single shorts/ root; extracted CLI ad-init; draft valid; launch rejected; no overwrite or publication.

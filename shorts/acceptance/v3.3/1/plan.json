@@ -1,0 +1,79 @@
+{
+  "schema_version": "1",
+  "meta": {
+    "name": "preview-1",
+    "language": "ru",
+    "platforms": [
+      "youtube_shorts"
+    ],
+    "duration_target": [
+      8,
+      60
+    ],
+    "loop": false,
+    "fps": 30
+  },
+  "brand": {
+    "preset": "mono"
+  },
+  "layout": {
+    "mode": "three",
+    "top": {
+      "height_pct": 8.3,
+      "source": "../media/game-0.mp4",
+      "start": 15
+    },
+    "bottom": {
+      "height_pct": 20,
+      "reserve_bottom_pct": 16.7,
+      "name": "QuattroVPN",
+      "handle": "QuattroVPN_BOT",
+      "message": "VPN в Telegram",
+      "action": "Открыть бота",
+      "qr_url": "https://telegram.me/QuattroVPN_BOT?start=r_O0Xa5v9BEFVvRioY",
+      "animation": {
+        "enabled": true,
+        "variant": "quattro",
+        "cycle": 12,
+        "safe_right": 192
+      }
+    },
+    "cta_in_center": []
+  },
+  "captions": {
+    "enabled": false
+  },
+  "audio": {
+    "music": {
+      "source": "none"
+    },
+    "sfx_auto": false,
+    "target_lufs": -14
+  },
+  "scenes": [
+    {
+      "id": "question",
+      "duration": 6.2,
+      "why": "Полный доступный вопрос: не резать слово по ошибочному старому SRT",
+      "source": {
+        "type": "video",
+        "ref": "../media/interview-provided.mp4",
+        "in": 0,
+        "out": 6.2,
+        "keep_audio": true
+      }
+    },
+    {
+      "id": "complete-answer",
+      "duration": 6.8,
+      "why": "Компактный самостоятельный ответ; не приписывать ему оборванное продолжение про алкоголь",
+      "source": {
+        "type": "video",
+        "ref": "../media/interview-provided.mp4",
+        "in": 6.6,
+        "out": 13.4,
+        "keep_audio": true
+      }
+    }
+  ]
+}

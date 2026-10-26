@@ -1,0 +1,30 @@
+{
+  "duration": 30,
+  "contains_speech": true,
+  "speech": {
+    "start": 100,
+    "end": 130,
+    "context_before_reviewed": false,
+    "context_after_reviewed": false,
+    "first_word_complete": false,
+    "last_word_complete": false,
+    "thought_complete": false,
+    "answer_complete": false,
+    "natural_reaction_preserved": false,
+    "audio_listened": false,
+    "context_words": []
+  },
+  "chapters": [
+    "00:00 - Вход",
+    "00:12 - Ответ"
+  ],
+  "motion_reviewed": false,
+  "audio_listened": false,
+  "editorial_accepted": false,
+  "sources_verified": false,
+  "ui_overlay_reviewed": false,
+  "music_required": false,
+  "exact_music_verified": false,
+  "qr_required": true,
+  "final_qr_verified": false
+}

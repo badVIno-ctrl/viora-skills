@@ -1,0 +1,13 @@
+{
+  "ready": false,
+  "issues": [
+    "motion_reviewed not confirmed",
+    "audio_listened not confirmed",
+    "editorial_accepted not confirmed",
+    "sources_verified not confirmed",
+    "ui_overlay_reviewed not confirmed",
+    "exact music not verified"
+  ],
+  "technical_qa": "separate",
+  "publication_performance": "not predicted"
+}

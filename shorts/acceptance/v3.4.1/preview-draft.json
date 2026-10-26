@@ -1,0 +1,14 @@
+{
+  "stage": "draft",
+  "valid": true,
+  "ready_for_launch": false,
+  "verification": "structure and reviewer-declared evidence only; no external verification",
+  "issues": [],
+  "warnings": [
+    "Draft only. Missing offer, rights, route, QA and approval may block launch."
+  ],
+  "not_applicable": [
+    "subtitles",
+    "motion_audio"
+  ]
+}

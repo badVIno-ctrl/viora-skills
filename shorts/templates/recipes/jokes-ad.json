@@ -1,0 +1,41 @@
+{
+  "_comment": "Шортс 2: нарезка шуток на весь экран (без верхней панели), снизу плашка рекламы + QR. 5-8 кусков по 3-7 с, каждый кусок = шутка целиком (подводка + панчлайн), лучшие в начале и в конце. 2.2: каждый кусок сам доводится до конца фразы, после последнего слова 0.7 с тишины.",
+  "out": "02-jokes.mp4",
+  "main": {
+    "pieces": [
+      {
+        "src": "sources/standup.mp4",
+        "start": 12.0,
+        "end": 19.0
+      },
+      {
+        "src": "sources/standup.mp4",
+        "start": 41.0,
+        "end": 47.5
+      },
+      {
+        "src": "sources/standup.mp4",
+        "start": 88.0,
+        "end": 95.0
+      }
+    ],
+    "track": "biggest",
+    "punch": 0.06,
+    "snap": "sentence"
+  },
+  "captions": {
+    "srt": "sources/standup.srt",
+    "style": "clean"
+  },
+  "hook": {
+    "text": "ЛУЧШАЯ ШУТКА *вечера*",
+    "start": 0,
+    "end": 1.8
+  },
+  "adbar": {
+    "brand": "Bob VPN",
+    "sub": "VPN в Telegram",
+    "url": "https://t.me/bobvpn_robot?start=ref_5771810401",
+    "tg": "bobvpn_robot"
+  }
+}

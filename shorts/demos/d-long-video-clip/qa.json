@@ -1,0 +1,496 @@
+{
+  "passed": true,
+  "video": "bbb-clip-1.mp4",
+  "duration": 30.0,
+  "summary": "QA PASSED: 0 fail, 0 warn, 2 manual; checklist 15/16 auto, 4 for the agent",
+  "checks": [
+    {
+      "id": "format",
+      "item": 1,
+      "title": "Format: 1080x1920, H.264/AAC, 30/60 fps, duration in target",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "w": 1080,
+        "h": 1920,
+        "vcodec": "h264",
+        "acodec": "aac",
+        "fps": 30.0,
+        "duration": 30.0,
+        "pix_fmt": "yuv420p"
+      },
+      "ok": true
+    },
+    {
+      "id": "first_frame",
+      "item": 2,
+      "title": "First frame is not empty, motion in the first 1.5 s",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "first": {
+          "mean": 106.1,
+          "std": 78.1,
+          "blank": false
+        },
+        "motion_first_1_5s": 60.18
+      },
+      "ok": true
+    },
+    {
+      "id": "rhythm",
+      "item": 3,
+      "title": "Event at least every 3 s, no still pause > 1 s",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "events": 68,
+        "max_gap": 2.3,
+        "visual_changes": 58,
+        "longest_still": 0.3,
+        "at": 13.0
+      },
+      "ok": true
+    },
+    {
+      "id": "safe_zone",
+      "item": 4,
+      "title": "Text, QR and links inside the platform safe zone",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "safe": [
+          120,
+          288,
+          888,
+          1248
+        ],
+        "platforms": [
+          "youtube_shorts",
+          "tiktok"
+        ],
+        "outside": []
+      },
+      "ok": true
+    },
+    {
+      "id": "contrast",
+      "item": 5,
+      "title": "Text contrast and minimum font sizes",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "pairs": [
+          [
+            "caption",
+            21.0,
+            7.102490312458857
+          ],
+          [
+            "label",
+            7.1,
+            7.0
+          ],
+          [
+            "cta_handle",
+            19.26,
+            7.0
+          ],
+          [
+            "cta_handle",
+            5.04,
+            4.5
+          ],
+          [
+            "cta_qr",
+            19.26,
+            7.0
+          ]
+        ]
+      },
+      "ok": true
+    },
+    {
+      "id": "layout",
+      "item": 6,
+      "title": "Centre >= 55% of height, no empty zone > 15%, panels filled",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "center_pct": 84.2,
+        "dead_zone": {
+          "max_share": 0.102,
+          "at": 0.0
+        },
+        "bottom": {
+          "motion": 0.01,
+          "still_share": 1.0,
+          "detail": 36.93
+        }
+      },
+      "ok": true
+    },
+    {
+      "id": "anti_slop",
+      "item": 7,
+      "title": "No glow, no gradient plates, <= 3 colours, no default font, no emoji",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "graphics_colour_families": [
+          "hue330"
+        ],
+        "palette": [
+          "#000000",
+          "#E63946",
+          "#F5F5F5"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "id": "qr",
+      "item": 8,
+      "title": "QR decodes from the finished video and matches the link",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "decoded": [
+          {
+            "t": 27.0,
+            "got": [
+              "https://t.me/VioraStudio"
+            ],
+            "want": "https://t.me/VioraStudio",
+            "side": 407
+          }
+        ]
+      },
+      "ok": true
+    },
+    {
+      "id": "captions",
+      "item": 9,
+      "title": "Captions synced (150 ms), no cut words, no overflow",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "chunks": 7,
+        "words_per_chunk": 2.29,
+        "max_drift": 0.0,
+        "single_word_share": 0.0,
+        "breaks": []
+      },
+      "ok": true
+    },
+    {
+      "id": "loudness",
+      "item": 10,
+      "title": "Loudness -14 LUFS (+-1.5), true peak <= -1 dBTP, no clipping",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "lufs": -14.1,
+        "true_peak": -1.4,
+        "sample_peak": -1.424458,
+        "clipped": null,
+        "voice": true,
+        "music_gain_db": -8.0,
+        "duck_db": -6.0,
+        "separation_db": 10.0,
+        "voice_minus_music_db": 12.1
+      },
+      "ok": true
+    },
+    {
+      "id": "loop",
+      "item": 11,
+      "title": "Last frame matches the first or leads to part 2",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "first_last_diff": 1.37,
+        "part2": false
+      },
+      "ok": true
+    },
+    {
+      "id": "metadata",
+      "item": 12,
+      "title": "Titles 5-7 (<= 100 chars), one description, no long dashes, hashtags sane",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "titles": 6,
+        "hashtags_unique": 7
+      },
+      "ok": true
+    },
+    {
+      "id": "eyes",
+      "item": 13,
+      "title": "Visual review: contact sheet (2 fps) and densest moments",
+      "status": "pass",
+      "detail": "agent looked at contact-1.png, contact-2.png: Кусок 251-281 с фильма: кролик ставит ловушки, копья, верёвка. Метка THEY WENT TOO FAR держится всю первую сцену (10 с) - долговато. Закадровый голос в начале и в конце, субтитры по словам. С 14 по 19 с почти статичный крупный план кролика, ритм держат вспышки punch. Ник на 11 с (anchor part-2+1), QR на 25.8 с (t_pct 0.86).",
+      "data": {
+        "contact_sheets": [
+          "contact-1.png",
+          "contact-2.png"
+        ],
+        "dense_frames": [
+          "qa-frames/dense-28.5.png",
+          "qa-frames/dense-28.0.png",
+          "qa-frames/dense-27.5.png"
+        ],
+        "agent_note": "Кусок 251-281 с фильма: кролик ставит ловушки, копья, верёвка. Метка THEY WENT TOO FAR держится всю первую сцену (10 с) - долговато. Закадровый голос в начале и в конце, субтитры по словам. С 14 по 19 с почти статичный крупный план кролика, ритм держат вспышки punch. Ник на 11 с (anchor part-2+1), QR на 25.8 с (t_pct 0.86)."
+      },
+      "ok": true
+    },
+    {
+      "id": "silent",
+      "item": 14,
+      "title": "Without sound: retell the video from picture and captions only",
+      "status": "pass",
+      "detail": "retold without sound: Кролика довели, он готовит месть: ловушки и копья. В конце зовут смотреть, что будет дальше.",
+      "data": {
+        "storyboard": [
+          "0.0s [video] THEY WENT TOO FAR | He was / a gentle giant. / Then they / went too far.",
+          "10.0s [video]  | ",
+          "20.0s [video]  | Watch what / the bunny / does next."
+        ]
+      },
+      "ok": true
+    },
+    {
+      "id": "distinct",
+      "item": 15,
+      "title": "Different from the user's previous videos",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "first_hash": "0101010100100111110000110010011110011100001001110100011100101011110011001101001111100100110001010111111111110100111111111100110001111111111011010100010011111100000000001011100001000001001000010001100010000011000000000000000000100000000000000001000000000000",
+        "compared": 4
+      },
+      "ok": true
+    },
+    {
+      "id": "text_rules",
+      "item": 0,
+      "title": "Language, no long dashes, CTA rules, hook",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "cta": 2,
+        "link_in_safe_zone": 2,
+        "script": {
+          "cyrillic": 0.0,
+          "latin": 1.0,
+          "letters": 145
+        }
+      },
+      "ok": true
+    },
+    {
+      "id": "edit_content",
+      "item": 0,
+      "title": "Edit: shots differ, no titles or credits, no black frames > 0.5 s",
+      "status": "pass",
+      "detail": "3/3 different shots, no text screens, longest black 0.0s",
+      "data": {
+        "ok": true,
+        "problems": [],
+        "shots": 3,
+        "distinct_shots": 3,
+        "same_in_a_row": [],
+        "text_frames": [],
+        "longest_text_s": 0.0,
+        "longest_black_s": 0.0
+      },
+      "ok": true
+    },
+    {
+      "id": "beat_sync",
+      "item": 0,
+      "title": "Cuts on strong beats (50 ms), slow-mo on the peak",
+      "status": "pass",
+      "detail": "music is not beat-synced (audio.music.beat_sync is off)",
+      "data": {
+        "applicable": false
+      },
+      "ok": true
+    }
+  ],
+  "checklist": {
+    "items": [
+      {
+        "n": 1,
+        "text": "First frame interesting, not black, not a logo",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 2,
+        "text": "First line gives the result or a question, no greeting",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 3,
+        "text": "Idea reads on the first frame, small and without sound",
+        "answer": "check",
+        "how": "manual"
+      },
+      {
+        "n": 4,
+        "text": "Title: key words first, honest, <= 100 chars, <= 1 emoji",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 5,
+        "text": "Cover: one focus, 3-5 words, readable at 320 px, contrast",
+        "answer": "check",
+        "how": "auto"
+      },
+      {
+        "n": 6,
+        "text": "Event every 2-3 s",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 7,
+        "text": "No pause > 1 s without a visual event",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 8,
+        "text": "Promise from the start is kept by the end",
+        "answer": "check",
+        "how": "manual"
+      },
+      {
+        "n": 9,
+        "text": "No goodbye, the end loops or leads to part 2",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 10,
+        "text": "Clear without sound, captions present",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 11,
+        "text": "One call to action, after the value",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 12,
+        "text": "Link/handle in the safe zone twice, QR scans",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 13,
+        "text": "Pinned comment and description ready",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 14,
+        "text": "Profile ready (remind the user)",
+        "answer": "check",
+        "how": "manual"
+      },
+      {
+        "n": 15,
+        "text": "Everything important inside the safe zone",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 16,
+        "text": "No slop: glow, gradients, empty zones, default font",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 17,
+        "text": "Texts in the right language, no long dashes",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 18,
+        "text": "About -14 LUFS, voice over music",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 19,
+        "text": "'Altered or synthetic content' label checked",
+        "answer": "check",
+        "how": "manual"
+      },
+      {
+        "n": 20,
+        "text": "Clearly different from previous videos",
+        "answer": "yes",
+        "how": "auto"
+      }
+    ],
+    "auto_yes": 15,
+    "auto_total": 16,
+    "manual": 4
+  },
+  "not_checked": [
+    "eyes",
+    "silent"
+  ],
+  "aliases": {
+    "first": [
+      "first_frame"
+    ],
+    "motion": [
+      "first_frame",
+      "rhythm",
+      "layout"
+    ],
+    "pause": [
+      "rhythm"
+    ],
+    "safe": [
+      "safe_zone"
+    ],
+    "qr_decode": [
+      "qr"
+    ],
+    "slop": [
+      "anti_slop"
+    ],
+    "glow": [
+      "anti_slop"
+    ],
+    "gradient": [
+      "anti_slop"
+    ],
+    "lufs": [
+      "loudness"
+    ],
+    "caption": [
+      "captions"
+    ],
+    "duration": [
+      "format"
+    ]
+  },
+  "review": {
+    "at": "2026-10-12 05:35 UTC",
+    "saw": "Кусок 251-281 с фильма: кролик ставит ловушки, копья, верёвка. Метка THEY WENT TOO FAR держится всю первую сцену (10 с) - долговато. Закадровый голос в начале и в конце, субтитры по словам. С 14 по 19 с почти статичный крупный план кролика, ритм держат вспышки punch. Ник на 11 с (anchor part-2+1), QR на 25.8 с (t_pct 0.86).",
+    "silent": "Кролика довели, он готовит месть: ловушки и копья. В конце зовут смотреть, что будет дальше."
+  }
+}

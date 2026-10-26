@@ -1,0 +1,20 @@
+{
+  "ready": false,
+  "issues": [
+    "context_before_reviewed not confirmed",
+    "context_after_reviewed not confirmed",
+    "first_word_complete not confirmed",
+    "last_word_complete not confirmed",
+    "thought_complete not confirmed",
+    "answer_complete not confirmed",
+    "natural_reaction_preserved not confirmed",
+    "audio_listened not confirmed",
+    "motion_reviewed not confirmed",
+    "audio_listened not confirmed",
+    "editorial_accepted not confirmed",
+    "sources_verified not confirmed",
+    "ui_overlay_reviewed not confirmed"
+  ],
+  "technical_qa": "separate",
+  "publication_performance": "not predicted"
+}

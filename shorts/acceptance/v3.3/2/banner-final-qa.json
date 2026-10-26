@@ -1,0 +1,72 @@
+{
+  "motion_verified": true,
+  "elements": {
+    "logo": {
+      "max_mean_abs_delta": 63.24775,
+      "changed": true
+    },
+    "title": {
+      "max_mean_abs_delta": 52.41071951398038,
+      "changed": true
+    },
+    "message": {
+      "max_mean_abs_delta": 26.560310901219992,
+      "changed": true
+    },
+    "cta": {
+      "max_mean_abs_delta": 28.162827501318798,
+      "changed": true
+    }
+  },
+  "qr_samples": [
+    {
+      "t": 0.1,
+      "decoded": "https://t.me/bobvpn_robot?start=ref_5771810401",
+      "exact": true
+    },
+    {
+      "t": 0.5,
+      "decoded": "https://t.me/bobvpn_robot?start=ref_5771810401",
+      "exact": true
+    },
+    {
+      "t": 1.1,
+      "decoded": "https://t.me/bobvpn_robot?start=ref_5771810401",
+      "exact": true
+    },
+    {
+      "t": 1.8,
+      "decoded": "https://t.me/bobvpn_robot?start=ref_5771810401",
+      "exact": true
+    },
+    {
+      "t": 2.9,
+      "decoded": "https://t.me/bobvpn_robot?start=ref_5771810401",
+      "exact": true
+    },
+    {
+      "t": 3.8,
+      "decoded": "https://t.me/bobvpn_robot?start=ref_5771810401",
+      "exact": true
+    },
+    {
+      "t": 4.6,
+      "decoded": "https://t.me/bobvpn_robot?start=ref_5771810401",
+      "exact": true
+    },
+    {
+      "t": 6.0,
+      "decoded": "https://t.me/bobvpn_robot?start=ref_5771810401",
+      "exact": true
+    },
+    {
+      "t": 8.0,
+      "decoded": "https://t.me/bobvpn_robot?start=ref_5771810401",
+      "exact": true
+    }
+  ],
+  "qr_exact_all_samples": true,
+  "quiet_hold_s": 7.2,
+  "human_phone_readability": "required",
+  "ui_overlay": "required"
+}

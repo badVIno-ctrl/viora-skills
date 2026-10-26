@@ -1,0 +1,45 @@
+{
+  "_comment": "Шортс 1 (2.2): сверху зацикленный видео-баннер (машинка), по центру кусок интервью, снизу плашка рекламы с QR. Пути: из папки, где лежит этот файл. Времена main.pieces и srt - по файлу sources/interview.mp4 (0 = начало скачанного куска). 2.2: куски сами доводятся до границ предложений (main.snap), субтитры clean не ложатся на лицо, хук Unbounded + *слово* от руки.",
+  "out": "01-interview.mp4",
+  "main": {
+    "pieces": [
+      {
+        "src": "sources/interview.mp4",
+        "start": 3.0,
+        "end": 11.0
+      },
+      {
+        "src": "sources/interview.mp4",
+        "start": 15.0,
+        "end": 24.0
+      }
+    ],
+    "track": "group",
+    "punch": 0.05,
+    "snap": "sentence",
+    "words": "auto"
+  },
+  "top": {
+    "src": "sources/car.mp4",
+    "start": 5,
+    "h": 480
+  },
+  "captions": {
+    "srt": "sources/interview.srt",
+    "style": "clean",
+    "accent": "#FFD84D"
+  },
+  "hook": {
+    "text": "БОЛЬШЕ $100 000 ЗА *интервью*?",
+    "start": 0,
+    "end": 2.4,
+    "style": "headline"
+  },
+  "adbar": {
+    "brand": "Quattro VPN",
+    "sub": "VPN в Telegram",
+    "url": "https://telegram.me/QuattroVPN_BOT?start=r_O0Xa5v9BEFVvRioY",
+    "tg": "QuattroVPN_BOT",
+    "start": 0.0
+  }
+}

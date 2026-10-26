@@ -1,0 +1,32 @@
+{
+ "duration": 14.733,
+ "video": "one-html-file.mp4",
+ "fps": 30,
+ "schema_version": "1",
+ "engine": "shorts",
+ "engine_version": "1.1.0",
+ "cta_schedule": [
+  {
+   "index": 0,
+   "kind": "handle",
+   "requested": 7.5,
+   "how": "t",
+   "duration": 2.0,
+   "dropped": false,
+   "t": 7.5,
+   "final": 7.5,
+   "reason": "as requested"
+  },
+  {
+   "index": 1,
+   "kind": "qr",
+   "requested": 99.0,
+   "how": "t",
+   "duration": 3.0,
+   "dropped": false,
+   "t": 11.733,
+   "final": 11.733,
+   "reason": "clamped into the video"
+  }
+ ]
+}

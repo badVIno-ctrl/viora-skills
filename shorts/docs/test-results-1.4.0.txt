@@ -1,0 +1,26 @@
+shorts 1.4.0 - 2026-10-18
+
+bash tools/check_all.sh
+Exit code: 0
+269 passed, 9 skipped in 1149.71s
+ALL CHECKS PASSED
+
+python3 -m pytest tests/unit -q -rs -p no:cacheprovider
+244 passed, 2 skipped in 32.96s
+
+python3 -m pytest tests/unit/test_v14_handoff.py tests/unit/test_memory.py tests/unit/test_cover.py -q -p no:cacheprovider
+63 passed in 17.94s
+
+python3 -m pytest tests/e2e -q -rs -p no:cacheprovider
+1 passed, 7 skipped
+
+Skipped:
+4 network tests (SHORTS_NETWORK not enabled)
+3 optional local Piper/faster-whisper tests (packages/models not installed)
+2 sibling viora-v8 integration checks (not included in supplied skill archive)
+
+Additional checks:
+package CLI executed on a teaching fixture, plain-text sections verified.
+29 research files compared byte-for-byte to v3.1 input archive.
+No generated MP4, private prefs, history, credentials or caches in release ZIP.
+Actual paid image/TTS API calls and publication performance were not tested.

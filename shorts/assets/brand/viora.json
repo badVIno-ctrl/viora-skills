@@ -1,0 +1,25 @@
+{
+  "description": "VIORA STUDIO: black air, white caps, one red accent #E63946 (source of truth for Viora Studio, its sync copies this file), thin wide logo",
+  "palette": {
+    "bg": "#000000",
+    "fg": "#F5F5F5",
+    "accent": "#E63946"
+  },
+  "fonts": {
+    "display": "assets/fonts/Montserrat-ExtraBold.ttf",
+    "body": "assets/fonts/Jost-Medium.ttf",
+    "logo": "assets/fonts/Jost-Light.ttf"
+  },
+  "logo_text": "VIORA",
+  "logo_sub": "STUDIO",
+  "logo_tracking": 0.45,
+  "highlight_mode": "color",
+  "label_style": "plate",
+  "upper": true,
+  "emotion_default": "trust",
+  "tone": "minimal or punch, two registers",
+  "line_width": 4,
+  "radius": 0,
+  "effects": {},
+  "name": "viora"
+}

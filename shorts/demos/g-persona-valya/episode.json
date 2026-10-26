@@ -1,0 +1,142 @@
+{
+  "title": "Почему рассада вытягивается",
+  "slug": "01-pochemu-rassada-vytyagivaetsya",
+  "aspect": "9:16",
+  "lang": "ru",
+  "voice": "ru-female-1",
+  "speed": 0.98,
+  "brand": "@babavalya_ogorod · ИИ-персонаж",
+  "style": {
+    "captions": "caps"
+  },
+  "cast": {
+    "host": {
+      "look": "granny",
+      "detail": "apron",
+      "hat": "scarf",
+      "hat_color": "#3F6FB5",
+      "top_color": "#4E8A4A",
+      "name": "Баба Валя"
+    }
+  },
+  "scenes": [
+    {
+      "say": "Рассада тянется, как ниточка?",
+      "shot": "close",
+      "actors": [
+        {
+          "id": "host",
+          "pose": "point",
+          "emotion": "smile",
+          "face": "front",
+          "gaze": "camera",
+          "at": 0.5
+        }
+      ],
+      "set": {
+        "id": "dacha",
+        "time": "day"
+      },
+      "hud": [
+        {
+          "type": "title",
+          "text": "Рассада тянется?"
+        }
+      ]
+    },
+    {
+      "say": "Вода тут ни при чём.",
+      "shot": "medium",
+      "actors": [
+        {
+          "id": "host",
+          "pose": "point",
+          "emotion": "smile",
+          "face": "front",
+          "gaze": "camera",
+          "at": 0.5
+        }
+      ]
+    },
+    {
+      "say": "Главная причина тонких длинных стеблей: мало *света*.",
+      "shot": "wide",
+      "actors": [
+        {
+          "id": "host",
+          "pose": "think",
+          "emotion": "calm",
+          "face": "front",
+          "gaze": "camera",
+          "at": 0.5
+        }
+      ]
+    },
+    {
+      "say": "На подоконнике его не хватает.",
+      "shot": "close",
+      "actors": [
+        {
+          "id": "host",
+          "pose": "think",
+          "emotion": "calm",
+          "face": "front",
+          "gaze": "camera",
+          "at": 0.5
+        }
+      ]
+    },
+    {
+      "say": "Повесь лампу в пяти-десяти сантиметрах над листьями.",
+      "shot": "medium",
+      "actors": [
+        {
+          "id": "host",
+          "pose": "hold",
+          "emotion": "calm",
+          "face": "front",
+          "gaze": "camera",
+          "at": 0.5,
+          "hold": "pot"
+        }
+      ]
+    },
+    {
+      "say": "Свети двенадцать-шестнадцать часов, а на ночь выключай.",
+      "scheme": {
+        "type": "closeup",
+        "bg": "paper",
+        "title": "12-16 часов света",
+        "item": "pot"
+      }
+    },
+    {
+      "say": "Новые листья пойдут плотные, и к окну рассада тянуться *перестанет*.",
+      "shot": "wide",
+      "actors": [
+        {
+          "id": "host",
+          "pose": "cheer",
+          "emotion": "smile",
+          "face": "front",
+          "gaze": "camera",
+          "at": 0.5
+        }
+      ]
+    },
+    {
+      "say": "А у тебя рассада на подоконнике или под лампой? Напиши, милок.",
+      "shot": "close",
+      "actors": [
+        {
+          "id": "host",
+          "pose": "wave",
+          "emotion": "smile",
+          "face": "front",
+          "gaze": "camera",
+          "at": 0.5
+        }
+      ]
+    }
+  ]
+}

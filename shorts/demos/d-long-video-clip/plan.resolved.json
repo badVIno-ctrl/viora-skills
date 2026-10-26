@@ -1,0 +1,137 @@
+{
+  "schema_version": "1.1",
+  "meta": {
+    "name": "bbb-clip-1",
+    "language": "en",
+    "platforms": [
+      "youtube_shorts",
+      "tiktok"
+    ],
+    "duration_target": [
+      20.0,
+      45.0
+    ],
+    "loop": true,
+    "fps": 30
+  },
+  "layout": {
+    "mode": "center_bottom",
+    "bottom": {
+      "height_pct": 16,
+      "handle": "VioraStudio",
+      "links": [
+        "https://t.me/VioraStudio"
+      ]
+    },
+    "cta_in_center": [
+      {
+        "anchor": {
+          "scene": "part-2",
+          "offset": 1.0
+        },
+        "duration": 2.0,
+        "kind": "handle",
+        "text": "VioraStudio"
+      },
+      {
+        "t_pct": 0.86,
+        "duration": 3,
+        "kind": "qr",
+        "url": "https://t.me/VioraStudio"
+      }
+    ]
+  },
+  "brand": {
+    "preset": "viora",
+    "register": "punch"
+  },
+  "captions": {
+    "enabled": true,
+    "max_words": 3,
+    "highlight": "accent",
+    "subs": {}
+  },
+  "audio": {
+    "voice": {
+      "engine": "auto"
+    },
+    "target_lufs": -14,
+    "sfx_auto": false,
+    "music": {
+      "source": "assets/audio/bed.mp3"
+    }
+  },
+  "fx": {
+    "punch": [
+      3.0,
+      6.0,
+      8.5,
+      10.0,
+      14.0,
+      16.5,
+      19.0,
+      20.0,
+      22.5,
+      24.5
+    ]
+  },
+  "scenes": [
+    {
+      "id": "part-1",
+      "why": "hook: the gentle giant and the trouble",
+      "duration": 10.0,
+      "source": {
+        "type": "video",
+        "ref": "media/film.mp4",
+        "in": 251.5,
+        "out": 261.5,
+        "keep_audio": true
+      },
+      "say": "He was a gentle giant. Then they went too far.",
+      "on_screen_text": "THEY WENT TOO FAR"
+    },
+    {
+      "id": "part-2",
+      "why": "window score 0.81",
+      "duration": 10.0,
+      "source": {
+        "type": "video",
+        "ref": "media/film.mp4",
+        "in": 261.5,
+        "out": 271.5,
+        "keep_audio": true
+      }
+    },
+    {
+      "id": "part-3",
+      "why": "window score 0.81",
+      "duration": 10.0,
+      "source": {
+        "type": "video",
+        "ref": "media/film.mp4",
+        "in": 271.5,
+        "out": 281.5,
+        "keep_audio": true
+      },
+      "say": "Watch what the bunny does next."
+    }
+  ],
+  "metadata": {
+    "window": [
+      251.5,
+      281.5
+    ],
+    "signals": {
+      "loudness": 0.888,
+      "cuts": 0.725
+    },
+    "transcript_words": 0,
+    "topic": "Big Buck Bunny: the bunny strikes back",
+    "hashtags": [
+      "shorts",
+      "bigbuckbunny",
+      "blender",
+      "animation"
+    ]
+  }
+}

@@ -1,0 +1,65 @@
+[
+  {
+    "id": "shot0",
+    "final_start": 0,
+    "final_end": 2.125,
+    "source": "../media/patsan-lifted.mp4",
+    "source_in": 0,
+    "source_out": 2.125,
+    "role": "Знакомство с героем"
+  },
+  {
+    "id": "shot1",
+    "final_start": 2.125,
+    "final_end": 3.572,
+    "source": "../media/patsan-lifted.mp4",
+    "source_in": 3.0,
+    "source_out": 4.447,
+    "role": "Ответ, школа"
+  },
+  {
+    "id": "shot2",
+    "final_start": 3.572,
+    "final_end": 4.759,
+    "source": "../media/patsan-lifted.mp4",
+    "source_in": 5.1,
+    "source_out": 6.287,
+    "role": "Переход к улице"
+  },
+  {
+    "id": "shot3",
+    "final_start": 4.759,
+    "final_end": 6.485,
+    "source": "../media/patsan-lifted.mp4",
+    "source_in": 7.0,
+    "source_out": 8.726,
+    "role": "Смена настроения"
+  },
+  {
+    "id": "shot4",
+    "final_start": 6.485,
+    "final_end": 7.752,
+    "source": "../media/patsan-lifted.mp4",
+    "source_in": 9.8,
+    "source_out": 11.067,
+    "role": "Ночная среда"
+  },
+  {
+    "id": "shot5",
+    "final_start": 7.752,
+    "final_end": 8.85,
+    "source": "../media/patsan-lifted.mp4",
+    "source_in": 12.0,
+    "source_out": 13.098,
+    "role": "Сближение с группой"
+  },
+  {
+    "id": "shot6",
+    "final_start": 8.85,
+    "final_end": 12.05,
+    "source": "../media/patsan-lifted.mp4",
+    "source_in": 14.4,
+    "source_out": 17.6,
+    "role": "Групповой финал"
+  }
+]

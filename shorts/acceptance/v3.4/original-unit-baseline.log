@@ -1,0 +1,20 @@
+..................................s..................................... [ 25%]
+.......................................................s.......F........ [ 51%]
+........................................................................ [ 76%]
+.................................................................        [100%]
+=================================== FAILURES ===================================
+____________________________ test_english_template _____________________________
+
+    def test_english_template():
+        plan = mini_plan()
+        plan["meta"]["language"] = "en"
+        plan["scenes"][0]["say"] = "Two free sites you will use."
+        plan["scenes"][0]["on_screen_text"] = "2 FREE SITES"
+        m = PK.build(plan, manifest("en"), PK.auto_draft(plan, manifest("en"), "en"), M.load())
+>       assert not m["errors"] and "Full video on the channel." in m["description"]
+E       AssertionError: assert (not [] and 'Full video on the channel.' in '#ai #tech\nTwo free sites you will use.\n\n\n\n#shorts #tools #productivity\n')
+
+tests/unit/test_meta.py:54: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_meta.py::test_english_template - AssertionError: asser...
+1 failed, 278 passed, 2 skipped in 46.27s

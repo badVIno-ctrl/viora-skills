@@ -1,0 +1,752 @@
+{
+  "engine": "shorts",
+  "version": "1.1.0",
+  "name": "bbb-edit",
+  "video": "bbb-edit.mp4",
+  "plan_dir": "/data/work/repo/skills/shorts/examples",
+  "fps": 30,
+  "duration": 20.267,
+  "language": "en",
+  "platforms": [
+    "youtube_shorts"
+  ],
+  "duration_target": [
+    14.0,
+    26.0
+  ],
+  "loop": true,
+  "layout": {
+    "mode": "center_only",
+    "top": null,
+    "center": {
+      "x": 0,
+      "y": 0,
+      "w": 1080,
+      "h": 1920
+    },
+    "bottom": null,
+    "safe": {
+      "rect": {
+        "x": 48,
+        "y": 288,
+        "w": 840,
+        "h": 960
+      },
+      "exclusions": [],
+      "platforms": [
+        "youtube_shorts"
+      ]
+    },
+    "caption_band": {
+      "x": 48,
+      "y": 928,
+      "w": 840,
+      "h": 320
+    },
+    "label_box": {
+      "x": 48,
+      "y": 304,
+      "w": 840,
+      "h": 240
+    },
+    "cta_box": {
+      "x": 48,
+      "y": 304,
+      "w": 840,
+      "h": 608
+    },
+    "center_pct": 100.0
+  },
+  "brand": {
+    "name": "viora",
+    "palette": {
+      "bg": "#000000",
+      "fg": "#F5F5F5",
+      "accent": "#E63946"
+    },
+    "fonts": {
+      "display": "/data/work/repo/skills/shorts/assets/fonts/Montserrat-ExtraBold.ttf",
+      "body": "/data/work/repo/skills/shorts/assets/fonts/Jost-Medium.ttf",
+      "logo": "/data/work/repo/skills/shorts/assets/fonts/Jost-Light.ttf"
+    },
+    "font_families": {
+      "display": "Montserrat ExtraBold",
+      "body": "Jost Medium"
+    },
+    "caption": {
+      "fill": "#FFFFFF",
+      "accent": "#ED6E78",
+      "outline": "#000000",
+      "highlight_mode": "color"
+    },
+    "line_width": 4,
+    "radius": 0,
+    "label_style": "plate",
+    "upper": true,
+    "register": "",
+    "effects": {},
+    "fonts_reason": "",
+    "warnings": []
+  },
+  "top": {
+    "kind": "none"
+  },
+  "bottom": null,
+  "scenes": [
+    {
+      "id": "shot-01",
+      "type": "film",
+      "start": 0.0,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [
+        "label plate #E63946 gives 5.0:1, changed to #ED6E78 (7.1:1 with #000000). To keep the exact colour, set brand.label_style to \"outline\" or pick an accent with 7:1"
+      ],
+      "say": "",
+      "on_screen_text": "BIG BUCK BUNNY",
+      "why": "best: moment 256.0s (score 0.976)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 258.0,
+        "out": 259.067
+      }
+    },
+    {
+      "id": "shot-02",
+      "type": "film",
+      "start": 1.0667,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "hero: moment 261.0s (score 0.956); slow-mo on the peak",
+      "speed": [
+        {
+          "t": 0,
+          "rate": 0.5
+        }
+      ],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 260.733,
+        "out": 261.267
+      }
+    },
+    {
+      "id": "shot-03",
+      "type": "film",
+      "start": 2.1333,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 195.0s (score 0.894)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 195.0,
+        "out": 196.067
+      }
+    },
+    {
+      "id": "shot-04",
+      "type": "film",
+      "start": 3.2,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 206.5s (score 0.682)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 206.5,
+        "out": 207.567
+      }
+    },
+    {
+      "id": "shot-05",
+      "type": "film",
+      "start": 4.2667,
+      "length": 1.1,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 294.0s (score 0.791)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 294.0,
+        "out": 295.1
+      }
+    },
+    {
+      "id": "shot-06",
+      "type": "film",
+      "start": 5.3667,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 335.0s (score 0.81)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 335.0,
+        "out": 336.067
+      }
+    },
+    {
+      "id": "shot-07",
+      "type": "film",
+      "start": 6.4333,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 399.5s (score 0.741)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 399.5,
+        "out": 400.567
+      }
+    },
+    {
+      "id": "shot-08",
+      "type": "film",
+      "start": 7.5,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 409.0s (score 0.736)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 409.0,
+        "out": 410.067
+      }
+    },
+    {
+      "id": "shot-09",
+      "type": "film",
+      "start": 8.5667,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 419.5s (score 0.94)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 419.5,
+        "out": 420.567
+      }
+    },
+    {
+      "id": "shot-10",
+      "type": "film",
+      "start": 9.6333,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 427.0s (score 0.853)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 427.0,
+        "out": 428.067
+      }
+    },
+    {
+      "id": "shot-11",
+      "type": "film",
+      "start": 10.7,
+      "length": 1.1,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 195.0s (score 0.894)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 196.317,
+        "out": 197.417
+      }
+    },
+    {
+      "id": "shot-12",
+      "type": "film",
+      "start": 11.8,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 206.5s (score 0.682)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 207.817,
+        "out": 208.883
+      }
+    },
+    {
+      "id": "shot-13",
+      "type": "film",
+      "start": 12.8667,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 294.0s (score 0.791)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 295.35,
+        "out": 296.417
+      }
+    },
+    {
+      "id": "shot-14",
+      "type": "film",
+      "start": 13.9333,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 335.0s (score 0.81)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 336.317,
+        "out": 337.383
+      }
+    },
+    {
+      "id": "shot-15",
+      "type": "film",
+      "start": 15.0,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 399.5s (score 0.741)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 400.817,
+        "out": 401.883
+      }
+    },
+    {
+      "id": "shot-16",
+      "type": "film",
+      "start": 16.0667,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 409.0s (score 0.736)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 410.317,
+        "out": 411.383
+      }
+    },
+    {
+      "id": "shot-17",
+      "type": "film",
+      "start": 17.1333,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 419.5s (score 0.94)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 420.817,
+        "out": 421.883
+      }
+    },
+    {
+      "id": "shot-18",
+      "type": "film",
+      "start": 18.2,
+      "length": 1.0667,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "walk: moment 427.0s (score 0.853)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 428.317,
+        "out": 429.383
+      }
+    },
+    {
+      "id": "shot-19",
+      "type": "film",
+      "start": 19.2667,
+      "length": 1.0,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "",
+      "why": "loop: moment 256.0s (score 0.976)",
+      "speed": [],
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 257.267,
+        "out": 258.0
+      }
+    }
+  ],
+  "music_sync": {
+    "enabled": true,
+    "strong_beats": [
+      0.0,
+      1.068,
+      2.136,
+      3.204,
+      4.272,
+      5.363,
+      6.432,
+      7.5,
+      8.568,
+      9.636,
+      10.704,
+      11.795,
+      12.864,
+      13.932,
+      15.0,
+      16.068,
+      17.136,
+      18.204,
+      19.272
+    ],
+    "music_start": 2.183,
+    "from": "plan"
+  },
+  "cta_schedule": [
+    {
+      "index": 0,
+      "kind": "handle",
+      "requested": 10.0,
+      "how": "t",
+      "duration": 2.0,
+      "dropped": false,
+      "t": 10.0,
+      "final": 10.0,
+      "reason": "as requested"
+    },
+    {
+      "index": 1,
+      "kind": "qr",
+      "requested": 16.8,
+      "how": "t",
+      "duration": 3.0,
+      "dropped": false,
+      "t": 16.8,
+      "final": 16.8,
+      "reason": "as requested"
+    }
+  ],
+  "alias_notes": [],
+  "schema_version": "1.1",
+  "overlays": [
+    {
+      "kind": "label",
+      "box": [
+        160,
+        304,
+        769,
+        608
+      ],
+      "text": "BIG BUCK BUNNY",
+      "min_font": 104,
+      "pairs": [
+        [
+          "#000000",
+          "#ED6E78",
+          7.0
+        ]
+      ],
+      "url": "",
+      "qr_box": null,
+      "note": "label plate #E63946 gives 5.0:1, changed to #ED6E78 (7.1:1 with #000000). To keep the exact colour, set brand.label_style to \"outline\" or pick an accent with 7:1",
+      "t0": 0.0,
+      "t1": 1.067
+    },
+    {
+      "kind": "cta_handle",
+      "box": [
+        56,
+        504,
+        880,
+        710
+      ],
+      "text": "@VioraStudio",
+      "min_font": 96,
+      "pairs": [
+        [
+          "#F5F5F5",
+          "#000000",
+          7.0
+        ]
+      ],
+      "url": "",
+      "qr_box": null,
+      "note": "",
+      "t0": 10.0,
+      "t1": 12.0
+    },
+    {
+      "kind": "cta_qr",
+      "box": [
+        216,
+        320,
+        716,
+        888
+      ],
+      "text": "t.me/VioraStudio",
+      "min_font": 56,
+      "pairs": [
+        [
+          "#000000",
+          "#F5F5F5",
+          7.0
+        ]
+      ],
+      "url": "https://t.me/VioraStudio",
+      "qr_box": [
+        262,
+        352,
+        669,
+        759
+      ],
+      "note": "",
+      "t0": 16.8,
+      "t1": 19.8
+    }
+  ],
+  "captions": {
+    "enabled": false,
+    "chunks": [],
+    "words_spoken": [],
+    "fill": "#FFFFFF",
+    "accent": "#ED6E78",
+    "outline": "#000000",
+    "highlight": "accent"
+  },
+  "events": [
+    {
+      "t": 0.0,
+      "kind": "scene",
+      "id": "shot-01"
+    },
+    {
+      "t": 0.0,
+      "kind": "label"
+    },
+    {
+      "t": 1.0666666666666667,
+      "kind": "scene",
+      "id": "shot-02"
+    },
+    {
+      "t": 2.1333,
+      "kind": "punch"
+    },
+    {
+      "t": 2.1333333333333333,
+      "kind": "scene",
+      "id": "shot-03"
+    },
+    {
+      "t": 3.2,
+      "kind": "scene",
+      "id": "shot-04"
+    },
+    {
+      "t": 4.266666666666667,
+      "kind": "scene",
+      "id": "shot-05"
+    },
+    {
+      "t": 4.2667,
+      "kind": "punch"
+    },
+    {
+      "t": 5.366666666666667,
+      "kind": "scene",
+      "id": "shot-06"
+    },
+    {
+      "t": 6.4333,
+      "kind": "punch"
+    },
+    {
+      "t": 6.433333333333334,
+      "kind": "scene",
+      "id": "shot-07"
+    },
+    {
+      "t": 7.5,
+      "kind": "scene",
+      "id": "shot-08"
+    },
+    {
+      "t": 8.566666666666666,
+      "kind": "scene",
+      "id": "shot-09"
+    },
+    {
+      "t": 8.5667,
+      "kind": "punch"
+    },
+    {
+      "t": 9.633333333333333,
+      "kind": "scene",
+      "id": "shot-10"
+    },
+    {
+      "t": 10.0,
+      "kind": "cta_handle"
+    },
+    {
+      "t": 10.7,
+      "kind": "scene",
+      "id": "shot-11"
+    },
+    {
+      "t": 10.7,
+      "kind": "punch"
+    },
+    {
+      "t": 11.799999999999999,
+      "kind": "scene",
+      "id": "shot-12"
+    },
+    {
+      "t": 12.866666666666665,
+      "kind": "scene",
+      "id": "shot-13"
+    },
+    {
+      "t": 12.8667,
+      "kind": "punch"
+    },
+    {
+      "t": 13.933333333333332,
+      "kind": "scene",
+      "id": "shot-14"
+    },
+    {
+      "t": 14.999999999999998,
+      "kind": "scene",
+      "id": "shot-15"
+    },
+    {
+      "t": 15.0,
+      "kind": "punch"
+    },
+    {
+      "t": 16.066666666666666,
+      "kind": "scene",
+      "id": "shot-16"
+    },
+    {
+      "t": 16.8,
+      "kind": "cta_qr"
+    },
+    {
+      "t": 17.1333,
+      "kind": "punch"
+    },
+    {
+      "t": 17.133333333333333,
+      "kind": "scene",
+      "id": "shot-17"
+    },
+    {
+      "t": 18.2,
+      "kind": "scene",
+      "id": "shot-18"
+    },
+    {
+      "t": 19.266666666666666,
+      "kind": "scene",
+      "id": "shot-19"
+    },
+    {
+      "t": 19.2667,
+      "kind": "punch"
+    }
+  ],
+  "sfx": [],
+  "audio": {
+    "voice": false
+  },
+  "fx": {
+    "punch": [
+      2.1333,
+      4.2667,
+      6.4333,
+      8.5667,
+      10.7,
+      12.8667,
+      15.0,
+      17.1333,
+      19.2667
+    ],
+    "flash": [
+      1.0667
+    ]
+  },
+  "effects": {},
+  "issues": [],
+  "render_seconds": 55.3,
+  "forced": false
+}

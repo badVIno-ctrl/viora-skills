@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" role="img" aria-label="Учебный макет: пропущенное отрицание в субтитрах">
+<rect width="1080" height="1920" fill="#F9F8F7"/>
+<g font-family="Arial" fill="#202124">
+<rect x="84" y="80" width="520" height="80" rx="16" fill="#EAF2FF" stroke="none" stroke-width="2"/>
+<text x="108" y="135" font-size="44" font-weight="700" fill="#145BBC">Учебный макет</text>
+<text x="84" y="218" font-size="44" font-weight="700">Редактор-пример</text>
+<text x="84" y="332" font-size="84" font-weight="700">Одно «не»</text>
+<text x="84" y="434" font-size="84" font-weight="700">меняет смысл</text>
+<text x="84" y="514" font-size="48" font-weight="400">Проверка субтитров</text>
+<text x="84" y="574" font-size="48" font-weight="400">перед публикацией</text>
+<text x="84" y="662" font-size="44" font-weight="700">НАПИСАННЫЙ ОРИГИНАЛ</text>
+<text x="84" y="724" font-size="48" font-weight="400">Мы не публикуем без проверки.</text>
+<rect x="84" y="790" width="912" height="270" rx="16" fill="#FFFFFF" stroke="#D2D2D0" stroke-width="2"/>
+<text x="120" y="856" font-size="44" font-weight="700">ДО · ПРОПУЩЕНО «НЕ»</text>
+<text x="120" y="942" font-size="56" font-weight="400">Мы публикуем</text>
+<text x="120" y="1014" font-size="56" font-weight="400">без проверки.</text>
+<rect x="84" y="1100" width="912" height="270" rx="16" fill="#EAF2FF" stroke="#145BBC" stroke-width="2"/>
+<text x="120" y="1166" font-size="44" font-weight="700" fill="#145BBC">ПОСЛЕ СВЕРКИ</text>
+<text x="120" y="1252" font-size="56" font-weight="700">Мы не публикуем</text>
+<text x="120" y="1324" font-size="56" font-weight="700">без проверки.</text>
+<path d="M84 1440 H996" stroke="#D2D2D0" stroke-width="2"/>
+<text x="84" y="1520" font-size="56" font-weight="700" fill="#145BBC">Сверь с оригиналом</text>
+<text x="84" y="1650" font-size="44" font-weight="400">Вымышленный сервис.</text>
+<text x="84" y="1710" font-size="44" font-weight="400">Не запись продукта.</text>
+</g></svg>

@@ -1,0 +1,14 @@
+out/
+.cache/
+memory/prefs.json
+memory/history.json
+memory/metrics.json
+secrets/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.mp4
+!assets/footage/*.mp4
+*.wav
+*.mp3
+!assets/audio/*.mp3

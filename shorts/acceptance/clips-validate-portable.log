@@ -1,0 +1,2 @@
+[warn] author_layer: foreign material (film/video/background gameplay) needs >= 2 own layers, one of them voice|thesis|own_footage|compare (now: none): add author_layer [{kind: voice|thesis|own_footage|compare|text_point|sound_design|interactive, note}] (reused content risk; your own long video: own_footage)
+OK: 0 errors, 1 warnings

@@ -1,0 +1,4 @@
+WARNING faster-whisper is not installed: `uv pip install faster-whisper`, or pass --transcript; cutting without captions
+[
+  "acceptance/clips-generated/clip-1.plan.json"
+]

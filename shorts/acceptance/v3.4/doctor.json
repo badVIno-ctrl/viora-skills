@@ -1,0 +1,54 @@
+{
+  "tools": {
+    "ffmpeg": "ffmpeg version 7.0.2-static https://johnvansickle.com/ffmpeg/  Copyright (c) 200",
+    "ffprobe": "ffprobe version 7.0.2-static https://johnvansickle.com/ffmpeg/  Copyright (c) 20",
+    "libass": true,
+    "ebur128": true,
+    "yt-dlp": "2026.08.19",
+    "js_runtime_for_youtube": "/vercel/runtimes/node24/bin/node",
+    "browser": "/usr/local/bin/chromium"
+  },
+  "python": {
+    "playwright": true,
+    "edge_tts": true,
+    "segno": true,
+    "cv2": true,
+    "numpy": true,
+    "PIL": true,
+    "jsonschema": true,
+    "librosa": true,
+    "pyloudnorm": true,
+    "fontTools": true,
+    "faster_whisper": false,
+    "piper": false
+  },
+  "env": {
+    "ELEVENLABS_API_KEY": false,
+    "OPENAI_API_KEY": false,
+    "GEMINI_API_KEY": false,
+    "GOOGLE_API_KEY": false,
+    "SHORTS_PIPER_MODEL": false,
+    "SHORTS_CHROME": false,
+    "SHORTS_HOME": false,
+    "SHORTS_MEMORY": false,
+    "SHORTS_CACHE": false
+  },
+  "notes": [
+    "no image generator: covers are made from video frames + a prompt for the user",
+    "faster-whisper missing: long videos are cut without captions unless a transcript is given (bash tools/install.sh --local)"
+  ],
+  "tts_engines": [
+    "edge"
+  ],
+  "image_generator": null,
+  "ok": true,
+  "verification": {
+    "edge_tts": "проверено (сеть, tests/e2e/test_network.py)",
+    "piper": "не установлено (bash tools/install.sh --local)",
+    "faster_whisper": "не установлено (bash tools/install.sh --local)",
+    "elevenlabs": "не проверено (нет ключа ELEVENLABS_API_KEY в песочнице)",
+    "openai_tts": "не проверено (нет ключа OPENAI_API_KEY)",
+    "openai_image": "не проверено (нет ключа OPENAI_API_KEY; тест подменяет вызов)",
+    "gemini_image": "не проверено (нет ключа GEMINI_API_KEY; тест подменяет вызов)"
+  }
+}

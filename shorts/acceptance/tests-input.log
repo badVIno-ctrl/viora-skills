@@ -1,0 +1,33 @@
+== doctor
+Traceback (most recent call last):
+  File "/vercel/sandbox/data/work/shorts/tools/shorts.py", line 426, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/vercel/sandbox/data/work/shorts/tools/shorts.py", line 419, in main
+    return a.fn(a)
+           ~~~~^^^
+  File "/vercel/sandbox/data/work/shorts/tools/shorts.py", line 231, in cmd_doctor
+    rep = doctor(deep=getattr(a, "deep", False))
+  File "/vercel/sandbox/data/work/shorts/tools/shortskit/doctor.py", line 68, in doctor
+    from .meta.cover import generator
+  File "/vercel/sandbox/data/work/shorts/tools/shortskit/meta/cover.py", line 28, in <module>
+    from ..engine.graphics import plate_colors
+  File "/vercel/sandbox/data/work/shorts/tools/shortskit/engine/graphics.py", line 12, in <module>
+    import segno
+ModuleNotFoundError: No module named 'segno'
+Traceback (most recent call last):
+  File "/vercel/sandbox/data/work/shorts/tools/shorts.py", line 426, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/vercel/sandbox/data/work/shorts/tools/shorts.py", line 419, in main
+    return a.fn(a)
+           ~~~~^^^
+  File "/vercel/sandbox/data/work/shorts/tools/shorts.py", line 231, in cmd_doctor
+    rep = doctor(deep=getattr(a, "deep", False))
+  File "/vercel/sandbox/data/work/shorts/tools/shortskit/doctor.py", line 68, in doctor
+    from .meta.cover import generator
+  File "/vercel/sandbox/data/work/shorts/tools/shortskit/meta/cover.py", line 28, in <module>
+    from ..engine.graphics import plate_colors
+  File "/vercel/sandbox/data/work/shorts/tools/shortskit/engine/graphics.py", line 12, in <module>
+    import segno
+ModuleNotFoundError: No module named 'segno'

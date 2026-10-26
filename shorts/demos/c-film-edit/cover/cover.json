@@ -1,0 +1,227 @@
+{
+  "generator": null,
+  "generated": false,
+  "words": [
+    "BIG",
+    "BUCK",
+    "BUNNY"
+  ],
+  "symbol": "play",
+  "ideas": [
+    "minimal",
+    "hero",
+    "split"
+  ],
+  "recommended": "A",
+  "register": "",
+  "variants": [
+    {
+      "file": "cover-A-minimal-16x9.jpg",
+      "variant": "minimal",
+      "format": "16x9",
+      "source": "code:symbol",
+      "errors": [],
+      "box": [
+        80,
+        378,
+        735,
+        650
+      ],
+      "font_px": 126,
+      "text_color": "#FFFFFF",
+      "symbol": "play",
+      "symbol_box": [
+        768,
+        72,
+        1214,
+        518
+      ],
+      "idea": "symbol",
+      "graphic_boxes": [
+        [
+          0,
+          0,
+          1280,
+          720
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.132,
+        "blob": 0.045,
+        "tone": 5.7
+      }
+    },
+    {
+      "file": "cover-A-minimal-9x16.jpg",
+      "variant": "minimal",
+      "format": "9x16",
+      "source": "code:symbol",
+      "errors": [],
+      "box": [
+        72,
+        904,
+        863,
+        1232
+      ],
+      "font_px": 152,
+      "text_color": "#FFFFFF",
+      "symbol": "play",
+      "symbol_box": [
+        228,
+        345,
+        708,
+        825
+      ],
+      "idea": "symbol",
+      "graphic_boxes": [
+        [
+          0,
+          0,
+          1080,
+          1920
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.069,
+        "blob": 0.025,
+        "tone": 8.0
+      }
+    },
+    {
+      "file": "cover-B-hero-16x9.jpg",
+      "variant": "hero",
+      "format": "16x9",
+      "source": "frame:014.50-shot-14",
+      "errors": [],
+      "box": [
+        88,
+        131,
+        596,
+        557
+      ],
+      "font_px": 132,
+      "text_color": "#FFFFFF",
+      "text_left": true,
+      "idea": "hero",
+      "graphic_boxes": [
+        [
+          75,
+          143,
+          620,
+          566
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.284,
+        "blob": 0.199,
+        "tone": 7.0
+      }
+    },
+    {
+      "file": "cover-B-hero-9x16.jpg",
+      "variant": "hero",
+      "format": "9x16",
+      "source": "frame:014.50-shot-14",
+      "errors": [],
+      "box": [
+        112,
+        406,
+        799,
+        690
+      ],
+      "font_px": 132,
+      "text_color": "#FFFFFF",
+      "text_left": true,
+      "idea": "hero",
+      "graphic_boxes": [
+        [
+          99,
+          418,
+          822,
+          699
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.281,
+        "blob": 0.261,
+        "tone": 9.4
+      }
+    },
+    {
+      "file": "cover-C-split-16x9.jpg",
+      "variant": "split",
+      "format": "16x9",
+      "source": "frame:013.43-shot-13",
+      "errors": [],
+      "box": [
+        64,
+        555,
+        1017,
+        665
+      ],
+      "font_px": 102,
+      "text_color": "#FFFFFF",
+      "idea": "split",
+      "solid_band": false,
+      "graphic_boxes": [
+        [
+          0,
+          504,
+          1280,
+          720
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.359,
+        "blob": 0.2,
+        "tone": 4.1
+      }
+    },
+    {
+      "file": "cover-C-split-9x16.jpg",
+      "variant": "split",
+      "format": "9x16",
+      "source": "frame:013.43-shot-13",
+      "errors": [],
+      "box": [
+        72,
+        606,
+        852,
+        930
+      ],
+      "font_px": 150,
+      "text_color": "#FFFFFF",
+      "idea": "split",
+      "solid_band": false,
+      "graphic_boxes": [
+        [
+          0,
+          576,
+          1080,
+          960
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.34,
+        "blob": 0.219,
+        "tone": 4.6
+      }
+    }
+  ],
+  "prompt": "cover/prompt.md",
+  "notes": [],
+  "errors": [],
+  "ask_user": "No image generator: A is drawn by code, B and C use frames. For a model image, use cover/prompt.md and send the file."
+}

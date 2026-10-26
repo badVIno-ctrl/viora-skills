@@ -1,0 +1,89 @@
+video: acceptance/out-long/long-8min-training.mp4  (480.0s, render 275.08s)
+# Подписи: long-8min-training
+
+## Названия (от громкого к спокойному)
+
+1. `УЧЕБНАЯ ПРОВЕРКА ДЛИННОГО ЭКСПОРТА 😱 #проверка`  (громкость 1, intrigue, 46 зн.)
+   - капс, эмодзи, крупное обещание
+2. `УЧЕБНАЯ ПРОВЕРКА ДЛИННОГО ЭКСПОРТА #проверка`  (громкость 2, intrigue, 44 зн.) **<- рекомендую**
+   - капс без эмодзи, для ленты
+3. `Учебная проверка длинного экспорта: смотри, как это работает #проверка`  (громкость 3, intrigue, 70 зн.)
+   - любопытство, без капса
+4. `Учебная проверка длинного экспорта #проверка`  (громкость 4, search, 44 зн.)
+   - суть в начале
+5. `Учебная проверка длинного экспорта - коротко и по делу #проверка`  (громкость 5, search, 64 зн.)
+   - поисковая фраза, спокойно
+
+Почему рекомендую: капс без эмодзи, для ленты
+
+## Описание
+
+```
+#проверка
+Учебная проверка длинного экспорта
+
+Полное видео - на канале.
+
+#shorts #ии #ai #полезное
+```
+
+## Закреплённый комментарий
+
+```
+Учебная проверка длинного экспорта.
+Продолжение - в следующем ролике.
+Что показать следующим? Пиши в комментах.
+```
+
+## TikTok
+
+```
+УЧЕБНАЯ ПРОВЕРКА ДЛИННОГО ЭКСПОРТА #проверка #ии #ai #полезное
+```
+
+## Файлы
+
+- captions.srt (загрузить в YouTube как субтитры)
+
+> Черновик собран правилами. Модель должна переписать названия в metadata.draft.json и перезапустить meta.
+
+Перед загрузкой: проверь пометку «изменённый или синтетический контент» (реалистичный ИИ-контент).
+- warn: title 1: 1 hashtags (pattern: 3-6)
+- warn: title 2: 1 hashtags (pattern: 3-6)
+- warn: title 3: 1 hashtags (pattern: 3-6)
+- warn: title 4: 1 hashtags (pattern: 3-6)
+- warn: title 5: 1 hashtags (pattern: 3-6)
+- warn: no links in prefs or plan: description and pinned comment go without links
+
+{
+  "variants": [
+    {
+      "variant": "long_text",
+      "format": "16x9",
+      "file": "cover-A-16x9.png",
+      "text": "УЧЕБНАЯ ПРОВЕРКА ДЛИННОГО ЭКСПОРТА",
+      "errors": []
+    },
+    {
+      "variant": "long_text",
+      "format": "16x9",
+      "file": "cover-B-16x9.png",
+      "text": "УЧЕБНАЯ ПРОВЕРКА ДЛИННОГО ЭКСПОРТА",
+      "errors": []
+    },
+    {
+      "variant": "long_text",
+      "format": "16x9",
+      "file": "cover-C-16x9.png",
+      "text": "УЧЕБНАЯ ПРОВЕРКА ДЛИННОГО ЭКСПОРТА",
+      "errors": []
+    }
+  ],
+  "errors": [],
+  "generated": false,
+  "note": "Text layout variants, not proven separate creative concepts; review 150 px manually"
+}
+acceptance/out-long/qa.md
+QA PASSED (technical only)
+acceptance/out-long/ПАКЕТ.txt
+all: QA PASSED, 0 warnings (exit 0)

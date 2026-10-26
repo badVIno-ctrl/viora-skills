@@ -1,0 +1,153 @@
+{
+ "duration": 31.101,
+ "scenes": 8,
+ "speech": [
+  {
+   "scene": 0,
+   "t": 0.06,
+   "wav": ".cache/tts/8e63b3bdc0f5500910511215.wav",
+   "duration": 3.24,
+   "estimated": false
+  },
+  {
+   "scene": 1,
+   "t": 2.908,
+   "wav": ".cache/tts/15e439f89c900c729fb39221.wav",
+   "duration": 2.544,
+   "estimated": false
+  },
+  {
+   "scene": 2,
+   "t": 5.003,
+   "wav": ".cache/tts/b16182bbd1a77be214977b28.wav",
+   "duration": 4.416,
+   "estimated": false
+  },
+  {
+   "scene": 3,
+   "t": 9.024,
+   "wav": ".cache/tts/18ef8c0b9051b3c28979e095.wav",
+   "duration": 3.024,
+   "estimated": false
+  },
+  {
+   "scene": 4,
+   "t": 11.668,
+   "wav": ".cache/tts/d6a1f7371ef254dbc7e1f66e.wav",
+   "duration": 4.152,
+   "estimated": false
+  },
+  {
+   "scene": 5,
+   "t": 15.357,
+   "wav": ".cache/tts/179fb939ffc0742f17091ee0.wav",
+   "duration": 4.608,
+   "estimated": false
+  },
+  {
+   "scene": 6,
+   "t": 19.557,
+   "wav": ".cache/tts/3586730c59386f19ff200925.wav",
+   "duration": 5.208,
+   "estimated": false
+  },
+  {
+   "scene": 7,
+   "t": 24.369,
+   "wav": ".cache/tts/df581f53560d6926c8bd9278.wav",
+   "duration": 6.624,
+   "estimated": false
+  }
+ ],
+ "problems": [],
+ "timing": [
+  {
+   "scene": 0,
+   "t0": 0.0,
+   "t1": 2.758,
+   "dur": 2.76,
+   "words": 4,
+   "set": "dacha",
+   "scheme": null,
+   "camera": "push",
+   "transition": null
+  },
+  {
+   "scene": 1,
+   "t0": 2.758,
+   "t1": 4.853,
+   "dur": 2.09,
+   "words": 5,
+   "set": "dacha",
+   "scheme": null,
+   "camera": "drift",
+   "transition": "cut"
+  },
+  {
+   "scene": 2,
+   "t0": 4.853,
+   "t1": 8.874,
+   "dur": 4.02,
+   "words": 7,
+   "set": "dacha",
+   "scheme": null,
+   "camera": "pan_right",
+   "transition": "cut"
+  },
+  {
+   "scene": 3,
+   "t0": 8.874,
+   "t1": 11.518,
+   "dur": 2.64,
+   "words": 5,
+   "set": "dacha",
+   "scheme": null,
+   "camera": "push",
+   "transition": "cut"
+  },
+  {
+   "scene": 4,
+   "t0": 11.518,
+   "t1": 15.207,
+   "dur": 3.69,
+   "words": 7,
+   "set": "dacha",
+   "scheme": null,
+   "camera": "pull",
+   "transition": "cut"
+  },
+  {
+   "scene": 5,
+   "t0": 15.207,
+   "t1": 19.407,
+   "dur": 4.2,
+   "words": 7,
+   "set": "plain",
+   "scheme": "closeup",
+   "camera": "push",
+   "transition": "zoom"
+  },
+  {
+   "scene": 6,
+   "t0": 19.407,
+   "t1": 24.219,
+   "dur": 4.81,
+   "words": 10,
+   "set": "dacha",
+   "scheme": null,
+   "camera": "pan_left",
+   "transition": "slide"
+  },
+  {
+   "scene": 7,
+   "t0": 24.219,
+   "t1": 31.101,
+   "dur": 6.88,
+   "words": 11,
+   "set": "dacha",
+   "scheme": null,
+   "camera": "drift",
+   "transition": "cut"
+  }
+ ]
+}

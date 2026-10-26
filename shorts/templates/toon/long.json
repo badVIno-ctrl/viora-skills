@@ -1,0 +1,498 @@
+{
+ "title": "Неделя без света: полный гайд",
+ "slug": "long-blackout-week",
+ "format": "long",
+ "aspect": "16:9",
+ "lang": "ru",
+ "voice": "ru-male-1",
+ "engine": "auto",
+ "speed": 1.04,
+ "music": "auto",
+ "style": {
+  "outline": "thin",
+  "grain": 0.05,
+  "vignette": 0.34,
+  "captions": "sentence"
+ },
+ "cast": {
+  "lesha": {
+   "look": "hero",
+   "name": "Лёша",
+   "voice": "м, 30, voice=Лёша"
+  },
+  "valya": {
+   "look": "granny",
+   "name": "Баба Валя",
+   "voice": "ж, 78, voice=Валя"
+  }
+ },
+ "scenes": [
+  {
+   "say": "Вечер. Щелчок — и весь город погружается в *темноту*.",
+   "camera": "push",
+   "set": {
+    "id": "facade",
+    "time": "night",
+    "floors": 9,
+    "cols": 7,
+    "lights_out_on": "Щелчок",
+    "trees": true
+   }
+  },
+  {
+   "say": "Света не будет неделю. Что ты сделаешь в первые *два часа*?",
+   "set": {
+    "id": "room",
+    "time": "blackout"
+   },
+   "actors": [
+    {
+     "id": "lesha",
+     "pose": "flashlight",
+     "hold": "phone",
+     "emotion": "worried",
+     "face": "right",
+     "at": 0.42
+    }
+   ],
+   "hud": [
+    {
+     "type": "question",
+     "text": "Твой первый шаг?",
+     "on": "два часа"
+    }
+   ]
+  },
+  {
+   "say": "Сейчас разберём всё по шагам: свет, вода, тепло и *связь*.",
+   "set": {
+    "id": "room",
+    "time": "blackout"
+   },
+   "camera": "drift",
+   "actors": [
+    {
+     "id": "lesha",
+     "pose": "point",
+     "hold": "flashlight",
+     "emotion": "determined",
+     "face": "front",
+     "gaze": "camera",
+     "at": 0.3
+    }
+   ],
+   "hud": [
+    {
+     "type": "title",
+     "text": "Неделя без света",
+     "sub": "полный гайд",
+     "at": [
+      0.68,
+      0.3
+     ],
+     "color": "warn"
+    }
+   ]
+  },
+  {
+   "chapter": {
+    "num": 1,
+    "text": "Первые 2 часа"
+   },
+   "say": "Сначала свет. Не свечи, а *фонарик*: свеча — это риск пожара.",
+   "set": {
+    "id": "room",
+    "time": "blackout"
+   },
+   "actors": [
+    {
+     "id": "lesha",
+     "pose": "flashlight",
+     "hold": "flashlight",
+     "emotion": "determined",
+     "face": "right",
+     "at": 0.36
+    }
+   ],
+   "props": [
+    {
+     "id": "candle",
+     "at": [
+      0.7,
+      null
+     ],
+     "on": false
+    }
+   ]
+  },
+  {
+   "say": "Холодильник не открывай. Закрытый, он держит холод около *четырёх часов*, морозилка — до двух суток.",
+   "scheme": {
+    "type": "timeline",
+    "title": "Сколько держит холод",
+    "steps": [
+     {
+      "text": "4 часа",
+      "sub": "закрытый холодильник",
+      "icon": "clock",
+      "on": "четырёх"
+     },
+     {
+      "text": "48 часов",
+      "sub": "полная морозилка",
+      "icon": "snow",
+      "color": "blue",
+      "on": "двух суток"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Пока вода ещё идёт, набери ванну и все *бутылки*.",
+   "set": {
+    "id": "kitchen",
+    "time": "blackout"
+   },
+   "actors": [
+    {
+     "id": "lesha",
+     "pose": "carry",
+     "hold": "bucket",
+     "emotion": "determined",
+     "face": "left",
+     "at": 0.55
+    }
+   ],
+   "props": [
+    {
+     "id": "bottle",
+     "at": [
+      0.25,
+      null
+     ]
+    },
+    {
+     "id": "jerrycan",
+     "at": [
+      0.32,
+      null
+     ]
+    }
+   ]
+  },
+  {
+   "say": "Но самое опасное начнётся на *третий день*.",
+   "camera": "crash",
+   "accent": "red",
+   "set": {
+    "id": "facade",
+    "time": "night",
+    "floors": 9,
+    "cols": 7,
+    "power_off": true,
+    "others": 0.08
+   },
+   "hud": [
+    {
+     "type": "stamp",
+     "text": "День 3",
+     "on": "третий"
+    }
+   ]
+  },
+  {
+   "chapter": {
+    "num": 2,
+    "text": "Тепло и еда"
+   },
+   "say": "Зимой без отопления квартира быстро *остывает*.",
+   "clock": "ДЕНЬ 3 — 07:10",
+   "set": {
+    "id": "room",
+    "time": "blackout"
+   },
+   "fx": [
+    {
+     "type": "snow",
+     "amount": 0.3
+    }
+   ],
+   "actors": [
+    {
+     "id": "lesha",
+     "pose": "hug_knees",
+     "emotion": "tired",
+     "face": "right",
+     "at": 0.45
+    }
+   ],
+   "hud": [
+    {
+     "type": "counter",
+     "label": "В комнате",
+     "from": 21,
+     "to": 13,
+     "suffix": "°",
+     "at": "tr",
+     "on": "остывает"
+    }
+   ]
+  },
+  {
+   "say": "Соберитесь в одной комнате, закройте двери, а окна завесьте *одеялами*.",
+   "scheme": {
+    "type": "topview",
+    "title": "Одна тёплая комната",
+    "zones": [
+     {
+      "x": 0,
+      "y": 0,
+      "w": 0.58,
+      "h": 0.62,
+      "label": "тепло",
+      "color": "ok",
+      "t": 1.2
+     }
+    ],
+    "marks": [
+     {
+      "at": [
+       0.3,
+       0.3
+      ],
+      "icon": "people",
+      "label": "все здесь",
+      "color": "ok"
+     },
+     {
+      "at": [
+       0.27,
+       0.02
+      ],
+      "icon": "snow",
+      "label": "одеяло",
+      "color": "blue",
+      "t": 2.2
+     }
+    ]
+   }
+  },
+  {
+   "say": "Газовую плиту для обогрева *не включай*: угарный газ убивает без запаха.",
+   "accent": "red",
+   "set": {
+    "id": "kitchen",
+    "time": "blackout"
+   },
+   "actors": [
+    {
+     "id": "lesha",
+     "pose": "hands_up",
+     "emotion": "scared",
+     "face": "front",
+     "at": 0.5
+    }
+   ],
+   "hud": [
+    {
+     "type": "stamp",
+     "text": "Угарный газ",
+     "on": "не включай"
+    }
+   ]
+  },
+  {
+   "say": "Еда по порядку: сначала холодильник, потом морозилка, консервы — *в конце*.",
+   "scheme": {
+    "type": "steps",
+    "title": "Что есть сначала",
+    "steps": [
+     {
+      "text": "Холодильник",
+      "sub": "день 1",
+      "on": "холодильник"
+     },
+     {
+      "text": "Морозилка",
+      "sub": "дни 2-3",
+      "on": "морозилка"
+     },
+     {
+      "text": "Консервы",
+      "sub": "потом",
+      "on": "консервы"
+     }
+    ]
+   }
+  },
+  {
+   "chapter": {
+    "num": 3,
+    "text": "Связь и соседи"
+   },
+   "say": "Телефон береги: энергосбережение, яркость на минимум, *авиарежим*.",
+   "scheme": {
+    "type": "checklist",
+    "title": "Заряд на неделю",
+    "items": [
+     {
+      "text": "Энергосбережение",
+      "on": "энергосбережение"
+     },
+     {
+      "text": "Яркость на минимум",
+      "on": "яркость"
+     },
+     {
+      "text": "Авиарежим",
+      "on": "авиарежим"
+     }
+    ]
+   }
+  },
+  {
+   "say": "И проверь соседей, особенно *пожилых*.",
+   "set": {
+    "id": "stairwell",
+    "time": "blackout",
+    "floor": 5
+   },
+   "actors": [
+    {
+     "id": "lesha",
+     "pose": "knock",
+     "hold": "flashlight",
+     "emotion": "determined",
+     "face": "right",
+     "at": 0.4
+    }
+   ]
+  },
+  {
+   "say": "Баба Валя одна: без воды и без *лекарств*.",
+   "set": {
+    "id": "room",
+    "time": "blackout"
+   },
+   "actors": [
+    {
+     "id": "valya",
+     "pose": "sit",
+     "emotion": "worried",
+     "face": "right",
+     "at": 0.6
+    }
+   ],
+   "props": [
+    {
+     "id": "candle",
+     "at": [
+      0.42,
+      null
+     ],
+     "on": true
+    },
+    {
+     "id": "chair",
+     "at": [
+      0.6,
+      null
+     ]
+    }
+   ]
+  },
+  {
+   "say": "Помогать друг другу — главный способ *выжить*.",
+   "set": {
+    "id": "room",
+    "time": "blackout"
+   },
+   "actors": [
+    {
+     "id": "lesha",
+     "pose": "hold",
+     "hold": "bottle",
+     "emotion": "smile",
+     "face": "right",
+     "at": 0.36
+    },
+    {
+     "id": "valya",
+     "pose": "stand",
+     "emotion": "smile",
+     "face": "left",
+     "at": 0.6
+    }
+   ],
+   "props": [
+    {
+     "id": "lantern",
+     "at": [
+      0.48,
+      null
+     ],
+     "on": true
+    }
+   ]
+  },
+  {
+   "say": "Итог: свет, вода, тепло, связь и *соседи*.",
+   "scheme": {
+    "type": "checklist",
+    "title": "Неделя без света",
+    "items": [
+     {
+      "text": "Фонарик, не свечи",
+      "on": "свет"
+     },
+     {
+      "text": "Запас воды",
+      "on": "вода"
+     },
+     {
+      "text": "Одна тёплая комната",
+      "on": "тепло"
+     },
+     {
+      "text": "Телефон на минимуме",
+      "on": "связь"
+     },
+     {
+      "text": "Проверь соседей",
+      "on": "соседи"
+     }
+    ]
+   }
+  },
+  {
+   "say": "А что из этого у тебя уже есть дома? Напиши в комментариях, и смотри следующее видео: как пережить *зиму* без газа.",
+   "dur": 12,
+   "set": {
+    "id": "room",
+    "time": "night"
+   },
+   "camera": "static",
+   "actors": [
+    {
+     "id": "lesha",
+     "pose": "point",
+     "emotion": "smile",
+     "face": "right",
+     "gaze": "camera",
+     "at": 0.22
+    }
+   ],
+   "hud": [
+    {
+     "type": "label",
+     "text": "следующее видео →",
+     "at": [
+      0.66,
+      0.2
+     ]
+    }
+   ],
+   "endscreen": true
+  }
+ ]
+}

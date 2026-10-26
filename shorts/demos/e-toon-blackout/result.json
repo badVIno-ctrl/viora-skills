@@ -1,0 +1,24 @@
+{
+ "video": "blackout-20.mp4",
+ "cover": "cover.jpg",
+ "sheet": "sheet.jpg",
+ "duration": 80.963,
+ "fps": 30,
+ "size": [
+  1080,
+  1920
+ ],
+ "audio": {
+  "voice": true,
+  "sfx": {
+   "mode": "files",
+   "kept": 0,
+   "dropped": [],
+   "synthetic": []
+  },
+  "music": null,
+  "music_placeholder": false
+ },
+ "warnings": [],
+ "seconds": 194.5
+}

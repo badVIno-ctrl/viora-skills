@@ -1,0 +1,56 @@
+[
+  {
+    "id": "T00",
+    "in": 0,
+    "out": 6,
+    "rms": 1.7257940271520056e-05,
+    "peak": 0.0027608771342784166,
+    "dominant_hz": 1103.1666666666665,
+    "method": "actual PCM decode and FFT, not listening"
+  },
+  {
+    "id": "T01",
+    "in": 6,
+    "out": 12,
+    "rms": 0.4949876368045807,
+    "peak": 1.0402791500091553,
+    "dominant_hz": 300.0,
+    "method": "actual PCM decode and FFT, not listening"
+  },
+  {
+    "id": "T02",
+    "in": 12,
+    "out": 18,
+    "rms": 0.08494363725185394,
+    "peak": 0.2825457453727722,
+    "dominant_hz": 550.0,
+    "method": "actual PCM decode and FFT, not listening"
+  },
+  {
+    "id": "T03",
+    "in": 18,
+    "out": 24,
+    "rms": 0.08482600748538971,
+    "peak": 0.12026523798704147,
+    "dominant_hz": 605.0,
+    "method": "actual PCM decode and FFT, not listening"
+  },
+  {
+    "id": "T04",
+    "in": 24,
+    "out": 30,
+    "rms": 0.0848265215754509,
+    "peak": 0.1208997294306755,
+    "dominant_hz": 660.0,
+    "method": "actual PCM decode and FFT, not listening"
+  },
+  {
+    "id": "T05",
+    "in": 30,
+    "out": 36,
+    "rms": 1.0131803719559684e-05,
+    "peak": 0.0009033720707520843,
+    "dominant_hz": 566.3333333333333,
+    "method": "actual PCM decode and FFT, not listening"
+  }
+]

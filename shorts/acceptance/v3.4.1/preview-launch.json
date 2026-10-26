@@ -1,0 +1,40 @@
+{
+  "stage": "launch",
+  "valid": false,
+  "ready_for_launch": false,
+  "verification": "structure and reviewer-declared evidence only; no external verification",
+  "issues": [
+    "training product cannot launch",
+    "canvas must be final",
+    "destination missing",
+    "audience.country missing",
+    "offer.advertiser missing",
+    "offer.audience_country missing",
+    "offer.account_and_country_eligibility missing",
+    "offer.disclosure_requirements missing",
+    "offer.official_terms_url missing",
+    "offer.checked_at missing",
+    "source forbidden or permission unknown",
+    "rights_verified not confirmed",
+    "publication_approved not confirmed",
+    "assets[0].rights_verified not confirmed",
+    "rules.reference missing",
+    "rules.checked_at missing",
+    "rules.scope missing",
+    "safe_area.verified not confirmed",
+    "route.verified not confirmed",
+    "tracking attribution level unknown",
+    "qa.product_action not confirmed",
+    "qa.rights not confirmed",
+    "qa.phone_readability not confirmed",
+    "qa.overlay_clear not confirmed",
+    "qa.cta_route not confirmed",
+    "qa.landing not confirmed",
+    "qa.disclosure not confirmed"
+  ],
+  "warnings": [],
+  "not_applicable": [
+    "subtitles",
+    "motion_audio"
+  ]
+}

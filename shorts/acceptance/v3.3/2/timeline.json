@@ -1,0 +1,29 @@
+[
+  {
+    "id": "ultimatum",
+    "final_start": 0,
+    "final_end": 10.8,
+    "source": "../media/standup-0.mp4",
+    "source_in": 1.7,
+    "source_out": 12.5,
+    "role": "Вход: законченный абсурдный ультиматум, без второй слабее связанной шутки"
+  },
+  {
+    "id": "prediction",
+    "final_start": 10.8,
+    "final_end": 17.85,
+    "source": "../media/standup-0.mp4",
+    "source_in": 14.25,
+    "source_out": 21.3,
+    "role": "Поворот: изобретут на следующий день; сохранена пауза после панчлайна"
+  },
+  {
+    "id": "payoff",
+    "final_start": 17.85,
+    "final_end": 25.75,
+    "source": "../media/standup-0.mp4",
+    "source_in": 26.8,
+    "source_out": 34.7,
+    "role": "Финальная воображаемая новость и реакция; не обрывать слово умер"
+  }
+]

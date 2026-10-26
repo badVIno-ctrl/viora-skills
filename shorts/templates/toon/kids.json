@@ -1,0 +1,544 @@
+{
+ "title": "Откуда берётся радуга?",
+ "slug": "kids-rainbow",
+ "format": "short",
+ "aspect": "9:16",
+ "lang": "ru",
+ "voice": "ru-female-1",
+ "engine": "auto",
+ "speed": 1.0,
+ "music": "auto",
+ "audience": "kids",
+ "style": {
+  "outline": "thick",
+  "grain": 0.0,
+  "vignette": 0.12,
+  "captions": "sentence",
+  "scheme_bg": "sky"
+ },
+ "cast": {
+  "masha": {
+   "look": "kid",
+   "name": "Маша",
+   "hair_style": "pigtails",
+   "hair": "#8A5530",
+   "top_color": "#FF6FAE",
+   "pants": "#3F5FA8",
+   "shoes": "#FFFFFF",
+   "bow": "#FFE04D",
+   "voice": "ж, 7, voice=Маша"
+  },
+  "pushok": {
+   "look": "cat",
+   "name": "Пушок",
+   "coat": "#A7B0BA",
+   "white": "#F8F8F8",
+   "eye": "#3B8A3A",
+   "voice": "мультяшка, м, voice=Пушок"
+  }
+ },
+ "scenes": [
+  {
+   "say": "Почему после дождя на небе появляется *радуга*?",
+   "shot": "wide",
+   "camera": "push",
+   "set": {
+    "id": "meadow",
+    "time": "kids"
+   },
+   "fx": [
+    {
+     "type": "rainbow",
+     "grow": 0
+    },
+    {
+     "type": "sparkle",
+     "at": [
+      0.5,
+      0.4
+     ],
+     "r": 0.35
+    }
+   ],
+   "actors": [
+    {
+     "id": "masha",
+     "pose": "point",
+     "emotion": "surprised",
+     "face": "right",
+     "at": 0.36
+    },
+    {
+     "id": "pushok",
+     "pose": "sit",
+     "at": 0.62,
+     "face": "left",
+     "emotion": "happy"
+    }
+   ],
+   "hud": [
+    {
+     "type": "title",
+     "text": "Откуда радуга?",
+     "color": "warn"
+    }
+   ]
+  },
+  {
+   "say": "Однажды Маша и котик Пушок гуляли по лугу.",
+   "camera": "pan_right",
+   "set": {
+    "id": "meadow",
+    "time": "kids"
+   },
+   "actors": [
+    {
+     "id": "masha",
+     "emotion": "happy",
+     "path": [
+      [
+       0,
+       0.22,
+       null
+      ],
+      [
+       3.0,
+       0.52,
+       null
+      ]
+     ]
+    },
+    {
+     "id": "pushok",
+     "path": [
+      [
+       0,
+       0.04,
+       null
+      ],
+      [
+       3.0,
+       0.34,
+       null
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "say": "И вдруг пошёл *дождь*!",
+   "shake": 0.6,
+   "dark": 0.32,
+   "set": {
+    "id": "meadow",
+    "time": "kids"
+   },
+   "fx": [
+    "rain"
+   ],
+   "actors": [
+    {
+     "id": "masha",
+     "pose": "scared",
+     "emotion": "surprised",
+     "face": "front",
+     "at": 0.5
+    },
+    {
+     "id": "pushok",
+     "pose": "stand",
+     "emotion": "scared",
+     "at": 0.7,
+     "face": "left"
+    }
+   ],
+   "shot": {
+    "type": "close",
+    "on": "masha"
+   }
+  },
+  {
+   "say": "Маша раскрыла *зонтик*, а Пушок спрятался рядом.",
+   "dark": 0.28,
+   "set": {
+    "id": "meadow",
+    "time": "kids"
+   },
+   "fx": [
+    {
+     "type": "rain",
+     "amount": 0.7
+    }
+   ],
+   "actors": [
+    {
+     "id": "masha",
+     "pose": "hold",
+     "hold": "umbrella",
+     "emotion": "happy",
+     "face": "right",
+     "at": 0.44
+    },
+    {
+     "id": "pushok",
+     "pose": "sit",
+     "at": 0.6,
+     "face": "left",
+     "emotion": "happy"
+    }
+   ]
+  },
+  {
+   "say": "Дождик кончился, и выглянуло *солнце*.",
+   "camera": "tilt_up",
+   "set": {
+    "id": "meadow",
+    "time": "kids"
+   },
+   "actors": [
+    {
+     "id": "masha",
+     "pose": "stand",
+     "emotion": "smile",
+     "face": "front",
+     "at": 0.45
+    },
+    {
+     "id": "pushok",
+     "pose": "stand",
+     "at": 0.64,
+     "face": "left",
+     "emotion": "happy"
+    }
+   ]
+  },
+  {
+   "say": "Ой, Пушок, смотри! На небе *радуга*!",
+   "shot": "wide",
+   "camera": "crash",
+   "set": {
+    "id": "meadow",
+    "time": "kids"
+   },
+   "fx": [
+    {
+     "type": "rainbow",
+     "t_on": "радуга",
+     "grow": 1.0
+    },
+    {
+     "type": "sparkle",
+     "at": [
+      0.5,
+      0.42
+     ],
+     "r": 0.4,
+     "t_on": "радуга"
+    }
+   ],
+   "actors": [
+    {
+     "id": "masha",
+     "pose": "cheer",
+     "emotion": "happy",
+     "face": "front",
+     "at": 0.42
+    },
+    {
+     "id": "pushok",
+     "pose": "sit",
+     "at": 0.62,
+     "face": "left",
+     "emotion": "happy"
+    }
+   ],
+   "pad": 1.1,
+   "speaker": "masha",
+   "tone": "восторженно"
+  },
+  {
+   "say": "Солнечный лучик белый, но в нём спрятаны *все цвета*.",
+   "scheme": {
+    "type": "closeup",
+    "icon": "sun",
+    "color": "warn",
+    "title": "Секрет лучика",
+    "notes": [
+     {
+      "text": "Белый свет",
+      "icon": "sun",
+      "side": "left"
+     },
+     {
+      "text": "7 цветов",
+      "icon": "star",
+      "color": "blue",
+      "on": "все цвета"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Капелька дождя, как волшебное стёклышко, *раскладывает* его на цвета.",
+   "scheme": {
+    "type": "prism",
+    "title": "Капелька-волшебница",
+    "label": "капелька",
+    "split_on": "раскладывает",
+    "labels": [
+     "красный",
+     "оранжевый",
+     "жёлтый",
+     "зелёный",
+     "голубой",
+     "синий",
+     "фиолетовый"
+    ]
+   }
+  },
+  {
+   "say": "Запомни цвета: каждый охотник желает знать, где сидит *фазан*.",
+   "scheme": {
+    "type": "checklist",
+    "title": "7 цветов радуги",
+    "caps": false,
+    "items": [
+     {
+      "text": "Каждый",
+      "note": "красный",
+      "color": "#E53935",
+      "on": "каждый",
+      "swatch": "#E53935"
+     },
+     {
+      "text": "Охотник",
+      "note": "оранжевый",
+      "color": "#F57C00",
+      "on": "охотник",
+      "swatch": "#F57C00"
+     },
+     {
+      "text": "Желает",
+      "note": "жёлтый",
+      "color": "#E2A800",
+      "on": "желает",
+      "swatch": "#F2B600"
+     },
+     {
+      "text": "Знать",
+      "note": "зелёный",
+      "color": "#2E9E46",
+      "on": "знать",
+      "swatch": "#2E9E46"
+     },
+     {
+      "text": "Где",
+      "note": "голубой",
+      "color": "#1E9BD7",
+      "on": "где",
+      "swatch": "#1E9BD7"
+     },
+     {
+      "text": "Сидит",
+      "note": "синий",
+      "color": "#2F55C8",
+      "on": "сидит",
+      "swatch": "#2F55C8"
+     },
+     {
+      "text": "Фазан",
+      "note": "фиолетовый",
+      "color": "#8E44C8",
+      "on": "фазан",
+      "swatch": "#8E44C8"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Красный всегда *сверху*, а фиолетовый — *внизу*.",
+   "camera": "drift",
+   "set": {
+    "id": "meadow",
+    "time": "kids"
+   },
+   "fx": [
+    {
+     "type": "rainbow",
+     "grow": 0
+    }
+   ],
+   "hud": [
+    {
+     "type": "callout",
+     "text": "Красный",
+     "at": [
+      0.12,
+      0.25
+     ],
+     "to": [
+      0.32,
+      0.366
+     ],
+     "color": "danger",
+     "on": "сверху"
+    },
+    {
+     "type": "callout",
+     "text": "Фиолетовый",
+     "at": [
+      0.9,
+      0.52
+     ],
+     "to": [
+      0.66,
+      0.461
+     ],
+     "color": "#8E44C8",
+     "on": "внизу"
+    }
+   ]
+  },
+  {
+   "say": "Радугу видно, только когда солнце светит *в спину*.",
+   "set": {
+    "id": "meadow",
+    "time": "kids"
+   },
+   "fx": [
+    {
+     "type": "rainbow",
+     "grow": 0
+    }
+   ],
+   "actors": [
+    {
+     "id": "masha",
+     "pose": "stand",
+     "emotion": "happy",
+     "face": "back",
+     "at": 0.44
+    },
+    {
+     "id": "pushok",
+     "pose": "sit",
+     "face": "back",
+     "at": 0.6
+    }
+   ],
+   "hud": [
+    {
+     "type": "plate",
+     "text": "Солнце — за спиной",
+     "icon": "sun",
+     "color": "warn",
+     "on": "в спину"
+    }
+   ]
+  },
+  {
+   "say": "Сделай радугу сам: встань спиной к солнцу и брызни водой из *лейки*!",
+   "shot": "wide",
+   "set": {
+    "id": "meadow",
+    "time": "kids"
+   },
+   "fx": [
+    {
+     "type": "spray",
+     "at": [
+      0.6,
+      0.665
+     ],
+     "dir": 5,
+     "speed": 0.75,
+     "t_on": "брызни"
+    },
+    {
+     "type": "rainbow",
+     "at": [
+      0.79,
+      0.6
+     ],
+     "r": 0.15,
+     "band": 0.07,
+     "amount": 0.75,
+     "front": true,
+     "t_on": "лейки",
+     "grow": 0.8
+    }
+   ],
+   "actors": [
+    {
+     "id": "masha",
+     "pose": "hold",
+     "hold": "watering_can",
+     "emotion": "happy",
+     "face": "right",
+     "at": 0.42
+    },
+    {
+     "id": "pushok",
+     "pose": "sit",
+     "at": 0.16,
+     "face": "right",
+     "emotion": "surprised"
+    }
+   ],
+   "hud": [
+    {
+     "type": "tape",
+     "text": "Только вместе со взрослыми"
+    }
+   ]
+  },
+  {
+   "say": "Вопрос: какой цвет у радуги посередине? Правильно — *зелёный*!",
+   "pad": 0.5,
+   "scheme": {
+    "type": "quiz",
+    "title": "Проверь себя",
+    "question": "Какой цвет посередине?",
+    "options": [
+     "Жёлтый",
+     "Зелёный",
+     "Голубой"
+    ],
+    "answer": 1,
+    "reveal_on": "зелёный"
+   }
+  },
+  {
+   "say": "Теперь ты знаешь секрет радуги. Пока-пока!",
+   "camera": "pull",
+   "set": {
+    "id": "meadow",
+    "time": "kids"
+   },
+   "fx": [
+    {
+     "type": "rainbow",
+     "grow": 0
+    },
+    "confetti"
+   ],
+   "actors": [
+    {
+     "id": "masha",
+     "pose": "wave",
+     "emotion": "happy",
+     "face": "front",
+     "gaze": "camera",
+     "at": 0.44
+    },
+    {
+     "id": "pushok",
+     "pose": "sit",
+     "at": 0.62,
+     "face": "left",
+     "emotion": "happy"
+    }
+   ]
+  }
+ ]
+}

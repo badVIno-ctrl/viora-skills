@@ -1,0 +1,75 @@
+{
+  "short": {
+    "duration": 18.0,
+    "width": 1080,
+    "height": 1920,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "observations": [
+      {
+        "scene": "result",
+        "output_t": 1.0,
+        "source_t": 25.0,
+        "frame_mae": 2.373905149647887,
+        "dominant_hz": 660.0
+      },
+      {
+        "scene": "step1",
+        "output_t": 7.0,
+        "source_t": 13.0,
+        "frame_mae": 2.36729570129108,
+        "dominant_hz": 550.0
+      },
+      {
+        "scene": "step2",
+        "output_t": 13.0,
+        "source_t": 19.0,
+        "frame_mae": 2.362870451877934,
+        "dominant_hz": 605.0
+      }
+    ],
+    "full_decode": true,
+    "movement_listened_review": false,
+    "sha256": "d84c3ed2ef5368fe6a51e11ef89165c749be9f6d12f19d62440af1c221da2f3a"
+  },
+  "long": {
+    "duration": 480.021029,
+    "width": 1280,
+    "height": 720,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "observations": [
+      {
+        "scene": "chapter-1",
+        "output_t": 1.0,
+        "source_t": 1.0,
+        "frame_mae": 0.2875636574074074,
+        "dominant_hz": 440.0
+      },
+      {
+        "scene": "chapter-2",
+        "output_t": 121.0,
+        "source_t": 1.0,
+        "frame_mae": 0.2923611111111111,
+        "dominant_hz": 550.0
+      },
+      {
+        "scene": "chapter-3",
+        "output_t": 241.0,
+        "source_t": 1.0,
+        "frame_mae": 0.28879050925925925,
+        "dominant_hz": 660.0
+      },
+      {
+        "scene": "chapter-4",
+        "output_t": 361.0,
+        "source_t": 1.0,
+        "frame_mae": 0.3160590277777778,
+        "dominant_hz": 770.0
+      }
+    ],
+    "full_decode": true,
+    "movement_listened_review": false,
+    "sha256": "792c293315a79088f1e45309371af8c44489d8a00abeaa03b85f512d9c463e61"
+  }
+}

@@ -1,0 +1,1315 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "urn:shorts:campaign:advertising-1",
+ "title": "Advertising sidecar; not a render plan",
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+  "schema_version": {
+   "enum": [
+    "advertising-1",
+    "advertising-2"
+   ]
+  },
+  "goal": {
+   "enum": [
+    "sale",
+    "confirmed_action",
+    "install",
+    "subscriber",
+    "click",
+    "paid_reach",
+    "training_comprehension"
+   ]
+  },
+  "placement": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "creative_type": {
+   "enum": [
+    "overlay",
+    "static_ad",
+    "advertising_short"
+   ]
+  },
+  "concept": {
+   "enum": [
+    "problem_solution",
+    "demonstration",
+    "process_comparison"
+   ]
+  },
+  "monetization": {
+   "enum": [
+    "affiliate",
+    "own_product",
+    "fixed_placement",
+    "training"
+   ]
+  },
+  "training_product": {
+   "type": "boolean"
+  },
+  "audience": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "country": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "age": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "language": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "need": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   },
+   "required": [
+    "country",
+    "age",
+    "language",
+    "need"
+   ]
+  },
+  "offer": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "name": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "advertiser": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "audience_country": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "audience_age": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "source": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "approval_evidence": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "payable_action": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "payout_and_currency": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "attribution_window": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "approval_and_rejection_rules": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "hold_and_payment_schedule": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "minimum_withdrawal_and_methods": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "account_and_country_eligibility": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "creative_rights_and_restrictions": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "disclosure_requirements": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "tracking_method": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "refunds_cancellations": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "returning_customers": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "brand_traffic": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "promo_codes": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "official_terms_url": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "pattern": "^https?://\\S+$"
+    },
+    "checked_at": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "format": "date"
+    },
+    "source_status": {
+     "enum": [
+      "allowed",
+      "forbidden",
+      "approval_required",
+      "unknown"
+     ]
+    }
+   },
+   "required": [
+    "name",
+    "advertiser",
+    "audience_country",
+    "audience_age",
+    "source",
+    "approval_evidence",
+    "payable_action",
+    "payout_and_currency",
+    "attribution_window",
+    "approval_and_rejection_rules",
+    "hold_and_payment_schedule",
+    "minimum_withdrawal_and_methods",
+    "account_and_country_eligibility",
+    "creative_rights_and_restrictions",
+    "disclosure_requirements",
+    "tracking_method",
+    "refunds_cancellations",
+    "returning_customers",
+    "brand_traffic",
+    "promo_codes",
+    "official_terms_url",
+    "checked_at",
+    "source_status"
+   ]
+  },
+  "headline": {
+   "type": "string"
+  },
+  "cta": {
+   "type": "string"
+  },
+  "destination": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "pattern": "^https?://\\S+$"
+  },
+  "canvas": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "width": {
+     "type": "integer",
+     "minimum": 1
+    },
+    "height": {
+     "type": "integer",
+     "minimum": 1
+    },
+    "status": {
+     "enum": [
+      "draft",
+      "final"
+     ]
+    }
+   },
+   "required": [
+    "width",
+    "height",
+    "status"
+   ]
+  },
+  "safe_area": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "method": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "verified": {
+     "type": "boolean"
+    },
+    "evidence": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   },
+   "required": [
+    "method",
+    "verified",
+    "evidence"
+   ]
+  },
+  "overlay": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "start_seconds": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "minimum": 0
+    },
+    "end_seconds": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "minimum": 0
+    },
+    "rectangle": {
+     "anyOf": [
+      {
+       "type": "null"
+      },
+      {
+       "type": "array",
+       "minItems": 4,
+       "maxItems": 4,
+       "items": {
+        "type": "number",
+        "minimum": 0
+       }
+      }
+     ]
+    },
+    "avoid": {
+     "type": "array",
+     "items": {
+      "enum": [
+       "face",
+       "product",
+       "subtitles",
+       "platform_ui"
+      ]
+     }
+    }
+   },
+   "required": [
+    "start_seconds",
+    "end_seconds",
+    "rectangle",
+    "avoid"
+   ]
+  },
+  "claims": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "text": {
+      "type": "string"
+     },
+     "verified": {
+      "type": "boolean"
+     },
+     "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+       "reference": {
+        "type": [
+         "string",
+         "null"
+        ]
+       },
+       "checked_at": {
+        "type": [
+         "string",
+         "null"
+        ],
+        "format": "date"
+       },
+       "scope": {
+        "type": [
+         "string",
+         "null"
+        ]
+       }
+      },
+      "required": [
+       "reference",
+       "checked_at",
+       "scope"
+      ]
+     },
+     "covers": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Risky-claim category ids this verified claim supports (see adrules.RISKY)."
+     }
+    },
+    "required": [
+     "text",
+     "verified",
+     "evidence"
+    ]
+   }
+  },
+  "assets": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "path": {
+      "type": "string"
+     },
+     "rights_verified": {
+      "type": "boolean"
+     },
+     "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+       "reference": {
+        "type": [
+         "string",
+         "null"
+        ]
+       },
+       "checked_at": {
+        "type": [
+         "string",
+         "null"
+        ],
+        "format": "date"
+       },
+       "scope": {
+        "type": [
+         "string",
+         "null"
+        ]
+       }
+      },
+      "required": [
+       "reference",
+       "checked_at",
+       "scope"
+      ]
+     }
+    },
+    "required": [
+     "path",
+     "rights_verified",
+     "evidence"
+    ]
+   }
+  },
+  "claims_verified": {
+   "type": "boolean"
+  },
+  "rights_verified": {
+   "type": "boolean"
+  },
+  "rules": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "reference": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "pattern": "^https?://\\S+$"
+    },
+    "checked_at": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "format": "date"
+    },
+    "scope": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   },
+   "required": [
+    "reference",
+    "checked_at",
+    "scope"
+   ]
+  },
+  "tracking": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "method": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "attribution_level": {
+     "enum": [
+      "unknown",
+      "channel",
+      "period",
+      "creative"
+     ]
+    },
+    "limitations": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "evidence": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   },
+   "required": [
+    "method",
+    "attribution_level",
+    "limitations",
+    "evidence"
+   ]
+  },
+  "route": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "link_point": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "verified": {
+     "type": "boolean"
+    },
+    "evidence": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   },
+   "required": [
+    "link_point",
+    "verified",
+    "evidence"
+   ]
+  },
+  "test": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "hypothesis": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "primary_metric": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "event_source": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "observation_window": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "stop_condition": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "spend_limit": {
+     "type": "number",
+     "minimum": 0
+    },
+    "currency": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "max_loss": {
+     "type": "number",
+     "minimum": 0
+    }
+   },
+   "required": [
+    "hypothesis",
+    "primary_metric",
+    "event_source",
+    "observation_window",
+    "stop_condition",
+    "spend_limit",
+    "currency",
+    "max_loss"
+   ]
+  },
+  "authorization": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "paid_media": {
+     "type": "boolean"
+    },
+    "spend_approved": {
+     "type": "boolean"
+    },
+    "evidence": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "scope": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "stop_method": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   },
+   "required": [
+    "paid_media",
+    "spend_approved",
+    "evidence",
+    "scope",
+    "stop_method"
+   ]
+  },
+  "publication_approved": {
+   "type": "boolean"
+  },
+  "qa": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "product_action": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "passed": {
+       "type": "boolean"
+      },
+      "evidence": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "applicability": {
+       "enum": [
+        "applicable",
+        "not_applicable"
+       ],
+       "default": "applicable",
+       "description": "Omitted means applicable. N/A only for motion_audio/subtitles on static_ad; evidence required and passed must remain false."
+      }
+     },
+     "required": [
+      "passed",
+      "evidence"
+     ]
+    },
+    "claims": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "passed": {
+       "type": "boolean"
+      },
+      "evidence": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "applicability": {
+       "enum": [
+        "applicable",
+        "not_applicable"
+       ],
+       "default": "applicable",
+       "description": "Omitted means applicable. N/A only for motion_audio/subtitles on static_ad; evidence required and passed must remain false."
+      }
+     },
+     "required": [
+      "passed",
+      "evidence"
+     ]
+    },
+    "rights": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "passed": {
+       "type": "boolean"
+      },
+      "evidence": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "applicability": {
+       "enum": [
+        "applicable",
+        "not_applicable"
+       ],
+       "default": "applicable",
+       "description": "Omitted means applicable. N/A only for motion_audio/subtitles on static_ad; evidence required and passed must remain false."
+      }
+     },
+     "required": [
+      "passed",
+      "evidence"
+     ]
+    },
+    "phone_readability": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "passed": {
+       "type": "boolean"
+      },
+      "evidence": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "applicability": {
+       "enum": [
+        "applicable",
+        "not_applicable"
+       ],
+       "default": "applicable",
+       "description": "Omitted means applicable. N/A only for motion_audio/subtitles on static_ad; evidence required and passed must remain false."
+      }
+     },
+     "required": [
+      "passed",
+      "evidence"
+     ]
+    },
+    "overlay_clear": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "passed": {
+       "type": "boolean"
+      },
+      "evidence": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "applicability": {
+       "enum": [
+        "applicable",
+        "not_applicable"
+       ],
+       "default": "applicable",
+       "description": "Omitted means applicable. N/A only for motion_audio/subtitles on static_ad; evidence required and passed must remain false."
+      }
+     },
+     "required": [
+      "passed",
+      "evidence"
+     ]
+    },
+    "silent_comprehension": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "passed": {
+       "type": "boolean"
+      },
+      "evidence": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "applicability": {
+       "enum": [
+        "applicable",
+        "not_applicable"
+       ],
+       "default": "applicable",
+       "description": "Omitted means applicable. N/A only for motion_audio/subtitles on static_ad; evidence required and passed must remain false."
+      }
+     },
+     "required": [
+      "passed",
+      "evidence"
+     ]
+    },
+    "subtitles": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "passed": {
+       "type": "boolean"
+      },
+      "evidence": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "applicability": {
+       "enum": [
+        "applicable",
+        "not_applicable"
+       ],
+       "default": "applicable",
+       "description": "Omitted means applicable. N/A only for motion_audio/subtitles on static_ad; evidence required and passed must remain false."
+      }
+     },
+     "required": [
+      "passed",
+      "evidence"
+     ]
+    },
+    "motion_audio": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "passed": {
+       "type": "boolean"
+      },
+      "evidence": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "applicability": {
+       "enum": [
+        "applicable",
+        "not_applicable"
+       ],
+       "default": "applicable",
+       "description": "Omitted means applicable. N/A only for motion_audio/subtitles on static_ad; evidence required and passed must remain false."
+      }
+     },
+     "required": [
+      "passed",
+      "evidence"
+     ]
+    },
+    "cta_route": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "passed": {
+       "type": "boolean"
+      },
+      "evidence": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "applicability": {
+       "enum": [
+        "applicable",
+        "not_applicable"
+       ],
+       "default": "applicable",
+       "description": "Omitted means applicable. N/A only for motion_audio/subtitles on static_ad; evidence required and passed must remain false."
+      }
+     },
+     "required": [
+      "passed",
+      "evidence"
+     ]
+    },
+    "landing": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "passed": {
+       "type": "boolean"
+      },
+      "evidence": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "applicability": {
+       "enum": [
+        "applicable",
+        "not_applicable"
+       ],
+       "default": "applicable",
+       "description": "Omitted means applicable. N/A only for motion_audio/subtitles on static_ad; evidence required and passed must remain false."
+      }
+     },
+     "required": [
+      "passed",
+      "evidence"
+     ]
+    },
+    "disclosure": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "passed": {
+       "type": "boolean"
+      },
+      "evidence": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "applicability": {
+       "enum": [
+        "applicable",
+        "not_applicable"
+       ],
+       "default": "applicable",
+       "description": "Omitted means applicable. N/A only for motion_audio/subtitles on static_ad; evidence required and passed must remain false."
+      }
+     },
+     "required": [
+      "passed",
+      "evidence"
+     ]
+    },
+    "measurement": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "passed": {
+       "type": "boolean"
+      },
+      "evidence": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "applicability": {
+       "enum": [
+        "applicable",
+        "not_applicable"
+       ],
+       "default": "applicable",
+       "description": "Omitted means applicable. N/A only for motion_audio/subtitles on static_ad; evidence required and passed must remain false."
+      }
+     },
+     "required": [
+      "passed",
+      "evidence"
+     ]
+    }
+   },
+   "required": [
+    "product_action",
+    "claims",
+    "rights",
+    "phone_readability",
+    "overlay_clear",
+    "silent_comprehension",
+    "subtitles",
+    "motion_audio",
+    "cta_route",
+    "landing",
+    "disclosure",
+    "measurement"
+   ]
+  },
+  "final_artifact": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "path": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "sha256": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "pattern": "^[a-f0-9]{64}$"
+    }
+   },
+   "required": [
+    "path",
+    "sha256"
+   ]
+  },
+  "author": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "description": "Who prepared the card (agent or person). The reviewer must be a different human."
+  },
+  "reviewer": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "Human who personally confirmed the launch evidence. Required at launch. Self-declared, not verified by code.",
+   "properties": {
+    "name": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "role": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "is_human": {
+     "type": "boolean"
+    },
+    "confirmed_at": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "format": "date"
+    },
+    "statement": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   },
+   "required": [
+    "name",
+    "role",
+    "is_human",
+    "confirmed_at",
+    "statement"
+   ]
+  },
+  "disclosure": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "Advertising/partnership disclosure shown to the viewer. Required at launch for affiliate and fixed_placement.",
+   "properties": {
+    "text": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "shown_in_creative": {
+     "type": "boolean"
+    },
+    "placement": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   },
+   "required": [
+    "text",
+    "shown_in_creative",
+    "placement"
+   ]
+  },
+  "variants": {
+   "type": "array",
+   "description": "2-3 meaningfully different concepts, each with a testable hypothesis.",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "concept": {
+      "enum": [
+       "problem_solution",
+       "demonstration",
+       "process_comparison"
+      ]
+     },
+     "headline": {
+      "type": "string"
+     },
+     "cta": {
+      "type": "string"
+     },
+     "hypothesis": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "concept",
+     "headline",
+     "cta",
+     "hypothesis"
+    ]
+   }
+  },
+  "evidence_max_age_days": {
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 90,
+   "description": "Maximum age of checked_at dates at launch. Default 30."
+  },
+  "creative": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "Typeset layers for ad-render. Text is composed from vector fonts, never baked into a generated image.",
+   "properties": {
+    "kicker": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "subline": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "badge": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "footnote": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "logo": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "brand": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "bg": {
+       "type": "string",
+       "pattern": "^#[0-9a-fA-F]{6}$"
+      },
+      "fg": {
+       "type": "string",
+       "pattern": "^#[0-9a-fA-F]{6}$"
+      },
+      "accent": {
+       "type": "string",
+       "pattern": "^#[0-9a-fA-F]{6}$"
+      }
+     }
+    },
+    "proof": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "type": {
+       "enum": [
+        "none",
+        "image",
+        "compare"
+       ]
+      },
+      "image": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "title": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "before_label": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "before": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "after_label": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "after": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "caption": {
+       "type": [
+        "string",
+        "null"
+       ]
+      }
+     }
+    }
+   }
+  }
+ },
+ "required": [
+  "schema_version",
+  "goal",
+  "placement",
+  "creative_type",
+  "concept",
+  "monetization",
+  "training_product",
+  "audience",
+  "offer",
+  "headline",
+  "cta",
+  "destination",
+  "canvas",
+  "safe_area",
+  "overlay",
+  "claims",
+  "assets",
+  "claims_verified",
+  "rights_verified",
+  "rules",
+  "tracking",
+  "route",
+  "test",
+  "authorization",
+  "publication_approved",
+  "qa",
+  "final_artifact"
+ ]
+}

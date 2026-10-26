@@ -1,3 +1,4 @@
 __pycache__/
 *.py[cod]
 .viora/
+shorts/assets/voice/voiceengine-models.tar.xz

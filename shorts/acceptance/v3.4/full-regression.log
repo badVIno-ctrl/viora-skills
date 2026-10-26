@@ -1,0 +1,61 @@
+sss.ssss.........................F...................................... [ 19%]
+...................................................................s.... [ 38%]
+........................................................................ [ 57%]
+................s.......F............................................... [ 77%]
+........................................................................ [ 96%]
+.............                                                            [100%]
+=================================== FAILURES ===================================
+________________ test_post_card_over_full_background_passes_qa _________________
+
+tmp_path = PosixPath('/tmp/pytest-of-vercel-sandbox/pytest-2/test_post_card_over_full_backg0')
+
+    @pytest.mark.slow
+    def test_post_card_over_full_background_passes_qa(tmp_path):
+        """Layout C (research 17, @amazinglul 4.9M): gameplay on the whole frame, a Reddit card that writes itself
+        with the voice, captions only after the card, the background author in the description."""
+        src = tmp_path / "run.mp4"
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "testsrc2=s=640x360:r=30:d=14",
+                        "-vf", "scroll=horizontal=0.004:vertical=0.002", "-c:v", "libx264", "-pix_fmt", "yuv420p", str(src)],
+                       check=True)
+        BG.add("test_full", src, credit="Gameplay: test author")
+        scenes = [{"id": "story", "why": "hook", "duration": 4.8, "source": {"type": "video", "ref": "bg:test_full"},
+                   "transcript": _tr(WORDS)},
+                  {"id": "end", "why": "payoff", "duration": 4.2, "source": {"type": "video", "ref": "bg:test_full"},
+                   "transcript": _tr(WORDS_B)}]
+        plan = _plan("post13", scenes, overlays={"post": {"scene": "story", "kind": "reddit", "name": "u/test_user",
+                                                          "where": "r/AskReddit", "title": "Два сайта", "stats": "12,4k 873"}},
+                     metadata={"topic": "два бесплатных сайта"})   # no say here (transcripts): the description needs a topic
+        out = tmp_path / "out"
+        m = render(write_plan(tmp_path, plan), out)
+        post = m["post"][0]
+        assert post["captions_hidden"] and post["max_early_s"] == 0.0 and post["states"] == len(WORDS) + 1
+        chunks = m["captions"]["chunks"]
+        assert chunks and all(ch["start"] >= post["t1"] - 1e-3 for ch in chunks)   # the card already shows those words
+        assert m["author_layer"]["credits"] == ["Gameplay: test author"]
+        assert any("background test_full" in n for s in m["scenes"] for n in s.get("notes", []))
+        sc = {s["id"]: s for s in m["scenes"]}   # the second scene goes on where the first one stopped (no repeat)
+        assert abs(sc["end"]["source"]["in"] - (sc["story"]["source"]["in"] + sc["story"]["length"])) < 0.05
+        meta = package_dir(out)
+        assert "Gameplay: test author" in meta["description"]
+        rep = run_gate(out)
+>       assert rep["passed"], _fails(rep)
+E       AssertionError: [('srt_intervals', 'cue 4: invalid bounds')]
+E       assert False
+
+tests/integration/test_vfx13_render.py:224: AssertionError
+____________________________ test_english_template _____________________________
+
+    def test_english_template():
+        plan = mini_plan()
+        plan["meta"]["language"] = "en"
+        plan["scenes"][0]["say"] = "Two free sites you will use."
+        plan["scenes"][0]["on_screen_text"] = "2 FREE SITES"
+        m = PK.build(plan, manifest("en"), PK.auto_draft(plan, manifest("en"), "en"), M.load())
+>       assert not m["errors"] and "Full video on the channel." in m["description"]
+E       AssertionError: assert (not [] and 'Full video on the channel.' in '#ai #tech\nTwo free sites you will use.\n\n\n\n#shorts #tools #productivity\n')
+
+tests/unit/test_meta.py:54: AssertionError
+=========================== short test summary info ============================
+FAILED tests/integration/test_vfx13_render.py::test_post_card_over_full_background_passes_qa
+FAILED tests/unit/test_meta.py::test_english_template - AssertionError: asser...
+2 failed, 362 passed, 9 skipped in 1538.82s (0:25:38)

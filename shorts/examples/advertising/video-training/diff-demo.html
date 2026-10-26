@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru"><meta charset="utf-8">
+<title>Учебная анимация: сверка текста с оригиналом (синтетика)</title>
+<style>
+@font-face{font-family:M;src:url("../../../assets/fonts/Manrope-Bold.ttf");font-weight:700}
+@font-face{font-family:M;src:url("../../../assets/fonts/Manrope-SemiBold.ttf");font-weight:600}
+html,body{margin:0;background:#FAF9F7;overflow:hidden}canvas{display:block;width:100vw;height:100vh}
+</style>
+<canvas id="c"></canvas>
+<script>
+// Synthetic training animation. Fictional product, no real UI. Uses requestAnimationFrame only.
+const cv=document.getElementById('c'),g=cv.getContext('2d');
+cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;
+const W=cv.width,H=cv.height,u=Math.min(W,H)/1000;
+const BG='#FAF9F7',FG='#202124',AC='#1A5FC1',RED='#B3261E';
+function card(x,y,w,h,label,words,hi,t,fill){
+  g.fillStyle=fill;g.strokeStyle=hi?AC:'#C7C7C7';g.lineWidth=5*u;
+  g.beginPath();g.roundRect(x,y,w,h,28*u);g.fill();g.stroke();
+  g.fillStyle=hi?AC:FG;g.font='600 '+28*u+'px M,Arial';g.textBaseline='top';g.fillText(label.toUpperCase(),x+30*u,y+20*u);
+  g.font='700 '+50*u+'px M,Arial';let cx=x+30*u;const cy=y+68*u;
+  words.forEach((wd,i)=>{
+    const tw=g.measureText(wd.t+' ').width;
+    if(wd.mark){const p=0.5+0.5*Math.sin(t*4);g.fillStyle='rgba(179,38,30,'+(0.12+0.18*p)+')';g.fillRect(cx-6*u,cy-4*u,tw,62*u);g.fillStyle=RED}
+    else g.fillStyle=FG;
+    g.fillText(wd.t,cx,cy);cx+=tw;
+  });
+}
+function draw(ms){
+  const t=ms/1000;g.fillStyle=BG;g.fillRect(0,0,W,H);
+  // headline lives inside the picture so it never collides with captions (lower third) or other labels
+  g.fillStyle=FG;g.font='700 '+66*u+'px M,Arial';g.textBaseline='top';g.textAlign='center';
+  g.fillText('Одно «не»',W/2,H*0.025);g.fillText('меняет смысл',W/2,H*0.025+76*u);g.textAlign='left';
+  const cw=W-120*u,ch=150*u,x=60*u;
+  const y1=H*0.22,y2=y1+ch+26*u;
+  // the original card marks the word "Не": it pulses in step with the sweep below
+  card(x,y1,cw,ch,'Оригинал',[{t:'Не',mark:true},{t:'отправлять'},{t:'письмо'}],false,t,'#FFFFFF');
+  card(x,y2,cw,ch,'Субтитры',[{t:'Отправлять'},{t:'письмо'}],true,t,'#E1E8F2');
+  // magnifier sweeps across both cards: continuous, large, no flashing
+  const s=0.5+0.5*Math.sin(t*1.6);const mx=x+60*u+s*(cw-120*u),my=(y1+y2+ch)/2;
+  g.strokeStyle=AC;g.lineWidth=7*u;g.fillStyle='rgba(26,95,193,0.10)';
+  g.beginPath();g.arc(mx,my,80*u,0,Math.PI*2);g.fill();g.stroke();
+  g.beginPath();g.moveTo(mx+57*u,my+57*u);g.lineTo(mx+100*u,my+100*u);g.stroke();
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+</script>
+</html>

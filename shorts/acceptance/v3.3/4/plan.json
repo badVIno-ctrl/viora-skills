@@ -1,0 +1,126 @@
+{
+  "schema_version": "1",
+  "meta": {
+    "name": "preview-4",
+    "language": "ru",
+    "platforms": [
+      "youtube_shorts"
+    ],
+    "duration_target": [
+      8,
+      60
+    ],
+    "loop": false,
+    "fps": 30
+  },
+  "brand": {
+    "preset": "mono"
+  },
+  "layout": {
+    "mode": "center_only",
+    "cta_in_center": []
+  },
+  "captions": {
+    "enabled": false
+  },
+  "audio": {
+    "music": {
+      "source": "../media/patsan-music-0.wav",
+      "start": 0,
+      "duck_db": 0
+    },
+    "sfx_auto": false,
+    "target_lufs": -14
+  },
+  "scenes": [
+    {
+      "id": "shot0",
+      "duration": 2.125,
+      "why": "Знакомство с героем",
+      "source": {
+        "type": "video",
+        "ref": "../media/patsan-lifted.mp4",
+        "in": 0,
+        "out": 2.125,
+        "keep_audio": false
+      }
+    },
+    {
+      "id": "shot1",
+      "duration": 1.447,
+      "why": "Ответ, школа",
+      "source": {
+        "type": "video",
+        "ref": "../media/patsan-lifted.mp4",
+        "in": 3.0,
+        "out": 4.447,
+        "keep_audio": false
+      }
+    },
+    {
+      "id": "shot2",
+      "duration": 1.187,
+      "why": "Переход к улице",
+      "source": {
+        "type": "video",
+        "ref": "../media/patsan-lifted.mp4",
+        "in": 5.1,
+        "out": 6.287,
+        "keep_audio": false
+      }
+    },
+    {
+      "id": "shot3",
+      "duration": 1.726,
+      "why": "Смена настроения",
+      "source": {
+        "type": "video",
+        "ref": "../media/patsan-lifted.mp4",
+        "in": 7.0,
+        "out": 8.726,
+        "keep_audio": false
+      }
+    },
+    {
+      "id": "shot4",
+      "duration": 1.267,
+      "why": "Ночная среда",
+      "source": {
+        "type": "video",
+        "ref": "../media/patsan-lifted.mp4",
+        "in": 9.8,
+        "out": 11.067,
+        "keep_audio": false
+      }
+    },
+    {
+      "id": "shot5",
+      "duration": 1.098,
+      "why": "Сближение с группой",
+      "source": {
+        "type": "video",
+        "ref": "../media/patsan-lifted.mp4",
+        "in": 12.0,
+        "out": 13.098,
+        "keep_audio": false
+      }
+    },
+    {
+      "id": "shot6",
+      "duration": 3.2,
+      "why": "Групповой финал",
+      "source": {
+        "type": "video",
+        "ref": "../media/patsan-lifted.mp4",
+        "in": 14.4,
+        "out": 17.6,
+        "keep_audio": false
+      }
+    }
+  ],
+  "fx": {
+    "punch": [
+      8.85
+    ]
+  }
+}

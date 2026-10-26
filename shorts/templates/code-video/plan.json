@@ -1,0 +1,68 @@
+{
+  "schema_version": "1",
+  "meta": {
+    "name": "code-video",
+    "language": "ru",
+    "platforms": [
+      "youtube_shorts",
+      "tiktok",
+      "reels"
+    ],
+    "duration_target": [
+      8,
+      30
+    ],
+    "emotion": "tech",
+    "audience": "TODO",
+    "loop": true
+  },
+  "layout": {
+    "mode": "center_only"
+  },
+  "brand": {
+    "preset": "mono",
+    "palette": {
+      "accent": "#FF5A1F"
+    }
+  },
+  "captions": {
+    "enabled": true,
+    "max_words": 3,
+    "highlight": "accent"
+  },
+  "audio": {
+    "voice": {
+      "engine": "auto",
+      "voice": "ru-male-1",
+      "speed": 1.05
+    },
+    "music": {
+      "source": "auto",
+      "mood": "tech",
+      "duck_db": -10
+    },
+    "target_lufs": -14
+  },
+  "scenes": [
+    {
+      "id": "film",
+      "why": "one continuous code animation: the page draws every frame in seek(t), the voice leads",
+      "say": "Это видео целиком написано кодом. Ты пишешь анимацию, браузер снимает каждый кадр, а на выходе получаешь готовый MP4 с голосом и музыкой.",
+      "source": {
+        "type": "html",
+        "ref": "scene.html",
+        "seed": 7
+      }
+    }
+  ],
+  "metadata": {
+    "topic": "Видео из кода",
+    "hashtags": [
+      "shorts",
+      "код",
+      "анимация",
+      "html",
+      "нейросети"
+    ]
+  }
+}

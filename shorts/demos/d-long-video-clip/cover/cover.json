@@ -1,0 +1,230 @@
+{
+  "generator": null,
+  "generated": false,
+  "words": [
+    "THEY",
+    "WENT",
+    "TOO",
+    "FAR"
+  ],
+  "symbol": "play",
+  "ideas": [
+    "minimal",
+    "hero",
+    "split"
+  ],
+  "recommended": "B",
+  "register": "punch",
+  "variants": [
+    {
+      "file": "cover-A-minimal-16x9.jpg",
+      "variant": "minimal",
+      "format": "16x9",
+      "source": "code:symbol",
+      "errors": [],
+      "box": [
+        80,
+        418,
+        768,
+        650
+      ],
+      "font_px": 108,
+      "text_color": "#FFFFFF",
+      "symbol": "play",
+      "symbol_box": [
+        768,
+        72,
+        1214,
+        518
+      ],
+      "idea": "symbol",
+      "graphic_boxes": [
+        [
+          0,
+          0,
+          1280,
+          720
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.124,
+        "blob": 0.033,
+        "tone": 5.1
+      }
+    },
+    {
+      "file": "cover-A-minimal-9x16.jpg",
+      "variant": "minimal",
+      "format": "9x16",
+      "source": "code:symbol",
+      "errors": [],
+      "box": [
+        144,
+        839,
+        723,
+        1232
+      ],
+      "font_px": 122,
+      "text_color": "#FFFFFF",
+      "symbol": "play",
+      "symbol_box": [
+        264,
+        345,
+        744,
+        825
+      ],
+      "idea": "symbol",
+      "graphic_boxes": [
+        [
+          0,
+          0,
+          1080,
+          1920
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.06,
+        "blob": 0.015,
+        "tone": 6.7
+      }
+    },
+    {
+      "file": "cover-B-hero-16x9.jpg",
+      "variant": "hero",
+      "format": "16x9",
+      "source": "frame:005.50-part-1",
+      "errors": [],
+      "box": [
+        88,
+        179,
+        572,
+        509
+      ],
+      "font_px": 102,
+      "text_color": "#FFFFFF",
+      "text_left": true,
+      "idea": "hero",
+      "graphic_boxes": [
+        [
+          71,
+          190,
+          586,
+          515
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.099,
+        "blob": 0.103,
+        "tone": 4.3
+      }
+    },
+    {
+      "file": "cover-B-hero-9x16.jpg",
+      "variant": "hero",
+      "format": "9x16",
+      "source": "frame:005.50-part-1",
+      "errors": [],
+      "box": [
+        184,
+        354,
+        753,
+        741
+      ],
+      "font_px": 120,
+      "text_color": "#FFFFFF",
+      "text_left": true,
+      "idea": "hero",
+      "graphic_boxes": [
+        [
+          164,
+          367,
+          769,
+          750
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.435,
+        "blob": 0.196,
+        "tone": 3.3
+      }
+    },
+    {
+      "file": "cover-C-split-16x9.jpg",
+      "variant": "split",
+      "format": "16x9",
+      "source": "frame:015.50-part-2",
+      "errors": [],
+      "box": [
+        64,
+        520,
+        818,
+        700
+      ],
+      "font_px": 84,
+      "text_color": "#FFFFFF",
+      "idea": "split",
+      "solid_band": false,
+      "graphic_boxes": [
+        [
+          0,
+          504,
+          1280,
+          720
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.497,
+        "blob": 0.469,
+        "tone": 3.8
+      }
+    },
+    {
+      "file": "cover-C-split-9x16.jpg",
+      "variant": "split",
+      "format": "9x16",
+      "source": "frame:015.50-part-2",
+      "errors": [],
+      "box": [
+        144,
+        603,
+        744,
+        933
+      ],
+      "font_px": 102,
+      "text_color": "#FFFFFF",
+      "idea": "split",
+      "solid_band": false,
+      "graphic_boxes": [
+        [
+          0,
+          576,
+          1080,
+          960
+        ]
+      ],
+      "glow_lift": 0.0,
+      "squint": {
+        "ok": true,
+        "share": 0.415,
+        "blob": 0.332,
+        "tone": 4.0
+      }
+    }
+  ],
+  "prompt": "cover/prompt.md",
+  "notes": [
+    "B 16x9: frame:005.50-part-1 failed the squint test (weak silhouette at 320 px (figure 44%, blob 36.2%, tone 2.8:1)), used frame:025.50-part-3"
+  ],
+  "errors": [],
+  "ask_user": "No image generator: A is drawn by code, B and C use frames. For a model image, use cover/prompt.md and send the file."
+}

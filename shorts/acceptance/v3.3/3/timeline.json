@@ -1,0 +1,47 @@
+[
+  {
+    "id": "shot0",
+    "final_start": 0,
+    "final_end": 1.776,
+    "source": "../media/brat-provided.mp4",
+    "source_in": 0,
+    "source_out": 1.776,
+    "role": "Конфликт: близость и напряжение"
+  },
+  {
+    "id": "shot1",
+    "final_start": 1.776,
+    "final_end": 3.243,
+    "source": "../media/brat-provided.mp4",
+    "source_in": 3.0,
+    "source_out": 4.467,
+    "role": "Ответ героя"
+  },
+  {
+    "id": "shot2",
+    "final_start": 3.243,
+    "final_end": 4.36,
+    "source": "../media/brat-provided.mp4",
+    "source_in": 4.8,
+    "source_out": 5.917,
+    "role": "Переход к одиночеству"
+  },
+  {
+    "id": "shot4",
+    "final_start": 4.36,
+    "final_end": 6.226,
+    "source": "../media/brat-provided.mp4",
+    "source_in": 11.0,
+    "source_out": 12.866,
+    "role": "Движение"
+  },
+  {
+    "id": "shot5",
+    "final_start": 6.226,
+    "final_end": 9.826,
+    "source": "../media/brat-provided.mp4",
+    "source_in": 14.0,
+    "source_out": 17.6,
+    "role": "Дорога, визуальная отдача"
+  }
+]

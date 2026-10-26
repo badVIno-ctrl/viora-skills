@@ -1,0 +1,21 @@
+{
+  "episode": "example-blackout",
+  "disaster": "Блэкаут на месяц",
+  "place": "Квартира на 20-м этаже",
+  "hero_name": "Макс",
+  "hook": "Свет пропал на месяц, а ты на двадцатом этаже? Не беги вниз.",
+  "voice": "piper",
+  "duration_s": 75,
+  "fps": 30,
+  "size": [
+    1080,
+    1920
+  ],
+  "text_min_px": 34,
+  "mode": "default",
+  "brand": {
+    "channel": "",
+    "handle": ""
+  },
+  "notes": "Учебный пример для anim-check. words.json синтетический (тайминги посчитаны по длине слов), в настоящем эпизоде его даёт faster-whisper."
+}

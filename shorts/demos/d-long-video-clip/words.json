@@ -1,0 +1,82 @@
+[
+ {
+  "word": "He",
+  "start": 0.0,
+  "end": 0.1
+ },
+ {
+  "word": "was",
+  "start": 0.1,
+  "end": 0.24
+ },
+ {
+  "word": "a",
+  "start": 0.24,
+  "end": 0.34
+ },
+ {
+  "word": "gentle",
+  "start": 0.34,
+  "end": 0.64
+ },
+ {
+  "word": "giant.",
+  "start": 0.64,
+  "end": 1.12
+ },
+ {
+  "word": "Then",
+  "start": 1.32,
+  "end": 1.5
+ },
+ {
+  "word": "they",
+  "start": 1.5,
+  "end": 1.7
+ },
+ {
+  "word": "went",
+  "start": 1.7,
+  "end": 1.88
+ },
+ {
+  "word": "too",
+  "start": 1.88,
+  "end": 2.12
+ },
+ {
+  "word": "far.",
+  "start": 2.12,
+  "end": 2.42
+ },
+ {
+  "word": "Watch",
+  "start": 20.0,
+  "end": 20.26
+ },
+ {
+  "word": "what",
+  "start": 20.26,
+  "end": 20.5
+ },
+ {
+  "word": "the",
+  "start": 20.5,
+  "end": 20.64
+ },
+ {
+  "word": "bunny",
+  "start": 20.64,
+  "end": 20.84
+ },
+ {
+  "word": "does",
+  "start": 20.84,
+  "end": 21.04
+ },
+ {
+  "word": "next.",
+  "start": 21.04,
+  "end": 21.34
+ }
+]

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ru"><meta charset="utf-8">
+<title>offline fixture: orbit scene</title>
+<style>html,body{margin:0;background:#0d0d0d;overflow:hidden}canvas{display:block;width:100vw;height:100vh}</style>
+<canvas id="c"></canvas>
+<script>
+// Offline test fixture (no network). Uses requestAnimationFrame + performance.now only,
+// so the engine must virtualise time to film it deterministically.
+const cv = document.getElementById('c'), g = cv.getContext('2d');
+cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio;
+const W = cv.width, H = cv.height, u = Math.min(W, H) / 1000;
+function draw(ms) {
+  const t = ms / 1000;
+  g.fillStyle = '#0d0d0d'; g.fillRect(0, 0, W, H);
+  // drifting star field over the whole frame: no empty static corners
+  g.fillStyle = '#8a8a8a';
+  for (let i = 0; i < 260; i++) {
+    const sx = (Math.sin(i * 12.9898) * 43758.5453) % 1, sy = (Math.sin(i * 78.233) * 12543.123) % 1;
+    const x = ((Math.abs(sx) * W + t * (30 + (i % 7) * 25) * u) % W), y = Math.abs(sy) * H;
+    g.fillRect(x, y, (3 + i % 4) * u, (3 + i % 4) * u);
+  }
+  g.strokeStyle = '#f2f2f2'; g.lineWidth = 6 * u;
+  for (let i = 0; i < 5; i++) {
+    const r = (120 + i * 70) * u;
+    g.beginPath(); g.arc(W / 2, H / 2, r, 0, Math.PI * 2); g.stroke();
+    const a = t * (1.6 - i * 0.25) + i;
+    g.fillStyle = i === 2 ? '#ff6a1a' : '#f2f2f2';
+    g.beginPath(); g.arc(W / 2 + Math.cos(a) * r, H / 2 + Math.sin(a) * r, (26 - i * 2) * u, 0, Math.PI * 2); g.fill();
+  }
+  const s = (Math.sin(t * 3) * 0.5 + 0.5);
+  g.fillStyle = '#f2f2f2'; g.fillRect(W / 2 - 40 * u, H / 2 - 40 * u - s * 40 * u, 80 * u, 80 * u + s * 80 * u);
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+</script>
+</html>

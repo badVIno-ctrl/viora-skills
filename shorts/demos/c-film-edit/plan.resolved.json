@@ -1,0 +1,470 @@
+{
+  "schema_version": "1.1",
+  "meta": {
+    "name": "bbb-edit",
+    "language": "en",
+    "platforms": [
+      "youtube_shorts"
+    ],
+    "duration_target": [
+      14.0,
+      26.0
+    ],
+    "emotion": "energy",
+    "audience": "film fans",
+    "loop": true,
+    "fps": 30
+  },
+  "layout": {
+    "mode": "center_only",
+    "cta_in_center": [
+      {
+        "t": 10.0,
+        "duration": 2.0,
+        "kind": "handle",
+        "text": "VioraStudio"
+      },
+      {
+        "t": 16.8,
+        "duration": 3.0,
+        "kind": "qr",
+        "url": "https://t.me/VioraStudio"
+      }
+    ]
+  },
+  "brand": {
+    "preset": "viora"
+  },
+  "captions": {
+    "enabled": true,
+    "max_words": 3,
+    "highlight": "accent",
+    "subs": {}
+  },
+  "audio": {
+    "voice": {
+      "engine": "auto"
+    },
+    "music": {
+      "source": "assets/audio/bed.mp3",
+      "start": 2.183,
+      "beat_sync": true
+    },
+    "target_lufs": -14,
+    "sfx_auto": false
+  },
+  "fx": {
+    "punch": [
+      2.1333,
+      4.2667,
+      6.4333,
+      8.5667,
+      10.7,
+      12.8667,
+      15.0,
+      17.1333,
+      19.2667
+    ],
+    "flash": [
+      1.0667
+    ]
+  },
+  "scenes": [
+    {
+      "id": "shot-01",
+      "why": "best: moment 256.0s (score 0.976)",
+      "duration": 1.0667,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 258.0,
+        "out": 259.067
+      },
+      "on_screen_text": "BIG BUCK BUNNY"
+    },
+    {
+      "id": "shot-02",
+      "why": "hero: moment 261.0s (score 0.956); slow-mo on the peak",
+      "duration": 1.0666,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 260.733,
+        "out": 261.267
+      },
+      "speed": [
+        {
+          "t": 0,
+          "rate": 0.5
+        }
+      ]
+    },
+    {
+      "id": "shot-03",
+      "why": "walk: moment 195.0s (score 0.894)",
+      "duration": 1.0667,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 195.0,
+        "out": 196.067
+      }
+    },
+    {
+      "id": "shot-04",
+      "why": "walk: moment 206.5s (score 0.682)",
+      "duration": 1.0667,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 206.5,
+        "out": 207.567
+      }
+    },
+    {
+      "id": "shot-05",
+      "why": "walk: moment 294.0s (score 0.791)",
+      "duration": 1.1,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 294.0,
+        "out": 295.1
+      }
+    },
+    {
+      "id": "shot-06",
+      "why": "walk: moment 335.0s (score 0.81)",
+      "duration": 1.0666,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 335.0,
+        "out": 336.067
+      }
+    },
+    {
+      "id": "shot-07",
+      "why": "walk: moment 399.5s (score 0.741)",
+      "duration": 1.0667,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 399.5,
+        "out": 400.567
+      }
+    },
+    {
+      "id": "shot-08",
+      "why": "walk: moment 409.0s (score 0.736)",
+      "duration": 1.0667,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 409.0,
+        "out": 410.067
+      }
+    },
+    {
+      "id": "shot-09",
+      "why": "walk: moment 419.5s (score 0.94)",
+      "duration": 1.0666,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 419.5,
+        "out": 420.567
+      }
+    },
+    {
+      "id": "shot-10",
+      "why": "walk: moment 427.0s (score 0.853)",
+      "duration": 1.0667,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 427.0,
+        "out": 428.067
+      }
+    },
+    {
+      "id": "shot-11",
+      "why": "walk: moment 195.0s (score 0.894)",
+      "duration": 1.1,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 196.317,
+        "out": 197.417
+      }
+    },
+    {
+      "id": "shot-12",
+      "why": "walk: moment 206.5s (score 0.682)",
+      "duration": 1.0667,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 207.817,
+        "out": 208.883
+      }
+    },
+    {
+      "id": "shot-13",
+      "why": "walk: moment 294.0s (score 0.791)",
+      "duration": 1.0666,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 295.35,
+        "out": 296.417
+      }
+    },
+    {
+      "id": "shot-14",
+      "why": "walk: moment 335.0s (score 0.81)",
+      "duration": 1.0667,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 336.317,
+        "out": 337.383
+      }
+    },
+    {
+      "id": "shot-15",
+      "why": "walk: moment 399.5s (score 0.741)",
+      "duration": 1.0667,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 400.817,
+        "out": 401.883
+      }
+    },
+    {
+      "id": "shot-16",
+      "why": "walk: moment 409.0s (score 0.736)",
+      "duration": 1.0666,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 410.317,
+        "out": 411.383
+      }
+    },
+    {
+      "id": "shot-17",
+      "why": "walk: moment 419.5s (score 0.94)",
+      "duration": 1.0667,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 420.817,
+        "out": 421.883
+      }
+    },
+    {
+      "id": "shot-18",
+      "why": "walk: moment 427.0s (score 0.853)",
+      "duration": 1.0667,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 428.317,
+        "out": 429.383
+      }
+    },
+    {
+      "id": "shot-19",
+      "why": "loop: moment 256.0s (score 0.976)",
+      "duration": 0.7333,
+      "source": {
+        "type": "film",
+        "ref": "media/film.mp4",
+        "in": 257.267,
+        "out": 258.0
+      }
+    }
+  ],
+  "metadata": {
+    "topic": "BIG BUCK BUNNY",
+    "source_video": "examples/media/film.mp4",
+    "moments": [
+      {
+        "start": 256.0,
+        "end": 259.5,
+        "peak": 258.0,
+        "score": 0.976,
+        "section": 3,
+        "signals": {
+          "loudness": 0.972,
+          "cuts": 0.988,
+          "text": 0.0
+        }
+      },
+      {
+        "start": 261.0,
+        "end": 264.5,
+        "peak": 261.0,
+        "score": 0.956,
+        "section": 3,
+        "signals": {
+          "loudness": 0.96,
+          "cuts": 0.948,
+          "text": 0.0
+        }
+      },
+      {
+        "start": 419.5,
+        "end": 423.0,
+        "peak": 420.5,
+        "score": 0.94,
+        "section": 6,
+        "signals": {
+          "loudness": 0.9,
+          "cuts": 0.982,
+          "text": 0.0
+        }
+      },
+      {
+        "start": 195.0,
+        "end": 198.5,
+        "peak": 196.5,
+        "score": 0.894,
+        "section": 2,
+        "signals": {
+          "loudness": 0.897,
+          "cuts": 0.903,
+          "text": 0.0
+        }
+      },
+      {
+        "start": 427.0,
+        "end": 430.5,
+        "peak": 428.0,
+        "score": 0.853,
+        "section": 6,
+        "signals": {
+          "loudness": 0.748,
+          "cuts": 0.96,
+          "text": 0.0
+        }
+      },
+      {
+        "start": 335.0,
+        "end": 338.5,
+        "peak": 337.0,
+        "score": 0.81,
+        "section": 4,
+        "signals": {
+          "loudness": 0.755,
+          "cuts": 0.885,
+          "text": 0.0
+        }
+      },
+      {
+        "start": 294.0,
+        "end": 297.5,
+        "peak": 296.5,
+        "score": 0.791,
+        "section": 4,
+        "signals": {
+          "loudness": 0.974,
+          "cuts": 0.631,
+          "text": 0.0
+        }
+      },
+      {
+        "start": 399.5,
+        "end": 403.0,
+        "peak": 400.0,
+        "score": 0.741,
+        "section": 5,
+        "signals": {
+          "loudness": 0.828,
+          "cuts": 0.663,
+          "text": 0.175
+        }
+      },
+      {
+        "start": 409.0,
+        "end": 412.5,
+        "peak": 411.0,
+        "score": 0.736,
+        "section": 5,
+        "signals": {
+          "loudness": 0.749,
+          "cuts": 0.717,
+          "text": 0.0
+        }
+      },
+      {
+        "start": 206.5,
+        "end": 210.0,
+        "peak": 207.5,
+        "score": 0.682,
+        "section": 2,
+        "signals": {
+          "loudness": 0.487,
+          "cuts": 0.885,
+          "text": 0.0
+        }
+      }
+    ],
+    "hashtags": [
+      "shorts",
+      "edit",
+      "movie",
+      "film",
+      "bigbuckbunny"
+    ],
+    "music": {
+      "tempo": 112.35,
+      "start": 2.183,
+      "cuts": [
+        0.0,
+        1.0667,
+        2.1333,
+        3.2,
+        4.2667,
+        5.3667,
+        6.4333,
+        7.5,
+        8.5667,
+        9.6333,
+        10.7,
+        11.8,
+        12.8667,
+        13.9333,
+        15.0,
+        16.0667,
+        17.1333,
+        18.2,
+        19.2667,
+        20.0
+      ],
+      "strong_beats": [
+        0.0,
+        1.068,
+        2.136,
+        3.204,
+        4.272,
+        5.363,
+        6.432,
+        7.5,
+        8.568,
+        9.636,
+        10.704,
+        11.795,
+        12.864,
+        13.932,
+        15.0,
+        16.068,
+        17.136,
+        18.204,
+        19.272
+      ]
+    }
+  }
+}

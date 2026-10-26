@@ -1,0 +1,120 @@
+{
+ "schema_version": "1.3",
+ "meta": {
+  "name": "post-card",
+  "language": "ru",
+  "platforms": [
+   "youtube_shorts"
+  ],
+  "duration_target": [
+   8,
+   40
+  ],
+  "loop": true
+ },
+ "x_note": "research 17, layout C (@amazinglul Jjt1fVYBkmQ, 4.9M): gameplay on the whole frame, a Reddit card writes itself while the voice reads it, then the story goes on in captions. No file in the cache: shorts.py bg fetch gta_ramp, or bg add ID FILE --credit '...'",
+ "layout": {
+  "mode": "center_only",
+  "cta_in_center": [
+   {
+    "anchor": {
+     "scene": "loop",
+     "offset": 0.3
+    },
+    "duration": 2.2,
+    "kind": "handle",
+    "text": "VioraStudio"
+   }
+  ]
+ },
+ "brand": {
+  "preset": "viora"
+ },
+ "captions": {
+  "enabled": true,
+  "max_words": 3,
+  "subs": {
+   "эйч ти эм эл": "HTML"
+  }
+ },
+ "audio": {
+  "voice": {
+   "engine": "auto",
+   "voice": "ru-male-1",
+   "speed": 1.05
+  },
+  "music": {
+   "source": "assets/audio/bed.mp3",
+   "duck_db": -10
+  },
+  "target_lufs": -14
+ },
+ "overlays": {
+  "post": {
+   "scene": "post",
+   "kind": "reddit",
+   "name": "u/html_wizard",
+   "where": "r/webdev · 5 ч",
+   "title": "Сделал анимацию без монтажа",
+   "stats": "12,4k 873"
+  }
+ },
+ "scenes": [
+  {
+   "id": "post",
+   "say": "Один эйч ти эм эл файл, и вот готовая анимация.",
+   "why": "hook: the post, read aloud while it writes itself",
+   "source": {
+    "type": "video",
+    "ref": "bg:gta_ramp"
+   }
+  },
+  {
+   "id": "how",
+   "say": "Пишешь код, движок снимает кадр за кадром.",
+   "why": "the story goes on in captions",
+   "source": {
+    "type": "video",
+    "ref": "bg:gta_ramp"
+   }
+  },
+  {
+   "id": "app",
+   "say": "А скриншоты оживают сами.",
+   "why": "second point",
+   "source": {
+    "type": "video",
+    "ref": "bg:gta_ramp"
+   }
+  },
+  {
+   "id": "loop",
+   "say": "Ссылка в закрепе, а файл с анимацией в канале.",
+   "why": "cta after value, loops to the start",
+   "source": {
+    "type": "video",
+    "ref": "bg:gta_ramp"
+   }
+  }
+ ],
+ "author_layer": [
+  {
+   "kind": "voice",
+   "note": "own voice: own story"
+  },
+  {
+   "kind": "thesis",
+   "note": "own post and conclusion, not a retold foreign post"
+  }
+ ],
+ "metadata": {
+  "topic": "анимация из html, история reddit",
+  "hashtags": [
+   "shorts",
+   "html",
+   "reddit",
+   "анимация",
+   "код"
+  ]
+ }
+}

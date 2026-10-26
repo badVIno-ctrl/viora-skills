@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "about": "Background motion for the top banner (layout.top.source bg:<id> | bg:auto) and split windows (layout.split[].b). Research 17 sections 6-7. Rules: constant motion, no faces / HUD / watermarks in the middle, sound off, the piece is longer than the video and starts in the middle of the source (no visible loop), credit in the description.",
+  "items": [
+    {
+      "id": "gta_ramp",
+      "title": "BEST GTA 5 MEGA RAMP No Copyright Gameplay for TIKTOK & YOUTUBE 4K 60fps",
+      "channel": "Dope Gameplays",
+      "url": "https://www.youtube.com/watch?v=ZtLrNBdXT7M",
+      "section": [
+        240,
+        315
+      ],
+      "kind": "gameplay",
+      "mood": [
+        "energy",
+        "fun",
+        "facts"
+      ],
+      "audience": "male 14-25",
+      "topics": [
+        "машин",
+        "авто",
+        "скорост",
+        "гонк",
+        "факт",
+        "истори",
+        "reddit",
+        "деньг",
+        "бизнес",
+        "car",
+        "speed",
+        "race",
+        "story",
+        "fact",
+        "money",
+        "гта",
+        "gta",
+        "рамп",
+        "ramp"
+      ],
+      "license": "uploaded as 'No Copyright Gameplay for TikTok & YouTube'; keep the credit",
+      "credit": "Gameplay: Dope Gameplays (YouTube, ZtLrNBdXT7M)",
+      "verified": "recorded 2026-10-12 in the shared browser: 1920x1080 50 fps, yellow car on a red and white ramp over the sea, no HUD in the middle",
+      "focus": "motion"
+    },
+    {
+      "id": "gta_ramp_2",
+      "title": "GTA 5 Mega Ramp gameplay",
+      "channel": "",
+      "url": "https://www.youtube.com/watch?v=5rsd34XKKkM",
+      "section": [
+        120,
+        195
+      ],
+      "kind": "gameplay",
+      "mood": [
+        "energy",
+        "fun"
+      ],
+      "audience": "male 14-25",
+      "topics": [
+        "машин",
+        "авто",
+        "скорост",
+        "гонк",
+        "car",
+        "speed",
+        "гта",
+        "gta",
+        "рамп",
+        "ramp"
+      ],
+      "license": "check the video description before use",
+      "credit": "Gameplay: YouTube 5rsd34XKKkM",
+      "verified": "",
+      "focus": "motion"
+    },
+    {
+      "id": "minecraft_parkour",
+      "title": "Minecraft parkour gameplay (vertical)",
+      "channel": "",
+      "url": "https://www.youtube.com/watch?v=M2j1SPMQwtI",
+      "section": [
+        60,
+        135
+      ],
+      "kind": "gameplay",
+      "mood": [
+        "calm",
+        "fun",
+        "facts"
+      ],
+      "audience": "under 18, wide",
+      "topics": [
+        "школ",
+        "учёб",
+        "учеб",
+        "лайфхак",
+        "игр",
+        "истори",
+        "факт",
+        "психолог",
+        "school",
+        "game",
+        "story",
+        "fact",
+        "майнкрафт",
+        "minecraft",
+        "паркур",
+        "parkour"
+      ],
+      "license": "check the video description before use",
+      "credit": "Gameplay: YouTube M2j1SPMQwtI",
+      "verified": "",
+      "focus": "center"
+    },
+    {
+      "id": "minecraft_parkour_2",
+      "title": "Minecraft parkour (no copyright)",
+      "channel": "",
+      "url": "https://www.youtube.com/watch?v=c3Db9IMwGNM",
+      "section": [
+        60,
+        135
+      ],
+      "kind": "gameplay",
+      "mood": [
+        "calm",
+        "fun"
+      ],
+      "audience": "under 18, wide",
+      "topics": [
+        "игр",
+        "истори",
+        "game",
+        "story",
+        "майнкрафт",
+        "minecraft",
+        "паркур",
+        "parkour"
+      ],
+      "license": "check the video description before use",
+      "credit": "Gameplay: YouTube c3Db9IMwGNM",
+      "verified": "",
+      "focus": "center"
+    }
+  ],
+  "search": {
+    "ru": [
+      "геймплей гта 5 для видео",
+      "майнкрафт паркур для фона",
+      "геймплей для шортсов вертикальный",
+      "subway surfers геймплей вертикальный"
+    ],
+    "en": [
+      "gameplay vertical for shorts",
+      "minecraft parkour gameplay 4k",
+      "gta 5 mega ramp gameplay",
+      "subway surfers gameplay vertical",
+      "satisfying video vertical",
+      "cluster truck gameplay"
+    ],
+    "calm": [
+      "drive pov 4k no commentary",
+      "drone nature 4k no copyright",
+      "rain window 4k"
+    ]
+  },
+  "not_for": "edits (motion is already at the maximum), tutorials (the background fights the screen), emotional monologues (background cheapens the moment); never for kids 'to keep them glued'"
+}

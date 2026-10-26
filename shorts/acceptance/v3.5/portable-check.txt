@@ -1,0 +1,11 @@
+# portable check: clean unzip, 2026-10-20
+ad-init ok
+  "valid": true,
+  "ok": true,
+      "epc": 15.0,
+      "epc_per_100_clicks": 1500.0,
+      "fewer than 10 confirmed actions [G]: approval, EPC and ROI are unstable"
+      "fewer than 10 confirmed actions [G]: approval, EPC and ROI are unstable",
+  "valid": true,
+  "valid": false,
+  "ready_for_launch": false,

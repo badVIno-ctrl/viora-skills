@@ -1,0 +1,1371 @@
+{
+ "tool": "ad-render",
+ "verification": "layout, contrast, size and safe-zone arithmetic only; meaning, honesty and rights need human review",
+ "platforms": [
+  "youtube_shorts"
+ ],
+ "outputs": [
+  {
+   "ratio": "9x16",
+   "size": [
+    1080,
+    1920
+   ],
+   "shrink_factor": 0.72,
+   "color": {
+    "file": "banner-9x16.png",
+    "sha256": "4af28179e5717d8136f50551a2bd7f3867e13490cc68b33f5bf17b521d12b255",
+    "boxes": [
+     {
+      "label": "badge_box",
+      "box": [
+       48,
+       288,
+       356,
+       347
+      ]
+     },
+     {
+      "label": "badge",
+      "box": [
+       84,
+       300,
+       320,
+       335
+      ],
+      "size_px": 32
+     },
+     {
+      "label": "kicker",
+      "box": [
+       48,
+       367,
+       390,
+       407
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "headline",
+      "box": [
+       48,
+       419,
+       801,
+       604
+      ],
+      "size_px": 83
+     },
+     {
+      "label": "subline",
+      "box": [
+       48,
+       624,
+       879,
+       677
+      ],
+      "size_px": 42
+     },
+     {
+      "label": "before_card",
+      "box": [
+       48,
+       697,
+       888,
+       870
+      ]
+     },
+     {
+      "label": "before_label",
+      "box": [
+       70,
+       734,
+       255,
+       771
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "before_text",
+      "box": [
+       70,
+       779,
+       578,
+       833
+      ],
+      "size_px": 46
+     },
+     {
+      "label": "after_card",
+      "box": [
+       48,
+       894,
+       888,
+       1067
+      ]
+     },
+     {
+      "label": "after_label",
+      "box": [
+       70,
+       931,
+       252,
+       968
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "after_text",
+      "box": [
+       70,
+       976,
+       522,
+       1030
+      ],
+      "size_px": 46
+     },
+     {
+      "label": "cta_button",
+      "box": [
+       48,
+       1087,
+       888,
+       1191
+      ]
+     },
+     {
+      "label": "cta",
+      "box": [
+       48,
+       1115,
+       494,
+       1163
+      ],
+      "size_px": 44
+     },
+     {
+      "label": "footnote",
+      "box": [
+       48,
+       1211,
+       865,
+       1248
+      ],
+      "size_px": 30
+     }
+    ],
+    "sizes_px": {
+     "badge": 32,
+     "kicker": 34,
+     "headline": 83,
+     "subline": 42,
+     "cta": 44,
+     "footnote": 30,
+     "before_text": 46,
+     "before_label": 34,
+     "after_text": 46,
+     "after_label": 34
+    },
+    "contrast": {
+     "text_on_bg": 15.3,
+     "accent_on_bg": 5.78,
+     "button_text": 6.09
+    },
+    "problems": [],
+    "notes": []
+   },
+   "safe_zone": {
+    "box": [
+     48,
+     288,
+     888,
+     1248
+    ],
+    "note": "intersection of youtube_shorts (checked 2026-10-11); confirm with the real preview"
+   },
+   "preview_360": "preview-9x16-360.png",
+   "mono": {
+    "file": "banner-9x16-mono.png",
+    "sha256": "c7caf5f12596f69dd56c6184b761cf570d5d35610951ab61ef5d26ff518a8cd8",
+    "boxes": [
+     {
+      "label": "badge_box",
+      "box": [
+       48,
+       288,
+       356,
+       347
+      ]
+     },
+     {
+      "label": "badge",
+      "box": [
+       84,
+       300,
+       320,
+       335
+      ],
+      "size_px": 32
+     },
+     {
+      "label": "kicker",
+      "box": [
+       48,
+       367,
+       390,
+       407
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "headline",
+      "box": [
+       48,
+       419,
+       801,
+       604
+      ],
+      "size_px": 83
+     },
+     {
+      "label": "subline",
+      "box": [
+       48,
+       624,
+       879,
+       677
+      ],
+      "size_px": 42
+     },
+     {
+      "label": "before_card",
+      "box": [
+       48,
+       697,
+       888,
+       870
+      ]
+     },
+     {
+      "label": "before_label",
+      "box": [
+       70,
+       734,
+       255,
+       771
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "before_text",
+      "box": [
+       70,
+       779,
+       578,
+       833
+      ],
+      "size_px": 46
+     },
+     {
+      "label": "after_card",
+      "box": [
+       48,
+       894,
+       888,
+       1067
+      ]
+     },
+     {
+      "label": "after_label",
+      "box": [
+       70,
+       931,
+       252,
+       968
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "after_text",
+      "box": [
+       70,
+       976,
+       522,
+       1030
+      ],
+      "size_px": 46
+     },
+     {
+      "label": "cta_button",
+      "box": [
+       48,
+       1087,
+       888,
+       1191
+      ]
+     },
+     {
+      "label": "cta",
+      "box": [
+       48,
+       1115,
+       494,
+       1163
+      ],
+      "size_px": 44
+     },
+     {
+      "label": "footnote",
+      "box": [
+       48,
+       1211,
+       865,
+       1248
+      ],
+      "size_px": 30
+     }
+    ],
+    "sizes_px": {
+     "badge": 32,
+     "kicker": 34,
+     "headline": 83,
+     "subline": 42,
+     "cta": 44,
+     "footnote": 30,
+     "before_text": 46,
+     "before_label": 34,
+     "after_text": 46,
+     "after_label": 34
+    },
+    "contrast": {
+     "text_on_bg": 21.0,
+     "accent_on_bg": 21.0,
+     "button_text": 21.0
+    },
+    "problems": [],
+    "notes": []
+   }
+  },
+  {
+   "ratio": "1x1",
+   "size": [
+    1080,
+    1080
+   ],
+   "shrink_factor": 0.85,
+   "color": {
+    "file": "banner-1x1.png",
+    "sha256": "fbf37852003729575f2d6d571309ddfad92bb7d8f5a0ef3beda0e93039c756cb",
+    "boxes": [
+     {
+      "label": "badge_box",
+      "box": [
+       64,
+       64,
+       372,
+       123
+      ]
+     },
+     {
+      "label": "badge",
+      "box": [
+       100,
+       76,
+       336,
+       111
+      ],
+      "size_px": 32
+     },
+     {
+      "label": "kicker",
+      "box": [
+       64,
+       146,
+       406,
+       186
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "headline",
+      "box": [
+       64,
+       198,
+       953,
+       417
+      ],
+      "size_px": 98
+     },
+     {
+      "label": "subline",
+      "box": [
+       64,
+       440,
+       934,
+       496
+      ],
+      "size_px": 44
+     },
+     {
+      "label": "before_card",
+      "box": [
+       64,
+       519,
+       1016,
+       660
+      ]
+     },
+     {
+      "label": "before_label",
+      "box": [
+       86,
+       535,
+       271,
+       572
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "before_text",
+      "box": [
+       86,
+       580,
+       682,
+       643
+      ],
+      "size_px": 54
+     },
+     {
+      "label": "after_card",
+      "box": [
+       64,
+       684,
+       1016,
+       824
+      ]
+     },
+     {
+      "label": "after_label",
+      "box": [
+       86,
+       700,
+       268,
+       737
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "after_text",
+      "box": [
+       86,
+       745,
+       617,
+       808
+      ],
+      "size_px": 54
+     },
+     {
+      "label": "cta_button",
+      "box": [
+       64,
+       847,
+       1016,
+       956
+      ]
+     },
+     {
+      "label": "cta",
+      "box": [
+       64,
+       875,
+       561,
+       928
+      ],
+      "size_px": 49
+     },
+     {
+      "label": "footnote",
+      "box": [
+       64,
+       979,
+       881,
+       1016
+      ],
+      "size_px": 30
+     }
+    ],
+    "sizes_px": {
+     "badge": 32,
+     "kicker": 34,
+     "headline": 98,
+     "subline": 44,
+     "cta": 49,
+     "footnote": 30,
+     "before_text": 54,
+     "before_label": 34,
+     "after_text": 54,
+     "after_label": 34
+    },
+    "contrast": {
+     "text_on_bg": 15.3,
+     "accent_on_bg": 5.78,
+     "button_text": 6.09
+    },
+    "problems": [],
+    "notes": []
+   },
+   "safe_zone": {
+    "box": [
+     64,
+     64,
+     1016,
+     1016
+    ],
+    "note": "generic 6% margin; not a platform template for this ratio"
+   },
+   "preview_360": "preview-1x1-360.png",
+   "mono": {
+    "file": "banner-1x1-mono.png",
+    "sha256": "3b54307d975367d60aba26970baaf043c6f9c39b437e4f6eb95aa0143f50ff2a",
+    "boxes": [
+     {
+      "label": "badge_box",
+      "box": [
+       64,
+       64,
+       372,
+       123
+      ]
+     },
+     {
+      "label": "badge",
+      "box": [
+       100,
+       76,
+       336,
+       111
+      ],
+      "size_px": 32
+     },
+     {
+      "label": "kicker",
+      "box": [
+       64,
+       146,
+       406,
+       186
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "headline",
+      "box": [
+       64,
+       198,
+       953,
+       417
+      ],
+      "size_px": 98
+     },
+     {
+      "label": "subline",
+      "box": [
+       64,
+       440,
+       934,
+       496
+      ],
+      "size_px": 44
+     },
+     {
+      "label": "before_card",
+      "box": [
+       64,
+       519,
+       1016,
+       660
+      ]
+     },
+     {
+      "label": "before_label",
+      "box": [
+       86,
+       535,
+       271,
+       572
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "before_text",
+      "box": [
+       86,
+       580,
+       682,
+       643
+      ],
+      "size_px": 54
+     },
+     {
+      "label": "after_card",
+      "box": [
+       64,
+       684,
+       1016,
+       824
+      ]
+     },
+     {
+      "label": "after_label",
+      "box": [
+       86,
+       700,
+       268,
+       737
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "after_text",
+      "box": [
+       86,
+       745,
+       617,
+       808
+      ],
+      "size_px": 54
+     },
+     {
+      "label": "cta_button",
+      "box": [
+       64,
+       847,
+       1016,
+       956
+      ]
+     },
+     {
+      "label": "cta",
+      "box": [
+       64,
+       875,
+       561,
+       928
+      ],
+      "size_px": 49
+     },
+     {
+      "label": "footnote",
+      "box": [
+       64,
+       979,
+       881,
+       1016
+      ],
+      "size_px": 30
+     }
+    ],
+    "sizes_px": {
+     "badge": 32,
+     "kicker": 34,
+     "headline": 98,
+     "subline": 44,
+     "cta": 49,
+     "footnote": 30,
+     "before_text": 54,
+     "before_label": 34,
+     "after_text": 54,
+     "after_label": 34
+    },
+    "contrast": {
+     "text_on_bg": 21.0,
+     "accent_on_bg": 21.0,
+     "button_text": 21.0
+    },
+    "problems": [],
+    "notes": []
+   }
+  },
+  {
+   "ratio": "4x5",
+   "size": [
+    1080,
+    1350
+   ],
+   "shrink_factor": 1.0,
+   "color": {
+    "file": "banner-4x5.png",
+    "sha256": "2136e601cc567afc50f4d21888dbeff4a5c873225b92075de73d777b04ef18b9",
+    "boxes": [
+     {
+      "label": "badge_box",
+      "box": [
+       64,
+       64,
+       416,
+       129
+      ]
+     },
+     {
+      "label": "badge",
+      "box": [
+       100,
+       76,
+       380,
+       117
+      ],
+      "size_px": 38
+     },
+     {
+      "label": "kicker",
+      "box": [
+       64,
+       157,
+       467,
+       205
+      ],
+      "size_px": 40
+     },
+     {
+      "label": "headline",
+      "box": [
+       64,
+       217,
+       882,
+       476
+      ],
+      "size_px": 116
+     },
+     {
+      "label": "subline",
+      "box": [
+       64,
+       504,
+       936,
+       637
+      ],
+      "size_px": 52
+     },
+     {
+      "label": "before_card",
+      "box": [
+       64,
+       665,
+       1016,
+       855
+      ]
+     },
+     {
+      "label": "before_label",
+      "box": [
+       86,
+       700,
+       271,
+       737
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "before_text",
+      "box": [
+       86,
+       745,
+       793,
+       820
+      ],
+      "size_px": 64
+     },
+     {
+      "label": "after_card",
+      "box": [
+       64,
+       879,
+       1016,
+       1069
+      ]
+     },
+     {
+      "label": "after_label",
+      "box": [
+       86,
+       914,
+       268,
+       951
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "after_text",
+      "box": [
+       86,
+       959,
+       715,
+       1034
+      ],
+      "size_px": 64
+     },
+     {
+      "label": "cta_button",
+      "box": [
+       64,
+       1097,
+       1016,
+       1216
+      ]
+     },
+     {
+      "label": "cta",
+      "box": [
+       64,
+       1125,
+       652,
+       1188
+      ],
+      "size_px": 58
+     },
+     {
+      "label": "footnote",
+      "box": [
+       64,
+       1244,
+       990,
+       1286
+      ],
+      "size_px": 34
+     }
+    ],
+    "sizes_px": {
+     "badge": 38,
+     "kicker": 40,
+     "headline": 116,
+     "subline": 52,
+     "cta": 58,
+     "footnote": 34,
+     "before_text": 64,
+     "before_label": 34,
+     "after_text": 64,
+     "after_label": 34
+    },
+    "contrast": {
+     "text_on_bg": 15.3,
+     "accent_on_bg": 5.78,
+     "button_text": 6.09
+    },
+    "problems": [],
+    "notes": []
+   },
+   "safe_zone": {
+    "box": [
+     64,
+     64,
+     1016,
+     1286
+    ],
+    "note": "generic 6% margin; not a platform template for this ratio"
+   },
+   "preview_360": "preview-4x5-360.png",
+   "mono": {
+    "file": "banner-4x5-mono.png",
+    "sha256": "f951660475ff9da5414edbf97837b970c39ad790cac63345d73293b65ca9280e",
+    "boxes": [
+     {
+      "label": "badge_box",
+      "box": [
+       64,
+       64,
+       416,
+       129
+      ]
+     },
+     {
+      "label": "badge",
+      "box": [
+       100,
+       76,
+       380,
+       117
+      ],
+      "size_px": 38
+     },
+     {
+      "label": "kicker",
+      "box": [
+       64,
+       157,
+       467,
+       205
+      ],
+      "size_px": 40
+     },
+     {
+      "label": "headline",
+      "box": [
+       64,
+       217,
+       882,
+       476
+      ],
+      "size_px": 116
+     },
+     {
+      "label": "subline",
+      "box": [
+       64,
+       504,
+       936,
+       637
+      ],
+      "size_px": 52
+     },
+     {
+      "label": "before_card",
+      "box": [
+       64,
+       665,
+       1016,
+       855
+      ]
+     },
+     {
+      "label": "before_label",
+      "box": [
+       86,
+       700,
+       271,
+       737
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "before_text",
+      "box": [
+       86,
+       745,
+       793,
+       820
+      ],
+      "size_px": 64
+     },
+     {
+      "label": "after_card",
+      "box": [
+       64,
+       879,
+       1016,
+       1069
+      ]
+     },
+     {
+      "label": "after_label",
+      "box": [
+       86,
+       914,
+       268,
+       951
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "after_text",
+      "box": [
+       86,
+       959,
+       715,
+       1034
+      ],
+      "size_px": 64
+     },
+     {
+      "label": "cta_button",
+      "box": [
+       64,
+       1097,
+       1016,
+       1216
+      ]
+     },
+     {
+      "label": "cta",
+      "box": [
+       64,
+       1125,
+       652,
+       1188
+      ],
+      "size_px": 58
+     },
+     {
+      "label": "footnote",
+      "box": [
+       64,
+       1244,
+       990,
+       1286
+      ],
+      "size_px": 34
+     }
+    ],
+    "sizes_px": {
+     "badge": 38,
+     "kicker": 40,
+     "headline": 116,
+     "subline": 52,
+     "cta": 58,
+     "footnote": 34,
+     "before_text": 64,
+     "before_label": 34,
+     "after_text": 64,
+     "after_label": 34
+    },
+    "contrast": {
+     "text_on_bg": 21.0,
+     "accent_on_bg": 21.0,
+     "button_text": 21.0
+    },
+    "problems": [],
+    "notes": []
+   }
+  },
+  {
+   "ratio": "16x9",
+   "size": [
+    1920,
+    1080
+   ],
+   "shrink_factor": 1.0,
+   "color": {
+    "file": "banner-16x9.png",
+    "sha256": "12ab978eceb322a72e045084f342a7b62237244afc033080c22af4203de9796c",
+    "boxes": [
+     {
+      "label": "badge_box",
+      "box": [
+       64,
+       64,
+       416,
+       129
+      ]
+     },
+     {
+      "label": "badge",
+      "box": [
+       100,
+       76,
+       380,
+       117
+      ],
+      "size_px": 38
+     },
+     {
+      "label": "kicker",
+      "box": [
+       64,
+       157,
+       467,
+       205
+      ],
+      "size_px": 40
+     },
+     {
+      "label": "headline",
+      "box": [
+       64,
+       217,
+       882,
+       476
+      ],
+      "size_px": 116
+     },
+     {
+      "label": "subline",
+      "box": [
+       64,
+       504,
+       936,
+       637
+      ],
+      "size_px": 52
+     },
+     {
+      "label": "before_card",
+      "box": [
+       1016,
+       64,
+       1856,
+       528
+      ]
+     },
+     {
+      "label": "before_label",
+      "box": [
+       1038,
+       236,
+       1223,
+       273
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "before_text",
+      "box": [
+       1038,
+       281,
+       1745,
+       356
+      ],
+      "size_px": 64
+     },
+     {
+      "label": "after_card",
+      "box": [
+       1016,
+       552,
+       1856,
+       1016
+      ]
+     },
+     {
+      "label": "after_label",
+      "box": [
+       1038,
+       724,
+       1220,
+       761
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "after_text",
+      "box": [
+       1038,
+       769,
+       1667,
+       844
+      ],
+      "size_px": 64
+     },
+     {
+      "label": "cta_button",
+      "box": [
+       64,
+       784,
+       960,
+       903
+      ]
+     },
+     {
+      "label": "cta",
+      "box": [
+       64,
+       812,
+       652,
+       875
+      ],
+      "size_px": 58
+     },
+     {
+      "label": "footnote",
+      "box": [
+       64,
+       931,
+       861,
+       1016
+      ],
+      "size_px": 34
+     }
+    ],
+    "sizes_px": {
+     "badge": 38,
+     "kicker": 40,
+     "headline": 116,
+     "subline": 52,
+     "cta": 58,
+     "footnote": 34,
+     "before_text": 64,
+     "before_label": 34,
+     "after_text": 64,
+     "after_label": 34
+    },
+    "contrast": {
+     "text_on_bg": 15.3,
+     "accent_on_bg": 5.78,
+     "button_text": 6.09
+    },
+    "problems": [],
+    "notes": []
+   },
+   "safe_zone": {
+    "box": [
+     64,
+     64,
+     1856,
+     1016
+    ],
+    "note": "generic 6% margin; not a platform template for this ratio"
+   },
+   "preview_360": "preview-16x9-360.png",
+   "mono": {
+    "file": "banner-16x9-mono.png",
+    "sha256": "e30aa8a31d761c7b7ec15ae4cf57760ded6853f53b5747d26779984197246f8e",
+    "boxes": [
+     {
+      "label": "badge_box",
+      "box": [
+       64,
+       64,
+       416,
+       129
+      ]
+     },
+     {
+      "label": "badge",
+      "box": [
+       100,
+       76,
+       380,
+       117
+      ],
+      "size_px": 38
+     },
+     {
+      "label": "kicker",
+      "box": [
+       64,
+       157,
+       467,
+       205
+      ],
+      "size_px": 40
+     },
+     {
+      "label": "headline",
+      "box": [
+       64,
+       217,
+       882,
+       476
+      ],
+      "size_px": 116
+     },
+     {
+      "label": "subline",
+      "box": [
+       64,
+       504,
+       936,
+       637
+      ],
+      "size_px": 52
+     },
+     {
+      "label": "before_card",
+      "box": [
+       1016,
+       64,
+       1856,
+       528
+      ]
+     },
+     {
+      "label": "before_label",
+      "box": [
+       1038,
+       236,
+       1223,
+       273
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "before_text",
+      "box": [
+       1038,
+       281,
+       1745,
+       356
+      ],
+      "size_px": 64
+     },
+     {
+      "label": "after_card",
+      "box": [
+       1016,
+       552,
+       1856,
+       1016
+      ]
+     },
+     {
+      "label": "after_label",
+      "box": [
+       1038,
+       724,
+       1220,
+       761
+      ],
+      "size_px": 34
+     },
+     {
+      "label": "after_text",
+      "box": [
+       1038,
+       769,
+       1667,
+       844
+      ],
+      "size_px": 64
+     },
+     {
+      "label": "cta_button",
+      "box": [
+       64,
+       784,
+       960,
+       903
+      ]
+     },
+     {
+      "label": "cta",
+      "box": [
+       64,
+       812,
+       652,
+       875
+      ],
+      "size_px": 58
+     },
+     {
+      "label": "footnote",
+      "box": [
+       64,
+       931,
+       861,
+       1016
+      ],
+      "size_px": 34
+     }
+    ],
+    "sizes_px": {
+     "badge": 38,
+     "kicker": 40,
+     "headline": 116,
+     "subline": 52,
+     "cta": 58,
+     "footnote": 34,
+     "before_text": 64,
+     "before_label": 34,
+     "after_text": 64,
+     "after_label": 34
+    },
+    "contrast": {
+     "text_on_bg": 21.0,
+     "accent_on_bg": 21.0,
+     "button_text": 21.0
+    },
+    "problems": [],
+    "notes": []
+   }
+  }
+ ],
+ "ok": true,
+ "next": "Open the colour, mono and 360 px files yourself. This report is not the QA evidence: record your own review in campaign.qa and seal the file with ad-seal."
+}

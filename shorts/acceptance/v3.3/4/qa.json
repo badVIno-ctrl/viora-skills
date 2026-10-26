@@ -1,0 +1,526 @@
+{
+  "passed": false,
+  "video": "preview-4.mp4",
+  "duration": 12.07,
+  "summary": "QA FAILED: 1 fail, 3 warn, 3 manual; checklist 14/16 auto, 4 for the agent",
+  "checks": [
+    {
+      "id": "format",
+      "item": 1,
+      "title": "Format: 1080x1920, H.264/AAC, native 24/25/30/50/60 fps, duration in target",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "w": 1080,
+        "h": 1920,
+        "vcodec": "h264",
+        "acodec": "aac",
+        "fps": 30.0,
+        "duration": 12.07,
+        "pix_fmt": "yuv420p"
+      },
+      "ok": true
+    },
+    {
+      "id": "first_frame",
+      "item": 2,
+      "title": "First frame is not empty, motion in the first 1.5 s",
+      "status": "warn",
+      "detail": "first scene has no on-screen text: the idea may not read without sound",
+      "data": {
+        "first": {
+          "mean": 75.6,
+          "std": 44.6,
+          "blank": false
+        },
+        "motion_first_1_5s": 9.79
+      },
+      "ok": true
+    },
+    {
+      "id": "rhythm",
+      "item": 3,
+      "title": "Event at least every 3 s, no still pause > 1 s",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "events": 25,
+        "max_gap": 1.5,
+        "visual_changes": 17,
+        "longest_still": 0.0,
+        "at": 0.0
+      },
+      "ok": true
+    },
+    {
+      "id": "safe_zone",
+      "item": 4,
+      "title": "Text, QR and links inside the platform safe zone",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "safe": [
+          48,
+          288,
+          888,
+          1248
+        ],
+        "platforms": [
+          "youtube_shorts"
+        ],
+        "outside": []
+      },
+      "ok": true
+    },
+    {
+      "id": "contrast",
+      "item": 5,
+      "title": "Text contrast and minimum font sizes",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "pairs": []
+      },
+      "ok": true
+    },
+    {
+      "id": "layout",
+      "item": 6,
+      "title": "Centre >= 55% of height, no empty zone > 15%, panels filled",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "center_pct": 100.0,
+        "dead_zone": {
+          "max_share": 0.006,
+          "at": 5.0
+        }
+      },
+      "ok": true
+    },
+    {
+      "id": "anti_slop",
+      "item": 7,
+      "title": "No glow, no gradient plates, <= 3 colours, no default font, no emoji",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "graphics_colour_families": [],
+        "palette": [
+          "#000000",
+          "#FFFFFF"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "id": "qr",
+      "item": 8,
+      "title": "QR decodes from the finished video and matches the link",
+      "status": "warn",
+      "detail": "no QR in this video",
+      "data": {},
+      "ok": true
+    },
+    {
+      "id": "captions",
+      "item": 9,
+      "title": "Captions synced (150 ms), no cut words, no overflow",
+      "status": "pass",
+      "detail": "no speech in this video",
+      "data": {},
+      "ok": true
+    },
+    {
+      "id": "loudness",
+      "item": 10,
+      "title": "Loudness -14 LUFS (+-1.5), true peak <= -1 dBTP, no clipping",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "lufs": -13.8,
+        "true_peak": -4.0,
+        "sample_peak": -3.962861,
+        "clipped": null,
+        "voice": false
+      },
+      "ok": true
+    },
+    {
+      "id": "loop",
+      "item": 11,
+      "title": "Last frame matches the first or leads to part 2",
+      "status": "fail",
+      "detail": "end does not loop to the start and does not lead to part 2; loop is off",
+      "data": {
+        "first_last_diff": 71.14,
+        "part2": false
+      },
+      "ok": false
+    },
+    {
+      "id": "metadata",
+      "item": 12,
+      "title": "Titles 5-7 (<= 100 chars), one description, no long dashes, hashtags sane",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "titles": 5,
+        "hashtags_unique": 2
+      },
+      "ok": true
+    },
+    {
+      "id": "eyes",
+      "item": 13,
+      "title": "Visual review: contact sheet (2 fps) and densest moments",
+      "status": "manual",
+      "detail": "open and describe: contact-1.png; qa-frames/dense-11.5.png, qa-frames/dense-11.0.png, qa-frames/dense-10.5.png",
+      "data": {
+        "contact_sheets": [
+          "contact-1.png"
+        ],
+        "dense_frames": [
+          "qa-frames/dense-11.5.png",
+          "qa-frames/dense-11.0.png",
+          "qa-frames/dense-10.5.png"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "id": "silent",
+      "item": 14,
+      "title": "Without sound: retell the video from picture and captions only",
+      "status": "manual",
+      "detail": "retell using qa.md 'silent storyboard'",
+      "data": {
+        "storyboard": [
+          "0.0s [video]  | ",
+          "2.1s [video]  | ",
+          "3.6s [video]  | ",
+          "4.8s [video]  | ",
+          "6.5s [video]  | ",
+          "7.8s [video]  | ",
+          "8.9s [video]  | "
+        ]
+      },
+      "ok": true
+    },
+    {
+      "id": "distinct",
+      "item": 15,
+      "title": "Different from the user's previous videos",
+      "status": "pass",
+      "detail": "no previous videos in memory",
+      "data": {
+        "first_hash": "0100010000000100010010000101000001010010001000001000100100000000100000001010010001100000001000000110010110010100110010011010001010010000100100101100001011001000110000101110100001100100011010010100101101011100010111001001010001011010101001100011001001001110",
+        "compared": 0
+      },
+      "ok": true
+    },
+    {
+      "id": "text_rules",
+      "item": 0,
+      "title": "Language, no long dashes, CTA rules, hook",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "cta": 0,
+        "link_in_safe_zone": 0,
+        "script": {
+          "cyrillic": 0.0,
+          "latin": 0.0,
+          "letters": 0
+        }
+      },
+      "ok": true
+    },
+    {
+      "id": "edit_content",
+      "item": 0,
+      "title": "Edit: shots differ, no titles or credits, no black frames > 0.5 s",
+      "status": "pass",
+      "detail": "7/7 different shots, no text screens, longest black 0.0s",
+      "data": {
+        "ok": true,
+        "problems": [],
+        "shots": 7,
+        "distinct_shots": 7,
+        "same_in_a_row": [],
+        "text_frames": [],
+        "longest_text_s": 0.0,
+        "longest_black_s": 0.0
+      },
+      "ok": true
+    },
+    {
+      "id": "beat_sync",
+      "item": 0,
+      "title": "Cuts on strong beats (50 ms), slow-mo on the peak",
+      "status": "pass",
+      "detail": "music is not beat-synced (audio.music.beat_sync is off)",
+      "data": {
+        "applicable": false
+      },
+      "ok": true
+    },
+    {
+      "id": "edit_style",
+      "item": 0,
+      "title": "Edit craft: full screen, link in the centre, speed curves, faces centred, drop on the line end",
+      "status": "pass",
+      "detail": "no edit scenes",
+      "data": {
+        "applicable": false
+      },
+      "ok": true
+    },
+    {
+      "id": "vfx",
+      "item": 0,
+      "title": "Effects: <= 3 flashes per second (WCAG 2.3.1), bars do not hide the hook, motivated effects",
+      "status": "pass",
+      "detail": "no 1.3 effects; flashes max 1/s",
+      "data": {
+        "flashes": {
+          "max_flashes": 1.0,
+          "at": 10.33,
+          "region": "frame",
+          "windows_over": 0,
+          "over_at": []
+        },
+        "notable": [],
+        "transitions": 0
+      },
+      "ok": true
+    },
+    {
+      "id": "author_layer",
+      "item": 0,
+      "title": "Foreign footage has >= 2 author layers (one core), no long stretch without them, credits",
+      "status": "warn",
+      "detail": "foreign footage (shot0: video, shot1: video, shot2: video) with 0 author layer(s): add voice, thesis text, own footage or a comparison (author_layer)",
+      "data": {
+        "foreign": [
+          "shot0: video",
+          "shot1: video",
+          "shot2: video",
+          "shot3: video",
+          "shot4: video",
+          "shot5: video",
+          "shot6: video"
+        ],
+        "declared": [],
+        "detected": [],
+        "count": 0,
+        "core": [],
+        "longest_foreign_only_s": 12.07,
+        "credits": []
+      },
+      "ok": true
+    },
+    {
+      "id": "publication_release",
+      "item": 0,
+      "title": "Publication acceptance",
+      "status": "manual",
+      "detail": "motion_reviewed not confirmed; audio_listened not confirmed; editorial_accepted not confirmed; sources_verified not confirmed; ui_overlay_reviewed not confirmed; exact music not verified",
+      "data": {
+        "ready": false,
+        "issues": [
+          "motion_reviewed not confirmed",
+          "audio_listened not confirmed",
+          "editorial_accepted not confirmed",
+          "sources_verified not confirmed",
+          "ui_overlay_reviewed not confirmed",
+          "exact music not verified"
+        ],
+        "technical_qa": "separate",
+        "publication_performance": "not predicted"
+      },
+      "ok": true
+    }
+  ],
+  "checklist": {
+    "items": [
+      {
+        "n": 1,
+        "text": "First frame interesting, not black, not a logo",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 2,
+        "text": "First line gives the result or a question, no greeting",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 3,
+        "text": "Idea reads on the first frame, small and without sound",
+        "answer": "check",
+        "how": "manual"
+      },
+      {
+        "n": 4,
+        "text": "Title: key words first, honest, <= 100 chars, <= 1 emoji",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 5,
+        "text": "Cover: one focus, 3-5 words, readable at 320 px, contrast",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 6,
+        "text": "Event every 2-3 s",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 7,
+        "text": "No pause > 1 s without a visual event",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 8,
+        "text": "Promise from the start is kept by the end",
+        "answer": "check",
+        "how": "manual"
+      },
+      {
+        "n": 9,
+        "text": "No goodbye, the end loops or leads to part 2",
+        "answer": "no",
+        "how": "auto"
+      },
+      {
+        "n": 10,
+        "text": "Clear without sound, captions present",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 11,
+        "text": "One call to action, after the value",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 12,
+        "text": "Link/handle in the safe zone twice, QR scans",
+        "answer": "no",
+        "how": "auto"
+      },
+      {
+        "n": 13,
+        "text": "Pinned comment and description ready",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 14,
+        "text": "Profile ready (remind the user)",
+        "answer": "check",
+        "how": "manual"
+      },
+      {
+        "n": 15,
+        "text": "Everything important inside the safe zone",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 16,
+        "text": "No slop: glow, gradients, empty zones, default font",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 17,
+        "text": "Texts in the right language, no long dashes",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 18,
+        "text": "About -14 LUFS, voice over music",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 19,
+        "text": "'Altered or synthetic content' label checked",
+        "answer": "check",
+        "how": "manual"
+      },
+      {
+        "n": 20,
+        "text": "Clearly different from previous videos",
+        "answer": "yes",
+        "how": "auto"
+      }
+    ],
+    "auto_yes": 14,
+    "auto_total": 16,
+    "manual": 4
+  },
+  "not_checked": [
+    "eyes",
+    "silent",
+    "publication_release"
+  ],
+  "aliases": {
+    "first": [
+      "first_frame"
+    ],
+    "motion": [
+      "first_frame",
+      "rhythm",
+      "layout"
+    ],
+    "pause": [
+      "rhythm"
+    ],
+    "safe": [
+      "safe_zone"
+    ],
+    "qr_decode": [
+      "qr"
+    ],
+    "slop": [
+      "anti_slop"
+    ],
+    "glow": [
+      "anti_slop"
+    ],
+    "gradient": [
+      "anti_slop"
+    ],
+    "lufs": [
+      "loudness"
+    ],
+    "caption": [
+      "captions"
+    ],
+    "duration": [
+      "format"
+    ],
+    "flash": [
+      "vfx"
+    ],
+    "effects": [
+      "vfx"
+    ],
+    "originality": [
+      "author_layer"
+    ],
+    "reused": [
+      "author_layer"
+    ]
+  }
+}

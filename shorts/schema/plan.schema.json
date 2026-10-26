@@ -1,0 +1,1840 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SHORTS plan",
+  "description": "Contract between the skills. SHORTS owns the schema, Viora Studio 8.0.0 produces plans against it. Change only together and bump schema_version. v1 additions in SHORTS 1.0.0 are optional fields only (see CHANGELOG). Relative paths anywhere in the plan (fonts, top.source, scene refs, music) are resolved from the folder of plan.json. Fields marked schema 1.1 need schema_version \"1.1\" to be relied on; a 1.0 engine ignores them.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "meta",
+    "layout",
+    "brand",
+    "scenes"
+  ],
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "1",
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4"
+      ],
+      "description": "1 = original contract; 1.1, 1.2 and 1.3 add only optional fields (CHANGELOG). Older plans stay valid."
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "name",
+        "language",
+        "platforms"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "language": {
+          "type": "string",
+          "minLength": 2
+        },
+        "platforms": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "youtube_shorts",
+              "tiktok",
+              "reels",
+              "youtube"
+            ]
+          }
+        },
+        "duration_target": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "emotion": {
+          "type": "string"
+        },
+        "audience": {
+          "type": "string"
+        },
+        "loop": {
+          "type": "boolean"
+        },
+        "fps": {
+          "enum": [
+            24,
+            25,
+            30,
+            50,
+            60
+          ],
+          "description": "Native cadence preferred; default 30. Explicit migration v1.6 supports 24/25/50 without forced duplicated frames."
+        },
+        "pacing": {
+          "enum": [
+            "dynamic",
+            "meaning"
+          ],
+          "description": "1.4: meaning requires manual pacing review, no fixed event interval"
+        },
+        "genre": {
+          "enum": [
+            "edit",
+            "tutorial",
+            "interview",
+            "story",
+            "observation",
+            "other"
+          ],
+          "description": "1.4: explicit genre, film-edit-only QA does not apply to tutorial/interview/etc"
+        }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "required": [
+        "mode"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "three",
+            "top_center",
+            "center_bottom",
+            "center_only",
+            "band"
+          ],
+          "description": "band (1.3): black fields, the picture band in the middle (>= 1056 px), title_bar in the top field (kinobust format)"
+        },
+        "top": {
+          "type": "object",
+          "properties": {
+            "height_pct": {
+              "type": "number",
+              "maximum": 20
+            },
+            "source": {
+              "type": "string",
+              "description": "loop:auto | loop:race|spin|code|runner (own procedural loop in brand colours), bg:auto | bg:<id> (1.3: background library, assets/footage/library.json: gameplay without sound, shorts.py bg list), a video file (the user own gameplay), html:<file.html>, or color:#hex (a solid colour is an empty panel and fails QA)"
+            },
+            "start": {
+              "type": "number",
+              "minimum": 0,
+              "description": "optional offset into the top video, s"
+            },
+            "fit": {
+              "type": "object",
+              "description": "1.3: how a video fills the banner",
+              "properties": {
+                "focus": {
+                  "description": "motion (window with the most motion, default for bg:), center, a number 0-1 (vertical position of the crop) or [x, y]",
+                  "anyOf": [
+                    {
+                      "enum": [
+                        "motion",
+                        "center"
+                      ]
+                    },
+                    {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "minItems": 2,
+                      "maxItems": 2
+                    }
+                  ]
+                },
+                "dim": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 0.6,
+                  "description": "darken the background so it does not fight the main picture (bg: default 0.12)"
+                }
+              }
+            }
+          }
+        },
+        "bottom": {
+          "type": "object",
+          "properties": {
+            "height_pct": {
+              "type": "number",
+              "maximum": 20
+            },
+            "handle": {
+              "type": "string"
+            },
+            "links": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "tagline": {
+              "type": "string",
+              "description": "optional short line under the handle"
+            },
+            "logo": {
+              "type": "string",
+              "description": "optional logo image path"
+            },
+            "name": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "action": {
+              "type": "string"
+            },
+            "qr_url": {
+              "type": "string",
+              "pattern": "^https://"
+            },
+            "animation": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "variant": {
+                  "enum": [
+                    "quattro",
+                    "bob"
+                  ]
+                },
+                "cycle": {
+                  "type": "number",
+                  "minimum": 8
+                },
+                "tracks": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "t",
+                        "value"
+                      ],
+                      "properties": {
+                        "t": {
+                          "type": "number",
+                          "minimum": 0
+                        },
+                        "value": {
+                          "type": "number"
+                        },
+                        "ease": {
+                          "enum": [
+                            "linear",
+                            "out_cubic",
+                            "in_out"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "safe_right": {
+                  "type": "integer",
+                  "minimum": 40,
+                  "maximum": 240
+                }
+              }
+            },
+            "reserve_bottom_pct": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 30
+            }
+          }
+        },
+        "cta_in_center": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "required": [
+              "kind"
+            ],
+            "properties": {
+              "t": {
+                "type": "number",
+                "minimum": 0,
+                "description": "start, seconds of the finished video"
+              },
+              "duration": {
+                "type": "number",
+                "minimum": 1.5,
+                "maximum": 3
+              },
+              "kind": {
+                "enum": [
+                  "handle",
+                  "qr",
+                  "text",
+                  "link",
+                  "subscribe"
+                ],
+                "description": "link (1.2): pill with the link; subscribe (1.3): channel card + SUBSCRIBE button, a cursor clicks it and it turns into SUBSCRIBED (with a click sound)"
+              },
+              "text": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "y": {
+                "description": "centre y: px number, or \"center\" = frame middle (960); QA checks the safe zone",
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "enum": [
+                      "center"
+                    ]
+                  }
+                ]
+              },
+              "anchor": {
+                "type": "object",
+                "required": [
+                  "scene"
+                ],
+                "properties": {
+                  "scene": {
+                    "type": "string",
+                    "description": "scene id"
+                  },
+                  "offset": {
+                    "type": "number",
+                    "description": "s from the scene start; negative = from the scene end"
+                  }
+                },
+                "description": "schema 1.1"
+              },
+              "t_pct": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "share of the real video length, schema 1.1"
+              },
+              "anim": {
+                "enum": [
+                  "pop",
+                  "slide",
+                  "pop_back"
+                ],
+                "description": "pop = scale from the centre, slide = rises from below (default for link), pop_back = pops with a small overshoot (default for subscribe)"
+              },
+              "icon": {
+                "enum": [
+                  "telegram",
+                  ""
+                ],
+                "description": "1.2, link only"
+              },
+              "caption": {
+                "type": "string",
+                "description": "1.2, link only: small line above the pill"
+              },
+              "target": {
+                "enum": [
+                  "youtube",
+                  "telegram"
+                ],
+                "description": "1.3, subscribe: bell icon (youtube) or paper plane (telegram)"
+              }
+            },
+            "anyOf": [
+              {
+                "required": [
+                  "t"
+                ]
+              },
+              {
+                "required": [
+                  "anchor"
+                ]
+              },
+              {
+                "required": [
+                  "t_pct"
+                ]
+              }
+            ],
+            "description": "When to show: t (s of the finished video), or anchor {scene, offset} (offset < 0 counts back from the scene end), or t_pct (0-1 of the real length). The engine resolves anchor/t_pct after TTS, keeps flashes inside the video and moves overlapping ones (gap 0.3 s), see manifest cta_schedule. Schema 1.1."
+          }
+        },
+        "band_h": {
+          "type": "number",
+          "minimum": 1056,
+          "maximum": 1920,
+          "description": "1.3, band mode: height of the picture band, px (default 1056)"
+        },
+        "band_y": {
+          "type": "number",
+          "minimum": 0,
+          "description": "1.3, band mode: top of the band, px (default: centred)"
+        },
+        "title_bar": {
+          "description": "1.3: topic plate (kinobust \"ЦЕНА ПРИЗНАНИЯ\"): an object for the whole video or a list of time pieces",
+          "anyOf": [
+            {
+              "type": "object",
+              "required": [
+                "text"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "2-5 words, <= 28 characters"
+                },
+                "sub": {
+                  "type": "string"
+                },
+                "style": {
+                  "enum": [
+                    "plate",
+                    "outline",
+                    "underline"
+                  ]
+                },
+                "from": {
+                  "$ref": "#/$defs/time"
+                },
+                "to": {
+                  "$ref": "#/$defs/time"
+                },
+                "anim": {
+                  "enum": [
+                    "none",
+                    "pop",
+                    "slide_down",
+                    "type"
+                  ],
+                  "description": "default none when it is on screen from the first frame"
+                }
+              }
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "text"
+                ],
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "description": "2-5 words, <= 28 characters"
+                  },
+                  "sub": {
+                    "type": "string"
+                  },
+                  "style": {
+                    "enum": [
+                      "plate",
+                      "outline",
+                      "underline"
+                    ]
+                  },
+                  "from": {
+                    "$ref": "#/$defs/time"
+                  },
+                  "to": {
+                    "$ref": "#/$defs/time"
+                  },
+                  "anim": {
+                    "enum": [
+                      "none",
+                      "pop",
+                      "slide_down",
+                      "type"
+                    ],
+                    "description": "default none when it is on screen from the first frame"
+                  }
+                }
+              },
+              "maxItems": 6
+            }
+          ]
+        },
+        "split": {
+          "type": "array",
+          "maxItems": 4,
+          "description": "1.3: second picture inside the centre (sludge 50/50, compare, reaction). Covering the whole video = scenes are captured at window A size.",
+          "items": {
+            "type": "object",
+            "required": [
+              "b"
+            ],
+            "properties": {
+              "from": {
+                "$ref": "#/$defs/time"
+              },
+              "to": {
+                "$ref": "#/$defs/time"
+              },
+              "mode": {
+                "enum": [
+                  "v2",
+                  "h2",
+                  "pip"
+                ]
+              },
+              "b": {
+                "type": "string",
+                "description": "bg:auto | bg:<id> | video file"
+              },
+              "ratio": {
+                "type": "number",
+                "minimum": 0.3,
+                "maximum": 0.8,
+                "description": "share of window A (v2: height, h2: width), default 0.5"
+              },
+              "gap": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 32
+              },
+              "anim": {
+                "enum": [
+                  "slide",
+                  "none"
+                ]
+              },
+              "a_pos": {
+                "enum": [
+                  "top",
+                  "bottom",
+                  "left",
+                  "right"
+                ]
+              },
+              "a_focus": {
+                "type": "array",
+                "items": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "b_focus": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "motion",
+                      "center"
+                    ]
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                  }
+                ]
+              },
+              "b_dim": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 0.6
+              },
+              "b_start": {
+                "type": "number",
+                "minimum": 0
+              },
+              "pos": {
+                "enum": [
+                  "tl",
+                  "tr",
+                  "bl",
+                  "br"
+                ],
+                "description": "pip corner (default bl: the right side is under the Shorts buttons)"
+              }
+            }
+          }
+        }
+      }
+    },
+    "brand": {
+      "type": "object",
+      "required": [
+        "preset"
+      ],
+      "properties": {
+        "preset": {
+          "type": "string",
+          "description": "mono, editorial, terminal, punch, viora, or a path to brand.json"
+        },
+        "palette": {
+          "type": "object",
+          "properties": {
+            "bg": {
+              "type": "string"
+            },
+            "fg": {
+              "type": "string"
+            },
+            "accent": {
+              "type": "string"
+            }
+          }
+        },
+        "fonts": {
+          "type": "object",
+          "properties": {
+            "display": {
+              "type": "string"
+            },
+            "body": {
+              "type": "string"
+            },
+            "logo": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string",
+              "description": "why a common default font (Inter, Arial...) was chosen on purpose"
+            }
+          },
+          "description": "font file paths; relative paths are resolved from the folder of plan.json, then the skill folder"
+        },
+        "line_width": {
+          "type": "number"
+        },
+        "radius": {
+          "type": "number"
+        },
+        "logo": {
+          "type": "object",
+          "properties": {
+            "color": {
+              "type": "string"
+            },
+            "mono": {
+              "type": "string"
+            }
+          }
+        },
+        "emotion_default": {
+          "type": "string"
+        },
+        "tone": {
+          "type": "string"
+        },
+        "label_style": {
+          "enum": [
+            "outline",
+            "plate"
+          ]
+        },
+        "upper": {
+          "type": "boolean"
+        },
+        "effects": {
+          "type": "object",
+          "description": "Slop effects. Off by default. If switched on, the QA gate fails the video on purpose.",
+          "properties": {
+            "text_glow": {
+              "type": "boolean"
+            },
+            "gradient_plate": {
+              "type": "boolean"
+            }
+          }
+        },
+        "register": {
+          "enum": [
+            "minimal",
+            "punch"
+          ],
+          "description": "schema 1.1: minimal = white caps on black, labels as outline, cover A first; punch = hero object + accent plate, cover B first. Alias x_viora.register is accepted."
+        }
+      }
+    },
+    "captions": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "max_words": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "highlight": {
+          "enum": [
+            "accent",
+            "none"
+          ]
+        },
+        "subs": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "size": {
+          "type": "number",
+          "description": "em size in px, min 64"
+        },
+        "y": {
+          "type": "number",
+          "description": "optional baseline override in px; QA checks the safe zone"
+        },
+        "upper": {
+          "type": "boolean"
+        },
+        "anim": {
+          "enum": [
+            "pop",
+            "grow"
+          ],
+          "description": "pop = small pop per chunk (default); grow = edit subtitles: grow in from small + blur, blur out (tutorial)"
+        },
+        "style": {
+          "enum": [
+            "karaoke",
+            "kinetic"
+          ],
+          "description": "karaoke = 2-3 words at the bottom (default); kinetic (1.3) = the phrase is built word by word in a stack over the picture"
+        },
+        "kinetic": {
+          "type": "object",
+          "properties": {
+            "max_lines": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "max_words": {
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 12
+            },
+            "box": {
+              "enum": [
+                "center",
+                "upper",
+                "lower"
+              ]
+            },
+            "accent": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "words to make big in the accent colour"
+            },
+            "auto_accent": {
+              "type": "boolean"
+            },
+            "pause": {
+              "type": "number",
+              "minimum": 0.15,
+              "maximum": 1.5
+            }
+          }
+        }
+      }
+    },
+    "audio": {
+      "type": "object",
+      "properties": {
+        "voice": {
+          "type": "object",
+          "properties": {
+            "engine": {
+              "type": "string"
+            },
+            "voice": {
+              "type": "string"
+            },
+            "speed": {
+              "type": "number"
+            }
+          }
+        },
+        "music": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string",
+              "description": "\"auto\" | \"none\" | file path (relative to plan.json) | URL"
+            },
+            "duck_db": {
+              "type": "number"
+            },
+            "start": {
+              "type": "number",
+              "minimum": 0
+            },
+            "gain_db": {
+              "type": "number"
+            },
+            "beat_sync": {
+              "type": "boolean",
+              "description": "since 1.1: cuts land on strong beats; QA check beat_sync measures it (50 ms)"
+            },
+            "drop_at": {
+              "type": "number",
+              "minimum": 0,
+              "description": "1.2, edits: video time of the music drop. Before it the music plays quietly under the dialogue (pre_drop_db), from it at full level"
+            },
+            "pre_drop_db": {
+              "type": "number",
+              "description": "1.2: music level before drop_at relative to the dialogue, dB (default -16)"
+            },
+            "offset": {
+              "type": "number",
+              "minimum": 0,
+              "description": "1.2: video time where the music begins (default 0)"
+            },
+            "mood": {
+              "type": "string",
+              "description": "2.4, with source auto: tense|epic|energetic|phonk|sad|calm|happy|tech|luxury|mystery|inspiring|gaming|romantic (or Russian words); guessed from the topic when absent"
+            },
+            "genre": {
+              "type": "string",
+              "description": "2.4, with source auto: genre words added to the search (lofi, synthwave, piano...)"
+            },
+            "query": {
+              "type": "string",
+              "description": "2.4, with source auto: exact YouTube search phrase (overrides mood/genre)"
+            },
+            "credit": {
+              "type": "string",
+              "description": "2.4: credit line for the description (pack adds it); written by edit --music auto"
+            }
+          },
+          "description": "2.4: source \"auto\" (default when the user named no track) = the renderer finds a fitting track on YouTube by mood/genre/query, starts it on a downbeat and writes music.json (credit for the description); \"none\" = no music (only when the user asked); a file path or URL = the user's track, never replaced"
+        },
+        "target_lufs": {
+          "type": "number"
+        },
+        "sfx_auto": {
+          "type": "boolean",
+          "description": "auto events: click on clicks, whoosh on cuts, pop on CTA (2.2: default false; events play only through audio.sfx)"
+        },
+        "sfx": {
+          "enum": [
+            "files",
+            "off",
+            "synth"
+          ],
+          "description": "2.2 sound policy: files (default) = only real recordings from assets/audio/sfx/<name>.wav|mp3|ogg|flac, events without a file are dropped (manifest.sfx_policy); off = no SFX; synth = opt-in drafts, noise-only click/whoosh/shutter. Pitched sounds (tick, pop, riser, hit) are never synthesized"
+        },
+        "export": {
+          "enum": [
+            "with_music",
+            "both",
+            "without_music"
+          ],
+          "description": "1.3: both = also <name>.nomusic.mp4 (voice + sfx) to add a trending sound inside the app; without_music = the main file has no music, music_cue.json says what and where"
+        }
+      }
+    },
+    "fx": {
+      "type": "object",
+      "description": "optional effects: punch / flash (beats), 1.3: letterbox, flicker, look_keys, transitions",
+      "properties": {
+        "punch": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "description": "times of zoom punches, s"
+        },
+        "flash": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "description": "times of 2-frame brightness flashes, s"
+        },
+        "letterbox": {
+          "description": "1.3: cinema bars (research 14.4): keys [{t, ratio|bars_pct, dur, ease}] and kicks [{t, pulse}] or {keys, hits, pulse}",
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "t": {
+                    "$ref": "#/$defs/time"
+                  },
+                  "ratio": {
+                    "description": "aspect of the visible picture: 2.39, \"21:9\", \"full\" (no bars)",
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0.5,
+                        "maximum": 4
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "bars_pct": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 40
+                  },
+                  "dur": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 3
+                  },
+                  "ease": {
+                    "enum": [
+                      "linear",
+                      "out_cubic",
+                      "in_cubic",
+                      "in_out"
+                    ]
+                  },
+                  "pulse": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 160
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "properties": {
+                "keys": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "t": {
+                        "$ref": "#/$defs/time"
+                      },
+                      "ratio": {
+                        "description": "aspect of the visible picture: 2.39, \"21:9\", \"full\" (no bars)",
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0.5,
+                            "maximum": 4
+                          },
+                          {
+                            "type": "string"
+                          }
+                        ]
+                      },
+                      "bars_pct": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 40
+                      },
+                      "dur": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 3
+                      },
+                      "ease": {
+                        "enum": [
+                          "linear",
+                          "out_cubic",
+                          "in_cubic",
+                          "in_out"
+                        ]
+                      },
+                      "pulse": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 160
+                      }
+                    }
+                  }
+                },
+                "hits": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "object"
+                      }
+                    ]
+                  }
+                },
+                "pulse": {
+                  "type": "number"
+                }
+              }
+            }
+          ]
+        },
+        "flicker": {
+          "type": "array",
+          "maxItems": 4,
+          "description": "1.3: short frame series (research 14.5). Limiter: <= 0.25 s, >= 1 s apart, <= 4 per video, <= 3 flashes per second (WCAG 2.3.1)",
+          "items": {
+            "type": "object",
+            "properties": {
+              "t": {
+                "$ref": "#/$defs/time"
+              },
+              "kind": {
+                "enum": [
+                  "cut",
+                  "exposure",
+                  "black"
+                ]
+              },
+              "pattern": {
+                "type": "string",
+                "pattern": "^[AB01]{1,8}$"
+              }
+            }
+          }
+        },
+        "look_keys": {
+          "type": "array",
+          "maxItems": 4,
+          "description": "1.3: colour switch inside the video (research 14.6), e.g. bw -> base on the drop",
+          "items": {
+            "type": "object",
+            "required": [
+              "look"
+            ],
+            "properties": {
+              "t": {
+                "$ref": "#/$defs/time"
+              },
+              "look": {
+                "enum": [
+                  "film",
+                  "cold",
+                  "punchy",
+                  "bw",
+                  "none",
+                  "base"
+                ]
+              },
+              "trans": {
+                "enum": [
+                  "cut",
+                  "fade",
+                  "wipe",
+                  "radial"
+                ]
+              },
+              "dur": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 2
+              },
+              "dir": {
+                "enum": [
+                  "lr",
+                  "rl",
+                  "tb",
+                  "bt"
+                ]
+              },
+              "cx": {
+                "type": "number"
+              },
+              "cy": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "transitions": {
+          "type": "object",
+          "description": "1.3: automatic transitions between scenes (research 03): 10-30% of joins, heavy moves never twice in a row",
+          "properties": {
+            "auto": {
+              "enum": [
+                "energy",
+                "phonk",
+                "facts",
+                "sad",
+                "calm",
+                "monologue"
+              ]
+            },
+            "share": {
+              "type": "number",
+              "minimum": 0.05,
+              "maximum": 0.4
+            }
+          }
+        }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "source"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "say": {
+            "type": "string"
+          },
+          "on_screen_text": {
+            "type": "string"
+          },
+          "why": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "output length when there is no voice, s"
+          },
+          "transcript": {
+            "type": "array",
+            "description": "word timings of real speech in this scene (relative to scene start), used for captions when there is no say",
+            "items": {
+              "type": "object",
+              "required": [
+                "w",
+                "s",
+                "e"
+              ],
+              "properties": {
+                "w": {
+                  "type": "string"
+                },
+                "s": {
+                  "type": "number"
+                },
+                "e": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "source": {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "site",
+                  "html",
+                  "video",
+                  "film",
+                  "text",
+                  "images"
+                ]
+              },
+              "ref": {
+                "type": "string",
+                "description": "URL, or a file path. Relative paths are resolved from the folder of plan.json (then the skill folder). video: bg:auto | bg:<id> = background gameplay on the whole frame (layout C)."
+              },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                },
+                "description": "site: goto(url), wait(s), move(x,y), click/hover/type(text|role+name|label|placeholder|sel; type has text, delay), press(key), scroll(dy, steps), dismiss_cookies; every action except the first may have t (s from page load), after, required. Unknown actions are skipped with a note."
+              },
+              "in": {
+                "type": "number",
+                "minimum": 0
+              },
+              "out": {
+                "type": "number",
+                "minimum": 0
+              },
+              "crop_x": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "keep_audio": {
+                "type": "boolean"
+              },
+              "viewport": {
+                "description": "mobile | desktop | {w,h} in CSS px"
+              },
+              "mode": {
+                "enum": [
+                  "deterministic",
+                  "realtime"
+                ]
+              },
+              "images": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "focus": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "zoom_on_click": {
+                "type": "boolean"
+              },
+              "seed": {
+                "type": "integer",
+                "description": "html: seed of Math.random in deterministic mode (same frames every run, default 7)"
+              },
+              "serve": {
+                "type": "boolean",
+                "description": "2.4, html: true = serve the page folder on 127.0.0.1 (automatic for <script type=\"module\"> / importmap pages: local module imports do not load from file://), false = always file://"
+              }
+            }
+          },
+          "speed": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "t",
+                "rate"
+              ],
+              "properties": {
+                "t": {
+                  "type": "number",
+                  "description": "source time from the scene start, s"
+                },
+                "rate": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            },
+            "description": "speed[].t is SOURCE time from the scene start (seconds of the site recording or the HTML timeline), not time of the finished video; from t on the source plays at rate."
+          },
+          "sfx": {
+            "type": "array",
+            "description": "2.2: plays only when assets/audio/sfx/<name>.wav|mp3|ogg|flac (a real recording) exists; otherwise dropped and listed in manifest.sfx_policy (see audio.sfx)",
+            "items": {
+              "type": "object",
+              "required": [
+                "t",
+                "name"
+              ],
+              "properties": {
+                "t": {
+                  "type": "number"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "duration_hint": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "minimum screen time, s (schema 1.1): length = max(voice + pause, duration, duration_hint); without say the scene lasts duration_hint. Alias x_duration_hint is accepted."
+          },
+          "avoid": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "known traps of a site (schema 1.1). 'click' or 'click:<text>' skips matching site actions (text is searched in the action fields, case-insensitive) and writes a note; free text is a note only. Alias x_avoid is accepted."
+          },
+          "edit": {
+            "type": "object",
+            "description": "1.2, film edits: how a film/video scene is processed (plan-level `edit` = defaults for every film scene)",
+            "properties": {
+              "reframe": {
+                "description": "face (default: 9:16 window follows the main face, AutoFlip-style stationary/tracking), center, or a number 0..1 = fixed crop centre",
+                "anyOf": [
+                  {
+                    "enum": [
+                      "face",
+                      "center"
+                    ]
+                  },
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                ]
+              },
+              "velocity": {
+                "description": "speed curve: preset velocity|hero|ramp_out|flat or points [[tau 0..1, rate], ...]; source.out-source.in = source seconds to spend",
+                "anyOf": [
+                  {
+                    "enum": [
+                      "velocity",
+                      "hero",
+                      "ramp_out",
+                      "flat",
+                      "none"
+                    ]
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "minItems": 2,
+                      "maxItems": 2
+                    }
+                  }
+                ]
+              },
+              "look": {
+                "description": "film|cold|punchy|bw|none or an object with grade, sharpen, grain, vignette, chroma, chroma_hit, shake_hit, sway",
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "object"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ]
+              },
+              "zoom": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 2
+              },
+              "hits": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "description": "scene-time seconds of shake/chromatic hits (default [0] = the cut)"
+              }
+            }
+          },
+          "trans": {
+            "description": "1.3: transition INTO this scene: kind or {kind, dur, dir}",
+            "anyOf": [
+              {
+                "enum": [
+                  "cut",
+                  "whip",
+                  "zoom",
+                  "flash_blur",
+                  "glitch",
+                  "dip",
+                  "spin",
+                  "dissolve",
+                  "flicker"
+                ]
+              },
+              {
+                "type": "object",
+                "required": [
+                  "kind"
+                ],
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "cut",
+                      "whip",
+                      "zoom",
+                      "flash_blur",
+                      "glitch",
+                      "dip",
+                      "spin",
+                      "dissolve",
+                      "flicker"
+                    ]
+                  },
+                  "dur": {
+                    "type": "number",
+                    "minimum": 0.05,
+                    "maximum": 1.0
+                  },
+                  "dir": {
+                    "enum": [
+                      "left",
+                      "right",
+                      "up",
+                      "down"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "narration": {
+            "type": "string",
+            "description": "1.4 long: local narration audio, replaces source sound; cannot combine with say."
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "topic": {
+          "type": "string"
+        },
+        "hashtags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cover_text": {
+          "type": "string"
+        },
+        "utm": {
+          "type": "boolean"
+        }
+      }
+    },
+    "edit": {
+      "type": "object",
+      "description": "1.2, film edits: how a film/video scene is processed (plan-level `edit` = defaults for every film scene)",
+      "properties": {
+        "reframe": {
+          "description": "face (default: 9:16 window follows the main face, AutoFlip-style stationary/tracking), center, or a number 0..1 = fixed crop centre",
+          "anyOf": [
+            {
+              "enum": [
+                "face",
+                "center"
+              ]
+            },
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          ]
+        },
+        "velocity": {
+          "description": "speed curve: preset velocity|hero|ramp_out|flat or points [[tau 0..1, rate], ...]; source.out-source.in = source seconds to spend",
+          "anyOf": [
+            {
+              "enum": [
+                "velocity",
+                "hero",
+                "ramp_out",
+                "flat",
+                "none"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              }
+            }
+          ]
+        },
+        "look": {
+          "description": "film|cold|punchy|bw|none or an object with grade, sharpen, grain, vignette, chroma, chroma_hit, shake_hit, sway",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "zoom": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "hits": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "description": "scene-time seconds of shake/chromatic hits (default [0] = the cut)"
+        }
+      }
+    },
+    "author_layer": {
+      "type": "array",
+      "description": "1.3: what YOU add to foreign material (YouTube reused content / originality rules 2026, research 15 and 22). Lint: with schema 1.3 a plan with film/video/foreign gameplay needs >= 2 layers.",
+      "items": {
+        "type": "object",
+        "required": [
+          "kind"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "voice",
+              "thesis",
+              "own_footage",
+              "compare",
+              "text_point",
+              "sound_design",
+              "interactive"
+            ]
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "overlays": {
+      "type": "object",
+      "description": "1.3: plates drawn by code",
+      "properties": {
+        "facts": {
+          "type": "array",
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "required": [
+              "t",
+              "text"
+            ],
+            "properties": {
+              "t": {
+                "$ref": "#/$defs/time"
+              },
+              "dur": {
+                "type": "number",
+                "minimum": 1.0,
+                "maximum": 8
+              },
+              "text": {
+                "type": "string",
+                "description": "1-2 short lines: date, place, number, name"
+              },
+              "sub": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "lower-third fact plates (Starikov format): black plate + accent bar, slide in from the left, captions move above them"
+        },
+        "arrow": {
+          "description": "arrow down to the Related video link / profile; true = last 2 s",
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "t": {
+                  "$ref": "#/$defs/time"
+                },
+                "dur": {
+                  "type": "number",
+                  "minimum": 1,
+                  "maximum": 4
+                },
+                "text": {
+                  "type": "string"
+                },
+                "side": {
+                  "enum": [
+                    "left",
+                    "center"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "post": {
+          "description": "1.3: post card over a background (layout C, research 14.9.2 / 17): writes itself with the voice",
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "scene": {
+                  "type": "string",
+                  "description": "scene whose voice the card reads (default: the first scene)"
+                },
+                "from": {
+                  "$ref": "#/$defs/time"
+                },
+                "to": {
+                  "$ref": "#/$defs/time"
+                },
+                "kind": {
+                  "enum": [
+                    "reddit",
+                    "telegram",
+                    "comment"
+                  ]
+                },
+                "name": {
+                  "type": "string",
+                  "description": "u/name, channel or @handle"
+                },
+                "where": {
+                  "type": "string",
+                  "description": "r/AskReddit, 'канал', '2 дня назад'"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "bold static title (<= 3 lines)"
+                },
+                "text": {
+                  "type": "string",
+                  "description": "'voice' (default) = the words of the voice appear as they are spoken; or a fixed text"
+                },
+                "stats": {
+                  "type": "string",
+                  "description": "'12,4k 873': votes and comments under the post"
+                },
+                "theme": {
+                  "enum": [
+                    "light",
+                    "dark"
+                  ]
+                },
+                "y": {
+                  "type": "number",
+                  "minimum": 288,
+                  "maximum": 1000,
+                  "description": "top of the card, px (default 300)"
+                },
+                "captions": {
+                  "type": "boolean",
+                  "description": "burn captions while the card reads (default false: the card shows the words)"
+                },
+                "anim": {
+                  "enum": [
+                    "slide_down",
+                    "pop",
+                    "none"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "array",
+              "maxItems": 4,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "scene": {
+                    "type": "string",
+                    "description": "scene whose voice the card reads (default: the first scene)"
+                  },
+                  "from": {
+                    "$ref": "#/$defs/time"
+                  },
+                  "to": {
+                    "$ref": "#/$defs/time"
+                  },
+                  "kind": {
+                    "enum": [
+                      "reddit",
+                      "telegram",
+                      "comment"
+                    ]
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "u/name, channel or @handle"
+                  },
+                  "where": {
+                    "type": "string",
+                    "description": "r/AskReddit, 'канал', '2 дня назад'"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "bold static title (<= 3 lines)"
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "'voice' (default) = the words of the voice appear as they are spoken; or a fixed text"
+                  },
+                  "stats": {
+                    "type": "string",
+                    "description": "'12,4k 873': votes and comments under the post"
+                  },
+                  "theme": {
+                    "enum": [
+                      "light",
+                      "dark"
+                    ]
+                  },
+                  "y": {
+                    "type": "number",
+                    "minimum": 288,
+                    "maximum": 1000,
+                    "description": "top of the card, px (default 300)"
+                  },
+                  "captions": {
+                    "type": "boolean",
+                    "description": "burn captions while the card reads (default false: the card shows the words)"
+                  },
+                  "anim": {
+                    "enum": [
+                      "slide_down",
+                      "pop",
+                      "none"
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "video": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format"
+      ],
+      "properties": {
+        "format": {
+          "const": "long"
+        },
+        "width": {
+          "enum": [
+            1280,
+            1920
+          ]
+        },
+        "height": {
+          "enum": [
+            720,
+            1080
+          ]
+        },
+        "fit": {
+          "enum": [
+            "contain",
+            "cover"
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "time": {
+      "description": "video time: seconds (negative = from the end), \"drop\" (audio.music.drop_at), \"start\", \"end\" or \"NN%\" of the length",
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "pattern": "^(drop|start|end|-?[0-9]+(\\.[0-9]+)?|[0-9]+(\\.[0-9]+)?%)$"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "video"
+        ]
+      },
+      "then": {
+        "properties": {
+          "schema_version": {
+            "const": "1.4"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "meta": {
+            "required": [
+              "pacing"
+            ]
+          }
+        },
+        "required": [
+          "meta"
+        ]
+      },
+      "then": {
+        "properties": {
+          "schema_version": {
+            "const": "1.4"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "meta": {
+            "required": [
+              "genre"
+            ]
+          }
+        },
+        "required": [
+          "meta"
+        ]
+      },
+      "then": {
+        "properties": {
+          "schema_version": {
+            "const": "1.4"
+          }
+        }
+      }
+    }
+  ]
+}

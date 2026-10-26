@@ -1,0 +1,63 @@
+# QA: one-html-file
+
+QA PASSED: 0 fail, 1 warn, 2 manual; checklist 15/16 auto, 4 for the agent
+
+| # | Check | Result | Detail |
+|---|---|---|---|
+| 1 | Format: 1080x1920, H.264/AAC, 30/60 fps, duration in target | OK |  |
+| 2 | First frame is not empty, motion in the first 1.5 s | OK |  |
+| 3 | Event at least every 3 s, no still pause > 1 s | OK |  |
+| 4 | Text, QR and links inside the platform safe zone | OK |  |
+| 5 | Text contrast and minimum font sizes | OK |  |
+| 6 | Centre >= 55% of height, no empty zone > 15%, panels filled | OK |  |
+| 7 | No glow, no gradient plates, <= 3 colours, no default font, no emoji | OK |  |
+| 8 | QR decodes from the finished video and matches the link | OK |  |
+| 9 | Captions synced (150 ms), no cut words, no overflow | OK |  |
+| 10 | Loudness -14 LUFS (+-1.5), true peak <= -1 dBTP, no clipping | OK |  |
+| 11 | Last frame matches the first or leads to part 2 | OK |  |
+| 12 | Titles 5-7 (<= 100 chars), one description, no long dashes, hashtags sane | OK |  |
+| 13 | Visual review: contact sheet (2 fps) and densest moments | EYES | open and describe: contact-1.png; qa-frames/dense-14.0.png, qa-frames/dense-13.5.png, qa-frames/dense-13.0.png |
+| 14 | Without sound: retell the video from picture and captions only | EYES | retell using qa.md 'silent storyboard' |
+| 15 | Different from the user's previous videos | OK |  |
+| + | Language, no long dashes, CTA rules, hook | WARN | CTA #2 (qr) 99.0s -> 11.7s: clamped into the video |
+| + | Edit: shots differ, no titles or credits, no black frames > 0.5 s | OK | not an edit (no film/video scenes) |
+| + | Cuts on strong beats (50 ms), slow-mo on the peak | OK | music is not beat-synced (audio.music.beat_sync is off) |
+
+## Checklist (research, section 9)
+
+| # | Item | Answer | How |
+|---|---|---|---|
+| 1 | First frame interesting, not black, not a logo | yes | auto |
+| 2 | First line gives the result or a question, no greeting | yes | auto |
+| 3 | Idea reads on the first frame, small and without sound | check | manual |
+| 4 | Title: key words first, honest, <= 100 chars, <= 1 emoji | yes | auto |
+| 5 | Cover: one focus, 3-5 words, readable at 320 px, contrast | check | auto |
+| 6 | Event every 2-3 s | yes | auto |
+| 7 | No pause > 1 s without a visual event | yes | auto |
+| 8 | Promise from the start is kept by the end | check | manual |
+| 9 | No goodbye, the end loops or leads to part 2 | yes | auto |
+| 10 | Clear without sound, captions present | yes | auto |
+| 11 | One call to action, after the value | yes | auto |
+| 12 | Link/handle in the safe zone twice, QR scans | yes | auto |
+| 13 | Pinned comment and description ready | yes | auto |
+| 14 | Profile ready (remind the user) | check | manual |
+| 15 | Everything important inside the safe zone | yes | auto |
+| 16 | No slop: glow, gradients, empty zones, default font | yes | auto |
+| 17 | Texts in the right language, no long dashes | yes | auto |
+| 18 | About -14 LUFS, voice over music | yes | auto |
+| 19 | 'Altered or synthetic content' label checked | check | manual |
+| 20 | Clearly different from previous videos | yes | auto |
+
+## Silent storyboard (picture + captions only)
+
+- 0.0s [html] ONE HTML FILE | This whole / animation is / one HTML file. / The engine
+- 2.9s [html]  | steps its clock, / so slow motion / stays smooth. / Speed it up
+- 6.7s [html] 2X SPEED | when the part / is boring. / Write code,
+- 8.9s [text]  | get frames, / post the video. / The link
+- 11.7s [html]  | is pinned, / and the file / is / in the channel.
+
+## Agent must still do
+
+1. Open the contact sheets and dense frames, write what you saw (item 13).
+2. Retell the video from the storyboard without sound (item 14).
+3. Answer the manual checklist items (3, 8, 14, 19) honestly.

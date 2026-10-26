@@ -1,0 +1,105 @@
+{
+  "changed": [
+    {
+      "path": "ROUTER.md",
+      "status": "changed"
+    },
+    {
+      "path": "SKILL.md",
+      "status": "changed"
+    },
+    {
+      "path": "VERSION",
+      "status": "changed"
+    },
+    {
+      "path": "reference/edits-film.md",
+      "status": "changed"
+    },
+    {
+      "path": "reference/metadata.md",
+      "status": "changed"
+    },
+    {
+      "path": "reference/qa.md",
+      "status": "changed"
+    },
+    {
+      "path": "reference/qr.md",
+      "status": "changed"
+    },
+    {
+      "path": "reference/user-package.md",
+      "status": "changed"
+    },
+    {
+      "path": "reference/vfx.md",
+      "status": "changed"
+    },
+    {
+      "path": "reference/youtube-access.md",
+      "status": "changed"
+    },
+    {
+      "path": "schema/plan.schema.json",
+      "status": "changed"
+    },
+    {
+      "path": "tools/shorts.py",
+      "status": "changed"
+    },
+    {
+      "path": "tools/shortskit/adapters/media.py",
+      "status": "changed"
+    },
+    {
+      "path": "tools/shortskit/adapters/ytbrowser.py",
+      "status": "changed"
+    },
+    {
+      "path": "tools/shortskit/engine/captions.py",
+      "status": "changed"
+    },
+    {
+      "path": "tools/shortskit/engine/layout.py",
+      "status": "changed"
+    },
+    {
+      "path": "tools/shortskit/engine/render.py",
+      "status": "changed"
+    },
+    {
+      "path": "tools/shortskit/meta/packaging.py",
+      "status": "changed"
+    },
+    {
+      "path": "tools/shortskit/meta/user_package.py",
+      "status": "changed"
+    },
+    {
+      "path": "tools/shortskit/plan.py",
+      "status": "changed"
+    },
+    {
+      "path": "tools/shortskit/qa/gate.py",
+      "status": "changed"
+    }
+  ],
+  "new": [
+    "docs/migration-1.6.md",
+    "reference/source-recovery.md",
+    "reference/live-banner.md",
+    "reference/dialogue-editing.md",
+    "reference/editorial-edit.md",
+    "reference/publication-clean.md",
+    "schema/release.example.json",
+    "tools/shortskit/recovery.py",
+    "tools/shortskit/release.py",
+    "tools/shortskit/editorial.py",
+    "tools/shortskit/engine/banner.py",
+    "tools/shortskit/qa/banner.py",
+    "tests/integration/test_live_banner_160.py",
+    "tests/unit/test_repair_160.py"
+  ],
+  "original_tests_modified": []
+}

@@ -1,0 +1,32 @@
+{
+ "duration": 30.0,
+ "video": "bbb-clip-1.mp4",
+ "fps": 30,
+ "schema_version": "1.1",
+ "engine": "shorts",
+ "engine_version": "1.1.0",
+ "cta_schedule": [
+  {
+   "index": 0,
+   "kind": "handle",
+   "requested": 11.0,
+   "how": "anchor part-2+1.00",
+   "duration": 2.0,
+   "dropped": false,
+   "t": 11.0,
+   "final": 11.0,
+   "reason": "as requested"
+  },
+  {
+   "index": 1,
+   "kind": "qr",
+   "requested": 25.8,
+   "how": "t_pct 0.86",
+   "duration": 3.0,
+   "dropped": false,
+   "t": 25.8,
+   "final": 25.8,
+   "reason": "as requested"
+  }
+ ]
+}

@@ -1,0 +1,606 @@
+{
+  "passed": true,
+  "video": "bbb-edit.mp4",
+  "duration": 20.27,
+  "summary": "QA PASSED: 0 fail, 0 warn, 2 manual; checklist 16/16 auto, 4 for the agent",
+  "checks": [
+    {
+      "id": "format",
+      "item": 1,
+      "title": "Format: 1080x1920, H.264/AAC, 30/60 fps, duration in target",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "w": 1080,
+        "h": 1920,
+        "vcodec": "h264",
+        "acodec": "aac",
+        "fps": 30.0,
+        "duration": 20.27,
+        "pix_fmt": "yuv420p"
+      },
+      "ok": true
+    },
+    {
+      "id": "first_frame",
+      "item": 2,
+      "title": "First frame is not empty, motion in the first 1.5 s",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "first": {
+          "mean": 121.1,
+          "std": 51.9,
+          "blank": false
+        },
+        "motion_first_1_5s": 73.09
+      },
+      "ok": true
+    },
+    {
+      "id": "rhythm",
+      "item": 3,
+      "title": "Event at least every 3 s, no still pause > 1 s",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "events": 61,
+        "max_gap": 1.07,
+        "visual_changes": 43,
+        "longest_still": 0.2,
+        "at": 1.6
+      },
+      "ok": true
+    },
+    {
+      "id": "safe_zone",
+      "item": 4,
+      "title": "Text, QR and links inside the platform safe zone",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "safe": [
+          48,
+          288,
+          888,
+          1248
+        ],
+        "platforms": [
+          "youtube_shorts"
+        ],
+        "outside": []
+      },
+      "ok": true
+    },
+    {
+      "id": "contrast",
+      "item": 5,
+      "title": "Text contrast and minimum font sizes",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "pairs": [
+          [
+            "label",
+            7.1,
+            7.0
+          ],
+          [
+            "cta_handle",
+            19.26,
+            7.0
+          ],
+          [
+            "cta_qr",
+            19.26,
+            7.0
+          ]
+        ]
+      },
+      "ok": true
+    },
+    {
+      "id": "layout",
+      "item": 6,
+      "title": "Centre >= 55% of height, no empty zone > 15%, panels filled",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "center_pct": 100.0,
+        "dead_zone": {
+          "max_share": 0.0,
+          "at": 0.0
+        }
+      },
+      "ok": true
+    },
+    {
+      "id": "anti_slop",
+      "item": 7,
+      "title": "No glow, no gradient plates, <= 3 colours, no default font, no emoji",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "graphics_colour_families": [
+          "hue330"
+        ],
+        "palette": [
+          "#000000",
+          "#E63946",
+          "#F5F5F5"
+        ]
+      },
+      "ok": true
+    },
+    {
+      "id": "qr",
+      "item": 8,
+      "title": "QR decodes from the finished video and matches the link",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "decoded": [
+          {
+            "t": 18.0,
+            "got": [
+              "https://t.me/VioraStudio"
+            ],
+            "want": "https://t.me/VioraStudio",
+            "side": 407
+          }
+        ]
+      },
+      "ok": true
+    },
+    {
+      "id": "captions",
+      "item": 9,
+      "title": "Captions synced (150 ms), no cut words, no overflow",
+      "status": "pass",
+      "detail": "no speech in this video",
+      "data": {},
+      "ok": true
+    },
+    {
+      "id": "loudness",
+      "item": 10,
+      "title": "Loudness -14 LUFS (+-1.5), true peak <= -1 dBTP, no clipping",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "lufs": -14.2,
+        "true_peak": -1.2,
+        "sample_peak": -1.188597,
+        "clipped": null,
+        "voice": false
+      },
+      "ok": true
+    },
+    {
+      "id": "loop",
+      "item": 11,
+      "title": "Last frame matches the first or leads to part 2",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "first_last_diff": 0.8,
+        "part2": false
+      },
+      "ok": true
+    },
+    {
+      "id": "metadata",
+      "item": 12,
+      "title": "Titles 5-7 (<= 100 chars), one description, no long dashes, hashtags sane",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "titles": 5,
+        "hashtags_unique": 8
+      },
+      "ok": true
+    },
+    {
+      "id": "eyes",
+      "item": 13,
+      "title": "Visual review: contact sheet (2 fps) and densest moments",
+      "status": "pass",
+      "detail": "agent looked at contact-1.png: 19 разных планов из середины Big Buck Bunny (195-428 с), титров и чёрного нет. Кролик, белка с бабочкой, летяга, лук и копья. Повторяются близкие моменты одной сцены (рыжая белка на 5.5 и 14 с, летяга на 6.5 и 15 с). Ник 10-12 с, QR 17-19.5 с. Последний кадр = первый, петля сходится.",
+      "data": {
+        "contact_sheets": [
+          "contact-1.png"
+        ],
+        "dense_frames": [
+          "qa-frames/dense-19.5.png",
+          "qa-frames/dense-19.0.png",
+          "qa-frames/dense-18.5.png"
+        ],
+        "agent_note": "19 разных планов из середины Big Buck Bunny (195-428 с), титров и чёрного нет. Кролик, белка с бабочкой, летяга, лук и копья. Повторяются близкие моменты одной сцены (рыжая белка на 5.5 и 14 с, летяга на 6.5 и 15 с). Ник 10-12 с, QR 17-19.5 с. Последний кадр = первый, петля сходится."
+      },
+      "ok": true
+    },
+    {
+      "id": "silent",
+      "item": 14,
+      "title": "Without sound: retell the video from picture and captions only",
+      "status": "pass",
+      "detail": "retold without sound: Нарезка под бит из мультфильма: большой кролик и обидевшие его зверьки, ник и QR в конце.",
+      "data": {
+        "storyboard": [
+          "0.0s [film] BIG BUCK BUNNY | ",
+          "1.1s [film]  | ",
+          "2.1s [film]  | ",
+          "3.2s [film]  | ",
+          "4.3s [film]  | ",
+          "5.4s [film]  | ",
+          "6.4s [film]  | ",
+          "7.5s [film]  | ",
+          "8.6s [film]  | ",
+          "9.6s [film]  | ",
+          "10.7s [film]  | ",
+          "11.8s [film]  | ",
+          "12.9s [film]  | ",
+          "13.9s [film]  | ",
+          "15.0s [film]  | ",
+          "16.1s [film]  | ",
+          "17.1s [film]  | ",
+          "18.2s [film]  | ",
+          "19.3s [film]  | "
+        ]
+      },
+      "ok": true
+    },
+    {
+      "id": "distinct",
+      "item": 15,
+      "title": "Different from the user's previous videos",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "first_hash": "1000101110001011010010101010001100010011011011010101010010110101110010110000111011011010011111100110010000110111000100011111100000010101000110000001101011100000000001111100000111100011000001111111001001111110011111011101100010111001100111100011101000111110",
+        "compared": 2
+      },
+      "ok": true
+    },
+    {
+      "id": "text_rules",
+      "item": 0,
+      "title": "Language, no long dashes, CTA rules, hook",
+      "status": "pass",
+      "detail": "",
+      "data": {
+        "cta": 2,
+        "link_in_safe_zone": 2,
+        "script": {
+          "cyrillic": 0.0,
+          "latin": 1.0,
+          "letters": 23
+        }
+      },
+      "ok": true
+    },
+    {
+      "id": "edit_content",
+      "item": 0,
+      "title": "Edit: shots differ, no titles or credits, no black frames > 0.5 s",
+      "status": "pass",
+      "detail": "19/19 different shots, no text screens, longest black 0.0s",
+      "data": {
+        "ok": true,
+        "problems": [],
+        "shots": 19,
+        "distinct_shots": 19,
+        "same_in_a_row": [],
+        "text_frames": [],
+        "longest_text_s": 0.0,
+        "longest_black_s": 0.0
+      },
+      "ok": true
+    },
+    {
+      "id": "beat_sync",
+      "item": 0,
+      "title": "Cuts on strong beats (50 ms), slow-mo on the peak",
+      "status": "pass",
+      "detail": "16/18 cuts on strong beats (89%)",
+      "data": {
+        "ok": true,
+        "hit_share": 0.889,
+        "hits": 16,
+        "planned_cuts": 18,
+        "visible_cuts": 16,
+        "measured_cuts": 30,
+        "tolerance_ms": 50,
+        "slowmo_scenes": [
+          "shot-02"
+        ],
+        "first_role": "best: moment 256.0s (score 0.976)",
+        "rows": [
+          {
+            "planned": 1.067,
+            "seen": 1.0667,
+            "beat": 1.068,
+            "err_ms": 1
+          },
+          {
+            "planned": 2.133,
+            "seen": 2.1333,
+            "beat": 2.136,
+            "err_ms": 3
+          },
+          {
+            "planned": 3.2,
+            "seen": 3.2,
+            "beat": 3.204,
+            "err_ms": 4
+          },
+          {
+            "planned": 4.267,
+            "seen": null,
+            "beat": 4.272,
+            "err_ms": null
+          },
+          {
+            "planned": 5.367,
+            "seen": 5.3667,
+            "beat": 5.363,
+            "err_ms": 4
+          },
+          {
+            "planned": 6.433,
+            "seen": 6.4333,
+            "beat": 6.432,
+            "err_ms": 1
+          },
+          {
+            "planned": 7.5,
+            "seen": 7.5,
+            "beat": 7.5,
+            "err_ms": 0
+          },
+          {
+            "planned": 8.567,
+            "seen": 8.5667,
+            "beat": 8.568,
+            "err_ms": 1
+          },
+          {
+            "planned": 9.633,
+            "seen": 9.6333,
+            "beat": 9.636,
+            "err_ms": 3
+          },
+          {
+            "planned": 10.7,
+            "seen": 10.7,
+            "beat": 10.704,
+            "err_ms": 4
+          },
+          {
+            "planned": 11.8,
+            "seen": 11.8,
+            "beat": 11.795,
+            "err_ms": 5
+          },
+          {
+            "planned": 12.867,
+            "seen": 12.8667,
+            "beat": 12.864,
+            "err_ms": 3
+          },
+          {
+            "planned": 13.933,
+            "seen": 13.9333,
+            "beat": 13.932,
+            "err_ms": 1
+          },
+          {
+            "planned": 15.0,
+            "seen": 15.0,
+            "beat": 15.0,
+            "err_ms": 0
+          },
+          {
+            "planned": 16.067,
+            "seen": 16.0667,
+            "beat": 16.068,
+            "err_ms": 1
+          },
+          {
+            "planned": 17.133,
+            "seen": 17.1333,
+            "beat": 17.136,
+            "err_ms": 3
+          },
+          {
+            "planned": 18.2,
+            "seen": 18.2,
+            "beat": 18.204,
+            "err_ms": 4
+          },
+          {
+            "planned": 19.267,
+            "seen": null,
+            "beat": 19.272,
+            "err_ms": null
+          }
+        ],
+        "beats_known": true
+      },
+      "ok": true
+    }
+  ],
+  "checklist": {
+    "items": [
+      {
+        "n": 1,
+        "text": "First frame interesting, not black, not a logo",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 2,
+        "text": "First line gives the result or a question, no greeting",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 3,
+        "text": "Idea reads on the first frame, small and without sound",
+        "answer": "check",
+        "how": "manual"
+      },
+      {
+        "n": 4,
+        "text": "Title: key words first, honest, <= 100 chars, <= 1 emoji",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 5,
+        "text": "Cover: one focus, 3-5 words, readable at 320 px, contrast",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 6,
+        "text": "Event every 2-3 s",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 7,
+        "text": "No pause > 1 s without a visual event",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 8,
+        "text": "Promise from the start is kept by the end",
+        "answer": "check",
+        "how": "manual"
+      },
+      {
+        "n": 9,
+        "text": "No goodbye, the end loops or leads to part 2",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 10,
+        "text": "Clear without sound, captions present",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 11,
+        "text": "One call to action, after the value",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 12,
+        "text": "Link/handle in the safe zone twice, QR scans",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 13,
+        "text": "Pinned comment and description ready",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 14,
+        "text": "Profile ready (remind the user)",
+        "answer": "check",
+        "how": "manual"
+      },
+      {
+        "n": 15,
+        "text": "Everything important inside the safe zone",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 16,
+        "text": "No slop: glow, gradients, empty zones, default font",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 17,
+        "text": "Texts in the right language, no long dashes",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 18,
+        "text": "About -14 LUFS, voice over music",
+        "answer": "yes",
+        "how": "auto"
+      },
+      {
+        "n": 19,
+        "text": "'Altered or synthetic content' label checked",
+        "answer": "check",
+        "how": "manual"
+      },
+      {
+        "n": 20,
+        "text": "Clearly different from previous videos",
+        "answer": "yes",
+        "how": "auto"
+      }
+    ],
+    "auto_yes": 16,
+    "auto_total": 16,
+    "manual": 4
+  },
+  "not_checked": [
+    "eyes",
+    "silent"
+  ],
+  "aliases": {
+    "first": [
+      "first_frame"
+    ],
+    "motion": [
+      "first_frame",
+      "rhythm",
+      "layout"
+    ],
+    "pause": [
+      "rhythm"
+    ],
+    "safe": [
+      "safe_zone"
+    ],
+    "qr_decode": [
+      "qr"
+    ],
+    "slop": [
+      "anti_slop"
+    ],
+    "glow": [
+      "anti_slop"
+    ],
+    "gradient": [
+      "anti_slop"
+    ],
+    "lufs": [
+      "loudness"
+    ],
+    "caption": [
+      "captions"
+    ],
+    "duration": [
+      "format"
+    ]
+  },
+  "review": {
+    "at": "2026-10-12 05:35 UTC",
+    "saw": "19 разных планов из середины Big Buck Bunny (195-428 с), титров и чёрного нет. Кролик, белка с бабочкой, летяга, лук и копья. Повторяются близкие моменты одной сцены (рыжая белка на 5.5 и 14 с, летяга на 6.5 и 15 с). Ник 10-12 с, QR 17-19.5 с. Последний кадр = первый, петля сходится.",
+    "silent": "Нарезка под бит из мультфильма: большой кролик и обидевшие его зверьки, ник и QR в конце."
+  }
+}

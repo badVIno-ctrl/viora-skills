@@ -1,0 +1,384 @@
+{
+ "title": "Что будет, если 3 дня не пить воду",
+ "slug": "explainer-water",
+ "format": "short",
+ "aspect": "9:16",
+ "lang": "ru",
+ "voice": "ru-male-1",
+ "engine": "auto",
+ "speed": 1.08,
+ "music": "auto",
+ "style": {
+  "outline": "thin",
+  "grain": 0.04,
+  "vignette": 0.3,
+  "captions": "caps"
+ },
+ "cast": {
+  "doc": {
+   "look": "doctor",
+   "name": "Док",
+   "detail": "glasses",
+   "hair_style": "short",
+   "hair": "#4A3426"
+  },
+  "max": {
+   "look": "hero",
+   "name": "Макс"
+  }
+ },
+ "scenes": [
+  {
+   "say": "Что будет, если *три дня* не пить воду?",
+   "camera": "push",
+   "set": {
+    "id": "room",
+    "time": "day"
+   },
+   "actors": [
+    {
+     "id": "doc",
+     "pose": "point",
+     "emotion": "worried",
+     "face": "front",
+     "gaze": "camera",
+     "at": 0.5
+    }
+   ],
+   "hud": [
+    {
+     "type": "title",
+     "text": "3 дня без воды",
+     "color": "danger"
+    }
+   ]
+  },
+  {
+   "say": "Правило трёх: три минуты без воздуха, три дня без воды, три недели без *еды*.",
+   "scheme": {
+    "type": "timeline",
+    "title": "Правило трёх",
+    "steps": [
+     {
+      "text": "3 минуты",
+      "sub": "без воздуха",
+      "icon": "warning",
+      "on": "минуты"
+     },
+     {
+      "text": "3 дня",
+      "sub": "без воды",
+      "icon": "drop",
+      "color": "danger",
+      "on": "дня"
+     },
+     {
+      "text": "3 недели",
+      "sub": "без еды",
+      "icon": "food",
+      "on": "недели"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Тело взрослого — это примерно *60 процентов* воды.",
+   "scheme": {
+    "type": "gauge",
+    "kind": "tank",
+    "title": "Вода в теле",
+    "from": 0,
+    "to": 0.6,
+    "t": 0.3
+   }
+  },
+  {
+   "say": "Потеря двух процентов — жажда, пяти — головокружение, десяти — уже *опасно*.",
+   "scheme": {
+    "type": "bars",
+    "title": "Сколько воды потеряно",
+    "unit": "%",
+    "max": 12,
+    "bars": [
+     {
+      "label": "жажда, усталость",
+      "value": 2,
+      "on": "двух"
+     },
+     {
+      "label": "головокружение",
+      "value": 5,
+      "color": "warn",
+      "on": "пяти"
+     },
+     {
+      "label": "опасно для жизни",
+      "value": 10,
+      "color": "danger",
+      "on": "десяти"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Представь: ты застрял на трассе в *жару*.",
+   "clock": "ДЕНЬ 1 — 14:00",
+   "camera": "pan_left",
+   "set": {
+    "id": "road",
+    "time": "day"
+   },
+   "fx": [
+    {
+     "type": "dust",
+     "amount": 1.4
+    }
+   ],
+   "actors": [
+    {
+     "id": "max",
+     "pose": "stand",
+     "emotion": "worried",
+     "face": "right",
+     "at": 0.42
+    }
+   ],
+   "props": [
+    {
+     "id": "car",
+     "at": [
+      0.74,
+      null
+     ]
+    }
+   ],
+   "hud": [
+    {
+     "type": "bar",
+     "label": "Силы",
+     "icon": "heart",
+     "from": 1.0,
+     "to": 0.85
+    }
+   ]
+  },
+  {
+   "say": "День первый: сильная жажда, сухо во рту, *тёмная* моча.",
+   "set": {
+    "id": "road",
+    "time": "day"
+   },
+   "actors": [
+    {
+     "id": "max",
+     "pose": "drink",
+     "hold": "bottle",
+     "emotion": "tired",
+     "face": "right",
+     "at": 0.45
+    }
+   ],
+   "hud": [
+    {
+     "type": "bar",
+     "label": "Силы",
+     "icon": "heart",
+     "from": 0.85,
+     "to": 0.65
+    },
+    {
+     "type": "plate",
+     "text": "−2%",
+     "sub": "жажда",
+     "icon": "drop",
+     "color": "warn",
+     "on": "жажда"
+    }
+   ]
+  },
+  {
+   "say": "День второй: болит голова, сердце бьётся *чаще*.",
+   "clock": "ДЕНЬ 2 — 13:10",
+   "set": {
+    "id": "road",
+    "time": "dusk"
+   },
+   "fx": [
+    "dust"
+   ],
+   "actors": [
+    {
+     "id": "max",
+     "pose": "sit_floor",
+     "emotion": "sad",
+     "face": "left",
+     "at": 0.5
+    }
+   ],
+   "props": [
+    {
+     "id": "car",
+     "at": [
+      0.2,
+      null
+     ]
+    }
+   ],
+   "hud": [
+    {
+     "type": "bar",
+     "label": "Силы",
+     "icon": "heart",
+     "from": 0.65,
+     "to": 0.4
+    },
+    {
+     "type": "plate",
+     "text": "−5%",
+     "sub": "голова, пульс",
+     "icon": "heart",
+     "color": "warn",
+     "on": "голова"
+    }
+   ]
+  },
+  {
+   "say": "День третий: путаются мысли, отказывают почки. Без помощи — *конец*.",
+   "clock": "ДЕНЬ 3 — 12:30",
+   "camera": "crash",
+   "set": {
+    "id": "road",
+    "time": "dusk"
+   },
+   "fx": [
+    "dust"
+   ],
+   "actors": [
+    {
+     "id": "max",
+     "pose": "lie",
+     "emotion": "tired",
+     "at": 0.5
+    }
+   ],
+   "hud": [
+    {
+     "type": "bar",
+     "label": "Силы",
+     "icon": "heart",
+     "from": 0.4,
+     "to": 0.12
+    },
+    {
+     "type": "stamp",
+     "text": "Критично",
+     "on": "конец"
+    }
+   ]
+  },
+  {
+   "say": "Что делать, если воды *мало*?",
+   "set": {
+    "id": "room",
+    "time": "day"
+   },
+   "actors": [
+    {
+     "id": "doc",
+     "pose": "think",
+     "emotion": "think",
+     "face": "front",
+     "at": 0.5
+    }
+   ],
+   "clock": false
+  },
+  {
+   "say": "Нельзя: морскую воду и алкоголь. Можно: тень, покой и пить *маленькими* глотками.",
+   "scheme": {
+    "type": "compare",
+    "left": {
+     "title": "Нельзя",
+     "items": [
+      {
+       "text": "Морская вода",
+       "on": "морскую"
+      },
+      {
+       "text": "Алкоголь",
+       "on": "алкоголь"
+      }
+     ]
+    },
+    "right": {
+     "title": "Можно",
+     "items": [
+      {
+       "text": "Тень и покой",
+       "on": "тень"
+      },
+      {
+       "text": "Пить глотками",
+       "on": "маленькими"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "say": "Ночью иди, днём *прячься* от солнца.",
+   "set": {
+    "id": "road",
+    "time": "night"
+   },
+   "fx": [
+    "stars"
+   ],
+   "actors": [
+    {
+     "id": "max",
+     "pose": "walk",
+     "hold": "flashlight",
+     "emotion": "determined",
+     "path": [
+      [
+       0,
+       0.15,
+       null
+      ],
+      [
+       2.8,
+       0.7,
+       null
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "say": "А сколько воды пьёшь *ты*? Пиши в комментариях.",
+   "camera": "push",
+   "set": {
+    "id": "room",
+    "time": "day"
+   },
+   "actors": [
+    {
+     "id": "doc",
+     "pose": "point",
+     "emotion": "smile",
+     "face": "front",
+     "gaze": "camera",
+     "at": 0.5
+    }
+   ],
+   "hud": [
+    {
+     "type": "question",
+     "text": "Сколько воды в день?",
+     "on": "пьёшь"
+    }
+   ]
+  }
+ ]
+}

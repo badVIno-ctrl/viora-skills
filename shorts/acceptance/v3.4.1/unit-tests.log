@@ -1,0 +1,16 @@
+........................................................................ [ 19%]
+..............................................s......................... [ 38%]
+...................................................................s.... [ 58%]
+...F.................................................................... [ 77%]
+........................................................................ [ 96%]
+............                                                             [100%]
+=================================== FAILURES ===================================
+____________________________ test_english_template _____________________________
+
+>   ???
+E   AssertionError: assert (not [] and 'Full video on the channel.' in '#ai #tech\nTwo free sites you will use.\n\n\n\n#shorts #tools #productivity\n')
+
+/vercel/sandbox/data/shorts_upgrade/shorts/tests/unit/test_meta.py:54: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_meta.py::test_english_template - AssertionError: asser...
+1 failed, 369 passed, 2 skipped in 36.10s

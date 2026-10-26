@@ -1,0 +1,675 @@
+{
+ "title": "30 дней на даче среди зомби",
+ "slug": "zombie-dacha",
+ "format": "short",
+ "aspect": "9:16",
+ "lang": "ru",
+ "voice": "ru-male-1",
+ "engine": "auto",
+ "speed": 1.08,
+ "music": "auto",
+ "style": {
+  "outline": "thin",
+  "grain": 0.05,
+  "vignette": 0.36,
+  "captions": "caps"
+ },
+ "cast": {
+  "vanya": {
+   "look": "ushanka",
+   "name": "Ваня"
+  },
+  "bim": {
+   "look": "dog_tan",
+   "name": "Бим"
+  }
+ },
+ "scenes": [
+  {
+   "say": "Город заражён, а ты на *даче* с собакой.",
+   "shot": "wide",
+   "camera": "push",
+   "set": {
+    "id": "dacha",
+    "time": "winter",
+    "snow": true,
+    "smoke": true
+   },
+   "actors": [
+    {
+     "id": "vanya",
+     "pose": "stand",
+     "emotion": "worried",
+     "face": "left",
+     "at": 0.6
+    },
+    {
+     "id": "bim",
+     "pose": "sit",
+     "at": 0.78,
+     "face": "left"
+    }
+   ],
+   "props": [
+    {
+     "id": "crowd",
+     "n": 6,
+     "area": [
+      0.0,
+      0.69,
+      0.28,
+      0.74
+     ],
+     "look": "zombie",
+     "look2": "zombie2",
+     "h": 0.09,
+     "walk": 0.05
+    }
+   ],
+   "hud": [
+    {
+     "type": "clock",
+     "text": "ДЕНЬ 1 — 07:40"
+    },
+    {
+     "type": "counter",
+     "label": "Заражённые",
+     "from": 0,
+     "to": 6,
+     "at": "tr",
+     "on": "заражён"
+    }
+   ]
+  },
+  {
+   "say": "По трассе к посёлку идёт *толпа*.",
+   "camera": "pan_left",
+   "set": {
+    "id": "road",
+    "time": "winter",
+    "snow": true
+   },
+   "props": [
+    {
+     "id": "crowd",
+     "n": 11,
+     "area": [
+      0.05,
+      0.72,
+      0.95,
+      0.86
+     ],
+     "look": "zombie",
+     "look2": "zombie2",
+     "walk": -0.12
+    }
+   ],
+   "hud": [
+    {
+     "type": "counter",
+     "label": "Заражённые",
+     "from": 6,
+     "to": 140,
+     "at": "tr",
+     "on": "толпа"
+    }
+   ]
+  },
+  {
+   "say": "До города сорок километров. Они дойдут к *ночи*.",
+   "scheme": {
+    "type": "map",
+    "title": "Сколько у тебя времени",
+    "unit": " км",
+    "center_icon": "house",
+    "center_label": "дача",
+    "rings": [
+     {
+      "r": 1,
+      "label": "10 км"
+     },
+     {
+      "r": 2,
+      "label": "20 км"
+     },
+     {
+      "r": 4,
+      "label": "40 км",
+      "color": "danger"
+     }
+    ],
+    "points": [
+     {
+      "at": [
+       0.86,
+       0.12
+      ],
+      "icon": "zombie",
+      "label": "город",
+      "color": "danger",
+      "on": "города"
+     }
+    ],
+    "route": [
+     [
+      0.86,
+      0.12
+     ],
+     [
+      0.7,
+      0.3
+     ],
+     [
+      0.5,
+      0.5
+     ]
+    ],
+    "route_on": "дойдут",
+    "route_dur": 1.4
+   }
+  },
+  {
+   "say": "Что делать *первым*?",
+   "set": {
+    "id": "dacha",
+    "time": "winter",
+    "snow": true
+   },
+   "actors": [
+    {
+     "id": "vanya",
+     "pose": "think",
+     "emotion": "think",
+     "face": "front"
+    }
+   ]
+  },
+  {
+   "say": "Генератор, доски на окна или лес? Ответ: *доски*.",
+   "scheme": {
+    "type": "quiz",
+    "title": "Твой выбор",
+    "question": "Что первым?",
+    "options": [
+     "Завести генератор",
+     "Заколотить окна",
+     "Бежать в лес"
+    ],
+    "answer": 1,
+    "reveal_on": "доски"
+   }
+  },
+  {
+   "say": "Забивай окна *первого этажа*,",
+   "set": {
+    "id": "dacha",
+    "time": "winter",
+    "snow": true
+   },
+   "actors": [
+    {
+     "id": "vanya",
+     "pose": "knock",
+     "hold": "hammer",
+     "emotion": "determined",
+     "face": "left",
+     "at": 0.6
+    }
+   ],
+   "props": [
+    {
+     "id": "planks",
+     "at": [
+      0.3,
+      null
+     ]
+    }
+   ],
+   "hud": [
+    {
+     "type": "plate",
+     "text": "Шаг 1 · окна",
+     "sub": "только первый этаж",
+     "icon": "shield",
+     "color": "warn"
+    }
+   ]
+  },
+  {
+   "say": "а спи наверху и *убери лестницу*.",
+   "scheme": {
+    "type": "cutaway",
+    "title": "Спи наверху",
+    "floors": 2,
+    "hero_floor": 2,
+    "power": false,
+    "labels": [
+     {
+      "floor": 2,
+      "text": "Спальня",
+      "sub": "лестницу наверх",
+      "icon": "house",
+      "on": "наверху"
+     },
+     {
+      "floor": 1,
+      "text": "Доски",
+      "sub": "окна закрыты",
+      "color": "warn",
+      "icon": "shield",
+      "on": "лестницу"
+     }
+    ],
+    "pump": false
+   }
+  },
+  {
+   "say": "Генератор *не заводи*: он ревёт на весь посёлок.",
+   "accent": "red",
+   "set": {
+    "id": "dacha",
+    "time": "night",
+    "snow": true
+   },
+   "actors": [
+    {
+     "id": "vanya",
+     "pose": "shrug",
+     "emotion": "worried",
+     "face": "right",
+     "at": 0.36
+    }
+   ],
+   "props": [
+    {
+     "id": "generator",
+     "at": [
+      0.7,
+      null
+     ]
+    }
+   ],
+   "hud": [
+    {
+     "type": "stamp",
+     "text": "Шум",
+     "on": "ревёт"
+    }
+   ]
+  },
+  {
+   "say": "Его слышно за километр, а они идут *на звук*.",
+   "scheme": {
+    "type": "radius",
+    "bg": "dark",
+    "title": "Радиус шума",
+    "center_icon": "bolt",
+    "center_label": "генератор",
+    "rings": [
+     {
+      "r": 1,
+      "label": "300 м"
+     },
+     {
+      "r": 2,
+      "label": "600 м"
+     },
+     {
+      "r": 3,
+      "label": "1 км",
+      "color": "danger"
+     }
+    ],
+    "points": [
+     {
+      "at": [
+       0.15,
+       0.2
+      ],
+      "icon": "zombie",
+      "color": "danger",
+      "on": "звук"
+     },
+     {
+      "at": [
+       0.85,
+       0.75
+      ],
+      "icon": "zombie",
+      "color": "danger",
+      "on": "звук"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Воду бери из *колодца* и кипяти.",
+   "set": {
+    "id": "dacha",
+    "time": "winter",
+    "snow": true
+   },
+   "actors": [
+    {
+     "id": "vanya",
+     "pose": "carry",
+     "hold": "bucket",
+     "emotion": "calm",
+     "face": "right",
+     "at": 0.36
+    }
+   ],
+   "props": [
+    {
+     "id": "well",
+     "at": [
+      0.72,
+      null
+     ]
+    }
+   ],
+   "hud": [
+    {
+     "type": "plate",
+     "text": "Шаг 2 · вода",
+     "sub": "кипятить 3 минуты",
+     "icon": "drop",
+     "color": "blue"
+    }
+   ]
+  },
+  {
+   "say": "У двери держи рюкзак: вода, еда, фонарик, аптечка.",
+   "scheme": {
+    "type": "checklist",
+    "title": "Тревожный рюкзак",
+    "items": [
+     {
+      "text": "Вода",
+      "on": "вода"
+     },
+     {
+      "text": "Еда на 3 дня",
+      "on": "еда"
+     },
+     {
+      "text": "Фонарик",
+      "on": "фонарик"
+     },
+     {
+      "text": "Аптечка",
+      "on": "аптечка"
+     }
+    ]
+   }
+  },
+  {
+   "say": "На двенадцатую ночь Бим *залаял*.",
+   "clock": "ДЕНЬ 12 — 23:10",
+   "camera": "crash",
+   "set": {
+    "id": "dacha",
+    "time": "night",
+    "snow": true
+   },
+   "actors": [
+    {
+     "id": "bim",
+     "pose": "stand",
+     "emotion": "angry",
+     "face": "left",
+     "acts": [
+      {
+       "on": "залаял",
+       "pose": "bark"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "say": "У забора *десятки* заражённых.",
+   "accent": "red",
+   "fx": [
+    "fog"
+   ],
+   "set": {
+    "id": "dacha",
+    "time": "night",
+    "snow": true
+   },
+   "props": [
+    {
+     "id": "crowd",
+     "n": 12,
+     "area": [
+      0.04,
+      0.7,
+      0.96,
+      0.8
+     ],
+     "look": "zombie",
+     "look2": "zombie2",
+     "walk": 0.06
+    }
+   ],
+   "hud": [
+    {
+     "type": "counter",
+     "label": "Заражённые",
+     "from": 0,
+     "to": 37,
+     "at": "tr",
+     "on": "десятки"
+    }
+   ]
+  },
+  {
+   "say": "Они пришли на лай. Свет *не включай*.",
+   "set": {
+    "id": "dacha",
+    "time": "night",
+    "snow": true
+   },
+   "actors": [
+    {
+     "id": "vanya",
+     "pose": "scared",
+     "emotion": "scared",
+     "face": "front"
+    }
+   ]
+  },
+  {
+   "say": "Уходи огородом к лесу, пока они у *ворот*.",
+   "scheme": {
+    "type": "topview",
+    "title": "Путь отхода",
+    "aspect": 0.9,
+    "rooms": [
+     {
+      "x": 0.06,
+      "y": 0.06,
+      "w": 0.42,
+      "h": 0.32,
+      "label": "дом"
+     },
+     {
+      "x": 0.06,
+      "y": 0.5,
+      "w": 0.6,
+      "h": 0.42,
+      "label": "огород"
+     }
+    ],
+    "windows": [],
+    "doors": [
+     [
+      0.27,
+      0.38
+     ]
+    ],
+    "zones": [
+     {
+      "x": 0.7,
+      "y": 0.02,
+      "w": 0.28,
+      "h": 0.3,
+      "color": "danger",
+      "label": "у ворот",
+      "on": "ворот"
+     }
+    ],
+    "marks": [
+     {
+      "at": [
+       0.84,
+       0.2
+      ],
+      "icon": "zombie",
+      "label": "толпа",
+      "color": "danger",
+      "t": 0.3
+     },
+     {
+      "at": [
+       0.88,
+       0.9
+      ],
+      "icon": "plant",
+      "label": "лес",
+      "color": "ok",
+      "t": 0.5
+     }
+    ],
+    "path": [
+     [
+      0.27,
+      0.4
+     ],
+     [
+      0.3,
+      0.7
+     ],
+     [
+      0.6,
+      0.9
+     ],
+     [
+      0.86,
+      0.9
+     ]
+    ],
+    "path_on": "огородом",
+    "path_color": "ok"
+   }
+  },
+  {
+   "say": "Тихо, по своим следам, без фонаря.",
+   "set": {
+    "id": "forest",
+    "time": "night",
+    "snow": true
+   },
+   "actors": [
+    {
+     "id": "vanya",
+     "hold": "backpack",
+     "emotion": "determined",
+     "path": [
+      [
+       0,
+       0.1,
+       null
+      ],
+      [
+       2.6,
+       0.62,
+       null
+      ]
+     ]
+    },
+    {
+     "id": "bim",
+     "path": [
+      [
+       0,
+       0.0,
+       null
+      ],
+      [
+       2.6,
+       0.8,
+       null
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "say": "К утру вы в лесу. Рюкзак *спас* вам жизнь.",
+   "clock": "ДЕНЬ 13 — 06:20",
+   "set": {
+    "id": "forest",
+    "time": "dusk",
+    "snow": true
+   },
+   "actors": [
+    {
+     "id": "vanya",
+     "pose": "sit_floor",
+     "emotion": "tired",
+     "face": "right",
+     "at": 0.4,
+     "feel": [
+      {
+       "on": "спас",
+       "emotion": "smile"
+      }
+     ]
+    },
+    {
+     "id": "bim",
+     "pose": "lie",
+     "emotion": "happy",
+     "at": 0.66,
+     "face": "left"
+    }
+   ],
+   "props": [
+    {
+     "id": "campfire",
+     "at": [
+      0.53,
+      null
+     ]
+    }
+   ]
+  },
+  {
+   "say": "А что *ты* положишь в рюкзак первым? Пиши в комментариях.",
+   "camera": "push",
+   "set": {
+    "id": "forest",
+    "time": "dusk",
+    "snow": true
+   },
+   "actors": [
+    {
+     "id": "vanya",
+     "pose": "point",
+     "emotion": "smile",
+     "face": "front",
+     "gaze": "camera"
+    }
+   ],
+   "hud": [
+    {
+     "type": "question",
+     "text": "Что положишь первым?",
+     "on": "положишь"
+    }
+   ]
+  }
+ ]
+}

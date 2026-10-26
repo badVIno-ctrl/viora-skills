@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<title>SHORTS 2.4 code video: scene</title>
+<style>
+  /* brand defaults; brand.css (shorts.py brand-md import) overrides them */
+  :root { --bg: #0b0b0b; --fg: #f2f2f2; --accent: #ff5a1f; --dim: #6e6e6e;
+          --font-display: Display; --font-body: Body; }
+  @font-face { font-family: Display; src: url(fonts/Montserrat-ExtraBold.ttf); }
+  @font-face { font-family: Body; src: url(fonts/Manrope-SemiBold.ttf); }
+  html, body { margin: 0; background: var(--bg); overflow: hidden; }
+  canvas { position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; display: block; }
+</style>
+<link rel="stylesheet" href="brand.css">
+<canvas id="paper"></canvas>
+<canvas id="c"></canvas>
+<!-- optional files: a missing one is skipped -->
+<script src="beats.js"></script>                       <!-- shorts.py beats track.mp3 --js beats.js -->
+<script src="vendor/p5.brush/brush.js"></script>       <!-- shorts.py fx-get p5.brush --to . -->
+<script src="vendor/thinking-orbs/orbs.js"></script>   <!-- shorts.py fx-get thinking-orbs --to . -->
+<script>
+"use strict";
+// ============ 1. WHAT THE VIDEO SAYS (edit this block) ============
+// Frame map (1080x1920): text only inside the safe zone y 288..1248, x 120..888; the renderer puts the
+// captions (spoken words) in the band y 928..1248; below it only picture: the orb and the equalizer.
+const SCENE = {
+  kicker: "КАК ЭТО РАБОТАЕТ",
+  title: ["КОД", "ВМЕСТО", "МОНТАЖА"],
+  // a step starts when the voice says its cue word (no word in the voice-over -> the next strong beat)
+  steps: [{ cue: "пишешь", orb: "composing" }, { cue: "браузер", orb: "searching" }, { cue: "получаешь", orb: "shaping" }],
+  orb: "working",   // thinking-orbs state before the first step: working|searching|solving|listening|connecting|weaving|composing|breathing|shaping
+  brush: true,      // hand-drawn p5.brush layer (WebGL2); false = off
+  length: 12,       // seconds, only for preview: in the render the scene length comes from the voice
+  seed: 7,
+};
+
+// ============ 2. TIME: voice words and music beats ============
+// window.SHORTS comes from the renderer (scene length, voice words, beats, drop, brand colours, all in page time);
+// window.BEATS from beats.js (your own track). Nothing here may depend on real time or Math.random.
+const S = window.SHORTS || {};
+const BJ = window.BEATS || {};
+const LEN = S.length || SCENE.length;
+const css = getComputedStyle(document.documentElement);
+const C = {
+  bg: (S.brand && S.brand.bg) || css.getPropertyValue("--bg").trim(),
+  fg: (S.brand && S.brand.fg) || css.getPropertyValue("--fg").trim(),
+  accent: (S.brand && S.brand.accent) || css.getPropertyValue("--accent").trim(),
+  dim: css.getPropertyValue("--dim").trim() || "#6e6e6e",
+};
+const FD = css.getPropertyValue("--font-display").trim() || "Display";
+const FB = css.getPropertyValue("--font-body").trim() || "Body";
+const first = (...v) => v.find(x => typeof x === "number" && isFinite(x));
+const tempo = first(S.tempo, BJ.tempo, 120);
+const beats = (S.beats && S.beats.length ? S.beats : (BJ.beats && BJ.beats.length ? BJ.beats : null))
+  || Array.from({ length: Math.ceil(LEN * tempo / 60) + 1 }, (_, i) => i * 60 / tempo);
+const strong = (S.strong && S.strong.length ? S.strong : BJ.strong) || beats.filter((_, i) => i % 4 === 0);
+// the beat that carries the main movement: beats.js "main" (you say which beat), else the drop, else the 5th beat
+const MAIN = first(BJ.main, S.drop, BJ.drop, beats[4], 2.0);
+const words = S.words || [];
+const norm = w => String(w).toLowerCase().replace(/ё/g, "е").replace(/[^\p{L}\p{N}]/gu, "");
+const wordTime = cue => { const k = norm(cue || ""); const w = k && words.find(x => norm(x.w).startsWith(k)); return w ? w.s : null; };
+const stepT = [];
+SCENE.steps.forEach((st, i) => {
+  const prev = i ? stepT[i - 1] : MAIN;
+  stepT.push(first(wordTime(st.cue), strong.find(b => b > prev + 0.8), prev + 1.5));
+});
+
+// ============ 3. HELPERS ============
+const cv = document.getElementById("c"), g = cv.getContext("2d");
+const paper = document.getElementById("paper");
+cv.width = paper.width = Math.round(innerWidth * devicePixelRatio);
+cv.height = paper.height = Math.round(innerHeight * devicePixelRatio);
+const W = cv.width, H = cv.height, U = W / 1080;          // design units: 1080 wide
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, t0, d) => clamp((t - t0) / d);
+const outExpo = x => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x));
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let r = Math.imul(seed ^ seed >>> 15, 1 | seed);
+  r = r + Math.imul(r ^ r >>> 7, 61 | r) ^ r; return ((r ^ r >>> 14) >>> 0) / 4294967296; }; }
+const hash = (a, b) => { const x = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return x - Math.floor(x); };
+function lastBeat(t) { let b = -9; for (const x of beats) { if (x <= t) b = x; else break; } return b; }
+const pulse = t => Math.exp(-(t - lastBeat(t)) * 7);          // 1 on every beat, fades out
+const speaking = t => (words.some(w => t >= w.s - 0.03 && t <= w.e + 0.05) ? 1 : 0);
+const outro = t => prog(t, LEN - 0.6, 0.5);                    // the end returns to the first frame (loop)
+const stepAt = t => { let k = -1; stepT.forEach((x, i) => { if (t >= x) k = i; }); return t >= LEN - 0.6 ? -1 : k; };
+function text(str, x, y, size, font, color, align = "left", alpha = 1) {
+  g.globalAlpha = alpha; g.fillStyle = color; g.textAlign = align; g.textBaseline = "alphabetic";
+  g.font = `${size * U}px ${font}`; g.fillText(str, x * U, y * U); g.globalAlpha = 1;
+}
+function orb(state, t, x, y, px, alpha) {
+  const T = window.ThinkingOrbs;
+  if (!T || !state || alpha <= 0.01) return;
+  const r = T.resolvePreset(state, 64), k = (px / 64) * U;
+  g.save(); g.globalAlpha = alpha; g.translate(x * U, y * U); g.scale(k, k); g.translate(-32, -32);
+  T.MODE_DRAWS[r.mode](g, 64, t * r.speed, true, r.opts);
+  g.restore(); g.globalAlpha = 1;
+}
+
+// background: a dot grid (every 36 px, so no 40 px block of the frame is empty canvas: QA "empty zone")
+// with a ripple from the centre on every strong beat, plus a few drifting sparks
+const hex = c => { c = c.replace("#", ""); if (c.length === 3) c = [...c].map(x => x + x).join(""); return [0, 2, 4].map(i => parseInt(c.slice(i, i + 2), 16)); };
+const mix = (a, b, k) => { const A = hex(a), B = hex(b); return `rgb(${A.map((v, i) => Math.round(v + (B[i] - v) * k)).join(",")})`; };
+const GRID = mix(C.bg, C.fg, 0.2), GRID_HOT = mix(C.bg, C.fg, 0.55);
+const SEED = S.seed || SCENE.seed;   // plan source.seed in the render
+const R = rng(SEED);
+const SPARKS = Array.from({ length: 40 }, () => ({ x: R() * 1080, y: R() * 1920, s: 4 + R() * 4, v: 10 + R() * 30 }));
+function backdrop(t, p) {
+  const waves = strong.filter(b => b <= t && t - b < 1.6);
+  for (let y = 18; y < 1920; y += 36) {
+    for (let x = 18; x < 1080; x += 36) {
+      let hot = 0;
+      for (const b of waves) {
+        const d = Math.hypot(x - 540, y - 960), r = (t - b) * 1100;
+        hot = Math.max(hot, Math.max(0, 1 - Math.abs(d - r) / 70) * (1 - (t - b) / 1.6));
+      }
+      const s = 4 + 3 * hot;
+      g.fillStyle = hot > 0.15 ? GRID_HOT : GRID;
+      g.fillRect((x - s / 2) * U, (y - s / 2) * U, s * U, s * U);
+    }
+  }
+  g.fillStyle = C.fg;
+  for (const d of SPARKS) {
+    const y = (d.y - t * d.v + 1920) % 1920, s = d.s * (1 + 0.6 * p);
+    g.globalAlpha = 0.5; g.fillRect(d.x * U, y * U, s * U, s * U); g.globalAlpha = 1;
+  }
+}
+
+// ============ 4. THE FRAME AT TIME t (pure function of t) ============
+function draw(t) {
+  const end = outro(t), live = 1 - end, p = pulse(t), k = stepAt(t);
+  if (useBrush) g.clearRect(0, 0, W, H); else { g.fillStyle = C.bg; g.fillRect(0, 0, W, H); }
+  backdrop(t, p);
+  // kicker + step counter (counter only while a step runs)
+  text(SCENE.kicker, 120, 350, 36, FB, C.accent);
+  if (k >= 0) {
+    const a = outExpo(prog(t, stepT[k], 0.3));
+    text(`${String(k + 1).padStart(2, "0")}/${String(SCENE.steps.length).padStart(2, "0")}`, 880, 350 - 16 * (1 - a), 36, FB, C.fg, "right", a);
+  }
+  // title: visible from the first frame (hook), settles in 0.5 s, punches on MAIN, last word turns accent
+  const settle = 1 - outExpo(prog(t, 0, 0.5));
+  const punch = t >= MAIN ? 1 + 0.06 * Math.exp(-(t - MAIN) * 6) : 1;
+  g.save(); g.translate(120 * U, 620 * U); g.scale(punch * (1 + 0.04 * settle), punch * (1 + 0.04 * settle)); g.translate(-120 * U, -620 * U);
+  SCENE.title.forEach((w, i) => {
+    const hot = i === SCENE.title.length - 1 && t >= MAIN && live > 0.5;
+    text(w, 120, 480 + i * 140 + 24 * settle * (i + 1), 138, FD, hot ? C.accent : C.fg);
+  });
+  g.restore();
+  // accent bar wipes in on MAIN, leaves at the end
+  const bar = outExpo(prog(t, MAIN, 0.45)) * live;
+  g.fillStyle = C.accent; g.fillRect(120 * U, 800 * U, 560 * bar * U, 12 * U);
+  // orb: one state per step, cross-fade 0.35 s; it breathes with the beat
+  const st = k >= 0 ? SCENE.steps[k].orb : SCENE.orb;
+  const t0 = k >= 0 ? stepT[k] : (end > 0 ? LEN - 0.6 : 0);
+  const prevSt = k >= 1 ? SCENE.steps[k - 1].orb : (k === 0 ? SCENE.orb : (end > 0 ? SCENE.steps[SCENE.steps.length - 1].orb : null));
+  const mix = t0 > 0 ? prog(t, t0, 0.35) : 1;
+  const px = 430 * (1 + 0.05 * p);
+  orb(prevSt, t, 540, 1500, px, 1 - mix);
+  orb(st, t, 540, 1500, px, mix);
+  // equalizer: bars move with the voice (words) and the beat
+  const n = 15, talk = speaking(t);
+  for (let i = 0; i < n; i++) {
+    const hgt = 14 + 120 * (0.35 * p + 0.65 * talk * hash(i, Math.floor(t * 9)));
+    g.fillStyle = i === Math.floor(t * 3) % n ? C.accent : C.fg;
+    g.fillRect((120 + i * 57) * U, (1860 - hgt) * U, 30 * U, hgt * U);
+  }
+}
+
+// p5.brush: hand-drawn strokes under the picture, drawn again every frame with the same seed (deterministic)
+const useBrush = !!(window.brush && SCENE.brush && paper.getContext("webgl2"));
+let brushReady = false;
+function drawPaper(t) {
+  const b = window.brush;
+  if (!brushReady) { b.load(paper); b.scaleBrushes(4.5 * U); b.angleMode(b.DEGREES); brushReady = true; }
+  b.seed(SEED); b.noiseSeed(SEED);
+  b.clear(C.bg);
+  b.push(); b.translate(-W / 2, -H / 2);
+  const live = 1 - outro(t), a = outExpo(prog(t, MAIN, 0.8)) * live;
+  if (a > 0.01) {
+    b.set("charcoal", C.accent, 1.2);
+    b.line(110 * U, 845 * U, (110 + 620 * a) * U, 836 * U);               // hand-drawn underline under the bar
+    b.set("HB", C.dim, 1);
+    b.noFill(); b.hatch(16 * U, 30, { rand: 0.2 });
+    b.circle(540 * U, 1500 * U, 260 * a * U, 0.4);                        // hatched paper disc behind the orb
+    b.noHatch();
+  }
+  b.pop(); b.render();
+}
+
+const ready = (async () => {
+  try { await Promise.all([document.fonts.load(`150px ${FD}`), document.fonts.load(`52px ${FB}`)]); } catch (e) { /* system font */ }
+})();
+// the renderer calls seek(t) for every frame (claudevideo.org uses the same name); __seek is the SHORTS alias
+window.seek = window.__seek = async t => {
+  await ready;
+  if (useBrush) drawPaper(t);
+  draw(t);
+};
+// opened in a normal browser: plays in a loop (inside the renderer time is virtual and this never runs)
+if (!window.__shortsVT) {
+  const t0 = performance.now();
+  const loop = () => { window.seek(((performance.now() - t0) / 1000) % LEN); requestAnimationFrame(loop); };
+  ready.then(loop);
+}
+</script>
+</html>

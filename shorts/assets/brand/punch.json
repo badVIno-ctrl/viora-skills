@@ -1,0 +1,22 @@
+{
+  "description": "black, white condensed caps, one yellow accent",
+  "palette": {
+    "bg": "#000000",
+    "fg": "#FFFFFF",
+    "accent": "#FFD60A"
+  },
+  "fonts": {
+    "display": "assets/fonts/Oswald-Bold.ttf",
+    "body": "assets/fonts/Manrope-Bold.ttf",
+    "logo": "assets/fonts/Oswald-Bold.ttf"
+  },
+  "highlight_mode": "color",
+  "label_style": "plate",
+  "upper": true,
+  "emotion_default": "energy",
+  "tone": "loud, short",
+  "line_width": 4,
+  "radius": 0,
+  "effects": {},
+  "name": "punch"
+}

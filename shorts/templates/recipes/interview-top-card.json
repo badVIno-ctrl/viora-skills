@@ -1,0 +1,52 @@
+{
+  "_comment": "Шортс 1b (2.3): верх геймплей/движение, середина интервью (крупно), низ карточка рекламы. top.h auto: верх подбирается сам (главная >= 62%). slot auto/below: карточка прижата к низу видимой зоны над интерфейсом Shorts/TikTok (верх 0-410, главная 410-1080, карточка 1104-1424, ниже только интерфейс). Карточка поднимается только если низ занят (adbar). Для платной рекламы Reels/Shorts: \"safe\": \"strict\" (старые зоны 2.2). Не задавать banner.y поверх спикера: такие координаты игнорируются.",
+  "out": "01-interview-card.mp4",
+  "main": {
+    "pieces": [
+      {
+        "src": "sources/interview.mp4",
+        "start": 3.0,
+        "end": 11.0
+      },
+      {
+        "src": "sources/interview.mp4",
+        "start": 15.0,
+        "end": 24.0
+      }
+    ],
+    "track": "group",
+    "punch": 0.05,
+    "snap": "sentence",
+    "words": "auto"
+  },
+  "top": {
+    "src": "sources/car.mp4",
+    "start": 5,
+    "h": "auto"
+  },
+  "captions": {
+    "srt": "sources/interview.srt",
+    "style": "clean",
+    "accent": "#FFD84D"
+  },
+  "hook": {
+    "text": "БОЛЬШЕ $100 000 ЗА *интервью*?",
+    "start": 0,
+    "end": 2.4
+  },
+  "banner": {
+    "brand": "Quattro VPN",
+    "tg": "QuattroVPN_BOT",
+    "theme": "auto",
+    "url": "t.me/QuattroVPN_BOT",
+    "qr_url": "https://telegram.me/QuattroVPN_BOT?start=r_O0Xa5v9BEFVvRioY",
+    "start": 3.0,
+    "slot": "auto",
+    "slides": [
+      {
+        "title": "VPN прямо в Telegram",
+        "sub": "подключение в боте"
+      }
+    ]
+  }
+}

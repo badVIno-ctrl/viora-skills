@@ -1,0 +1,22 @@
+{
+  "description": "paper and ink, serif headlines, one red",
+  "palette": {
+    "bg": "#F4F1EA",
+    "fg": "#111111",
+    "accent": "#C8102E"
+  },
+  "fonts": {
+    "display": "assets/fonts/PTSerif-Bold.ttf",
+    "body": "assets/fonts/Manrope-SemiBold.ttf",
+    "logo": "assets/fonts/PTSerif-Bold.ttf"
+  },
+  "highlight_mode": "color",
+  "label_style": "plate",
+  "upper": false,
+  "emotion_default": "trust",
+  "tone": "calm explainer",
+  "line_width": 4,
+  "radius": 0,
+  "effects": {},
+  "name": "editorial"
+}

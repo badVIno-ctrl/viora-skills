@@ -1,0 +1,160 @@
+{
+ "schema_version": "1.3",
+ "meta": {
+  "name": "edit-fx",
+  "language": "ru",
+  "platforms": [
+   "youtube_shorts"
+  ],
+  "duration_target": [
+   8,
+   40
+  ],
+  "loop": true
+ },
+ "x_note": "research 14.4 + 14.6: bars and black and white until the drop, the drop (on 'готовая анимация', 2.15 s: bars closed <= 3 s) opens the frame and brings the colour; subscribe card after the value; a no-music copy for a trending sound in the app. Film edits: edit ... --bars --bw-drop",
+ "layout": {
+  "mode": "center_only",
+  "cta_in_center": [
+   {
+    "t": 12.0,
+    "duration": 2.4,
+    "kind": "subscribe",
+    "text": "VioraStudio",
+    "target": "youtube"
+   }
+  ]
+ },
+ "brand": {
+  "preset": "viora"
+ },
+ "captions": {
+  "enabled": true,
+  "max_words": 3,
+  "subs": {
+   "эйч ти эм эл": "HTML"
+  }
+ },
+ "fx": {
+  "letterbox": [
+   {
+    "t": 0,
+    "ratio": 2.39
+   },
+   {
+    "t": "drop",
+    "ratio": "full",
+    "dur": 0.45,
+    "ease": "out_cubic"
+   },
+   {
+    "t": -1.2,
+    "ratio": 2.39,
+    "dur": 0.6,
+    "ease": "in_out"
+   }
+  ],
+  "look_keys": [
+   {
+    "t": 0,
+    "look": "bw"
+   },
+   {
+    "t": "drop",
+    "look": "base",
+    "trans": "wipe",
+    "dur": 0.6,
+    "dir": "lr"
+   }
+  ]
+ },
+ "audio": {
+  "voice": {
+   "engine": "auto",
+   "voice": "ru-male-1",
+   "speed": 1.05
+  },
+  "music": {
+   "source": "assets/audio/edit.mp3",
+   "start": 4.71,
+   "drop_at": 2.15
+  },
+  "target_lufs": -14,
+  "export": "both"
+ },
+ "scenes": [
+  {
+   "id": "hook",
+   "say": "Один эйч ти эм эл файл, и вот готовая анимация.",
+   "on_screen_text": "1 ФАЙЛ = АНИМАЦИЯ",
+   "why": "result first",
+   "source": {
+    "type": "html",
+    "ref": "orbit.html"
+   }
+  },
+  {
+   "id": "how",
+   "say": "Пишешь код, движок снимает кадр за кадром.",
+   "why": "explain",
+   "source": {
+    "type": "text",
+    "ref": "Код -> *кадры* -> видео"
+   }
+  },
+  {
+   "id": "app",
+   "say": "А скриншоты оживают сами.",
+   "why": "second proof",
+   "source": {
+    "type": "images",
+    "images": [
+     "../tests/fixtures/app-screen.png"
+    ],
+    "focus": [
+     0.5,
+     0.2
+    ],
+    "points": [
+     [
+      0.82,
+      0.9,
+      1.0
+     ]
+    ]
+   },
+   "trans": "whip"
+  },
+  {
+   "id": "loop",
+   "say": "Ссылка в закрепе, а файл с анимацией в канале.",
+   "why": "cta after value, loops to the start",
+   "source": {
+    "type": "html",
+    "ref": "orbit.html",
+    "in": 1.0
+   },
+   "trans": "dip"
+  }
+ ],
+ "author_layer": [
+  {
+   "kind": "voice",
+   "note": "own voice-over"
+  },
+  {
+   "kind": "text_point",
+   "note": "on-screen theses"
+  }
+ ],
+ "metadata": {
+  "topic": "анимация из html",
+  "hashtags": [
+   "shorts",
+   "html",
+   "javascript",
+   "анимация",
+   "код"
+  ]
+ }
+}

@@ -1,0 +1,156 @@
+{
+  "schema_version": "advertising-1",
+  "goal": "training_comprehension",
+  "placement": null,
+  "creative_type": "overlay",
+  "concept": "demonstration",
+  "monetization": "training",
+  "training_product": true,
+  "audience": {
+    "country": null,
+    "age": null,
+    "language": null,
+    "need": null
+  },
+  "offer": {
+    "name": null,
+    "advertiser": null,
+    "audience_country": null,
+    "audience_age": null,
+    "source": null,
+    "approval_evidence": null,
+    "payable_action": null,
+    "payout_and_currency": null,
+    "attribution_window": null,
+    "approval_and_rejection_rules": null,
+    "hold_and_payment_schedule": null,
+    "minimum_withdrawal_and_methods": null,
+    "account_and_country_eligibility": null,
+    "creative_rights_and_restrictions": null,
+    "disclosure_requirements": null,
+    "tracking_method": null,
+    "refunds_cancellations": null,
+    "returning_customers": null,
+    "brand_traffic": null,
+    "promo_codes": null,
+    "official_terms_url": null,
+    "checked_at": null,
+    "source_status": "unknown"
+  },
+  "headline": "Учебный макет",
+  "cta": "Открыть пример",
+  "destination": null,
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "status": "draft"
+  },
+  "safe_area": {
+    "method": null,
+    "verified": false,
+    "evidence": null
+  },
+  "overlay": {
+    "start_seconds": null,
+    "end_seconds": null,
+    "rectangle": null,
+    "avoid": [
+      "face",
+      "product",
+      "subtitles",
+      "platform_ui"
+    ]
+  },
+  "claims": [],
+  "assets": [],
+  "claims_verified": false,
+  "rights_verified": false,
+  "rules": {
+    "reference": null,
+    "checked_at": null,
+    "scope": null
+  },
+  "tracking": {
+    "method": null,
+    "attribution_level": "unknown",
+    "limitations": null,
+    "evidence": null
+  },
+  "route": {
+    "link_point": null,
+    "verified": false,
+    "evidence": null
+  },
+  "test": {
+    "hypothesis": null,
+    "primary_metric": null,
+    "event_source": null,
+    "observation_window": null,
+    "stop_condition": null,
+    "spend_limit": 0,
+    "currency": null,
+    "max_loss": 0
+  },
+  "authorization": {
+    "paid_media": false,
+    "spend_approved": false,
+    "evidence": null,
+    "scope": null,
+    "stop_method": null
+  },
+  "publication_approved": false,
+  "qa": {
+    "product_action": {
+      "passed": false,
+      "evidence": null
+    },
+    "claims": {
+      "passed": false,
+      "evidence": null
+    },
+    "rights": {
+      "passed": false,
+      "evidence": null
+    },
+    "phone_readability": {
+      "passed": false,
+      "evidence": null
+    },
+    "overlay_clear": {
+      "passed": false,
+      "evidence": null
+    },
+    "silent_comprehension": {
+      "passed": false,
+      "evidence": null
+    },
+    "subtitles": {
+      "passed": false,
+      "evidence": null
+    },
+    "motion_audio": {
+      "passed": false,
+      "evidence": null
+    },
+    "cta_route": {
+      "passed": false,
+      "evidence": null
+    },
+    "landing": {
+      "passed": false,
+      "evidence": null
+    },
+    "disclosure": {
+      "passed": false,
+      "evidence": null
+    },
+    "measurement": {
+      "passed": false,
+      "evidence": null
+    }
+  },
+  "final_artifact": {
+    "path": null,
+    "sha256": null
+  }
+}

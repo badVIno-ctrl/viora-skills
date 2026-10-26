@@ -1,0 +1,1 @@
+PASS: ZIP CRC, single shorts/ root, separately extracted CLI ad-init/draft/launch; separate stage reports survive; training launch rejected. No publication or paid API.

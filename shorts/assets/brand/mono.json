@@ -1,0 +1,22 @@
+{
+  "description": "strict black and white",
+  "palette": {
+    "bg": "#000000",
+    "fg": "#FFFFFF",
+    "accent": "#FFFFFF"
+  },
+  "fonts": {
+    "display": "assets/fonts/Montserrat-ExtraBold.ttf",
+    "body": "assets/fonts/Jost-Medium.ttf",
+    "logo": "assets/fonts/Jost-Light.ttf"
+  },
+  "highlight_mode": "underline",
+  "label_style": "outline",
+  "upper": true,
+  "emotion_default": "calm",
+  "tone": "minimal",
+  "line_width": 4,
+  "radius": 0,
+  "effects": {},
+  "name": "mono"
+}

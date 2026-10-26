@@ -1,0 +1,794 @@
+{
+ "title": "Месяц без света на 20-м этаже",
+ "slug": "blackout-20",
+ "format": "short",
+ "aspect": "9:16",
+ "lang": "ru",
+ "voice": "ru-male-1",
+ "engine": "auto",
+ "speed": 1.08,
+ "music": "auto",
+ "style": {
+  "outline": "thin",
+  "grain": 0.04,
+  "vignette": 0.32,
+  "captions": "caps"
+ },
+ "cast": {
+  "max": {
+   "look": "hero",
+   "name": "Макс"
+  },
+  "nora": {
+   "look": "dog",
+   "name": "Нора"
+  }
+ },
+ "scenes": [
+  {
+   "say": "Свет пропал на *месяц*, а ты на двадцатом этаже?",
+   "set": {
+    "id": "facade",
+    "time": "night",
+    "floors": 16,
+    "cols": 5,
+    "lights_out_on": "пропал",
+    "hero_window": [
+     3,
+     13
+    ],
+    "trees": true
+   },
+   "camera": "push",
+   "hud": [
+    {
+     "type": "callout",
+     "text": "20 этаж",
+     "sub": "ты здесь",
+     "icon": "house",
+     "at": [
+      0.3,
+      0.12
+     ],
+     "to": [
+      0.67,
+      0.2
+     ],
+     "on": "двадцатом"
+    }
+   ]
+  },
+  {
+   "say": "*Не беги* вниз.",
+   "accent": "red",
+   "set": {
+    "id": "stairwell",
+    "time": "blackout",
+    "floor": 20
+   },
+   "camera": "crash",
+   "actors": [
+    {
+     "id": "max",
+     "pose": "hands_up",
+     "emotion": "determined",
+     "face": "front"
+    }
+   ],
+   "hud": [
+    {
+     "type": "ribbon",
+     "text": "Лестница = ловушка",
+     "y": 0.2,
+     "on": "беги"
+    }
+   ]
+  },
+  {
+   "say": "Лифты встали, в подъезде крики.",
+   "scheme": {
+    "type": "cutaway",
+    "title": "Лифты встали",
+    "sub": "22 этажа · свет 0",
+    "floors": 22,
+    "hero_floor": 20,
+    "power": false,
+    "lift_at": 11,
+    "labels": [
+     {
+      "floor": 20,
+      "text": "Макс",
+      "sub": "20 этаж",
+      "icon": "house"
+     },
+     {
+      "floor": 11,
+      "text": "Лифт стоит",
+      "color": "danger",
+      "icon": "warning",
+      "on": "встали"
+     },
+     {
+      "floor": 2,
+      "text": "Крики",
+      "sub": "в подъезде",
+      "color": "danger",
+      "icon": "people",
+      "on": "крики"
+     }
+    ]
+   }
+  },
+  {
+   "say": "*Толпа* бежит вниз в темноте,",
+   "set": {
+    "id": "stairwell",
+    "time": "blackout",
+    "floor": 19
+   },
+   "camera": "pan_right",
+   "props": [
+    {
+     "id": "crowd",
+     "n": 9,
+     "area": [
+      0.08,
+      0.72,
+      0.92,
+      0.86
+     ],
+     "look": "worker",
+     "look2": "granny",
+     "silhouette": true
+    }
+   ]
+  },
+  {
+   "say": "с телефонами вместо фонарей.",
+   "set": {
+    "id": "stairwell",
+    "time": "blackout",
+    "floor": 14
+   },
+   "actors": [
+    {
+     "id": "sosed",
+     "look": "worker",
+     "pose": "flashlight",
+     "hold": "phone",
+     "emotion": "worried",
+     "face": "right",
+     "at": 0.4
+    }
+   ]
+  },
+  {
+   "say": "Двадцать этажей, узкие ступени, все в одну сторону.",
+   "scheme": {
+    "type": "stairs",
+    "title": "Все бегут вниз",
+    "flights": 6,
+    "from": 1,
+    "to": 20,
+    "dir": "down",
+    "dots": 5,
+    "label": "20 этажей",
+    "label_sub": "в темноте",
+    "t_on": "ступени"
+   }
+  },
+  {
+   "say": "Макс остаётся дома: лестница сейчас *ловушка*.",
+   "accent": "red",
+   "set": {
+    "id": "room",
+    "time": "night",
+    "variant": "living",
+    "power": false
+   },
+   "actors": [
+    {
+     "id": "max",
+     "pose": "shrug",
+     "emotion": "worried",
+     "face": "front",
+     "at": 0.42,
+     "acts": [
+      {
+       "on": "ловушка",
+       "pose": "hands_up"
+      }
+     ],
+     "feel": [
+      {
+       "on": "ловушка",
+       "emotion": "determined"
+      }
+     ]
+    },
+    {
+     "id": "nora",
+     "at": 0.75,
+     "pose": "sit",
+     "emotion": "worried",
+     "face": "left"
+    }
+   ],
+   "hud": [
+    {
+     "type": "stamp",
+     "text": "Ловушка",
+     "at": [
+      0.5,
+      0.2
+     ],
+     "on": "ловушка"
+    }
+   ],
+   "clock": "ДЕНЬ 1 — 18:04"
+  },
+  {
+   "say": "Но есть вещь *важнее*.",
+   "clock": "ДЕНЬ 1 — 18:09",
+   "set": {
+    "id": "kitchen",
+    "time": "blackout"
+   },
+   "camera": "pull",
+   "actors": [
+    {
+     "id": "max",
+     "pose": "flashlight",
+     "hold": "flashlight",
+     "emotion": "think",
+     "face": "left",
+     "at": 0.7
+    }
+   ]
+  },
+  {
+   "say": "Насосы встали вместе со светом.",
+   "scheme": {
+    "type": "chain",
+    "title": "Почему пропадёт вода",
+    "nodes": [
+     {
+      "icon": "bolt",
+      "text": "Сеть"
+     },
+     {
+      "icon": "gas",
+      "text": "Насос"
+     },
+     {
+      "icon": "house",
+      "text": "Трубы"
+     },
+     {
+      "icon": "tap",
+      "text": "Кран"
+     }
+    ],
+    "broken": 0,
+    "break_on": "встали"
+   }
+  },
+  {
+   "say": "Напор упадёт за считанные *минуты*.",
+   "scheme": {
+    "type": "gauge",
+    "kind": "tank",
+    "title": "Давление в трубах",
+    "from": 1,
+    "to": 0.12,
+    "timer": 269,
+    "label": "вода",
+    "t": 0.3
+   }
+  },
+  {
+   "say": "И верхние этажи пустеют *первыми*.",
+   "scheme": {
+    "type": "cutaway",
+    "title": "Верх пустеет первым",
+    "floors": 22,
+    "hero_floor": 20,
+    "power": false,
+    "water_from": 22,
+    "water_to": 6,
+    "water_t": 0.3,
+    "water_dur": 2.2,
+    "labels": [
+     {
+      "floor": 20,
+      "text": "Сухо",
+      "sub": "20 этаж",
+      "color": "danger",
+      "icon": "tap",
+      "on": "верхние"
+     },
+     {
+      "floor": 6,
+      "text": "Вода до 6",
+      "color": "blue",
+      "icon": "drop"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Только пить: около *трёх литров* в день.",
+   "scheme": {
+    "type": "counter",
+    "title": "Норма воды",
+    "to": 3,
+    "suffix": " Л",
+    "label": "в день",
+    "unit_label": "на одного человека",
+    "icon": "drop",
+    "color": "blue"
+   }
+  },
+  {
+   "say": "За месяц это *девяносто*.",
+   "scheme": {
+    "type": "bars",
+    "title": "Сколько нужно воды",
+    "unit": " л",
+    "hi": 2,
+    "bars": [
+     {
+      "label": "1 день",
+      "value": 3
+     },
+     {
+      "label": "Неделя",
+      "value": 21
+     },
+     {
+      "label": "Месяц",
+      "value": 90,
+      "on": "месяц"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Потом встанут туалеты, кухня и нервы.",
+   "scheme": {
+    "type": "timeline",
+    "title": "Что сломается дальше",
+    "steps": [
+     {
+      "time": "День 2",
+      "text": "Туалеты",
+      "on": "туалеты"
+     },
+     {
+      "time": "День 4",
+      "text": "Кухня",
+      "on": "кухня"
+     },
+     {
+      "time": "День 7",
+      "text": "Нервы",
+      "on": "нервы",
+      "color": "danger"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Без запаса ты *не продержишься*.",
+   "accent": "red",
+   "set": {
+    "id": "room",
+    "time": "blackout",
+    "variant": "living"
+   },
+   "camera": "pull",
+   "actors": [
+    {
+     "id": "max",
+     "pose": "hug_knees",
+     "emotion": "sad",
+     "face": "front",
+     "at": 0.45
+    },
+    {
+     "id": "nora",
+     "pose": "lie",
+     "emotion": "sad",
+     "at": 0.72,
+     "face": "left"
+    }
+   ]
+  },
+  {
+   "say": "Нора ходит кругами: пора действовать.",
+   "set": {
+    "id": "room",
+    "time": "blackout",
+    "variant": "living"
+   },
+   "actors": [
+    {
+     "id": "max",
+     "at": 0.28,
+     "pose": "think",
+     "emotion": "worried",
+     "face": "right",
+     "acts": [
+      {
+       "on": "пора",
+       "pose": "point"
+      }
+     ],
+     "feel": [
+      {
+       "on": "пора",
+       "emotion": "determined"
+      }
+     ]
+    },
+    {
+     "id": "nora",
+     "at": [
+      0.86,
+      null
+     ],
+     "path": [
+      [
+       0,
+       0.86,
+       null
+      ],
+      [
+       1.3,
+       0.55,
+       null
+      ],
+      [
+       2.6,
+       0.86,
+       null
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "say": "Первое: *вода*. У тебя минуты, не часы.",
+   "set": {
+    "id": "kitchen",
+    "time": "blackout"
+   },
+   "camera": "push",
+   "actors": [
+    {
+     "id": "max",
+     "pose": "carry",
+     "hold": "bucket",
+     "emotion": "determined",
+     "face": "right",
+     "at": 0.36
+    }
+   ],
+   "hud": [
+    {
+     "type": "plate",
+     "text": "Шаг 1 · вода",
+     "sub": "пока есть напор",
+     "icon": "drop",
+     "color": "blue",
+     "at": [
+      0.5,
+      0.2
+     ]
+    },
+    {
+     "type": "timer",
+     "from": 240,
+     "at": [
+      0.5,
+      0.31
+     ],
+     "on": "минуты"
+    }
+   ]
+  },
+  {
+   "say": "Ванна, кастрюли, бутылки, всё с крышкой.",
+   "scheme": {
+    "type": "checklist",
+    "title": "Куда набрать воду",
+    "items": [
+     {
+      "text": "Ванна",
+      "on": "ванна"
+     },
+     {
+      "text": "Кастрюли",
+      "on": "кастрюли"
+     },
+     {
+      "text": "Бутылки",
+      "on": "бутылки"
+     },
+     {
+      "text": "Всё с крышкой",
+      "note": "от пыли",
+      "on": "крышкой"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Второе: *свет*. Фонарик, а не свеча:",
+   "scheme": {
+    "type": "closeup",
+    "bg": "dark",
+    "item": "flashlight",
+    "on": true,
+    "label": "Фонарик",
+    "label_sub": "не свеча",
+    "notes": [
+     {
+      "text": "Без огня",
+      "icon": "fire",
+      "color": "ok"
+     },
+     {
+      "text": "Налобный",
+      "sub": "руки свободны",
+      "side": "left"
+     }
+    ]
+   }
+  },
+  {
+   "say": "огонь опаснее темноты.",
+   "accent": "red",
+   "set": {
+    "id": "room",
+    "time": "blackout",
+    "variant": "living"
+   },
+   "props": [
+    {
+     "id": "candle",
+     "at": [
+      0.66,
+      null
+     ],
+     "scale": 1.6
+    }
+   ],
+   "hud": [
+    {
+     "type": "stamp",
+     "text": "Опасно",
+     "at": [
+      0.5,
+      0.2
+     ],
+     "on": "опаснее"
+    }
+   ],
+   "shot": {
+    "type": "close",
+    "at": [
+     0.66,
+     null
+    ],
+    "z": 2.4
+   }
+  },
+  {
+   "say": "Третье: *тепло*. Одевайся слоями, как капуста",
+   "set": {
+    "id": "room",
+    "time": "day",
+    "variant": "bedroom",
+    "power": false
+   },
+   "actors": [
+    {
+     "id": "max",
+     "pose": "stand",
+     "emotion": "determined",
+     "face": "front",
+     "acts": [
+      {
+       "on": "одевайся",
+       "pose": "hug_knees"
+      }
+     ]
+    }
+   ],
+   "hud": [
+    {
+     "type": "plate",
+     "text": "Шаг 3 · тепло",
+     "sub": "три слоя одежды",
+     "icon": "temp",
+     "color": "warn",
+     "at": [
+      0.5,
+      0.2
+     ]
+    }
+   ],
+   "clock": "ДЕНЬ 2 — 09:00"
+  },
+  {
+   "say": "и спите в одной комнате.",
+   "scheme": {
+    "type": "topview",
+    "title": "Одна тёплая комната",
+    "zones": [
+     {
+      "x": 0,
+      "y": 0,
+      "w": 0.58,
+      "h": 0.62,
+      "color": "ok",
+      "label": "спим здесь",
+      "on": "одной"
+     }
+    ],
+    "marks": [
+     {
+      "at": [
+       0.29,
+       0.42
+      ],
+      "icon": "heart",
+      "label": "Макс и Нора",
+      "color": "ok",
+      "on": "спите"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Четвёртое: *запах* еды.",
+   "set": {
+    "id": "kitchen",
+    "time": "blackout"
+   },
+   "actors": [
+    {
+     "id": "max",
+     "pose": "eat",
+     "hold": "can",
+     "emotion": "happy",
+     "face": "right",
+     "at": 0.4
+    }
+   ],
+   "hud": [
+    {
+     "type": "plate",
+     "text": "Шаг 4 · запах",
+     "icon": "food",
+     "color": "danger",
+     "at": [
+      0.5,
+      0.2
+     ]
+    }
+   ],
+   "clock": "ДЕНЬ 2 — 19:30"
+  },
+  {
+   "say": "Он идёт по вентиляции на весь дом: ешь при закрытой двери.",
+   "scheme": {
+    "type": "cutaway",
+    "title": "Запах идёт по вентиляции",
+    "floors": 12,
+    "hero_floor": 9,
+    "power": false,
+    "vent": true,
+    "vent_t": 0.2,
+    "labels": [
+     {
+      "floor": 9,
+      "text": "Ты ешь",
+      "icon": "food"
+     },
+     {
+      "floor": 3,
+      "text": "Соседи чуют",
+      "color": "danger",
+      "icon": "people",
+      "on": "весь"
+     }
+    ]
+   }
+  },
+  {
+   "say": "А ночью твоё окно светится одно на весь район.",
+   "clock": "ДЕНЬ 2 — 22:15",
+   "set": {
+    "id": "facade",
+    "time": "blackout",
+    "floors": 16,
+    "cols": 5,
+    "power": false,
+    "hero_window": [
+     3,
+     13
+    ],
+    "hero_light": 1,
+    "hero_mark": false,
+    "others": 0
+   },
+   "camera": "pull"
+  },
+  {
+   "say": "Тебя *видно* за километры.",
+   "scheme": {
+    "type": "radius",
+    "bg": "dark",
+    "title": "Тебя видно",
+    "center_icon": "eye",
+    "center_label": "твоё окно",
+    "rings": [
+     {
+      "r": 1,
+      "label": "1 км"
+     },
+     {
+      "r": 2,
+      "label": "2 км"
+     },
+     {
+      "r": 4,
+      "label": "4 км"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Что ты погасишь *первым*? Пиши в комментариях.",
+   "set": {
+    "id": "room",
+    "time": "blackout",
+    "variant": "living"
+   },
+   "camera": "drift",
+   "actors": [
+    {
+     "id": "max",
+     "pose": "flashlight",
+     "hold": "flashlight",
+     "emotion": "think",
+     "face": "front",
+     "look": "hero"
+    },
+    {
+     "id": "nora",
+     "at": 0.78,
+     "pose": "sit",
+     "face": "left"
+    }
+   ],
+   "hud": [
+    {
+     "type": "question",
+     "text": "Что погасишь первым?",
+     "at": [
+      0.5,
+      0.24
+     ],
+     "on": "погасишь"
+    }
+   ],
+   "shot": {
+    "type": "medium",
+    "z": 1.6
+   }
+  }
+ ]
+}

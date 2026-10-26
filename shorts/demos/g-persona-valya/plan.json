@@ -1,0 +1,55 @@
+{
+  "schema": "persona-episode/1",
+  "topic": "Почему рассада вытягивается",
+  "format": "tip",
+  "engine": "toon",
+  "audience": "general",
+  "range": [
+    25,
+    50
+  ],
+  "beats": [
+    {
+      "id": "hook",
+      "shot": "close",
+      "say": "Рассада тянется, как ниточка? Вода тут ни при чём.",
+      "pose": "point",
+      "emotion": "smile",
+      "title": "Рассада тянется?"
+    },
+    {
+      "id": "why",
+      "shot": "medium",
+      "say": "Главная причина тонких длинных стеблей: мало *света*. На подоконнике его не хватает.",
+      "pose": "think",
+      "emotion": "calm"
+    },
+    {
+      "id": "how",
+      "shot": "medium",
+      "say": "Повесь лампу в пяти-десяти сантиметрах над листьями. Свети двенадцать-шестнадцать часов, а на ночь выключай.",
+      "pose": "hold",
+      "emotion": "calm",
+      "hold": "pot",
+      "title": "12-16 часов света"
+    },
+    {
+      "id": "proof",
+      "shot": "wide",
+      "say": "Новые листья пойдут плотные, и к окну рассада тянуться *перестанет*.",
+      "pose": "cheer",
+      "emotion": "smile"
+    },
+    {
+      "id": "loop",
+      "shot": "close",
+      "say": "А у тебя рассада на подоконнике или под лампой? Напиши, милок.",
+      "pose": "wave",
+      "emotion": "smile"
+    }
+  ],
+  "sources": [
+    "University of Minnesota Extension, Starting seeds indoors: https://extension.umn.edu/planting-and-growing-guides/starting-seeds-indoors"
+  ],
+  "ad": null
+}

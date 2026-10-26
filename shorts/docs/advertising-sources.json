@@ -1,0 +1,122 @@
+{
+ "provenance": "URL list extracted from user PDF v1.0 (not rechecked: AffTrends pages and PDF-only links). The \"rechecked\" block was read online on 2026-10-20 (read-only page loads and search excerpts); rules change, re-check before every real launch.",
+ "links": [
+  {
+   "page": 3,
+   "url": "https://afftrends.com/monetizaciya-youtube-shorts-narezki-bannery-stikery/"
+  },
+  {
+   "page": 3,
+   "url": "https://afftrends.com/monetizaciya-youtube-shorts-narezki-bannery-stikery/"
+  },
+  {
+   "page": 3,
+   "url": "https://academy.affiliate.admitad.com/ru/advertisers/traffic"
+  },
+  {
+   "page": 3,
+   "url": "https://academy.affiliate.admitad.com/ru/publishers/indicators"
+  },
+  {
+   "page": 3,
+   "url": "https://academy.affiliate.admitad.com/ru/publishers/indicators"
+  },
+  {
+   "page": 5,
+   "url": "https://afftrends.com/ishodniki-kreativov/"
+  },
+  {
+   "page": 6,
+   "url": "https://afftrends.com/ugc-content/"
+  },
+  {
+   "page": 7,
+   "url": "https://afftrends.com/arbitrazh-nativnogo-trafika/"
+  },
+  {
+   "page": 7,
+   "url": "https://afftrends.com/telegram-ads-2026/"
+  },
+  {
+   "page": 9,
+   "url": "https://afftrends.com/creative-testing/"
+  },
+  {
+   "page": 9,
+   "url": "https://afftrends.com/kontent-zavod/"
+  },
+  {
+   "page": 11,
+   "url": "https://afftrends.com/best-partners/"
+  },
+  {
+   "page": 11,
+   "url": "https://afftrends.com/cpa-partnerki/"
+  }
+ ],
+ "rechecked": [
+  {
+   "checked": "2026-10-20",
+   "url": "https://academy.affiliate.admitad.com/ru/advertisers/traffic",
+   "label": "[П]",
+   "how": "page load",
+   "page_date": "2022-09-01",
+   "confirmed": "Traffic types are set per offer: allowed types work without limits, some work only with approved promo materials; arbitrage (contextual, social targeting, teaser/banner networks) is a separate type; the page recommends banning incentivised \"gray\" traffic.",
+   "note": "Page is from 2022: the offer card for a real programme always wins."
+  },
+  {
+   "checked": "2026-10-20",
+   "url": "https://academy.affiliate.admitad.com/ru/publishers/indicators",
+   "label": "[П]",
+   "how": "page load",
+   "page_date": "2022-06-13",
+   "confirmed": "CR = actions / clicks; EPC on this page = average earnings per 100 clicks (not per click); approval rate, CR and EPC are averages over all webmasters of a programme and change over time.",
+   "consequence": "ad-metrics reports epc (per click, as in the PDF) and epc_per_100_clicks (Admitad definition). Name the definition when comparing with an offer card."
+  },
+  {
+   "checked": "2026-10-20",
+   "url": "https://support.google.com/youtube/answer/13748639",
+   "label": "[П]",
+   "how": "page load",
+   "confirmed": "URLs in YouTube Shorts comments and Shorts descriptions are non-clickable. Clickable: channel profile links (up to 14), external brand deal links, Posts and End screens (some need advanced features).",
+   "consequence": "ad-check blocks launch when route.link_point relies on a Shorts description or comment on YouTube without a clickable place; ad-links prints this note for YouTube sources."
+  },
+  {
+   "checked": "2026-10-20",
+   "url": "https://support.google.com/youtube/answer/9054257",
+   "label": "[П]",
+   "how": "page load",
+   "confirmed": "External links policy covers clickable URLs, URL text shown in videos or images and obfuscated URLs; links to violating content are not allowed; affiliate content does not violate the Terms of Use, but excessive affiliate posting in dedicated accounts may violate the spam policy.",
+   "consequence": "Showing a URL or QR in a creative is a link under this policy: keep destinations clean and review them."
+  },
+  {
+   "checked": "2026-10-20",
+   "url": "https://support.google.com/youtube/answer/154235",
+   "label": "[П]",
+   "how": "search excerpt",
+   "also": "https://support.google.com/youtube/answer/17596007",
+   "confirmed": "Paid product placements, sponsorships, endorsements and other commercial relationships must be declared with the paid promotion setting in the video details; YouTube shows a disclosure label; local legal duties remain with the creator and the brand."
+  },
+  {
+   "checked": "2026-10-20",
+   "url": "https://support.tiktok.com/en/business-and-creator/creator-and-business-accounts/branded-content-on-tiktok",
+   "label": "[П]",
+   "how": "search excerpt",
+   "also": "https://support.tiktok.com/km/business-and-creator/creator-and-business-accounts/branded-content-policy",
+   "confirmed": "Branded content requires the content disclosure toggle; own-brand posts are labelled Promotional content, content for another business Paid partnership; the label cannot be changed after publication."
+  },
+  {
+   "checked": "2026-10-20",
+   "url": "https://help.instagram.com/help/instagram/128845584325492",
+   "label": "[П]",
+   "how": "search excerpt",
+   "also": "https://help.instagram.com/1123581461537025/",
+   "confirmed": "Branded content must carry the paid partnership label; content with an affiliate link should have the label even without a tagged business partner; creators may need to request access."
+  }
+ ],
+ "not_rechecked": [
+  "AffTrends articles from the PDF",
+  "schema/safe_zones.json platform margins (kept as conservative design values [Г]; confirm with the real app preview)",
+  "Telegram Ads and other networks named in the PDF"
+ ]
+}

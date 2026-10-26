@@ -1,0 +1,25 @@
+{
+  "_note": "Synthetic training example from the PDF (not a forecast). Replace with your own numbers; null/absent = unknown.",
+  "currency": "RUB",
+  "views": 20000,
+  "link_clicks": 200,
+  "actions": 10,
+  "confirmed": 6,
+  "rejected": 4,
+  "pending": 0,
+  "payout_per_action": 500,
+  "spend_total": 1200,
+  "limits": {
+    "spend_limit": 1500,
+    "max_loss": 500,
+    "min_clicks": 100,
+    "min_actions": 10,
+    "window_days": 7,
+    "elapsed_days": 7
+  },
+  "flags": {
+    "rule_violation": false,
+    "wrong_link": false,
+    "offer_mismatch": false
+  }
+}

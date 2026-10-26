@@ -1,0 +1,111 @@
+{
+  "schema_version": "1",
+  "meta": {
+    "name": "preview-3",
+    "language": "ru",
+    "platforms": [
+      "youtube_shorts"
+    ],
+    "duration_target": [
+      8,
+      60
+    ],
+    "loop": false,
+    "fps": 30
+  },
+  "brand": {
+    "preset": "mono"
+  },
+  "layout": {
+    "mode": "center_only",
+    "cta_in_center": [
+      {
+        "t": 7.4,
+        "duration": 2.5,
+        "kind": "link",
+        "text": "t.me/VioraStudio",
+        "anim": "slide",
+        "y": "center"
+      }
+    ]
+  },
+  "captions": {
+    "enabled": false
+  },
+  "audio": {
+    "music": {
+      "source": "../media/brat-music-0.wav",
+      "start": 0,
+      "duck_db": 0
+    },
+    "sfx_auto": false,
+    "target_lufs": -14
+  },
+  "scenes": [
+    {
+      "id": "shot0",
+      "duration": 1.776,
+      "why": "Конфликт: близость и напряжение",
+      "source": {
+        "type": "video",
+        "ref": "../media/brat-provided.mp4",
+        "in": 0,
+        "out": 1.776,
+        "keep_audio": false
+      }
+    },
+    {
+      "id": "shot1",
+      "duration": 1.467,
+      "why": "Ответ героя",
+      "source": {
+        "type": "video",
+        "ref": "../media/brat-provided.mp4",
+        "in": 3.0,
+        "out": 4.467,
+        "keep_audio": false
+      }
+    },
+    {
+      "id": "shot2",
+      "duration": 1.117,
+      "why": "Переход к одиночеству",
+      "source": {
+        "type": "video",
+        "ref": "../media/brat-provided.mp4",
+        "in": 4.8,
+        "out": 5.917,
+        "keep_audio": false
+      }
+    },
+    {
+      "id": "shot4",
+      "duration": 1.866,
+      "why": "Движение",
+      "source": {
+        "type": "video",
+        "ref": "../media/brat-provided.mp4",
+        "in": 11.0,
+        "out": 12.866,
+        "keep_audio": false
+      }
+    },
+    {
+      "id": "shot5",
+      "duration": 3.6,
+      "why": "Дорога, визуальная отдача",
+      "source": {
+        "type": "video",
+        "ref": "../media/brat-provided.mp4",
+        "in": 14.0,
+        "out": 17.6,
+        "keep_audio": false
+      }
+    }
+  ],
+  "fx": {
+    "punch": [
+      6.226
+    ]
+  }
+}

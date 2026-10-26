@@ -1,0 +1,5 @@
+[warn] author_layer: foreign material (film/video/background gameplay) needs >= 2 own layers, one of them voice|thesis|own_footage|compare (now: none): add author_layer [{kind: voice|thesis|own_footage|compare|text_point|sound_design|interactive, note}] (reused content risk; your own long video: own_footage)
+[warn] abs_path: scene part-1: absolute path /vercel/sandbox/data/revised/shorts/acceptance/out-long/long-8min-training.mp4: use a path relative to the plan folder so the plan works on another machine
+[warn] abs_path: scene part-2: absolute path /vercel/sandbox/data/revised/shorts/acceptance/out-long/long-8min-training.mp4: use a path relative to the plan folder so the plan works on another machine
+[warn] abs_path: scene part-3: absolute path /vercel/sandbox/data/revised/shorts/acceptance/out-long/long-8min-training.mp4: use a path relative to the plan folder so the plan works on another machine
+OK: 0 errors, 4 warnings
